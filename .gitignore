@@ -14,7 +14,7 @@ results
 tmp
 
 # Build
-public/css/main.css
+client/build
 
 # Coverage reports
 coverage
@@ -24,6 +24,7 @@ coverage
 
 # Dependency directory
 node_modules
+client/node_modules
 bower_components
 
 # Editors

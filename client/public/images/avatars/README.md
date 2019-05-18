@@ -1,0 +1,1 @@
+Avatars in this folder are downloaded from http://www.onlygraphicdesign.com/2016/08/04/zala-rudrapalsinh-young-avatar-collection-icons/ which are authorized for personal or commercial usage freely.
