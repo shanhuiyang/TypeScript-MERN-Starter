@@ -1,14 +1,14 @@
 import React from "react";
 import ErrorPage from "./ErrorPage";
 import AppState from "../models/AppState";
-import ActionCreator from "../models/ActionCreator";
-import connectPropsAndActions from "../utils/connect";
+import UserActionCreator from "../models/UserActionCreator";
+import connectPropsAndActions from "../shared/connect";
 import { Redirect } from "react-router-dom";
 
 interface Props {
     location: Location;
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {}

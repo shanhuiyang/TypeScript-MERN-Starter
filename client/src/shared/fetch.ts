@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "../constants";
+import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "./constants";
 
 export type Method = "GET" | "POST";
 

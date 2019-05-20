@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import connectPropsAndActions from "../utils/connect";
+import connectPropsAndActions from "../shared/connect";
 
 interface Props {}
 interface States {}

@@ -1,13 +1,13 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../utils/connect";
+import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
-import ActionCreator from "../models/ActionCreator";
+import UserActionCreator from "../models/UserActionCreator";
 import _ from "lodash";
 
 interface Props {
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {}

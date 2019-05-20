@@ -5,7 +5,7 @@ import ActionCreator from "../models/ActionCreator";
 
 const mapStateToProps: MapStateToPropsParam<any, any, any> = (state: any): any => {
     return {
-        state: state.default
+        state
     };
 };
 

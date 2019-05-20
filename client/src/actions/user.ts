@@ -1,9 +1,9 @@
-import ActionCreator from "./models/ActionCreator";
+import UserActionCreator from "../models/UserActionCreator";
 import { Dispatch, AnyAction as Action } from "redux";
-import fetch from "./utils/fetch";
-import { ACCESS_TOKEN_KEY } from "./constants";
+import fetch from "../shared/fetch";
+import { ACCESS_TOKEN_KEY } from "../shared/constants";
 import { toast } from "react-toastify";
-import User from "./models/User";
+import User from "../models/User";
 
 export const CONSENT_REQUEST_SUCCESS: string = "CONSENT_REQUEST_SUCCESS";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -16,13 +16,13 @@ export const UPDATE_PROFILE_FAILED: string = "UPDATE_PROFILE_FAILED";
 export const SIGN_UP_FAILED: string = "SIGN_UP_FAILED";
 export const LOGOUT: string = "LOGOUT";
 
-const actionCreator: ActionCreator = {
+const userActionCreator: UserActionCreator = {
     handleFetchError(type: string, error: Error): Action {
         const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
         console.error(formattedMessage);
         toast.error(error.message);
         return {
-            type: type
+            type
         };
     },
     allowConsent(transactionId: string): any {
@@ -41,7 +41,7 @@ const actionCreator: ActionCreator = {
                     dispatch({ type: CONSENT_REQUEST_FAILED});
                 }
             }, (error: Error) => {
-                dispatch(actionCreator.handleFetchError(CONSENT_REQUEST_FAILED, error));
+                dispatch(userActionCreator.handleFetchError(CONSENT_REQUEST_FAILED, error));
             });
         };
     },
@@ -68,7 +68,7 @@ const actionCreator: ActionCreator = {
                         dispatch({ type: AUTHENTICATE_FAILED});
                     }
                 }, (error: Error) => {
-                    dispatch(actionCreator.handleFetchError(AUTHENTICATE_FAILED, error));
+                    dispatch(userActionCreator.handleFetchError(AUTHENTICATE_FAILED, error));
                 });
             }
         };
@@ -89,7 +89,7 @@ const actionCreator: ActionCreator = {
                     dispatch({ type: LOGIN_FAILED});
                 }
             }, (error: Error) => {
-                dispatch(actionCreator.handleFetchError(LOGIN_FAILED, error));
+                dispatch(userActionCreator.handleFetchError(LOGIN_FAILED, error));
             });
         };
     },
@@ -117,11 +117,11 @@ const actionCreator: ActionCreator = {
                         dispatch({ type: UPDATE_PROFILE_FAILED});
                     }
                 }, (error: Error) => {
-                    dispatch(actionCreator.handleFetchError(UPDATE_PROFILE_FAILED, error));
+                    dispatch(userActionCreator.handleFetchError(UPDATE_PROFILE_FAILED, error));
                 });
             }
         };
     }
 };
 
-export default actionCreator;
+export default userActionCreator;

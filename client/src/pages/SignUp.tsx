@@ -1,16 +1,16 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../utils/connect";
+import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
-import fetch from "../utils/fetch";
-import ActionCreator from "../models/ActionCreator";
-import { SIGN_UP_FAILED } from "../actions";
+import fetch from "../shared/fetch";
+import UserActionCreator from "../models/UserActionCreator";
+import { SIGN_UP_FAILED } from "../actions/user";
 import Gender from "../models/Gender";
 import _ from "lodash";
 
 interface Props {
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {}

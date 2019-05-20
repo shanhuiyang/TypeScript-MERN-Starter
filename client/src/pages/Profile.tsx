@@ -1,14 +1,14 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../utils/connect";
+import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import ErrorPage from "./ErrorPage";
-import ActionCreator from "../models/ActionCreator";
+import UserActionCreator from "../models/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
 
 interface Props {
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {}
