@@ -8,8 +8,8 @@ import Clients from "../models/OAuth/ClientCollection";
 import User from "../../client/src/models/User";
 
 passport.use("oauth2", new OAuth2Strategy({
-        authorizationURL: "http://localhost:" + process.env.PORT + "/oauth2/authorize",
-        tokenURL: "http://localhost:" + process.env.PORT + "/oauth2/token",
+        authorizationURL: `${process.env.ORIGIN_URI}:${process.env.PORT}/oauth2/authorize`,
+        tokenURL: `${process.env.ORIGIN_URI}:${process.env.PORT}/oauth2/token`,
         clientID: Clients[0].id,
         clientSecret: Clients[0].secret,
         callbackURL: Clients[0].redirectUri

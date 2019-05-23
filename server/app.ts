@@ -40,6 +40,7 @@ mongoose.connect(mongoUrl, { useMongoClient: true }).then(
 
 // Express configuration
 app.set("server_port", process.env.SERVER_PORT);
+app.set("origin_uri", process.env.ORIGIN_URI);
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

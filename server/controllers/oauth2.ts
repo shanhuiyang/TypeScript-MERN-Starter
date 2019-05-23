@@ -65,7 +65,7 @@ export const authorization: RequestHandler[] = [
         }
     ),
     function (req: MiddlewareRequest, res: Response) {
-      res.redirect(302, `http://localhost:${process.env.PORT}/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+      res.redirect(302, `${process.env.ORIGIN_URI}:${process.env.PORT}/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 

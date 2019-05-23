@@ -12,7 +12,7 @@
     "update": "yarn && cd client && yarn && cd ..",
     "build": "npm run build-ts && npm run tslint && cd client && npm run build",
     "client": "node start-client.js",
-    "serve": "node dist/server.js",
+    "serve": "node dist/server/server.js",
     "start": "npm run build-ts && npm run tslint && concurrently \"npm run serve\" \"npm run client\"",
     "debug": "npm run build && npm run watch-debug",
     "watch-node": "nodemon dist/server.js",
