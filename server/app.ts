@@ -1,5 +1,5 @@
 import express from "express";
-import compression from "compression";  // compresses requests
+import compression from "compression";
 import session from "express-session";
 import lusca from "lusca";
 import dotenv from "dotenv";
@@ -32,10 +32,12 @@ const app = express();
 const mongoUrl = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
 mongoose.connect(mongoUrl, { useMongoClient: true }).then(
-    () => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ },
+    () => {
+        console.log("  MongoDB is connected successfully.");
+    },
 ).catch(err => {
-    console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
-    // process.exit();
+    console.error("  MongoDB connection error. Please make sure MongoDB is running. " + err);
+    process.exit();
 });
 
 // Express configuration

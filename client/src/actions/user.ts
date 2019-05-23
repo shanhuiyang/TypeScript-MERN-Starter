@@ -64,10 +64,12 @@ const userActionCreator: UserActionCreator = {
                             user: json.user
                         });
                     } else {
-                        console.error("null user profile");
+                        console.error("null user profile, remove the invalid access token");
+                        localStorage.setItem(ACCESS_TOKEN_KEY, "");
                         dispatch({ type: AUTHENTICATE_FAILED});
                     }
                 }, (error: Error) => {
+                    localStorage.setItem(ACCESS_TOKEN_KEY, "");
                     dispatch(userActionCreator.handleFetchError(AUTHENTICATE_FAILED, error));
                 });
             }
