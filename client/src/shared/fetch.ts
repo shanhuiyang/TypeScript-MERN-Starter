@@ -43,13 +43,26 @@ const _fetch = (url: string, body: any, method: Method, withToken?: boolean): Pr
                         message: body && body.message
                     } as Error);
                 });
-            } else {
+            } else if (contentType && contentType.startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
                 return response.text().then((body: any) => {
                     return Promise.reject({
                         name: `${response.status} ${response.statusText}`,
                         message: body
                     } as Error);
                 });
+            } else if (contentType && contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML)) {
+                return response.text().then((body: any) => {
+                    return Promise.reject({
+                        name: `${response.status} ${response.statusText}`,
+                        message: "",
+                        stack: body
+                    } as Error);
+                });
+            } else {
+                return Promise.reject({
+                    name: `${response.status} ${response.statusText}`,
+                    message: ""
+                } as Error);
             }
         }
     });

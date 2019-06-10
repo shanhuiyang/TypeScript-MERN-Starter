@@ -1,0 +1,5 @@
+node_modules
+dist
+client/node_modules
+client/build
+npm-debug.log

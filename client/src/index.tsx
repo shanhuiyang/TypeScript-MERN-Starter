@@ -2,7 +2,6 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import React from "react";
-import * as serviceWorker from "./serviceWorker";
 import { Provider } from "react-redux";
 import store from "./store";
 import { toast, ToastContainerProps } from "react-toastify";
@@ -24,5 +23,3 @@ toast.configure({
   closeOnClick: true,
   pauseOnHover: true
 } as ToastContainerProps);
-
-serviceWorker.unregister(); // TODO: know service worker better

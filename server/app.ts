@@ -29,9 +29,9 @@ import auth from "./routes/auth";
 const app = express();
 
 // Connect to MongoDB
-const mongoUrl = MONGODB_URI;
+const mongoUrl: string = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
-mongoose.connect(mongoUrl, { useMongoClient: true }).then(
+mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
     () => {
         console.log("  MongoDB is connected successfully.");
     },

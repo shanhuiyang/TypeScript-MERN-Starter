@@ -1,6 +1,10 @@
 # TypeScript MERN Starter
 > **Note!** This project is still **under construction**, but it has already been working well. You can go to the [Quick Start](#quick-start) section and have a try.
 
+**Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
+
+![Live Demo](./images/live-demo.png)
+
 This project is intended to build a RESTful MERN start point in TypeScript. With this project as a start point you can easily extend it to a community or blog app.
 
 MERN is a free and open-source JavaScript software stack for building dynamic web sites and web applications. The MERN stack is composed of MongoDB, Express.js, React, and Node.js. 
@@ -21,6 +25,7 @@ Not only using TypeScript, but this project is also featured by:
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states.
 - **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter**  for who would like to build an community app on MERN.
 - The client code is created from [create-react-app](https://facebook.github.io/create-react-app/), so now you can get rid of annoying configurations for babel and webpack.
+
 # Motivation
 (constructing...)
 # Quick Start
@@ -29,6 +34,7 @@ To build and run this app locally you will need a few things:
 - Install [Node.js](https://nodejs.org/en/)
 - Install [MongoDB](https://docs.mongodb.com/manual/installation/)
 - Install [VS Code](https://code.visualstudio.com/)
+- Install [Yarn](https://yarnpkg.com/)
 
 ## Clone the repository
 ```
@@ -37,7 +43,7 @@ git clone https://github.com/shanhuiyang/TypeScript-MERN-Starter.git <project_na
 ## Install dependencies
 ```
 cd <project_name>
-npm run update
+yarn install
 ```
 ## Start your mongoDB server
 (you'll probably have to start another command prompt)
@@ -46,7 +52,7 @@ mongod
 ```
 ## Build and run the project
 ```
-npm run start
+yarn start
 ```
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
 # Project Structure
@@ -60,7 +66,7 @@ In this section, let's show you how to deploy this project to Azure App Service.
 - [**Azure account**](https://azure.microsoft.com/en-us/free/) - If you don't have one, you can sign up for free.
 The Azure free tier gives you plenty of resources to play around with including up to 10 App Service instances, which is what we will be using.
 - [**VS Code**](https://code.visualstudio.com/) - We'll be using the interface provided by VS Code to quickly deploy our app.
-- [**Azure App Service VS Code extension**](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azureappservice) - In VS Code, search for `Azure App Service` in the extension marketplace (5th button down on the far left menu bar), install the extension, and then reload VS Code.
+- [**Docker Desktop**](https://www.docker.com/products/docker-desktop) - Usually you need to sign in or sign up on [Docker hub](https://hub.docker.com/) first.
 ## Create production MongoDB
 In this step, you create a MongoDB database in Azure. When your app is deployed to Azure, it uses this cloud database.
 For MongoDB, we use Azure Cosmos DB. Cosmos DB supports MongoDB client connections.
@@ -120,12 +126,14 @@ Copy the value of ```primaryMasterKey```. You need this information in the next 
 ### Configure the connection string in your Node.js application
 In your Typescript MERN project open file _.env.production_. Replace the two ```<cosmosdb_name>``` placeholders with your Cosmos DB database name, and replace the ```<primary_master_key>``` placeholder with the key you copied in the previous step.
 ```
-MONGODB_URI=mongodb://<cosmosdb_name>:<primary_master_key>@<cosmosdb_name>.documents.azure.com:10250/mean?ssl=true&sslverifycertificate=false
+MONGODB_URI=mongodb://<cosmosdb_name>:<primary_master_key>@<cosmosdb_name>.documents.azure.com:10250/typescript-mern-starter?ssl=true&sslverifycertificate=false
 ```
 The ```ssl=true``` option is required because Cosmos DB requires SSL. Save your changes.
 ### Test the application in production mode
-In file _.env.production_, change the ORIGIN_URI to the localhost.
+In file _.env.production_, change the ORIGIN_URI to the localhost. Meanwhile change the ports number from 80 to 3000 because your local 80 port may have been blocked.
 ```
+PORT=3000
+SERVER_PORT=3000
 ORIGIN_URI=http://localhost
 ```
 Open your local terminal. Switch the local node env from development to production by entering following commands.
@@ -137,17 +145,95 @@ $env:NODE_ENV = "production"
 ```
 Build the production for your TypeScript MERN project.
 ```
-npm run build
+yarn build
 ```
 Start your local production server.
 ```
-npm run serve
+yarn serve
 ```
 In the output of terminal, you should see that **MongoDB is connected successfully**.
 
 Navigate to http://localhost:3000 in a browser. Click Sign Up in the top menu and create a test user. If you are successful creating a user and signing in, then your app is writing data to the Cosmos DB database in Azure. You can check that in your Azure portal's **Azure Cosmos DB account** page using **Data Explorer**.
 
 In the terminal, stop Node.js by typing Ctrl+C.
+## Build app into a Docker image
+Firstly, we will [deploy the production app to Docker image](https://docs.docker.com/get-started/part2/) because of its great flexibility. Nowadays almost every cloud service support deploying web app using Docker image. Therefore once we have a well constructed Docker image then we can easily deploy our app to **any platform** with little adaption. In next section we will deploy the Docker image generated in this section to [Azure app service](https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-docker-go). Let's generate the Docker image locally in this section.
+### Configure environment variables for production
+In file _.env.production_, change the ORIGIN_URI to the target app url. Meanwhile change the ports number from 3000 back to 80.
+```
+PORT=80
+SERVER_PORT=80
+ORIGIN_URI=https://<your_app_name>.azurewebsites.net
+```
+### Build app into a local Docker image
+We are ready to build the app. Make sure you are still at the root directory in your repository, which includes a ```Dockerfile```
+
+Now run the build command. This creates a Docker image, which we’re going to name using the --tag option. Use -t if you want to use the shorter option. Replace <your_app_name> with your desired app name. This command will take your several minutes to finish for the first time you run it.
+```
+docker build --tag=<your_app_name> .
+```
+Where is your built image? It’s in your machine’s local Docker image registry:
+```
+$ docker image ls
+
+REPOSITORY            TAG               IMAGE ID
+<your_app_name>       latest            326387cea398
+```
+### Push Docker image to Docker hub
+If you don’t have a Docker account, sign up for one at [hub.docker.com](hub.docker.com). Make note of <your_username>.
+
+Log in to the Docker public registry on your local machine.
+```
+docker login
+```
+We need to tag the image with a meaningful version label using following command, e.g. azure. Replace <your_app_name> and <your_username>, and run the command.
+```
+docker tag <your_app_name> <your_username>/<your_app_name>:azure
+```
+Finally, upload your tagged image to the repository:
+```
+docker push <your_username>/<your_app_name>:azure
+```
+Once complete, the results of this upload are publicly available. If you log in to Docker Hub, you see the new image there, with its pull command.
+## Create an Azure app service using Docker image
+Traditionally, we can deploy a node.js app using git repository on Azure app service. That is to say, you can push your git repository to the Azure app service, then it will start your app by running ```npm run start```. In practice this is not a easy-to-use approach since you have very limited ability to control the installation and build process for your app on Azure app service.
+
+Using Docker image you can get rid of many annoying environment issues, and will easily migrate your app to other cloud platforms in future.
+### Create an Azure app service in Azure portal
+Open Azure portal, click the quick link of *App Services*. Then click the +Add button. You will probably see the portal looks like following:
+
+![Create an Azure app service in Azure portal](./images/create-app-service.png)
+
+Fill the create wizard like this.
+- Resource Group: click *Create new*, and name it like ```myLinuxGroup```
+- Name: use <your_app_name>
+- Publish: click *Docker Image*
+- Operating System: Linux
+- Region: choose one near your place
+- Sku and size: Free F1 is OK, you can scale it up later on your demand
+Then click *Next: Docker >*, you will probably see the portal looks like following:
+
+![Choose a Docker image for your app service](./images/choose-docker-image.png)
+
+Fill this wizard like following.
+- Options: keep it as *Single Container*
+- Image Source: *Docker Hub*
+- Access Type: keep it *public*
+- Image and tag: <your_username>/<your_app_name>:azure, the one you just published in previous section
+
+Finally you are ready to create your app service with Docker image. Click ***Review and Create***. Then click ***Create*** after the portal navigate you to the next page.
+
+### Verify your Azure app service
+After click *create* for the Azure app service, you will get the finish notification.
+
+![finish notification](./images/deploy-complete.png)
+
+However, it is still preparing the resources internally. If you see 5xx error on your site at [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net), don't feel frustrated. 
+
+You have to wait up to 20 minutes to verify your new app. After the app is ready, please note that the browser has marked your site trustful, i.e. Azure has served SSL for your site.
+
+**Congratulation!** You have deployed a real working web app!
+
 # Prior Art
 ### TypeScript-Node-Starter
 https://github.com/Microsoft/TypeScript-Node-Starter
@@ -156,4 +242,4 @@ https://github.com/Hashnode/mern-starter
 ### oauth2api
 https://github.com/PatrickHeneise/oauth2api
 # Road Map
-We would like to extend this project from MERN to MERRN, another R stands for ReactNative. TypeScript will show the power of modeling in a **real fullstack** web app.
+We would like to extend this project from MERN to MERRN, where the additional R stands for ReactNative. TypeScript will show the power of modeling in a **real fullstack** web app.
