@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt-nodejs";
 import mongoose, { Model, Schema } from "mongoose";
-import UserDocument, { ComparePasswordFunction, default as User } from "./UserDocument";
+import UserDocument, { ComparePasswordFunction } from "./UserDocument";
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
@@ -35,5 +35,5 @@ const comparePassword: ComparePasswordFunction = function (candidatePassword, cb
 
 userSchema.methods.comparePassword = comparePassword;
 
-const UserCollection: Model<User> = mongoose.model("User", userSchema);
+const UserCollection: Model<UserDocument> = mongoose.model("User", userSchema);
 export default UserCollection;

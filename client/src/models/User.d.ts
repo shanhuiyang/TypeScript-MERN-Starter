@@ -1,5 +1,6 @@
  import Gender from "./Gender";
- export default interface User {
+import { UnifiedModel } from "./UnifiedModel";
+export default interface User extends UnifiedModel {
     email: string;
     password?: string;
     name: string;

@@ -111,7 +111,8 @@ class Profile extends React.Component<Props, States> {
             const name: any = this.nameRef.current && this.nameRef.current.value;
             const gender: Gender = this.tempGender;
             const avatarUrl: string = this.props.state.user.avatarUrl;
-            this.props.actions.updateProfile({email, name, gender, website, address, avatarUrl});
+            this.props.actions.updateProfile({_id: this.props.state.user._id,
+                email, name, gender, website, address, avatarUrl});
         }
     }
 }

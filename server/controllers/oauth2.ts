@@ -182,6 +182,7 @@ export const profile: RequestHandler = (req: Request, res: Response, next: NextF
 
 export const updateProfile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     req.assert("email", "Malicious attack is detected.").equals(req.user.email);
+    req.assert("_id", "Malicious attack is detected.").equals(req.user._id.toString());
     req.assert("name", "Name cannot be blank.").notEmpty();
     req.assert("avatarUrl", "Invalid url.").matches("\/images\/avatars\/.*\.png");
     req.assert("gender", "Gender is incorrect.").isIn(Object.values(Gender));
@@ -190,10 +191,10 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
         return res.status(400).json({ message: errors[0].msg });
     }
 
-    UserCollection.findOne({ email: req.body.email }, (err: Error, user: UserDocument) => {
+    UserCollection.findById(req.body._id, (err: Error, user: UserDocument) => {
         if (err) { return next(err); }
         if (!user) {
-            return res.status(404).json({ message: "Account with that email cannot be found." });
+            return res.status(404).json({ message: "Account cannot be found." });
         }
         Object.assign(user, req.body);
         user.save((err: any) => {
