@@ -1,5 +1,5 @@
 # TypeScript MERN Starter
-> **Note!** This project is still **under construction**, but it has already been working well. You can go to the [Quick Start](#quick-start) section and have a try.
+> **Note!** This project is still **under construction**, but it has already been working well. You can go to the [Quick Start](#quick-start) part, then have a try.
 
 **Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
 
@@ -25,10 +25,7 @@ Not only using TypeScript, but this project is also featured by:
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states.
 - **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter**  for who would like to build an community app on MERN.
 - The client code is created from [create-react-app](https://facebook.github.io/create-react-app/), so now you can get rid of annoying configurations for babel and webpack.
-
-# Motivation
-(constructing...)
-# Quick Start
+# Quick start
 ## Prerequisite
 To build and run this app locally you will need a few things:
 - Install [Node.js](https://nodejs.org/en/)
@@ -55,7 +52,13 @@ mongod
 yarn start
 ```
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
-# Project Structure
+# Motivation
+(constructing...)
+# Project structure
+(constructing...)
+# How to debug
+(constructing...)
+# Tests
 (constructing...)
 # Tutorial 
 (constructing...)
@@ -228,12 +231,28 @@ After click *create* for the Azure app service, you will get the finish notifica
 
 ![finish notification](./images/deploy-complete.png)
 
-However, it is still preparing the resources internally. If you see 5xx error on your site at [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net), don't feel frustrated. 
+> **Note!** Indeed it is still preparing the resources internally. If you see 5xx error on your site at [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net), don't feel frustrated. You have to wait up to 20 minutes to verify your new app successfully. 
 
-You have to wait up to 20 minutes to verify your new app. After the app is ready, please note that the browser has marked your site trustful, i.e. Azure has served SSL for your site.
+After the app is ready, please note that the browser has marked your site trustful, i.e. Azure has served SSL for your site.
 
 **Congratulation!** You have deployed a real working web app!
+## Map custom domain and bind SSL certificate
+Usually the web address https://<your_app_name>.azurewebsites.net cannot fulfil your requirement for a real product, since you would like to give your customer a more concise and noticeable url. You can follow the steps below to adapt the app you just deployed on Azure to a desired domain name.
+1. Register a domain you like.
+2. Modify your _.env.production_, so that ```ORIGIN_URI=https://<domain_you registered>```
+3. Re-deploy your app to https://<your_app_name>.azurewebsites.net by following steps introduced in previous sections.
+4. Follow the tutorial of [map custom domain](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain).
+5. Follow the tutorial of [bind SSL certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl). Please note that bind a valid SSL certificate is must-do for Typescript-MERN-starter projects.
+## Summary
+From this part we can see that deploy a Typescript-MERN-starter project to Azure is very easy. What you have to be worry about is just to configure the environment variables correctly. 
 
+Further more, you can do following to improve your engineering experience if you are using Azure as your could platform.
+1. You can [configure the CI/CD procedure](https://docs.microsoft.com/en-us/azure/app-service/containers/app-service-linux-ci-cd) on Azure app service so that you can save a lot of mouse click in future.
+2. You can write your own [```docker-compose.yml```](https://docs.docker.com/get-started/part3/) to manage/orchestrate multiple services including your app service. For example you can add the [mongodb](https://hub.docker.com/_/mongo) service so that you can avoid using the Azure Cosmos DB. Then when you deploy your docker image, choose *Docker Compose (Preview)* instead of *Single Container* for *Options*.
+
+If you don't like Azure, e.g. you prefer AWS, you can easily [deploy your Docker image](https://aws.amazon.com/getting-started/tutorials/deploy-docker-containers/) to AWS too. The flexibility of Docker make the migration from one platform to another very simple.
+# CI and Collaboration
+(constructing...)
 # Prior Art
 ### TypeScript-Node-Starter
 https://github.com/Microsoft/TypeScript-Node-Starter
