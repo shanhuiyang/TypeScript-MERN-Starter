@@ -6,10 +6,11 @@ import OAuth2Strategy from "./oauth2orize-strategy";
 import _ from "lodash";
 import Clients from "../models/OAuth/ClientCollection";
 import User from "../../client/src/models/User";
+import { APP_URL } from "../util/secrets";
 
 passport.use("oauth2", new OAuth2Strategy({
-        authorizationURL: `${process.env.ORIGIN_URI}:${process.env.PORT}/oauth2/authorize`,
-        tokenURL: `${process.env.ORIGIN_URI}:${process.env.PORT}/oauth2/token`,
+        authorizationURL: `${APP_URL}/oauth2/authorize`,
+        tokenURL: `${APP_URL}/oauth2/token`,
         clientID: Clients[0].id,
         clientSecret: Clients[0].secret,
         callbackURL: Clients[0].redirectUri

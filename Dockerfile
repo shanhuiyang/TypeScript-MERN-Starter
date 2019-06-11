@@ -1,5 +1,7 @@
 FROM node:10
 
+ENV NODE_ENV production
+
 # Create app directory
 WORKDIR /app
 COPY package.json .
@@ -15,11 +17,10 @@ RUN yarn install
 COPY client .
 RUN yarn build
 
+# Then build server
 WORKDIR /app
 COPY . .
-RUN yarn build
-
-ENV NODE_ENV production
+RUN yarn build-server
 
 EXPOSE 80
 CMD ["node", "dist/server/server.js"]

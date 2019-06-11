@@ -17,6 +17,7 @@ import { IVerifyOptions } from "passport-local";
 import { MiddlewareRequest } from "oauth2orize";
 import { random } from "../util/random";
 import { MappedError } from "express-validator/shared-typings";
+import { APP_URL } from "../util/secrets";
 
 // User authorization endpoint.
 //
@@ -65,7 +66,7 @@ export const authorization: RequestHandler[] = [
         }
     ),
     function (req: MiddlewareRequest, res: Response) {
-      res.redirect(302, `${process.env.ORIGIN_URI}:${process.env.PORT}/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+      res.redirect(302, `${APP_URL}/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 
