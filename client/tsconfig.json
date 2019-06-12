@@ -20,7 +20,6 @@
     "isolatedModules": true
   },
   "include": [
-    "src",
-    "../models"
+    "src"
   ]
 }

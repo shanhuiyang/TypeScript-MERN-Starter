@@ -3,4 +3,5 @@ import Article from "./Article";
 
 export default interface ArticleActionCreator extends ActionCreatorsMapObject {
     getAllArticles(): any;
+    createArticle(title: string, content: string, author: string): any;
 }

@@ -4,6 +4,8 @@ import fetch from "../shared/fetch";
 import { ACCESS_TOKEN_KEY } from "../shared/constants";
 import { toast } from "react-toastify";
 import User from "../models/User";
+import actions from ".";
+import Gender from "../models/Gender";
 
 export const CONSENT_REQUEST_SUCCESS: string = "CONSENT_REQUEST_SUCCESS";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -17,14 +19,6 @@ export const SIGN_UP_FAILED: string = "SIGN_UP_FAILED";
 export const LOGOUT: string = "LOGOUT";
 
 const userActionCreator: UserActionCreator = {
-    handleFetchError(type: string, error: Error): Action {
-        const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
-        console.error(formattedMessage);
-        toast.error(error.message);
-        return {
-            type
-        };
-    },
     allowConsent(transactionId: string): any {
         return (dispatch: Dispatch<any>): void => {
             fetch("/oauth2/authorize/decision", { transaction_id: transactionId }, "POST")
@@ -41,7 +35,7 @@ const userActionCreator: UserActionCreator = {
                     dispatch({ type: CONSENT_REQUEST_FAILED});
                 }
             }, (error: Error) => {
-                dispatch(userActionCreator.handleFetchError(CONSENT_REQUEST_FAILED, error));
+                dispatch(actions.handleFetchError(CONSENT_REQUEST_FAILED, error));
             });
         };
     },
@@ -70,7 +64,7 @@ const userActionCreator: UserActionCreator = {
                     }
                 }, (error: Error) => {
                     localStorage.setItem(ACCESS_TOKEN_KEY, "");
-                    dispatch(userActionCreator.handleFetchError(AUTHENTICATE_FAILED, error));
+                    dispatch(actions.handleFetchError(AUTHENTICATE_FAILED, error));
                 });
             }
         };
@@ -91,7 +85,7 @@ const userActionCreator: UserActionCreator = {
                     dispatch({ type: LOGIN_FAILED});
                 }
             }, (error: Error) => {
-                dispatch(userActionCreator.handleFetchError(LOGIN_FAILED, error));
+                dispatch(actions.handleFetchError(LOGIN_FAILED, error));
             });
         };
     },
@@ -119,9 +113,19 @@ const userActionCreator: UserActionCreator = {
                         dispatch({ type: UPDATE_PROFILE_FAILED});
                     }
                 }, (error: Error) => {
-                    dispatch(userActionCreator.handleFetchError(UPDATE_PROFILE_FAILED, error));
+                    dispatch(actions.handleFetchError(UPDATE_PROFILE_FAILED, error));
                 });
             }
+        };
+    },
+    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any {
+        return (dispatch: Dispatch<any>): void => {
+            fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
+            .then((json: any) => {
+                console.log(`sign up successfully with response ${JSON.stringify(json)}`);
+            }, (error: Error) => {
+                dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));
+            });
         };
     }
 };

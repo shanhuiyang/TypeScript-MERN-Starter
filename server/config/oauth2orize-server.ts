@@ -1,5 +1,4 @@
 // This module is modified from
-// https://github.com/awais786327/oauth2orize-examples/blob/master/routes/oauth2.js
 // The Spec of OAuth2 defined 4 roles, which are user, resource server, client and authorization server.
 // This file is part of **authorization server**
 

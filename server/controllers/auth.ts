@@ -1,7 +1,7 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import passport from "passport";
 import UserDocument from "../models/User/UserDocument";
-export const oauth2Callback: RequestHandler = (req: Request, res: Response, next: NextFunction) =>  {
+export const oauth2Callback: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
     passport.authenticate("oauth2", (error: Error, user: UserDocument | boolean, info: any) => {
         if (error) {
             return next(error);

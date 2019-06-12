@@ -24,6 +24,7 @@ if (process.env.NODE_ENV === "production") {
 import "./config/passport-consumer";
 import oauth2 from "./routes/oauth2";
 import auth from "./routes/auth";
+import article from "./routes/article";
 
 // Create Express server
 const app = express();
@@ -106,5 +107,6 @@ if (process.env.NODE_ENV === "production") {
  */
 app.use("/auth", auth); // Auth client routes
 app.use("/oauth2", oauth2); // OAuth2 server routes
+app.use("/api/article", article); // Article related routes
 
 export default app;

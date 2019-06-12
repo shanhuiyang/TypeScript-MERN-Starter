@@ -2,9 +2,7 @@ import React, { RefObject } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
-import fetch from "../shared/fetch";
 import UserActionCreator from "../models/UserActionCreator";
-import { SIGN_UP_FAILED } from "../actions/user";
 import Gender from "../models/Gender";
 import _ from "lodash";
 
@@ -78,18 +76,12 @@ class SignUp extends React.Component<Props, States> {
         }
     }
     private _signUp = (): void => {
-        console.log("this._signUp is called");
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
         const confirmPassword: any = this.confirmPasswordRef.current && this.confirmPasswordRef.current.value;
         const name: any = this.nameRef.current && this.nameRef.current.value;
         const gender: Gender = this.tempGender;
-        fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
-        .then((json: any) => {
-            console.log(JSON.stringify(json));
-        }, (error: Error) => {
-            this.props.actions.handleFetchError(SIGN_UP_FAILED, error);
-        });
+        this.props.actions.signUp(email, password, confirmPassword, name, gender);
     }
 }
 
