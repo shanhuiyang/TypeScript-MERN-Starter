@@ -3,12 +3,29 @@ import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
 import actions from ".";
 import { toast } from "react-toastify";
+import ArticleState from "../models/ArticleState";
 
 export const SAVE_ARTICLE_FAILED: string = "SAVE_ARTICLE_FAILED";
+export const GET_ARTICLE_SUCCESS: string = "GET_ARTICLE_SUCCESS";
+export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
 
 const articleActionCreator: ArticleActionCreator = {
     getAllArticles(): any {
-        // TODO
+        return (dispatch: Dispatch<any>): void => {
+            fetch("/api/article", undefined, "GET")
+            .then((json: ArticleState) => {
+                if (json && json.data && json.authors) {
+                    dispatch({
+                        type: GET_ARTICLE_SUCCESS,
+                        articles: json
+                    });
+                } else {
+                    dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
+                }
+            }, (error: Error) => {
+                dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, error));
+            });
+        };
     },
     createArticle(title: string, content: string, author: string): any {
         return (dispatch: Dispatch<any>): void => {

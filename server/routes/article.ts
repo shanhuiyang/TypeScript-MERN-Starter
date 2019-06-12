@@ -7,5 +7,6 @@ article.route("/create").post(
     passport.authenticate("bearer", { session: false }),
     controllers.createArticle
 );
+article.route("/").get(controllers.getArticles);
 
 export default article;
