@@ -3,6 +3,10 @@ import { MappedError } from "express-validator/shared-typings";
 import ArticleDocument from "../models/Article/ArticleDocument";
 import ArticleCollection from "../models/Article/ArticleCollection";
 import ArticleState from "../../client/src/models/ArticleState";
+import Article from "../../client/src/models/Article";
+import User from "../../client/src/models/User";
+import UserCollection from "../models/User/UserCollection";
+import UserDocument from "../models/User/UserDocument";
 
 export const createArticle: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     console.log("controller createArticle is called.");
@@ -36,6 +40,25 @@ export const getArticles: RequestHandler = (req: Request, res: Response, next: N
         if (error) {
             next(error);
         }
-        res.json({data: articles, authors: []} as ArticleState);
+        const findAuthorInUsers = (article: Article): Promise<UserDocument> => {
+            return UserCollection.findById(article.author).exec();
+        };
+        const promises: Promise<User>[] = articles.map(async (article: Article) => {
+            const user: UserDocument = await findAuthorInUsers(article);
+            return {
+                email: user.email,
+                name: user.name,
+                avatarUrl: user.avatarUrl,
+                gender: user.gender,
+                _id: user._id.toString()
+            } as User;
+        });
+        Promise.all(promises).then((authors: User []) => {
+            const authorsDic: {[id: string]: User} = {};
+            authors.forEach((author: User): void => {
+                authorsDic[author._id] = author;
+            });
+            res.json({data: articles, authors: authorsDic} as ArticleState);
+        });
     });
 };

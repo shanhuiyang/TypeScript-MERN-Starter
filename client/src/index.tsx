@@ -17,7 +17,7 @@ ReactDOM.render(
 );
 
 toast.configure({
-  position: "top-center",
+  position: "bottom-right",
   autoClose: 4000,
   hideProgressBar: true,
   closeOnClick: true,

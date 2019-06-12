@@ -4,7 +4,7 @@ import { GET_ARTICLE_SUCCESS } from "../actions/article";
 
 const initialState: ArticleState = {
     data: [],
-    authors: []
+    authors: {}
 };
 
 const articles = (state: ArticleState = initialState, action: Action): ArticleState => {

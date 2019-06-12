@@ -39,7 +39,13 @@ class Header extends React.Component<HeaderProps, HeaderStates> {
         return (
             <div className="navbar navbar-default navbar-fixed-top">
                 <div className="container">
-                    <div className="navbar-header"><button className="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse"><span className="sr-only">Toggle navigation</span><span className="icon-bar"></span><span className="icon-bar"></span><span className="icon-bar"></span></button>
+                    <div className="navbar-header">
+                        <button className="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span className="sr-only">Toggle navigation</span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                        </button>
                         <Link className="navbar-brand" to="/"><i className="fa fa-cube"></i>Typescript MERN Starter</Link>
                     </div>
                     <div className="collapse navbar-collapse">
