@@ -4,6 +4,7 @@ import connectPropsAndActions from "../shared/connect";
 import Article from "../models/Article";
 import { Link } from "react-router-dom";
 import User from "../models/User";
+import { byCreatedAt } from "../shared/date";
 
 interface Props {
     state: AppState;
@@ -16,9 +17,7 @@ class ArticleList extends React.Component<Props, States> {
         return <div className="row">
             {
                 this.props.state.articles.data
-                .sort((first: Article, second: Article): number => {
-                    return -1; // TODO for the correct time
-                }).map(
+                .sort(byCreatedAt).map(
                     (article: Article) => this._renderArticle(article)
                 )
             }
@@ -26,12 +25,13 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     private _renderArticle = (article: Article): React.ReactElement<any> => {
+        const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         return <div className="col-sm-10 col-md-8 col-lg-7 bg-info" style={{margin: "8px"}} key={article._id}>
             <h2>{article.title}</h2>
             {this._renderAuthorInfo(article)}
             <p style={{ whiteSpace: "pre-line" }}>{article.content}</p>
             <p>
-                <span className="text-muted">{article.createdAt}</span>
+                <span className="text-muted">{createDate.toLocaleString()}</span>
                 {this._renderEditButton(article)}
             </p>
         </div>;
