@@ -8,8 +8,62 @@ import User from "../../client/src/models/User";
 import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument";
 
-export const createArticle: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    console.log("controller createArticle is called.");
+export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
+        if (error) {
+            return next(error);
+        }
+        if (!article) {
+            return res.status(404).json({ message: "Not Found" });
+        }
+        if (article.author !== req.user._id.toString()) {
+            return res.status(401).json({ message: "You are not the author!" });
+        }
+        ArticleCollection.findByIdAndRemove(req.params.id).exec(
+            (error: Error, removed: Article) => {
+                if (error) {
+                    return next(error);
+                }
+                res.status(200).end();
+            }
+        );
+    });
+};
+
+export const update: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    req.assert("content", "Content cannot be empty.").notEmpty();
+    req.assert("content", "Content should be longer than 500 characters.").len({ min: 500 });
+    req.assert("title", "Title cannot be empty.").notEmpty();
+    req.assert("title", "Title cannot be longer than 100 characters.").len({ max: 100 });
+
+    const errors: MappedError[] = req.validationErrors() as MappedError[];
+    if (errors && errors.length > 0) {
+        return res.status(400).json({ message: errors[0].msg });
+    }
+
+    ArticleCollection.findById(req.body._id).exec((error: Error, article: ArticleDocument) => {
+        if (error) {
+            return next(error);
+        }
+        if (!article) {
+            return res.status(404).json({ message: "Not Found" });
+        }
+        if (article.author !== req.user._id.toString()) {
+            return res.status(401).json({ message: "You are not the author!" });
+        }
+        ArticleCollection.findByIdAndUpdate(
+            req.body._id, {content: req.body.content, title: req.body.title}
+        ).exec(
+            (error: Error, updated: Article) => {
+                if (error) {
+                    return next(error);
+                }
+                res.status(200).end();
+            }
+        );
+    });
+};
+export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     req.assert("author", "Malicious attack is detected.").equals(req.user._id.toString());
     req.assert("content", "Content cannot be empty.").notEmpty();
     req.assert("content", "Content should be longer than 500 characters.").len({ min: 500 });
@@ -27,15 +81,14 @@ export const createArticle: RequestHandler = (req: Request, res: Response, next:
         content: req.body.content,
     });
 
-    article.save((err: any) => {
-        if (err) {
-            return next(err);
+    article.save((error: any) => {
+        if (error) {
+            return next(error);
         }
         res.status(200).send();
     });
 };
-
-export const getArticles: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+export const read: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ArticleCollection.find({}).exec((error: Error, articles: ArticleDocument[]) => {
         if (error) {
             next(error);

@@ -26,7 +26,7 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     private _renderArticle = (article: Article): React.ReactElement<any> => {
-        return <div className="col-sm-10 col-md-8 col-lg-7" key={article._id}>
+        return <div className="col-sm-10 col-md-8 col-lg-7 bg-info" style={{margin: "8px"}} key={article._id}>
             <h2>{article.title}</h2>
             {this._renderAuthorInfo(article)}
             <p style={{ whiteSpace: "pre-line" }}>{article.content}</p>
@@ -51,8 +51,8 @@ class ArticleList extends React.Component<Props, States> {
 
     private _renderEditButton = (article: Article): React.ReactElement<any> | undefined => {
         if (article.author === (this.props.state.user && this.props.state.user._id)) {
-            const uri: string = `/edit-article?id=${article._id}`;
-            return <Link className="btn btn-default pull-right" to={uri} role="button">
+            const uri: string = `/article/edit/${article._id}`;
+            return <Link className="btn btn-default pull-right" to={uri} style={{marginBottom: "8px"}} role="button">
                     <i className="fa fa-edit"></i>Edit
             </Link>;
         } else {

@@ -5,8 +5,13 @@ import passport from "passport";
 const article: Router = express.Router();
 article.route("/create").post(
     passport.authenticate("bearer", { session: false }),
-    controllers.createArticle
+    controllers.create
 );
-article.route("/").get(controllers.getArticles);
+article.route("/edit").post(
+    passport.authenticate("bearer", { session: false }),
+    controllers.update
+);
+article.route("/").get(controllers.read);
+article.route("/remove/:id").get(controllers.remove);
 
 export default article;
