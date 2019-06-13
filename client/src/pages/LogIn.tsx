@@ -50,7 +50,6 @@ class LogIn extends React.Component<Props, States> {
     }
 
     private _login = (): void => {
-        console.log("this._login is called");
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
         if (_.isString(email) && _.isString(password)) {

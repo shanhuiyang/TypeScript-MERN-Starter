@@ -104,7 +104,6 @@ class Profile extends React.Component<Props, States> {
     }
     private _update = (): void => {
         if (this.props.state.user) {
-            console.log("this._update is called");
             const email: any = this.props.state.user.email;
             const address: any = this.addressRef.current && this.addressRef.current.value;
             const website: any = this.websiteRef.current && this.websiteRef.current.value;

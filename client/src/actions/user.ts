@@ -122,7 +122,7 @@ const userActionCreator: UserActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
             .then((json: any) => {
-                console.log(`sign up successfully with response ${JSON.stringify(json)}`);
+                // Redirected
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));
             });

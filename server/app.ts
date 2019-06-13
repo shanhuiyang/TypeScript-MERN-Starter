@@ -2,36 +2,28 @@ import express from "express";
 import compression from "compression";
 import session from "express-session";
 import lusca from "lusca";
-import dotenv from "dotenv";
 import mongo from "connect-mongo";
 import mongoose from "mongoose";
 import passport from "passport";
 import expressValidator from "express-validator";
 import bluebird from "bluebird";
+import errorHandler from "errorhandler";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
 import { Response, Request, NextFunction } from "express";
-
-const MongoStore = mongo(session);
-
-// Load environment variables from .env file, where API keys and passwords are configured
-if (process.env.NODE_ENV === "production") {
-    dotenv.config({ path: ".env.production" });
-} else if (process.env.NODE_ENV === "development") {
-    dotenv.config({ path: ".env.development" });
-}
-
-// API keys and Passport configuration
-import "./config/passport-consumer";
 import oauth2 from "./routes/oauth2";
 import auth from "./routes/auth";
 import article from "./routes/article";
 
-// Create Express server
-const app = express();
+// API keys and Passport configuration
+import "./config/passport-consumer";
 
 // Connect to MongoDB
+const MongoStore = mongo(session);
 const mongoUrl: string = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
+mongoose.set("useNewUrlParser", true);
+mongoose.set("useFindAndModify", false);
+mongoose.set("useCreateIndex", true);
 mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
     () => {
         console.log("  MongoDB is connected successfully.");
@@ -42,6 +34,7 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
 });
 
 // Express configuration
+const app = express();
 app.set("server_port", process.env.SERVER_PORT);
 app.set("origin_uri", process.env.ORIGIN_URI);
 app.use(compression());
@@ -69,12 +62,15 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.user = req.user;
     next();
 });
+if (process.env.NODE_ENV === "development") {
+    app.use(errorHandler());
+}
 
-app.use(
-    express.static("./client/build", { maxAge: 31557600000 })
-);
-
+// Server rendering configuration
 if (process.env.NODE_ENV === "production") {
+    app.use(
+        express.static("./client/build", { maxAge: 31557600000 })
+    );
     app.use((req: Request, res: Response, next: NextFunction) => {
         if (req.originalUrl.startsWith("/api") ||
             req.originalUrl.startsWith("/auth") ||
@@ -102,9 +98,7 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-/**
- * Primary app routes.
- */
+// Primary app routes.
 app.use("/auth", auth); // Auth client routes
 app.use("/oauth2", oauth2); // OAuth2 server routes
 app.use("/api/article", article); // Article related routes

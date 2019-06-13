@@ -4,10 +4,10 @@ export const ENVIRONMENT = process.env.NODE_ENV;
 const prod = ENVIRONMENT === "production";
 
 if (prod) {
-    console.debug("  Using .env.production file to supply config environment variables");
+    console.log = (input: string): void => {/* Disable log in production */};
     dotenv.config({ path: ".env.production" });
 } else {
-    console.debug("  Using .env.development file to supply config environment variables");
+    console.log("  Using .env.development file to supply config environment variables");
     dotenv.config({ path: ".env.development" });  // you can delete this after you create your own .env file!
 }
 

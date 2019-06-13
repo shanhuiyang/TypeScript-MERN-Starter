@@ -177,6 +177,7 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
 };
 
 export const profile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    // TODO: Remove/Hide the password
     return res.json({user: req.user});
 };
 

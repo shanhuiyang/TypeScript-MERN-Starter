@@ -139,10 +139,10 @@ PORT=3000
 SERVER_PORT=3000
 ORIGIN_URI=http://localhost
 ```
-Open your local terminal. Switch the local node env from development to production by entering following commands.
+Open your local terminal. Switch the local node env from development to production by entering following commands. Please remember to switch the ```NODE_ENV``` back to ```development``` once you are done this section.
 ```
 # Bash
-NODE_ENV=production
+export NODE_ENV=production
 # Windows PowerShell
 $env:NODE_ENV = "production" 
 ```
