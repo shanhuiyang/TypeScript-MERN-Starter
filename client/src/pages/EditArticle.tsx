@@ -22,6 +22,9 @@ class EditArticle extends React.Component<Props, States> {
         this.contentRef = React.createRef();
     }
     render(): React.ReactElement<any> {
+        if (!this.props.state.articles.valid) {
+            return <Redirect to="/" />;
+        }
         const notFoundError: Error = {
             name: "404 Not Found",
             message: `not found for ${window.location.href} `

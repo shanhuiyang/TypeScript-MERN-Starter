@@ -3,12 +3,24 @@ import { Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import ArticleList from "../components/ArticleList";
+import ActionCreator from "../models/ActionCreator";
 
 interface Props {
     state: AppState;
+    actions: ActionCreator;
 }
 interface States {}
 class Home extends React.Component<Props, States> {
+    componentDidMount() {
+        if (!this.props.state.articles.valid) {
+            this.props.actions.getAllArticles();
+        }
+    }
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.state.articles.valid && !this.props.state.articles.valid) {
+            this.props.actions.getAllArticles();
+        }
+    }
     render(): React.ReactElement<any> {
         return (
             <div className="container">

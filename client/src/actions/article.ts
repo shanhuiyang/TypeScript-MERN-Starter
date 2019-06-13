@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import ArticleState from "../models/ArticleState";
 import Article from "../models/Article";
 
+export const SAVE_ARTICLE_SUCCESS: string = "SAVE_ARTICLE_SUCCESS";
 export const SAVE_ARTICLE_FAILED: string = "SAVE_ARTICLE_FAILED";
 export const GET_ARTICLE_SUCCESS: string = "GET_ARTICLE_SUCCESS";
 export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
@@ -33,7 +34,7 @@ const articleActionCreator: ArticleActionCreator = {
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
             .then((json: any) => {
                 toast.success("Save your article successfully.");
-                // TODO: Redirect to home page
+                dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });
@@ -44,7 +45,7 @@ const articleActionCreator: ArticleActionCreator = {
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
             .then((json: any) => {
                 toast.success("Save your article successfully.");
-                // TODO: Redirect to home page
+                dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });
@@ -55,7 +56,7 @@ const articleActionCreator: ArticleActionCreator = {
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
                 toast.success("Delete your article successfully.");
-                // TODO: Redirect to home page
+                dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });

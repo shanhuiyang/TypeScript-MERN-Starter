@@ -111,7 +111,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             authors.forEach((author: User): void => {
                 authorsDic[author._id] = author;
             });
-            res.json({data: articles, authors: authorsDic} as ArticleState);
+            res.json({data: articles, authors: authorsDic, valid: true} as ArticleState);
         });
     });
 };

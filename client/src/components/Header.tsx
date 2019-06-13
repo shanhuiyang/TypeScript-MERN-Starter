@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import AccountControl from "./AccountControl";
-import ActionCreator from "../models/ActionCreator";
+import UserActionCreator from "../models/UserActionCreator";
 
 interface Props {
     to: string;
@@ -25,7 +25,7 @@ class NavItem extends React.Component<Props, States> {
 interface HeaderProps {
     location: Location;
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 interface HeaderStates {}
 class Header extends React.Component<HeaderProps, HeaderStates> {
@@ -33,7 +33,6 @@ class Header extends React.Component<HeaderProps, HeaderStates> {
         if (!this.props.state.user) {
             this.props.actions.authenticate();
         }
-        this.props.actions.getAllArticles();
     }
 
     render(): React.ReactElement<any> {

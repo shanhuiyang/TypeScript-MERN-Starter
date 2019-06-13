@@ -19,7 +19,9 @@ class CreateArticle extends React.Component<Props, States> {
         this.contentRef = React.createRef();
     }
     render(): React.ReactElement<any> {
-        if (this.props.state.user) {
+        if (!this.props.state.articles.valid) {
+            return <Redirect to="/" />;
+        } else if (this.props.state.user) {
             return (
                 <div className="container">
                     <div className="page-header">
