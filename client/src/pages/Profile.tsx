@@ -1,10 +1,10 @@
 import React, { RefObject } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
-import ErrorPage from "./ErrorPage";
 import UserActionCreator from "../models/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
+import { Redirect } from "react-router";
 
 interface Props {
     state: AppState;
@@ -84,11 +84,7 @@ class Profile extends React.Component<Props, States> {
                 </div>
             );
         } else {
-            const error: Error = {
-                name: "401 Unauthorized",
-                message: "Please log in first."
-            };
-            return <ErrorPage error={error} />;
+            return <Redirect to="/login" />;
         }
     }
     private _renderGenderRadio = (gender: string): React.ReactElement<any> | undefined => {

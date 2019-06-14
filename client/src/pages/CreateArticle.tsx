@@ -29,15 +29,15 @@ class CreateArticle extends React.Component<Props, States> {
                     </div>
                     <div className="form-horizontal"><input type="hidden" name="_csrf" />
                         <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="name">Title</label>
+                            <label className="col-sm-2 control-label" htmlFor="title">Title</label>
                             <div className="col-sm-8">
-                                <input className="form-control" type="text" name="name" ref={this.titleRef} autoFocus={true} />
+                                <input className="form-control" type="text" name="title" ref={this.titleRef} autoFocus={true} />
                             </div>
                         </div>
                         <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="message">Content</label>
+                            <label className="col-sm-2 control-label" htmlFor="content">Content</label>
                             <div className="col-sm-8">
-                                <textarea className="form-control" name="message" ref={this.contentRef} rows={16}>
+                                <textarea className="form-control" name="content" ref={this.contentRef} rows={16}>
                             </textarea></div>
                         </div>
                         <div className="form-group">
