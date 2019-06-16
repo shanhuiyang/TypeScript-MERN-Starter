@@ -55,6 +55,13 @@ yarn start
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
 # Motivation
 (constructing...)
+## Prior Art
+### TypeScript-Node-Starter
+https://github.com/Microsoft/TypeScript-Node-Starter
+### mern-starter
+https://github.com/Hashnode/mern-starter
+### oauth2api
+https://github.com/PatrickHeneise/oauth2api
 # Project structure
 In this part, we will not only summarize the folder structure, but also introduce how each of the project gradients works.
 ## Folder structure
@@ -110,18 +117,72 @@ In this part, we will not only summarize the folder structure, but also introduc
 The client folder includes a complete React app which was initialized by [```Create React App```](https://facebook.github.io/create-react-app/). Create React App is a great tool for beginner since it is:
 1. **Less to Learn**. You don't need to learn and configure many build tools. Instant reloads help you focus on development. When it's time to deploy, your bundles are optimized automatically.
 2. **Only One Dependency**. Your app only needs one build dependency. Under the hood, it uses Webpack, Babel, ESLint, and **tsc (Typescript compiler)** to power your app. Then you can get rid of the complicated configuration of them.
-### Proxying API requests in development
+### Serve static assets of client in production
 In production build environment, ```react-scripts```, the tool for use with ```Create React App``` will output all of your (Typescript) source code and resources into bundles and assets in ```client/build``` folder.
 
 For all routes except those for REST APIs, the Node.js server can response ```client/build/static/index.html```. That is to say, our server routes all REST APIs, and leave all other possible routes to client. Server will never make up the client app, it will not decide how would the client should look like. This is **the first key point to make the RESTful architecture possible**.
 
-However, in development environment, things become totally different. When you run the command ```yarn start``` in client folder, ```react-scripts``` will boot a local debug server for you. This server is implemented in ```client/src/serviceWorker.ts```. It makes the hot-reload and other functions for a better development experience. Then you have 2 servers when you are develop and debug. One is the Node.js server developed by yourself, another is the service worker booted by ```Create React App```. The former serves REST APIs for you, the later serves React app for you.
+### Proxy API requests in development
+However, in development environment, things become totally different. When you run the command ```yarn start``` in client folder, ```react-scripts``` will boot a local debug server for you. This server is implemented in ```client/src/serviceWorker.ts```. It makes the hot-reload and other functions for a better development experience. Then you have 2 servers when you are develop and debug. One is the Node.js server developed by yourself, another is the serviceWorker booted by ```Create React App```. The former serves REST APIs for you, the later serves React app for you.
 
-How could we make these 2 servers work together? 
+How could we make these 2 servers work together? Suggested by the [document of ```Create React App```](https://facebook.github.io/create-react-app/docs/proxying-api-requests-in-development), we can configure the serviceWorker proxy REST API requests to the Node.js server. Conveniently, this avoids [CORS issues](https://stackoverflow.com/questions/21854516/understanding-ajax-cors-and-security-considerations). [This article](https://www.fullstackreact.com/articles/using-create-react-app-with-a-server/#the-rub-) presented by Anthony Accomazzo clearly illustrated how this mechanism works. We can summarize it as below:
 
+1. Assign port 3000 to the serviceWorker, and assign port 3001 to the Node.js server.
+2. When we are running ```yarn start``` in project root path, these 2 servers will be started concurrently.
+3. All client requests are going to the port 3000, i.e. the serviceWorker.
+4. In the file ```client/src/setupProxy.js```, we configure that uri starts with ```/api```, ```/auth```, and ```oauth``` should be proxied to port 3001., i.e. the Node.js server will handle these requests.
+
+## Unified Modeling
+A big advantage of Node.js is that it can be used as a single programming language for both front and back end. However, since JavaScript is a loosely typed or a dynamic language, variables in JavaScript are not directly associated with any particular value type, and any variable can be assigned (and re-assigned) values of all types. Therefore sometimes when you look at a function call, you may have no idea what kind of object the argument passes. 
+
+Typescript provided a good solution for large scale project of Javascript because of its type system. We will take advantage of this type system to model the objects which can be used in both client and server in the same time.
+
+Let's take a close examine. In ```client/src/models/UnifiedModel.d.ts```, we define a interface named UnifiedModel. This interface represent an abstract type that would be used in client, service, and MongoDB. 
+
+Suppose we are going to define a type named User, which contains the profile and password of a website user who can login, post an article, and view his/her profile. We will do following.
+1. Add a interface named ```User``` in ```client/src/models```, and extends from ```UnifiedModel```.
+2. Fill the ```User``` with fields of you desired such as name and address, etc. See what we did in ```client/src/models/User.d.ts```.
+3. In ```server/models/User/UserDocument.d.ts```, define a interface named ```UserDocument```, which extends ```User``` and ```mongoose.Document``` simultaneously. This interface represent a document which can be create, read, update and delete from MongoDB.
+4. Add the ```userSchema``` and necessary middleware according to the requirements of ```mongoose``` in ```server/models/User/UserCollection.ts```.
+
+In summary, ```User``` is the common type used on both sides of a REST API request. 
+
+When you are going to update your address, the web client will compose an object of type ```User``` with the new address you just modified, then send this object by a POST request to the server. On the server side, when the Express app receives an profile updating request, it received an  ```User``` object in the request body. However an  ```User``` object cannot be inserted into the MongoDB, but an ```UserDocument``` can. So we have to add fields of the received ```User``` object to the target ```UserDocument``` object, then save it into MongoDB.
+
+On the other hand, when you are going to take a look at your profile, the server will look up your profile in MongoDB, and get an ```UserDocument``` object from it. An ```UserDocument``` object is also an ```User``` object so the server will return it directly.
+
+> **Note!** The reason why we defined the common interface under ```client``` folder but not a common ```models``` folder is the restriction of ```Create React App```. This tool cannot read the type definition out of it's workspace, i.e. the ```client``` folder. So we have to put our common models in ```client``` folder
+
+## OAuth2 implementation
 (constructing...)
 # How to debug
-(constructing...)
+## Debugging server
+Debugging is one of the places where VS Code really shines over other editors. Node.js debugging in VS Code is easy to setup and even easier to use. 
+This project comes pre-configured with everything you need to get started.
+
+To start debugging server you need to run the command first.
+```
+yarn debug
+```
+
+Then hit `F5` in VS Code, it looks for a top level `.vscode` folder with a `launch.json` file.
+In this file, you can tell VS Code exactly what you want to do:
+
+```json
+{
+    "type": "node",
+    "request": "attach",
+    "name": "Attach by Process ID",
+    "processId": "${command:PickProcess}",
+    "protocol": "inspector"
+}
+```
+This is mostly identical to the "Node.js: Attach by Process ID" template with one minor change.
+We added `"protocol": "inspector"` which tells VS Code that we're using the latest version of Node which uses a new debug protocol.
+
+With this file in place, you can hit `F5` to attach a debugger.
+You will probably have multiple node processes running, so you need to find the one that shows `node dist/server/server.js`.
+Now just set your breakpoints and go!
 # Tests
 (constructing...)
 # Tutorial 
@@ -316,12 +377,5 @@ Further more, you can do following to improve your engineering experience if you
 If you don't like Azure, e.g. you prefer AWS, you can easily [deploy your Docker image](https://aws.amazon.com/getting-started/tutorials/deploy-docker-containers/) to AWS too. The flexibility of Docker make the migration from one platform to another very simple.
 # CI and Collaboration
 (constructing...)
-# Prior Art
-### TypeScript-Node-Starter
-https://github.com/Microsoft/TypeScript-Node-Starter
-### mern-starter
-https://github.com/Hashnode/mern-starter
-### oauth2api
-https://github.com/PatrickHeneise/oauth2api
 # Road Map
 We would like to extend this project from MERN to MERRN, where the additional R stands for ReactNative. TypeScript will show the power of modeling in a **real fullstack** web app.
