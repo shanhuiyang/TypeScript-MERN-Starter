@@ -342,6 +342,7 @@ You can debug the server in VS Code, meanwhile you can debug the client in [Chro
 We use [Yarn](https://yarnpkg.com/) as the package manager of this project.
 You can use `npm` if you prefer.
 You can run following commands using ```yarn <command>```.
+
 | Yarn Script | Description |
 | ------------------------- | -------------------------------------------------------------------------------------------------- |
 | **`install`**             | Install all dependencies defined in `package.json` and `client/package.json`.                                |
