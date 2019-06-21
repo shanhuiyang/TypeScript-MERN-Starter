@@ -466,9 +466,8 @@ When the Cosmos DB account is created several minutes later, the Azure CLI shows
   },
   "databaseAccountOfferType": "Standard",
   "documentEndpoint": "https://<cosmosdb_name>.documents.azure.com:443/",
-  "failoverPolicies": 
-  ...
-  < Output truncated for readability >
+  "failoverPolicies": "",
+  "..." : "Output truncated for readability"
 }
 ```
 ## Connect app to production MongoDB
