@@ -31,6 +31,7 @@ export default class App extends React.Component<Props, States> {
                     <Route path="/profile" render={ (props) => <Profile {...props} /> } />
                     <Route path="/article/create" render={ (props) => <CreateArticle {...props} /> } />
                     <Route path="/article/edit/:id" render={ (props) => <EditArticle {...props} /> } />
+                    {/* add more routes here */}
                     <Route render={ (props) => <ErrorPage {...props} error={notFoundError} /> } />
                 </Switch>
                 <Footer />

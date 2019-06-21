@@ -65,7 +65,7 @@ class SignUp extends React.Component<Props, States> {
         }
     }
     private _renderGenderRadio = (gender: string): React.ReactElement<any> | undefined => {
-        return <label className="radio radio-inline">
+        return <label className="radio radio-inline" key={gender}>
             <input type="radio" defaultChecked={Gender.MALE === gender} onChange={this._updateGender} name="gender" value={gender} data-toggle="radio"/>
             <span>{_.upperFirst(gender)}</span>
         </label>;
