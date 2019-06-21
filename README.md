@@ -57,14 +57,38 @@ yarn start
 ```
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
 # Motivation
-(constructing...)
+Up to 2019, React is the most popular front-end framework.
+For novice web developers, if they would like to build a full-stack project using Javascript, they can intuitively choose the combination of Node.js and React.
+
+Typescript is a success Javascript alternative which can keep the maintainability as the project grows.
+The most famous Typescript project is [Angular](https://angular.io).
+Nowadays React also [support Typescript officially](https://facebook.github.io/create-react-app/docs/adding-typescript).
+
+Therefore, the motivation of this project is building a fullstack web app using Javascript, meanwhile we can maintain this web app easily.
 ## Prior Art
-### TypeScript-Node-Starter
-https://github.com/Microsoft/TypeScript-Node-Starter
-### mern-starter
-https://github.com/Hashnode/mern-starter
-### oauth2api
-https://github.com/PatrickHeneise/oauth2api
+[mern-starter](https://github.com/Hashnode/mern-starter) is a famous project which combine React and Node.js in a single project.
+However, it is deprecated after April, 2019.
+This project is a server rendering solution.
+It modeled the ```Post``` object, but did not implement the authentication module.
+
+[TypeScript-Node-Starter](https://github.com/Microsoft/TypeScript-Node-Starter) is an officially built starter project for Node.js by Microsoft.
+This project is a good starter for Node.js app using Typescript. 
+It is also a server rendering solution, using [pug](https://github.com/pugjs/pug).
+
+Indeed **TypeScript-MERN-Starter** is built on top of TypeScript-Node-Starter.
+However, as you can see in **TypeScript-MERN-Starter**, the architecture has been totally changed comparing to TypeScript-Node-Starter.
+
+[oauth2api](https://github.com/PatrickHeneise/oauth2api) is a good example on how to implement OAuth2 strategy in an Node.js app.
+We almost totally imported this project to **TypeScript-MERN-Starter**.
+## Philosophy
+We build this project on following philosophies:
+1. Beginner friendly. There is little things you should be worried about. You can find well-constructed document for any part of this project.
+2. Easy to extend. You can add your own business code easily. We have already built the authentication and authorization mechanism. You can just add more models like `Article` we added.
+3. Workable in an real industry task.
+4. Appeal to mature 3rd party libraries. Indeed both Node.js and React are mature frameworks with a large amount of community support. To develop a web app based on this project, one can easily find desired 3rd party solution to help them resolve the problems. 
+## Road map
+We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/). 
+TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, and iOS.
 # Project structure
 In this part, we will not only summarize the folder structure, but also introduce how each of the project gradients works.
 ## Folder structure
@@ -623,6 +647,3 @@ Further more, you can do following to improve your engineering experience if you
 
 If you don't like Azure, e.g. you prefer AWS, you can easily [deploy your Docker image](https://aws.amazon.com/getting-started/tutorials/deploy-docker-containers/) to AWS too.
 The flexibility of Docker make the migration from one platform to another very simple.
-# Road map
-We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/). 
-TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, and iOS.
