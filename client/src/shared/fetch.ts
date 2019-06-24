@@ -12,6 +12,7 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
     const options: any = {
         method: method,
         headers: headers,
+        credentials: "include"
     };
     if (method === "POST") {
         options.body = JSON.stringify(body);
