@@ -82,10 +82,8 @@ However, as you can see in **TypeScript-MERN-Starter**, the architecture has bee
 We almost totally imported this project to **TypeScript-MERN-Starter**.
 ## Philosophy
 We build this project on following philosophies:
-1. Beginner friendly. There is little things you should be worried about. You can find well-constructed document for any part of this project.
-2. Easy to extend. You can add your own business code easily. We have already built the authentication and authorization mechanism. You can just add more models like `Article` we added.
-3. Workable in an real industry task.
-4. Appeal to mature 3rd party libraries. Indeed both Node.js and React are mature frameworks with a large amount of community support. To develop a web app based on this project, one can easily find desired 3rd party solution to help them resolve the problems. 
+1. Beginner friendly.
+2. Easy to extend.
 ## Road map
 We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/). 
 TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, and iOS.
