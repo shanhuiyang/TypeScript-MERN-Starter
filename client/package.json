@@ -15,6 +15,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.87.2",
     "typescript": "3.4.5",
     "@types/http-proxy-middleware": "^0.19.2",
     "@types/jquery": "^3.2.17",
