@@ -1,6 +1,6 @@
-import React from "react";
+import React, { RefObject, createRef } from "react";
 import { Route, Switch } from "react-router-dom";
-import Header from "./components/Header";
+import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import LogIn from "./pages/LogIn";
@@ -15,14 +15,19 @@ interface Props {}
 interface States {}
 
 export default class App extends React.Component<Props, States> {
+    private contextRef: RefObject<any>;
+    constructor(props: Props) {
+        super(props);
+        this.contextRef = createRef();
+    }
     render(): React.ReactElement<any> {
         const notFoundError: Error = {
             name: "404 Not Found",
             message: `not found for ${window.location.href} `
         };
         return (
-            <div>
-                <Route render={ (props) => <Header {...props} /> } />
+            <div ref={this.contextRef}>
+                <Route render={ (props) => <NavBar {...props} containerRef={this.contextRef}/> } />
                 <Switch>
                     <Route exact path="/" render={ (props) => <Home {...props} /> } />
                     <Route path="/login" render={ (props) => <LogIn {...props} /> } />
