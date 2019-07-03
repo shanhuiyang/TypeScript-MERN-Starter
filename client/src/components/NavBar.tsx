@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import UserActionCreator from "../models/UserActionCreator";
-import { Menu, Sticky } from "semantic-ui-react";
+import { Menu, Sticky, Image } from "semantic-ui-react";
 
 interface HeaderProps {
     containerRef: RefObject<any>;
@@ -35,7 +35,16 @@ class NavBar extends React.Component<HeaderProps, HeaderStates> {
     }
 
     private renderAccountTabsLoggedIn() {
+        const {user} = this.props.state;
+        if (!user) {
+            return undefined;
+        }
         return <Menu.Menu position="right">
+            <Menu.Item
+                as={NavLink} to="/profile">
+                <Image src={user.avatarUrl} avatar />
+                <span style={{marginLeft: 10}}>{user.name}</span>
+            </Menu.Item>
             <Menu.Item
                 content="Logout"
                 onClick={this.props.actions.logout}

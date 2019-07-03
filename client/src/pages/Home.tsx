@@ -1,7 +1,7 @@
 import React from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
-import ArticleList from "../components/ArticleList";
+import ArticleList from "../components/article/ArticleList";
 import ActionCreator from "../models/ActionCreator";
 
 interface Props {
