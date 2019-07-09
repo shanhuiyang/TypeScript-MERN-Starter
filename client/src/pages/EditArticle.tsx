@@ -1,10 +1,13 @@
-import React, { RefObject } from "react";
+import React from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect, match } from "react-router-dom";
 import ArticleActionCreator from "../models/ArticleActionCreator";
 import Article from "../models/Article";
 import ErrorPage from "./ErrorPage";
+import { Container, Header } from "semantic-ui-react";
+import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import ArticleEditor from "../components/article/ArticleEditor";
 
 interface Props {
     match: match<any>;
@@ -14,13 +17,7 @@ interface Props {
 
 interface States {}
 class EditArticle extends React.Component<Props, States> {
-    titleRef: RefObject<HTMLInputElement>;
-    contentRef: RefObject<HTMLTextAreaElement>;
-    constructor(props: Props) {
-        super(props);
-        this.titleRef = React.createRef();
-        this.contentRef = React.createRef();
-    }
+    private articleId: string = "";
     render(): React.ReactElement<any> {
         if (!this.props.state.articles.valid) {
             return <Redirect to="/" />;
@@ -29,68 +26,42 @@ class EditArticle extends React.Component<Props, States> {
             name: "404 Not Found",
             message: `not found for ${window.location.href} `
         };
-        const articleId: string = this.props.match && this.props.match.params && this.props.match.params.id;
-        if (!articleId) {
+        this.articleId = this.props.match && this.props.match.params && this.props.match.params.id;
+        if (!this.articleId) {
             return <ErrorPage error={notFoundError} />;
         }
         const article: Article | undefined = this.props.state.articles.data.find(
-            (value: Article): boolean => value._id === articleId
+            (value: Article): boolean => value._id === this.articleId
         );
         if (!article) {
             return <ErrorPage error={notFoundError} />;
         }
         if (this.props.state.user) {
             return (
-                <div className="container">
-                    <div className="page-header">
-                        <h3>Edit Article</h3>
-                    </div>
-                    <div className="form-horizontal"><input type="hidden" name="_csrf" />
-                        <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="title">Title</label>
-                            <div className="col-sm-8">
-                                <input className="form-control" type="text" name="title" defaultValue={article.title} ref={this.titleRef} autoFocus={true}/>
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="content">Content</label>
-                            <div className="col-sm-8">
-                                <textarea className="form-control" name="content" defaultValue={article.content} ref={this.contentRef} rows={16}>
-                            </textarea></div>
-                        </div>
-                        <div className="form-group"><div className="col-sm-2"></div>
-                            <div className="col-sm-offset-2 col-sm-8 btn-toolbar">
-                                <button className="btn btn-primary" type="submit" onClick={() => this._editArticle(articleId)}>
-                                    <i className="fa fa-check"></i>Save
-                                </button>
-                                <button className="btn btn-danger" type="submit" onClick={() => this._removeArticle(articleId)}>
-                                    <i className="fa fa-remove"></i>Delete
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div >
+                <Container text style={STYLE_CONTAINER_PADDING}>
+                    <Header size={"medium"}>Edit Article</Header>
+                    <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle}
+                        negativeSubmitText={"Delete"} onNegativeSubmit={this.removeArticle}/>
+                </Container>
             );
         } else {
             return <Redirect to="/" />;
         }
     }
 
-    private _editArticle = (articleId: string): void => {
-        const title: any = this.titleRef.current && this.titleRef.current.value;
-        const content: any = this.contentRef.current && this.contentRef.current.value;
+    private editArticle = (title: string, content: string): void => {
         if (this.props.state.user) {
             this.props.actions.editArticle({
                 author: this.props.state.user._id,
                 title: title,
                 content: content,
-                _id: articleId
+                _id: this.articleId
             } as Article);
         }
     }
 
-    private _removeArticle = (articleId: string): void => {
-        this.props.actions.removeArticle(articleId);
+    private removeArticle = (): void => {
+        this.props.actions.removeArticle(this.articleId);
     }
 }
 

@@ -1,8 +1,11 @@
-import React, { RefObject } from "react";
+import React from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
 import ArticleActionCreator from "../models/ArticleActionCreator";
+import { Container, Header } from "semantic-ui-react";
+import ArticleEditor from "../components/article/ArticleEditor";
+import { STYLE_CONTAINER_PADDING } from "../shared/constants";
 
 interface Props {
     state: AppState;
@@ -11,53 +14,22 @@ interface Props {
 
 interface States {}
 class CreateArticle extends React.Component<Props, States> {
-    titleRef: RefObject<HTMLInputElement>;
-    contentRef: RefObject<HTMLTextAreaElement>;
-    constructor(props: Props) {
-        super(props);
-        this.titleRef = React.createRef();
-        this.contentRef = React.createRef();
-    }
     render(): React.ReactElement<any> {
         if (!this.props.state.articles.valid) {
             return <Redirect to="/" />;
         } else if (this.props.state.user) {
             return (
-                <div className="container">
-                    <div className="page-header">
-                        <h3>Create Article</h3>
-                    </div>
-                    <div className="form-horizontal"><input type="hidden" name="_csrf" />
-                        <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="title">Title</label>
-                            <div className="col-sm-8">
-                                <input className="form-control" type="text" name="title" ref={this.titleRef} autoFocus={true} />
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <label className="col-sm-2 control-label" htmlFor="content">Content</label>
-                            <div className="col-sm-8">
-                                <textarea className="form-control" name="content" ref={this.contentRef} rows={16}>
-                            </textarea></div>
-                        </div>
-                        <div className="form-group">
-                            <div className="col-sm-offset-2 col-sm-8">
-                                <button className="btn btn-primary" type="submit" onClick={this._createArticle}>
-                                    <i className="fa fa-check"></i>Create
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <Container text style={STYLE_CONTAINER_PADDING}>
+                    <Header size={"medium"}>Create Article</Header>
+                    <ArticleEditor onSubmit={this.createArticle} submitText={"Create"} />
+                </Container>
             );
         } else {
             return <Redirect to="/" />;
         }
     }
 
-    private _createArticle = (): void => {
-        const title: any = this.titleRef.current && this.titleRef.current.value;
-        const content: any = this.contentRef.current && this.contentRef.current.value;
+    private createArticle = (title: string, content: string): void => {
         if (this.props.state.user) {
             this.props.actions.createArticle(title, content, this.props.state.user._id);
         }
