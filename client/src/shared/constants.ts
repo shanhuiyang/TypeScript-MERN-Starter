@@ -5,3 +5,9 @@ export const RESPONSE_CONTENT_TYPE = {
     TEXT: "text/plain",
     HTML: "text/html"
 };
+
+export const CONTAINER_PADDING_VERTICAL: number = 16;
+export const STYLE_CONTAINER_PADDING = {
+    paddingTop: CONTAINER_PADDING_VERTICAL,
+    paddingBottom: CONTAINER_PADDING_VERTICAL
+};

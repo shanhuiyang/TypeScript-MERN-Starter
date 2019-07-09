@@ -4,6 +4,8 @@ import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
 import UserActionCreator from "../models/UserActionCreator";
 import _ from "lodash";
+import { Form, Button, Icon, Container } from "semantic-ui-react";
+import { STYLE_CONTAINER_PADDING } from "../shared/constants";
 
 interface Props {
     state: AppState;
@@ -21,35 +23,28 @@ class LogIn extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         if (!this.props.state.user) {
-            return (
-                <div className="container">
-                    <div className="page-header">
-                        <h3>Sign in</h3>
-                    </div>
-                    <div className="form-horizontal"><input type="hidden" name="_csrf" />
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="email">Email</label>
-                            <div className="col-sm-7"><input className="form-control" type="email" name="email" ref={this.emailRef} placeholder="Email" autoFocus={true} required={true} /></div>
-                        </div>
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="password">Password</label>
-                            <div className="col-sm-7"><input className="form-control" type="password" name="password" ref={this.passwordRef} placeholder="Password" required={true} /></div>
-                        </div>
-                        <div className="form-group">
-                            <div className="col-sm-offset-3 col-sm-7"><button className="col-sm-3 btn btn-primary" onClick={ this._login }><i className="fa fa-user"></i>Log In</button></div>
-                        </div>
-                        <div className="form-group">
-                            <div className="col-sm-offset-3 col-sm-7">
-                                <hr/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            );
+            return (<Container text style={STYLE_CONTAINER_PADDING}>
+                <Form>
+                    <Form.Field width={6}>
+                        <label>Email</label>
+                        <input placeholder="Email" ref={this.emailRef} />
+                    </Form.Field>
+                    <Form.Field width={6}>
+                        <label>Password</label>
+                        <input type="password" placeholder="Password" ref={this.passwordRef} />
+                    </Form.Field>
+                    <Button primary type="submit" onClick={ this.login }>
+                        <Icon name="check circle outline" />
+                        Submit
+                    </Button>
+                </Form>
+            </Container>);
         } else {
             return <Redirect to="/" />;
         }
     }
 
-    private _login = (): void => {
+    private login = (): void => {
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
         if (_.isString(email) && _.isString(password)) {

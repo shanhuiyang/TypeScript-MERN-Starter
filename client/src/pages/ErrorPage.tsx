@@ -1,4 +1,6 @@
 import React from "react";
+import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { Container, Header } from "semantic-ui-react";
 
 interface Props {
     error: Error;
@@ -7,16 +9,16 @@ interface States {}
 export default class ErrorPage extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         return (
-            <div  className="container">
+            <Container text style={STYLE_CONTAINER_PADDING}>
                 <div className="page-header">
-                    <h3 className="text-danger">
+                    <Header color="red" size="large">
                         { this.props.error ? this.props.error.name : "Error" }
-                    </h3>
+                    </Header>
                     <p>
                         { this.props.error && this.props.error.message }
                     </p>
                 </div>
-            </div>
+            </Container>
         );
     }
 }

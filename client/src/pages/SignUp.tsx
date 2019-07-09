@@ -1,86 +1,95 @@
-import React, { RefObject } from "react";
+import React, { RefObject, ChangeEvent } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
 import UserActionCreator from "../models/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
+import { Container, Form, Button, Icon, Radio } from "semantic-ui-react";
+import { STYLE_CONTAINER_PADDING } from "../shared/constants";
 
 interface Props {
     state: AppState;
     actions: UserActionCreator;
 }
 
-interface States {}
+interface States {
+    selectedGender: Gender;
+}
+
+const DEFAULT_SELECTED_GENDER: Gender = Gender.MALE;
+
 class SignUp extends React.Component<Props, States> {
     emailRef: RefObject<HTMLInputElement>;
     passwordRef: RefObject<HTMLInputElement>;
     confirmPasswordRef: RefObject<HTMLInputElement>;
     nameRef: RefObject<HTMLInputElement>;
-    tempGender: Gender;
     constructor(props: Props) {
         super(props);
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
         this.confirmPasswordRef = React.createRef();
         this.nameRef = React.createRef();
-        this.tempGender = Gender.MALE;
+        this.state = {
+            selectedGender: DEFAULT_SELECTED_GENDER
+        };
     }
     render(): React.ReactElement<any> {
         if (!this.props.state.user) {
-            return (
-                <div className="container">
-                    <div className="page-header">
-                        <h3>Sign up</h3>
-                    </div>
-                    <div className="form-horizontal" id="sign-up-form">
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="email">Email</label>
-                            <div className="col-sm-7"><input className="form-control" type="email" name="email" ref={this.emailRef} placeholder="Email" autoFocus={true} required={true} /></div>
-                        </div>
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="password">Password</label>
-                            <div className="col-sm-7"><input className="form-control" type="password" name="password" ref={this.passwordRef} placeholder="Password" required={true} /></div>
-                        </div>
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="confirmPassword">Confirm Password</label>
-                            <div className="col-sm-7"><input className="form-control" type="password" name="confirmPassword" ref={this.confirmPasswordRef} placeholder="Confirm Password" required={true} /></div>
-                        </div>
-                        <div className="form-group"><label className="col-sm-3 control-label" htmlFor="name">Name</label>
-                            <div className="col-sm-7"><input className="form-control" type="text" name="name" ref={this.nameRef} placeholder="Name" required={true} /></div>
-                        </div>
-                        <div className="form-group input-group-prepend">
-                            <label className="col-sm-3 control-label">Gender</label>
-                            <div className="col-sm-6">
-                                {
-                                    Object.values(Gender).map((value: string) => this._renderGenderRadio(value))
-                                }
-                            </div>
-                        </div>
-                        <div className="form-group">
-                            <div className="col-sm-offset-3 col-sm-7"><button className="btn btn-primary" onClick={ this._signUp }><i className="fa fa-user-plus"></i>Sign Up</button></div>
-                        </div>
-                    </div>
-                </div>
-            );
+            return (<Container text style={STYLE_CONTAINER_PADDING}>
+                <Form>
+                    <Form.Field width={6}>
+                        <label>Email</label>
+                        <input placeholder="Email" ref={this.emailRef} />
+                    </Form.Field>
+                    <Form.Field width={6}>
+                        <label>Password</label>
+                        <input type="password" placeholder="Password" ref={this.passwordRef} />
+                    </Form.Field>
+                    <Form.Field width={6}>
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Confirm Password" ref={this.confirmPasswordRef} />
+                    </Form.Field>
+                    <Form.Field width={6}>
+                        <label>Name</label>
+                        <input placeholder="Name" ref={this.nameRef} />
+                    </Form.Field>
+                    <Form.Group inline>
+                        <label>Gender</label>
+                            {
+                                Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
+                            }
+                    </Form.Group>
+                    <Button primary type="submit" onClick={ this.signUp }>
+                        <Icon name="check circle outline" />
+                        Submit
+                    </Button>
+                </Form>
+            </Container>);
         } else {
             return <Redirect to="/" />;
         }
     }
-    private _renderGenderRadio = (gender: string): React.ReactElement<any> | undefined => {
-        return <label className="radio radio-inline" key={gender}>
-            <input type="radio" defaultChecked={Gender.MALE === gender} onChange={this._updateGender} name="gender" value={gender} data-toggle="radio"/>
-            <span>{_.upperFirst(gender)}</span>
-        </label>;
+    private renderGenderRadio = (gender: string): React.ReactElement<any> | undefined => {
+        return <Form.Field
+            key={gender}
+            control={Radio}
+            label={_.upperFirst(gender)}
+            value={gender}
+            checked={this.state.selectedGender === gender}
+            onChange={this.onSelectedGenderChange} />;
     };
-    private _updateGender = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        if (event.target.checked) {
-            this.tempGender = event.target.value as Gender;
-        }
+    private onSelectedGenderChange = (event: ChangeEvent, data: any): void => {
+        this.setState({
+            selectedGender: data.value as Gender
+        });
     }
-    private _signUp = (): void => {
+    private signUp = (): void => {
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
         const confirmPassword: any = this.confirmPasswordRef.current && this.confirmPasswordRef.current.value;
         const name: any = this.nameRef.current && this.nameRef.current.value;
-        const gender: Gender = this.tempGender;
+        const gender: Gender = this.state.selectedGender;
         this.props.actions.signUp(email, password, confirmPassword, name, gender);
     }
 }
