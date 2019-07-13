@@ -2,13 +2,13 @@ import Article from "../../models/Article";
 import { Form, Button, FormGroup } from "semantic-ui-react";
 import { RefObject } from "react";
 import React from "react";
+import ModalButton, { ModalButtonProps } from "../shared/ModalButton";
 
 interface Props {
     article?: Article;
     submitText: string;
     onSubmit: (title: string, content: string) => void;
-    onNegativeSubmit?: () => void;
-    negativeSubmitText?: string;
+    negativeButtonProps?: ModalButtonProps;
 }
 
 interface States {}
@@ -41,7 +41,11 @@ export default class ArticleEditor extends React.Component<Props, States> {
                 <FormGroup inline>
                     <Form.Field control={Button} onClick={this.onSubmit} primary>{this.props.submitText}</Form.Field>
                     {
-                        this.props.onNegativeSubmit ? <Form.Field control={Button} onClick={this.props.onNegativeSubmit}>{this.props.negativeSubmitText}</Form.Field> : undefined
+                        this.props.negativeButtonProps ?
+                            <Form.Field>
+                                <ModalButton {...this.props.negativeButtonProps}/>
+                            </Form.Field>
+                            : undefined
                     }
                 </FormGroup>
             </Form>

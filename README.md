@@ -351,12 +351,12 @@ This RESTful architecture brings significant performance improvement from severa
 3. Since the file ```client/build/static/index.html``` would not change unless you re-deploy you app, it's easily be cached among Internet.
 4. The React app handles navigation locally, users feel no latency when they navigate back and forth in the browser.
 ## Styling
-In this project, all the styles are defined in a separated file ```client/public/css/main.css```. 
-This file is generated from [Bootstrap 3.3](https://getbootstrap.com/docs/3.3/css/).
-
-We are using Bootstrap simply **because it is the most popular CSS frameworks on the earth**.
-
-> **Note!** We are migrating this project to **Bootstrap 4.x** using [**React Bootstrap**](https://react-bootstrap.github.io/). This task will be done before 7/31/2019.
+In this project, there is no separated file like ```client/public/css/main.css```. 
+We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has following advantages.
+1. React style. It's components match the mental model React has given us for composing UI great. Most of the time you are shaping your UI using props instead of classes or inline styles.
+2. It provides many useful components which are suitable to compose a community app. [Feed](https://react.semantic-ui.com/views/feed/), [Rating](https://react.semantic-ui.com/modules/rating/), and [Comment](https://react.semantic-ui.com/views/comment/) are fancy examples.
+3. [Good support for react-router](https://react.semantic-ui.com/#augmentation).
+4. As its name hinted, using Semantic-UI React you can build your virtual DOM easy-to-read and compact. 
 
 On the other hand, you can easily change the styles of React app by import [other 3rd party libraries](https://hackernoon.com/23-best-react-ui-component-libraries-and-frameworks-250a81b2ac42) and replace existing raw components.
 Please refer to [official document](https://reactjs.org/docs/faq-styling.html) for more solutions on this problem.

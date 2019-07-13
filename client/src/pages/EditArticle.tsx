@@ -8,6 +8,7 @@ import ErrorPage from "./ErrorPage";
 import { Container, Header } from "semantic-ui-react";
 import { STYLE_CONTAINER_PADDING } from "../shared/constants";
 import ArticleEditor from "../components/article/ArticleEditor";
+import { ModalButtonProps } from "../components/shared/ModalButton";
 
 interface Props {
     match: match<any>;
@@ -41,7 +42,13 @@ class EditArticle extends React.Component<Props, States> {
                 <Container text style={STYLE_CONTAINER_PADDING}>
                     <Header size={"medium"}>Edit Article</Header>
                     <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle}
-                        negativeSubmitText={"Delete"} onNegativeSubmit={this.removeArticle}/>
+                        negativeButtonProps={{
+                            buttonText: "Delete",
+                            descriptionIcon: "delete",
+                            descriptionText: "Delete Article " + article.title,
+                            warningText: "You cannot store this article after delete. Are you sure to delete?",
+                            onConfirm: this.removeArticle
+                        } as ModalButtonProps}/>
                 </Container>
             );
         } else {
