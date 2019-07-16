@@ -7,6 +7,7 @@ import Gender from "../models/Gender";
 import _ from "lodash";
 import { Container, Form, Button, Icon, Radio } from "semantic-ui-react";
 import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props {
     state: AppState;
@@ -38,22 +39,22 @@ class SignUp extends React.Component<Props, States> {
         if (!this.props.state.user) {
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                 <Form>
-                    <Form.Field width={6}>
+                    <ResponsiveFormField>
                         <label>Email</label>
                         <input placeholder="Email" ref={this.emailRef} />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Password</label>
                         <input type="password" placeholder="Password" ref={this.passwordRef} />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Confirm Password</label>
                         <input type="password" placeholder="Confirm Password" ref={this.confirmPasswordRef} />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Name</label>
                         <input placeholder="Name" ref={this.nameRef} />
-                    </Form.Field>
+                    </ResponsiveFormField>
                     <Form.Group inline>
                         <label>Gender</label>
                             {

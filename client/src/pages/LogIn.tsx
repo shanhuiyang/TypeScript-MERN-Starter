@@ -6,6 +6,7 @@ import UserActionCreator from "../models/UserActionCreator";
 import _ from "lodash";
 import { Form, Button, Icon, Container } from "semantic-ui-react";
 import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props {
     state: AppState;
@@ -25,14 +26,14 @@ class LogIn extends React.Component<Props, States> {
         if (!this.props.state.user) {
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                 <Form>
-                    <Form.Field width={6}>
+                    <ResponsiveFormField>
                         <label>Email</label>
                         <input placeholder="Email" ref={this.emailRef} />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Password</label>
                         <input type="password" placeholder="Password" ref={this.passwordRef} />
-                    </Form.Field>
+                    </ResponsiveFormField>
                     <Button primary type="submit" onClick={ this.login }>
                         <Icon name="check circle outline" />
                         Submit

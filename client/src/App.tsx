@@ -32,7 +32,9 @@ export default class App extends React.Component<Props, States> {
         };
         const mainViewStyle: any = {
             display: "flex",
-            flex: 1
+            flex: 1,
+            flexDirection: "column",
+            alignItems: "stretch"
         };
         return (
             <div ref={this.contextRef} style={rootWrapperStyle}>

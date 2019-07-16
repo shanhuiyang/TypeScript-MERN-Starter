@@ -23,7 +23,7 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
     }
     handleOpen = (): void => this.setState({ closed: false });
     handleClose = (): void => this.setState({ closed: true });
-    render() {
+    render(): React.ReactElement<any> {
         return (<Modal
             open={!this.state.closed} onClose={this.handleClose}
             trigger={
