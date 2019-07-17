@@ -7,6 +7,7 @@ import _ from "lodash";
 import { Redirect } from "react-router";
 import { Container, Form, Button, Icon, Radio, Image } from "semantic-ui-react";
 import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props {
     state: AppState;
@@ -42,32 +43,32 @@ class Profile extends React.Component<Props, States> {
             const { user } = this.props.state;
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                 <Form>
-                    <Form.Field width={6}>
+                    <ResponsiveFormField>
                         <label>Email</label>
                         <input value={user.email} disabled />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Name</label>
                         <input defaultValue={user.name} ref={this.nameRef} />
-                    </Form.Field>
-                    <Form.Field width={6}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField>
                         <label>Photo</label>
                         <Image size="tiny" rounded bordered src={user.avatarUrl} />
-                    </Form.Field>
+                    </ResponsiveFormField>
                     <Form.Group inline>
                         <label>Gender</label>
                             {
                                 Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
                             }
                     </Form.Group>
-                    <Form.Field width={12}>
+                    <ResponsiveFormField width={12}>
                         <label>Address</label>
                         <input defaultValue={user.address} ref={this.addressRef} />
-                    </Form.Field>
-                    <Form.Field width={12}>
+                    </ResponsiveFormField>
+                    <ResponsiveFormField width={12}>
                         <label>Web site</label>
                         <input defaultValue={user.website} ref={this.websiteRef} />
-                    </Form.Field>
+                    </ResponsiveFormField>
                     <Button primary type="submit" onClick={ this.update }>
                         <Icon name="check circle outline" />
                         Submit
