@@ -1,9 +1,9 @@
 import { combineReducers } from "redux";
-import user from "./user";
+import userState from "./user";
 import articles from "./articles";
 
 const reducer = combineReducers({
-    user,
+    userState: userState,
     articles
 });
 

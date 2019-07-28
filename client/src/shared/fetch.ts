@@ -1,8 +1,14 @@
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "./constants";
+import sleep from "./sleep";
 
 export type Method = "GET" | "POST";
 
+const TEST_FOR_LOADING: boolean = false;
+
 const _fetch = async (url: string, body: any, method: Method, withToken?: boolean): Promise<any> => {
+    if (TEST_FOR_LOADING) {
+        await sleep(2000);
+    }
     const headers: any = {
         "Content-Type": "application/json"
     };

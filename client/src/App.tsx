@@ -28,7 +28,8 @@ export default class App extends React.Component<Props, States> {
         const rootWrapperStyle: any = {
             display: "flex",
             flexDirection: "column",
-            minHeight: "100%"
+            minHeight: "100%",
+            fontSize: "16px"
         };
         const mainViewStyle: any = {
             display: "flex",

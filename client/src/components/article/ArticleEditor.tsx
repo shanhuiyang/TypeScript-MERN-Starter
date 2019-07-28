@@ -9,6 +9,7 @@ interface Props {
     submitText: string;
     onSubmit: (title: string, content: string) => void;
     negativeButtonProps?: ModalButtonProps;
+    loading?: boolean;
 }
 
 interface States {}
@@ -39,7 +40,9 @@ export default class ArticleEditor extends React.Component<Props, States> {
                     <textarea placeholder="no less than 500 characters" ref={this.contentRef} rows={24} defaultValue={originalContent} />
                 </Form.Field>
                 <FormGroup inline>
-                    <Form.Field control={Button} onClick={this.onSubmit} primary>{this.props.submitText}</Form.Field>
+                    <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
+                        {this.props.submitText}
+                    </Form.Field>
                     {
                         this.props.negativeButtonProps ?
                             <Form.Field>

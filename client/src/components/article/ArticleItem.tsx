@@ -60,7 +60,7 @@ class ArticleItem extends React.Component<Props, States> {
     }
 
     private renderEditButton = (article: Article): React.ReactElement<any> | undefined => {
-        if (article.author === (this.props.state.user && this.props.state.user._id)) {
+        if (article.author === (this.props.state.userState.currentUser && this.props.state.userState.currentUser._id)) {
             const uri: string = `/article/edit/${article._id}`;
             return <Button primary as={Link} to={uri}><i className="fa fa-edit"></i>Edit</Button>;
         } else {

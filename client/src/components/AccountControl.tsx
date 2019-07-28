@@ -4,6 +4,7 @@ import UserActionCreator from "../models/UserActionCreator";
 import connectPropsAndActions from "../shared/connect";
 import { Image } from "semantic-ui-react";
 import { Link } from "react-router-dom";
+import User from "../models/User";
 
 interface Props {
     location: Location;
@@ -14,8 +15,8 @@ interface Props {
 interface States {}
 class AccountControl extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
-        if (this.props.state.user) {
-            const { user } = this.props.state;
+        if (this.props.state.userState.currentUser) {
+            const user: User = this.props.state.userState.currentUser;
             return <Link to="/profile">
                 <Image src={user.avatarUrl} avatar />
                 <span>{user.name}</span>

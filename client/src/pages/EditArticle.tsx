@@ -37,11 +37,11 @@ class EditArticle extends React.Component<Props, States> {
         if (!article) {
             return <ErrorPage error={notFoundError} />;
         }
-        if (this.props.state.user) {
+        if (this.props.state.userState.currentUser) {
             return (
                 <Container text style={STYLE_CONTAINER_PADDING}>
                     <Header size={"medium"}>Edit Article</Header>
-                    <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle}
+                    <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle} loading={this.props.state.articles.loading}
                         negativeButtonProps={{
                             buttonText: "Delete",
                             descriptionIcon: "delete",
@@ -57,9 +57,9 @@ class EditArticle extends React.Component<Props, States> {
     }
 
     private editArticle = (title: string, content: string): void => {
-        if (this.props.state.user) {
+        if (this.props.state.userState.currentUser) {
             this.props.actions.editArticle({
-                author: this.props.state.user._id,
+                author: this.props.state.userState.currentUser._id,
                 title: title,
                 content: content,
                 _id: this.articleId

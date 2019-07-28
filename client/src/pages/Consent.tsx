@@ -26,7 +26,8 @@ class Consent extends React.Component<Props, States> {
         if (!this.transactionId) {
             const error: Error = { name: "No Transaction ID", message: "" };
             return <ErrorPage error={error} />;
-        } else if (!this.props.state.user) {
+        } else if (!this.props.state.userState.currentUser) {
+            const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                     <div>
                         <Header size="medium">Hi {this.params.get("email")},</Header>
@@ -36,7 +37,7 @@ class Consent extends React.Component<Props, States> {
                     <br />
                     {/* Add your consent texts here */}
                     <div>
-                        <Button primary onClick={this.allow}>Approve</Button>
+                        <Button primary onClick={this.allow} loading={loading} disabled={loading}>Approve</Button>
                         <Button secondary onClick={this.deny}>Deny</Button>
                     </div>
                 </Container>

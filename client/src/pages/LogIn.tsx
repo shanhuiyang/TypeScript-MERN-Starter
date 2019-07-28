@@ -23,7 +23,8 @@ class LogIn extends React.Component<Props, States> {
         this.passwordRef = React.createRef();
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.user) {
+        if (!this.props.state.userState.currentUser) {
+            const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                 <Form>
                     <ResponsiveFormField>
@@ -34,7 +35,7 @@ class LogIn extends React.Component<Props, States> {
                         <label>Password</label>
                         <input type="password" placeholder="Password" ref={this.passwordRef} />
                     </ResponsiveFormField>
-                    <Button primary type="submit" onClick={ this.login }>
+                    <Button primary type="submit" onClick={ this.login } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
                         Submit
                     </Button>

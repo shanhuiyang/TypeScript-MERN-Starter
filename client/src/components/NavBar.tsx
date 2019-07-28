@@ -4,6 +4,7 @@ import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import UserActionCreator from "../models/UserActionCreator";
 import { Menu, Sticky, Image } from "semantic-ui-react";
+import User from "../models/User";
 
 interface HeaderProps {
     containerRef: RefObject<any>;
@@ -13,7 +14,7 @@ interface HeaderProps {
 interface HeaderStates {}
 class NavBar extends React.Component<HeaderProps, HeaderStates> {
     componentDidMount(): void {
-        if (!this.props.state.user) {
+        if (!this.props.state.userState.currentUser) {
             this.props.actions.authenticate();
         }
     }
@@ -27,7 +28,7 @@ class NavBar extends React.Component<HeaderProps, HeaderStates> {
                     <img src="/favicon.png" alt="logo" style={{marginRight: 10}}/>
                     {"Typescript MERN Starter"}
                 </Menu.Item>
-                {this.props.state.user ?
+                {this.props.state.userState.currentUser ?
                     this.renderAccountTabsLoggedIn() :
                     this.renderAccountTabsBeforeLoggedIn()}
             </Menu>
@@ -35,7 +36,7 @@ class NavBar extends React.Component<HeaderProps, HeaderStates> {
     }
 
     private renderAccountTabsLoggedIn() {
-        const {user} = this.props.state;
+        const user: User | undefined = this.props.state.userState.currentUser;
         if (!user) {
             return undefined;
         }

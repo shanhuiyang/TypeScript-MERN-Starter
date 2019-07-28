@@ -7,9 +7,10 @@ import User from "../models/User";
 import actions from ".";
 import Gender from "../models/Gender";
 
-export const CONSENT_REQUEST_SUCCESS: string = "CONSENT_REQUEST_SUCCESS";
+export const USER_REQUEST_START: string = "USER_REQUEST_START";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
 export const AUTHENTICATE_SUCCESS: string = "AUTHENTICATE_SUCCESS";
+export const CONSENT_REQUEST_SUCCESS: string = "CONSENT_REQUEST_SUCCESS";
 export const AUTHENTICATE_FAILED: string = "AUTHENTICATE_FAILED";
 export const LOGIN_SUCCESS: string = "LOGIN_SUCCESS";
 export const LOGIN_FAILED: string = "LOGIN_FAILED";
@@ -21,6 +22,7 @@ export const LOGOUT: string = "LOGOUT";
 const userActionCreator: UserActionCreator = {
     allowConsent(transactionId: string): any {
         return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/authorize/decision", { transaction_id: transactionId }, "POST")
             .then((json: any) => {
                 if (json.user && json.accessToken) {
@@ -50,6 +52,7 @@ const userActionCreator: UserActionCreator = {
             if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
                 dispatch({ type: AUTHENTICATE_FAILED});
             } else {
+                dispatch({ type: USER_REQUEST_START});
                 fetch("/oauth2/profile", undefined, "GET", true)
                 .then((json: any) => {
                     if (json.user) {
@@ -71,6 +74,7 @@ const userActionCreator: UserActionCreator = {
     },
     login(email: string, password: string): any {
         return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/login", { email: email, password: password }, "POST")
             .then((json: any) => {
                 if (json.user && json.accessToken) {
@@ -100,6 +104,7 @@ const userActionCreator: UserActionCreator = {
             if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
                 dispatch({ type: UPDATE_PROFILE_FAILED});
             } else {
+                dispatch({ type: USER_REQUEST_START});
                 fetch("/oauth2/profile", user, "POST", true)
                 .then((json: User) => {
                     if (json) {
@@ -120,6 +125,7 @@ const userActionCreator: UserActionCreator = {
     },
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any {
         return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
             .then((json: any) => {
                 // Redirected

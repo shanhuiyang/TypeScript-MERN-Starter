@@ -1,6 +1,6 @@
-import User from "./User";
+import UserState from "./UserState";
 import ArticleState from "./ArticleState";
 export default interface AppState {
-    user: User | false; // If user is false then user has not logged in.
+    userState: UserState;
     articles: ArticleState;
 }

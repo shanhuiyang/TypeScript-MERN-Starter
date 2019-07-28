@@ -1,19 +1,29 @@
 import { AnyAction as Action } from "redux";
-import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS } from "../actions/user";
-import User from "../models/User";
+import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START } from "../actions/user";
+import UserState from "../models/UserState";
 
-const user = (state: User | false = false, action: Action): User | false => {
+const initialState: UserState = {
+    loading: false,
+    currentUser: undefined
+};
+
+const userState = (state: UserState = initialState, action: Action): UserState => {
     switch (action.type) {
         case LOGOUT:
-            return false;
+            return initialState;
         case CONSENT_REQUEST_SUCCESS:
         case AUTHENTICATE_SUCCESS:
         case LOGIN_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
-            return action.user;
+            return {
+                loading: false,
+                currentUser: action.user
+            };
+        case USER_REQUEST_START:
+            return {...state, loading: true};
         default:
-            return state;
+            return {...state, loading: false};
     }
 };
 
-export default user;
+export default userState;

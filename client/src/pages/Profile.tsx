@@ -8,6 +8,7 @@ import { Redirect } from "react-router";
 import { Container, Form, Button, Icon, Radio, Image } from "semantic-ui-react";
 import { STYLE_CONTAINER_PADDING } from "../shared/constants";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
+import User from "../models/User";
 
 interface Props {
     state: AppState;
@@ -33,14 +34,15 @@ class Profile extends React.Component<Props, States> {
     }
 
     componentDidMount() {
-        if (this.props.state.user) {
-            this.setState({selectedGender: this.props.state.user.gender});
+        if (this.props.state.userState.currentUser) {
+            this.setState({selectedGender: this.props.state.userState.currentUser.gender});
         }
     }
 
     render(): React.ReactElement<any> {
-        if (this.props.state.user) {
-            const { user } = this.props.state;
+        if (this.props.state.userState.currentUser) {
+            const user: User = this.props.state.userState.currentUser;
+            const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={STYLE_CONTAINER_PADDING}>
                 <Form>
                     <ResponsiveFormField>
@@ -69,7 +71,7 @@ class Profile extends React.Component<Props, States> {
                         <label>Web site</label>
                         <input defaultValue={user.website} ref={this.websiteRef} />
                     </ResponsiveFormField>
-                    <Button primary type="submit" onClick={ this.update }>
+                    <Button primary type="submit" onClick={ this.update } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
                         Submit
                     </Button>
@@ -94,14 +96,15 @@ class Profile extends React.Component<Props, States> {
         });
     }
     private update = (): void => {
-        if (this.props.state.user) {
-            const email: any = this.props.state.user.email;
+        if (this.props.state.userState.currentUser) {
+            const user: User = this.props.state.userState.currentUser;
+            const email: any = user.email;
             const address: any = this.addressRef.current && this.addressRef.current.value;
             const website: any = this.websiteRef.current && this.websiteRef.current.value;
             const name: any = this.nameRef.current && this.nameRef.current.value;
             const gender: Gender = this.state.selectedGender;
-            const avatarUrl: string = this.props.state.user.avatarUrl;
-            this.props.actions.updateProfile({_id: this.props.state.user._id,
+            const avatarUrl: string = user.avatarUrl;
+            this.props.actions.updateProfile({_id: user._id,
                 email, name, gender, website, address, avatarUrl});
         }
     }
