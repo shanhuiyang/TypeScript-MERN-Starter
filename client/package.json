@@ -19,7 +19,6 @@
     "typescript": "3.4.5",
     "@types/http-proxy-middleware": "^0.19.2",
     "@types/jquery": "^3.2.17",
-    "@types/lodash": "^4.14.91",
     "@types/react": "^16.8.19",
     "@types/react-redux": "^7.0.8",
     "@types/react-dom": "16.8.3",
