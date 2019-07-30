@@ -37,7 +37,8 @@ export default class ArticleEditor extends React.Component<Props, States> {
                 </Form.Field>
                 <Form.Field>
                     <label>Content</label>
-                    <textarea placeholder="no less than 500 characters" ref={this.contentRef} rows={24} defaultValue={originalContent} />
+                    <textarea placeholder="no less than 500 characters"
+                        ref={this.contentRef} rows={24} defaultValue={originalContent} />
                 </Form.Field>
                 <FormGroup inline>
                     <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
