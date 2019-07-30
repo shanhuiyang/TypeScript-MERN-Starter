@@ -1,23 +1,25 @@
 # TypeScript MERN Starter
+
 > **Note!** This project is still **under construction**, but it has already been working well. You can go to the [Quick Start](#quick-start) part, then have a try.
 
 **Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
 
 ![Live Demo](./images/live-demo.png)
 
-This project is intended to build a RESTful MERN start point in TypeScript. 
+This project is intended to build a RESTful MERN start point in TypeScript.
 With this project as a start point you can easily build a community or blog app.
 
-MERN is a free and open-source JavaScript software stack for building dynamic web sites and web applications. 
-The MERN stack is composed of MongoDB, Express.js, React, and Node.js. 
+MERN is a free and open-source JavaScript software stack for building dynamic web sites and web applications.
+The MERN stack is composed of MongoDB, Express.js, React, and Node.js.
 
-This project implemented MERN in **TypeScript**. 
-TypeScript is a typed superset of JavaScript. 
-It has become popular recently in applications due to the benefits it can bring. 
-If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding. 
+This project implemented MERN in **TypeScript**.
+TypeScript is a typed superset of JavaScript.
+It has become popular recently in applications due to the benefits it can bring.
+If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding.
 You can check out its documentation [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
 TypeScript has brought the following benefits to MERN:
+
 - **Unified modeling** across web client and server for objects
 - Type safety, and easy refactoring of typed code across web client and server
 - A superior developer experience in a team environment
@@ -29,14 +31,20 @@ Not only using TypeScript, but this project is also featured by:
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states.
 - **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter**  for who would like to build an community app on MERN.
 - The client code is created from [create-react-app](https://facebook.github.io/create-react-app/), so now you can get rid of annoying configurations for babel and webpack.
+
 # Quick start
+
 ## Prerequisite
+
 To build and run this app locally you will need a few things:
+
 - Install [Node.js](https://nodejs.org/en/)
 - Install [MongoDB](https://docs.mongodb.com/manual/installation/)
 - Install [VS Code](https://code.visualstudio.com/)
 - Install [Yarn](https://yarnpkg.com/)
+
 ## Clone the repository
+
 ```bash
 git clone https://github.com/shanhuiyang/TypeScript-MERN-Starter.git <project_name>
 ```

@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "http-proxy-middleware": "^0.19.1",
+    "lodash": "^4.17.15",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
@@ -17,6 +17,7 @@
     "semantic-ui-react": "^0.87.3",
     "shelljs": "^0.8.1",
     "typescript": "^3.5.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@types/http-proxy-middleware": "^0.19.2",
     "@types/jquery": "^3.3.30",
     "@types/react": "^16.8.23",
@@ -27,6 +28,13 @@
     "@types/react-toastify": "^4.0.2",
     "@types/redux-thunk": "^2.1.0",
     "@types/shelljs": "^0.8.5"
+  },
+  "devDependencies": {
+    "fetch-mock": "^7.3.9",
+    "redux-mock-store": "^1.5.3",
+    "@types/fetch-mock": "^7.3.1",
+    "@types/jest": "^24.0.16",
+    "@types/redux-mock-store": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
