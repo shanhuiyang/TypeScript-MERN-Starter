@@ -299,7 +299,9 @@ It can respond authorization requests coming from **resource server**, i.e. veri
 | server/config/oauth2orize-server.ts| [oauth2orize](https://github.com/jaredhanson/oauth2orize) is an authorization server toolkit for Node.js. In this file we imported oauth2orize and defined how should the OAuth2Server work in each of the authorization phases. |
 | server/routes/oauth2.ts            | Defines routes start with ```/oauth2```, these routes configures **authorization server** on how to handle authorize, login, sign up, and profile updating, etc. |
 | server/controller/oauth2.ts        | Defines route handlers on how to handle authorize, login, sign up, and profile updating, etc. It works with the OAuth2Server defined in ```server/config/oauth2orize-server.ts```, and executes DB operations in ```User``` collection. |
+
 ### Summary
+
 For developers who would like to use the authorizing mechanism in this project, he/she just need to know how to protect his/her REST API. 
 This authorizing mechanism is **the second key point to make the RESTful architecture possible**.
 
@@ -308,14 +310,20 @@ For developers who would like to go deeper, we can summarize for them that:
 2. All requests to **resource server** are routed to path start with ```/auth``` or ```/api```; all requests to **authorization server** are routed to path start with ```/oauth2```.
 3. If one would like to import 3rd party token provider or **authorization server**, he/she should make changes in the **resource server** part.
 4. You can improve the OAuth2 **authorization server** implementation by adding *expiration time* or *scope* in the ```AccessToken``` collection. Also necessary code changes should be made in **authorization server** part.
+
 ## Server routing & client routing
+
 In section [Create React App](##create-react-app) we have mentioned how the Node.js server serves React app and REST APIs.
 Briefly speaking, the Node.js server complete this task in a very simple way.
+
 1. If the url of request starts with ```/api```, ```/auth```, or ```/oauth2```, handle it using its own route handlers.
 2. For all other request url, return the ```client/build/static/index.html```.
+
 ### React-router 4.0+
+
 The client powered by [react-router 4.0+](https://reacttraining.com/react-router/) handles all routes except those were handled by Node.js server. 
 In the file ```client/src/App.tsx```, react-router 4.0+ shows how this works can be done elegantly.
+
 ```Typescript
 export default class App extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
@@ -341,18 +349,24 @@ export default class App extends React.Component<Props, States> {
     }
 }
 ```
+
 ```<Route>```s in the ```<Switch>``` can only be rendered the first matched one.
 If none of the ```<Route>```s matched, ```<ErrorPage error={notFoundError}>``` will be rendered.
 Please refer to the [document](https://reacttraining.com/react-router/web/guides/quick-start) for more usages of react-router 4.0+.
+
 ### Performance perspective
+
 This RESTful architecture brings significant performance improvement from several aspects:
 1. The Node.js server reduces its response payload.
 2. The Node.js server gets rid of the work on constructing html pages.
 3. Since the file ```client/build/static/index.html``` would not change unless you re-deploy you app, it's easily be cached among Internet.
 4. The React app handles navigation locally, users feel no latency when they navigate back and forth in the browser.
+
 ## Styling
+
 In this project, there is no separated file like ```client/public/css/main.css```. 
 We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has following advantages.
+
 1. React style. It's components match the mental model React has given us for composing UI great. Most of the time you are shaping your UI using props instead of classes or inline styles.
 2. It provides many useful components which are suitable to compose a community app. [Feed](https://react.semantic-ui.com/views/feed/), [Rating](https://react.semantic-ui.com/modules/rating/), and [Comment](https://react.semantic-ui.com/views/comment/) are fancy examples.
 3. [Good support for react-router](https://react.semantic-ui.com/#augmentation).
@@ -360,12 +374,16 @@ We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has 
 
 On the other hand, you can easily change the styles of React app by import [other 3rd party libraries](https://hackernoon.com/23-best-react-ui-component-libraries-and-frameworks-250a81b2ac42) and replace existing raw components.
 Please refer to [official document](https://reactjs.org/docs/faq-styling.html) for more solutions on this problem.
+
 # How to debug
+
 In this project, you can debug your server and client **at the same time**.
 You can debug the server in VS Code, meanwhile you can debug the client in [Chrome](https://www.google.com/chrome/).
 
 > **Note!** If you are going to debug your app in local area networks (LAN), please change the `ORIGIN_URI` in file  _.env.development_ from `localhost` to your host IP, e.g. `192.168.1.13`. **Debugging your web client on mobile devices** usually requires debugging in LAN. 
+
 ## Available scripts
+
 We use [Yarn](https://yarnpkg.com/) as the package manager of this project.
 You can use `npm` if you prefer.
 You can run following commands using ```yarn <command>```.
@@ -388,16 +406,23 @@ You can run following commands using ```yarn <command>```.
 | `test`                    | Not ready yet.                                                       |
 | `serve-debug`             | Runs the app with the --inspect flag.                                |
 | `watch-debug`             | The same as `watch` but includes the --inspect flag so you can attach a debugger.                   |
+
 ## Debugging client
+
 After you run the command `yarn start` or `yarn debug`, you can visit http://localhost:3000 using Chrome.
 Hit `F12` to open the debug mode of Chrome.
 You can see the debugging window shows on the right side or bottom of the browser.
 There are 2 important tabs in the debugging window.
+
 1. _Console_. You can see logs from client in this tab. We added the `redux-logger` middleware in client so you can inspect the redux states transition in this tab.
 2. _Source_. You can find your source code files in this tab. Usually your source code folder shows an orange icon. Also you can set break point and watch variables in this tab.
 
 From the [official document](https://developers.google.com/web/tools/chrome-devtools/javascript/) you may find the best practice on how to debug using Chrome.
+
+You can also integrate [React DevTools](https://github.com/facebook/react-devtools) to boost your debug experience.
+
 ## Debugging server
+
 Debugging is one of the places where VS Code really shines over other editors. Node.js debugging in VS Code is easy to setup and even easier to use. 
 This project comes pre-configured with everything you need to get started.
 
