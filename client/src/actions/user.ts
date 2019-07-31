@@ -73,9 +73,9 @@ const userActionCreator: UserActionCreator = {
         };
     },
     login(email: string, password: string): any {
-        return (dispatch: Dispatch<any>): void => {
+        return (dispatch: Dispatch<any>): any => {
             dispatch({ type: USER_REQUEST_START});
-            fetch("/oauth2/login", { email: email, password: password }, "POST")
+            return fetch("/oauth2/login", { email: email, password: password }, "POST")
             .then((json: any) => {
                 if (json.user && json.accessToken) {
                     localStorage.setItem(ACCESS_TOKEN_KEY, json.accessToken);

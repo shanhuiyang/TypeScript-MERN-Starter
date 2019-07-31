@@ -13,7 +13,7 @@ MERN is a free and open-source JavaScript software stack for building dynamic we
 The MERN stack is composed of MongoDB, Express.js, React, and Node.js.
 
 This project implemented MERN in **TypeScript**.
-TypeScript is a typed superset of JavaScript.
+TypeScript is a typed super set of JavaScript.
 It has become popular recently in applications due to the benefits it can bring.
 If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding.
 You can check out its documentation [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
@@ -34,7 +34,7 @@ Not only using TypeScript, but this project is also featured by:
 
 # Quick start
 
-## Prerequisite
+## Before Start
 
 To build and run this app locally you will need a few things:
 
@@ -48,23 +48,34 @@ To build and run this app locally you will need a few things:
 ```bash
 git clone https://github.com/shanhuiyang/TypeScript-MERN-Starter.git <project_name>
 ```
+
 ## Install dependencies
+
 ```bash
 cd <project_name>
 yarn install
 ```
+
 ## Start your mongoDB server
+
 (you'll probably have to start another command prompt)
+
 ```bash
 mongod
 ```
+
 > **Note!** If you are working on Windows, you can run MongoDB as service, then your MongoDB will always be running even after you restart your computer.
+
 ## Build and run the project
+
 ```bash
 yarn start
 ```
+
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
+
 # Motivation
+
 Up to 2019, React is the most popular front-end framework.
 For novice web developers, if they would like to build a full-stack project using Javascript, they can intuitively choose the combination of Node.js and React.
 
@@ -73,14 +84,16 @@ The most famous Typescript project is [Angular](https://angular.io).
 Nowadays React also [support Typescript officially](https://facebook.github.io/create-react-app/docs/adding-typescript).
 
 Therefore, the motivation of this project is building a fullstack web app using Javascript, meanwhile we can maintain this web app easily.
+
 ## Prior Art
+
 [mern-starter](https://github.com/Hashnode/mern-starter) is a famous project which combine React and Node.js in a single project.
 However, it is deprecated after April, 2019.
 This project is a server rendering solution.
 It modeled the ```Post``` object, but did not implement the authentication module.
 
 [TypeScript-Node-Starter](https://github.com/Microsoft/TypeScript-Node-Starter) is an officially built starter project for Node.js by Microsoft.
-This project is a good starter for Node.js app using Typescript. 
+This project is a good starter for Node.js app using Typescript.
 It is also a server rendering solution, using [pug](https://github.com/pugjs/pug).
 
 Indeed **TypeScript-MERN-Starter** is built on top of TypeScript-Node-Starter.
@@ -88,16 +101,25 @@ However, as you can see in **TypeScript-MERN-Starter**, the architecture has bee
 
 [oauth2api](https://github.com/PatrickHeneise/oauth2api) is a good example on how to implement OAuth2 strategy in an Node.js app.
 We almost totally imported this project to **TypeScript-MERN-Starter**.
+
 ## Philosophy
+
 We build this project on following philosophies:
+
 1. Beginner friendly.
 2. Easy to extend.
+
 ## Road map
+
 We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/). 
 TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, and iOS.
+
 # Project structure
+
 In this part, we will not only summarize the folder structure, but also introduce how each of the project gradients works.
+
 ## Folder structure
+
 | Folder Path              | Description                                                                                                                                  |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | .vscode                  | Contains VS Code specific settings.                                                                                                          |
@@ -146,19 +168,26 @@ In this part, we will not only summarize the folder structure, but also introduc
 | tsconfig.tests.json      | Config settings for compiling tests written in TypeScript. (constructing...)                                                                 |
 | tslint.json              | Config settings for TSLint code style checking for **server** side only.                                                                     |
 | yarn.lock                | Yarn stores exactly which versions of each dependency were installed. Generated after you run ```yarn``` or ```yarn install```.              |
+
 ## Create React App
+
 The client folder includes a complete React app which was initialized by [```Create React App```](https://facebook.github.io/create-react-app/).
 Create React App is a great tool for beginner since it is:
+
 1. **Less to Learn**. You don't need to learn and configure many build tools. Instant reloads help you focus on development. When it's time to deploy, your bundles are optimized automatically.
 2. **Only One Dependency**. Your app only needs one build dependency. Under the hood, it uses Webpack, Babel, ESLint, and **tsc (Typescript compiler)** to power on your app. Then you can get rid of the complicated configurations for them.
+
 ### Serve static assets of client and index.html in production
+
 In production build environment, ```react-scripts```, the tool for use with ```Create React App``` will compile all of your (Typescript) source code and resources into bundles and assets in ```client/build``` folder.
 
-For all routes except those for REST APIs, the Node.js server can response ```client/build/static/index.html```. 
+For all routes except those for REST APIs, the Node.js server can response ```client/build/static/index.html```.
 That is to say, our server routes all REST APIs, and leave all other possible routes to client. 
-Server will never make up the client app, it will not decide how would the client should look like. 
+Server will never make up the client app, it will not decide how would the client should look like.
 This is **the first key point to make the RESTful architecture possible**.
+
 ### Proxy API requests in development
+
 However, in development environment, things become totally different.
 When you run the command ```yarn start``` in client folder, ```react-scripts``` will boot a local debug server for you.
 This server is implemented in ```client/src/serviceWorker.ts```.
@@ -179,6 +208,7 @@ We can summarize how we applied this strategy as below:
 4. In the file ```client/src/setupProxy.js```, we configure that uri starts with ```/api```, ```/auth```, and ```oauth``` should be proxied to port 3001., i.e. the Node.js server will handle these requests forwarded by the serviceWorker.
 
 ## Unified Modeling
+
 A big advantage of Node.js is that it can be used as a single programming language for both front and back end.
 However, since JavaScript is a loosely typed or a dynamic language, variables in JavaScript are not directly associated with any particular value type, and any variable can be assigned (and re-assigned) values of all types.
 Therefore, sometimes when you look at a function call, you may have no idea what kind of object the argument passes.
@@ -195,6 +225,7 @@ These fields should be read-only in client side Typescript code.
 
 Suppose we are going to define a type named User, which contains the profile and password of a website user who can login, post an article, and view his/her profile.
 We will do following:
+
 1. Add a interface named ```User``` in ```client/src/models```, and extends from ```UnifiedModel```.
 2. Fill the ```User``` with fields you desire such as name and address, etc. See what we did in ```client/src/models/User.d.ts```.
 3. In ```server/models/User/UserDocument.d.ts```, define a interface named ```UserDocument```, which extends ```User``` and ```mongoose.Document``` simultaneously. This interface represent a document which can be create, read, update and delete from MongoDB.
@@ -209,6 +240,7 @@ When you are going to add a field in your ```User``` definition, you may have to
 If you forget to make necessary change on both sides, VS Code will kindly remind you when you are building the project. 
 
 You would feel inconvenient that after you defined the ```User``` interface like this,
+
 ```Typescript
 export default interface User extends UnifiedModel {
     email: string;
@@ -220,7 +252,9 @@ export default interface User extends UnifiedModel {
     website?: string;
 }
 ```
+
 you still have to define ```userSchema``` for ```Mongoose``` like following,
+
 ```Typescript
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
@@ -232,6 +266,7 @@ export const userSchema: Schema = new mongoose.Schema({
     website: String
 }, { timestamps: true });
 ```
+
 **Yes, it is duplicated works you need to take care about**.
 Now you have to make sure these 2 definitions consistent after you change one of them.
 There is a known library named [typegoose](https://github.com/szokodiakos/typegoose) which is addressing the duplicated definitions problem.
@@ -239,25 +274,34 @@ However since it defines the model using class extended from a ```Typegoose``` c
 We are looking forward its evolving so that we can resolve this issue in future.
 
 ## Embedded OAuth2 server
+
 To protect REST API against unauthorized request, we used [Passport](http://www.passportjs.org/docs/) in this project.
 Passport is an authentication middleware for Express. 
 It is designed to serve authenticating requests.
 Suppose you are going to create an article in the web app, the server protected such requests like this:
+
 ```Typescript
 article.route("/create").post(
     passport.authenticate("bearer", { session: false }),
     controllers.create
 );
 ```
+
 The purpose of this statement is straightforward. It means that when a POST request with url ```api/article/create``` is coming, do the following in order.
+
 1. Authorize the request with Bearer strategy, just see if it has a valid Bearer token. If yes, go to step 2; if no, return a ```401 Unauthorized``` error.
 2. Handle the request using controller of article creating.
+
 Therefore when you confirm that an REST API should be protected, just insert a single line in its route configuration like this:
+
 ```Typescript
 passport.authenticate("bearer", { session: false }),
 ```
+
 Let's take a look at what we did in this project to make life easier.
+
 ### OAuth 2.0 protocol
+
 OAuth 2.0 (formally specified by [RFC 6749](https://tools.ietf.org/html/rfc6749)) provides an authorization framework which allows users to authorize access to third-party applications.
 When authorized, the application is issued a token to use as an authentication credential.
 This has two primary security benefits:
@@ -268,23 +312,25 @@ This has two primary security benefits:
 These benefits are particularly important for ensuring the security of web applications, making OAuth 2.0 the predominant standard for API authentication.
 
 OAuth 2.0 defines four roles:
-1. **resource owner**. 
+
+1. **resource owner**.
 An entity capable of granting access to a protected resource.
 Usually the resource owner is a person, it is referred to as an application end-user.
-2. **resource server**. 
+2. **resource server**.
 The server hosting the protected resources, capable of accepting and responding to protected resource requests using access tokens.
-3. **client**. 
+3. **client**.
 An application making protected resource requests on behalf of the resource owner and with its authorization.  Client usually is an application executes in your browser, on a desktop, or mobile devices.
-4. **authorization server**. 
+4. **authorization server**.
 The server issuing access tokens to the client after successfully authenticating the resource owner and obtaining authorization.
 
-In this project, **resource owner** is our end user. 
+In this project, **resource owner** is our end user.
 We implemented other 3 roles in Typescript.
-The client React app takes the role of **client**. 
-The Node.js server takes the role of **resource server** and **authorization server**. 
+The client React app takes the role of **client**.
+The Node.js server takes the role of **resource server** and **authorization server**.
 
 ### Resource server
-As a **resource server**, the Node.js server owns articles written by user. 
+
+As a **resource server**, the Node.js server owns articles written by user.
 Also it can ask **authorization server** to authenticate the request send by **client**.
 If **authorization server** says this is authorized request, **resource server** will start its own jobs such as updating an article.
 
@@ -297,7 +343,9 @@ If **authorization server** says this is authorized request, **resource server**
 | server/controller/auth.ts          | Defines route controllers for ```/auth/oauth2/callback```. This controller handles the callback from **authorization server**. In this callback the **resource server** can save the user information in its own DB, and forward the user information as well as access token to the **client**. You can add more callback controllers here for other 3rd party **authorization server**, such as Facebook. Then the routes for the callback should be like ```/auth/facebook/callback```. |
 
 > **Note!** In our DB the collection named ```User``` is owned by **authorization server** exclusively. In the callback controller of **resource server** the user account is not saved into the/an ```User``` collection. If you would like to import a 3rd party token provider such as Facebook, you need to create a collection like ```User``` in MongoDB, which is owned by the **resource server**. Then the callback controller should store user info into that ```User``` collection. Also the added ```User``` collection will not contain password or other credential info of account.
+
 ### Authorization server
+
 As an **authorization server**, the Node.js server owns user accounts and profiles. 
 It can respond authorization requests coming from **resource server**, i.e. verify the access token, then send back an corresponding ```User``` object to the **resource server** if the token is valid.
 
@@ -314,6 +362,7 @@ For developers who would like to use the authorizing mechanism in this project, 
 This authorizing mechanism is **the second key point to make the RESTful architecture possible**.
 
 For developers who would like to go deeper, we can summarize for them that:
+
 1. The Node.js server in this project not only take the role of **resource server**, but also take the role of **authorization server**.
 2. All requests to **resource server** are routed to path start with ```/auth``` or ```/api```; all requests to **authorization server** are routed to path start with ```/oauth2```.
 3. If one would like to import 3rd party token provider or **authorization server**, he/she should make changes in the **resource server** part.
@@ -365,6 +414,7 @@ Please refer to the [document](https://reacttraining.com/react-router/web/guides
 ### Performance perspective
 
 This RESTful architecture brings significant performance improvement from several aspects:
+
 1. The Node.js server reduces its response payload.
 2. The Node.js server gets rid of the work on constructing html pages.
 3. Since the file ```client/build/static/index.html``` would not change unless you re-deploy you app, it's easily be cached among Internet.
@@ -431,15 +481,18 @@ You can also integrate [React DevTools](https://github.com/facebook/react-devtoo
 
 ## Debugging server
 
-Debugging is one of the places where VS Code really shines over other editors. Node.js debugging in VS Code is easy to setup and even easier to use. 
+Debugging is one of the places where VS Code really shines over other editors. Node.js debugging in VS Code is easy to setup and even easier to use.
 This project comes pre-configured with everything you need to get started.
 
 To start debugging server you need to run the command first.
+
 ```bash
 yarn debug
 ```
+
 Then hit `F5` in VS Code, it looks for a top level `.vscode` folder with a `launch.json` file.
 In this file, you can tell VS Code exactly what you want to do:
+
 ```json
 {
     "type": "node",
@@ -449,42 +502,62 @@ In this file, you can tell VS Code exactly what you want to do:
     "protocol": "inspector"
 }
 ```
+
 This is mostly identical to the "Node.js: Attach by Process ID" template with one minor change.
 We added `"protocol": "inspector"` which tells VS Code that we're using the latest version of Node which uses a new debug protocol.
 
 With this file in place, you can hit `F5` to attach a debugger.
 You will probably have multiple node processes running, so you need to find the one that shows `node dist/server/server.js`.
 Now you can set your breakpoints and wait for them be hit.
+
 # Tests
-(constructing...)
+
+You can run all of the tests in project using ```yarn test```, or run tests for client only using ```yarn test-client```.
+
+(Still under construction...)
+
 # Deploying the app
+
 There are many ways to deploy an Node app, and in general, nothing about the deployment process changes because you're using TypeScript.
 In this section, let's show you how to deploy this project to Azure App Service.
+
 ## Prerequisite
+
 - [**Azure account**](https://azure.microsoft.com/en-us/free/) - If you don't have one, you can sign up for free.
 The Azure free tier gives you plenty of resources to play around with including up to 10 App Service instances, which is what we will be using.
 - [**Docker Desktop**](https://www.docker.com/products/docker-desktop) - Usually you need to sign in or sign up on [Docker hub](https://hub.docker.com/) first.
+
 ## Create production MongoDB
+
 In this step, you create a MongoDB database in Azure. When your app is deployed to Azure, it uses this cloud database.
 For MongoDB, we use Azure Cosmos DB. Cosmos DB supports MongoDB client connections.
+
 ### Open Azure Cloud Shell
+
 1. Sign in [Azure Portal](https://portal.azure.com) using your account.
 2. Open [Azure cloud shell button](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-nodejs-mongodb-app#open-azure-cloud-shell) on the menu in the upper-right corner of the portal.
 3. Then if you are prompted that **You have no storage mounted**, just click **Create Storage**.
+
 ### Create a resource group
+
 In the opened shell enter following command.
 Change the location according to your preference.
+
 ```bash
 az group create --name myResourceGroup --location "West Europe"
 ```
+
 After entering this you should get a Json response in the shell.
 With following property in it.
+
 ```json
 "properties": {
     "provisioningState": "Succeeded"
 }
 ```
+
 ### Create a Cosmos DB account
+
 In the following command, substitute a unique Cosmos DB name for the ```<cosmosdb_name>``` placeholder.
 This name is used as the part of the Cosmos DB endpoint, ```https://<cosmosdb_name>.documents.azure.com/```, so the name needs to be unique across all Cosmos DB accounts in Azure.
 The name must contain only lowercase letters, numbers, and the hyphen (-) character, and must be between 3 and 50 characters long.
