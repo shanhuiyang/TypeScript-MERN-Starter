@@ -7,7 +7,7 @@ import { byCreatedAt } from "../../shared/date";
 import { Container, Segment, Button, Header, Icon } from "semantic-ui-react";
 import ArticleActionCreator from "../../models/ArticleActionCreator";
 import ArticleItem from "./ArticleItem";
-import { STYLE_CONTAINER_PADDING } from "../../shared/constants";
+import { CONTAINER_STYLE } from "../../shared/styles";
 import Loading from "./Loading";
 
 interface Props {
@@ -31,7 +31,7 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     render(): React.ReactElement<any> {
-        return <Container text style={STYLE_CONTAINER_PADDING}>
+        return <Container text style={CONTAINER_STYLE}>
             {this.renderCreateArticleSection()}
             {this.renderArticles()}
         </Container>;

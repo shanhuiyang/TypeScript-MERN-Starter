@@ -36,7 +36,7 @@ describe("login", () => {
         fetchMock.restore();
     });
 
-    it("creates LOGIN_SUCCESS when login has been done", () => {
+    it("return LOGIN_SUCCESS when login has been done", () => {
         fetchMock.postOnce(`${LOCAL_HOST_URI}/oauth2/login`, {
             body: { user: DUMMY_USER_1, accessToken: DUMMY_ACCESS_TOKEN },
             headers: { "content-type": RESPONSE_CONTENT_TYPE.JSON }

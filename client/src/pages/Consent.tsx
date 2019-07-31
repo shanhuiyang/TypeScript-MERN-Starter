@@ -5,7 +5,7 @@ import UserActionCreator from "../models/UserActionCreator";
 import connectPropsAndActions from "../shared/connect";
 import { Redirect } from "react-router-dom";
 import { Container, Header, Button } from "semantic-ui-react";
-import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { CONTAINER_STYLE } from "../shared/styles";
 
 interface Props {
     location: Location;
@@ -28,7 +28,7 @@ class Consent extends React.Component<Props, States> {
             return <ErrorPage error={error} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
-            return (<Container text style={STYLE_CONTAINER_PADDING}>
+            return (<Container text style={CONTAINER_STYLE}>
                     <div>
                         <Header size="medium">Hi {this.params.get("email")},</Header>
                         <Header size="tiny">{this.params.get("client_name")} is requesting access to your account.</Header>

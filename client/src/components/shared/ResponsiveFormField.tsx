@@ -1,5 +1,6 @@
 import React from "react";
 import { Responsive, Form } from "semantic-ui-react";
+import { MOBILE_DESKTOP_BOUND } from "../../shared/constants";
 
 export interface Props {
     width?: number;
@@ -7,7 +8,6 @@ export interface Props {
 interface States {}
 const MOBILE_INPUT_WIDTH: number = 16;
 const DESKTOP_INPUT_WIDTH: number = 8;
-const MOBILE_DESKTOP_BOUND: number = Responsive.onlyTablet.minWidth as number;
 export default class ResponsiveFormField extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         return (<React.Fragment>

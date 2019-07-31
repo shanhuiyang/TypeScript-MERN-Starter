@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import ArticleActionCreator from "../models/ArticleActionCreator";
 import { Container, Header } from "semantic-ui-react";
 import ArticleEditor from "../components/article/ArticleEditor";
-import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { CONTAINER_STYLE } from "../shared/styles";
 
 interface Props {
     state: AppState;
@@ -20,7 +20,7 @@ class CreateArticle extends React.Component<Props, States> {
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articles.loading;
             return (
-                <Container text style={STYLE_CONTAINER_PADDING}>
+                <Container text style={CONTAINER_STYLE}>
                     <Header size={"medium"}>Create Article</Header>
                     <ArticleEditor onSubmit={this.createArticle} submitText={"Create"} loading={loading}/>
                 </Container>

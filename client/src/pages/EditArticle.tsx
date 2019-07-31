@@ -6,7 +6,7 @@ import ArticleActionCreator from "../models/ArticleActionCreator";
 import Article from "../models/Article";
 import ErrorPage from "./ErrorPage";
 import { Container, Header } from "semantic-ui-react";
-import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { CONTAINER_STYLE } from "../shared/styles";
 import ArticleEditor from "../components/article/ArticleEditor";
 import { ModalButtonProps } from "../components/shared/ModalButton";
 
@@ -39,7 +39,7 @@ class EditArticle extends React.Component<Props, States> {
         }
         if (this.props.state.userState.currentUser) {
             return (
-                <Container text style={STYLE_CONTAINER_PADDING}>
+                <Container text style={CONTAINER_STYLE}>
                     <Header size={"medium"}>Edit Article</Header>
                     <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle} loading={this.props.state.articles.loading}
                         negativeButtonProps={{

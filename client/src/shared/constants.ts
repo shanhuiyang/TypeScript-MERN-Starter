@@ -1,3 +1,5 @@
+import { Responsive } from "semantic-ui-react";
+
 export const ACCESS_TOKEN_KEY = "accessToken";
 
 export const RESPONSE_CONTENT_TYPE = {
@@ -6,9 +8,4 @@ export const RESPONSE_CONTENT_TYPE = {
     HTML: "text/html"
 };
 
-export const CONTAINER_PADDING_VERTICAL: number = 16;
-export const STYLE_CONTAINER_PADDING = {
-    paddingTop: CONTAINER_PADDING_VERTICAL,
-    paddingBottom: CONTAINER_PADDING_VERTICAL,
-    width: "100%"
-};
+export const MOBILE_DESKTOP_BOUND: number = Responsive.onlyTablet.minWidth as number;

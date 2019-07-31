@@ -6,7 +6,7 @@ import UserActionCreator from "../models/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
 import { Container, Form, Button, Icon, Radio } from "semantic-ui-react";
-import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props {
@@ -38,7 +38,7 @@ class SignUp extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
-            return (<Container text style={STYLE_CONTAINER_PADDING}>
+            return (<Container text style={CONTAINER_STYLE}>
                 <Form>
                     <ResponsiveFormField>
                         <label>Email</label>

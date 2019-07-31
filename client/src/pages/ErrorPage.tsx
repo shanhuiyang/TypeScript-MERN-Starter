@@ -1,5 +1,5 @@
 import React from "react";
-import { STYLE_CONTAINER_PADDING } from "../shared/constants";
+import { CONTAINER_STYLE } from "../shared/styles";
 import { Container, Header } from "semantic-ui-react";
 
 interface Props {
@@ -9,7 +9,7 @@ interface States {}
 export default class ErrorPage extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         return (
-            <Container text style={STYLE_CONTAINER_PADDING}>
+            <Container text style={CONTAINER_STYLE}>
                 <div className="page-header">
                     <Header color="red" size="large">
                         { this.props.error ? this.props.error.name : "Error" }
