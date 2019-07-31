@@ -1,4 +1,4 @@
-import React, { RefObject, Fragment, createRef } from "react";
+import React, { RefObject, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
@@ -8,6 +8,7 @@ import User from "../models/User";
 import ResponsiveDesktop from "./shared/ResponsiveDesktop";
 import ResponsiveMobile from "./shared/ResponsiveMobile";
 import { WRAPPER_VIEW_STYLE } from "../shared/styles";
+import ScrollToTop from "react-scroll-up";
 
 interface Props {
     containerRef: RefObject<any>;
@@ -78,6 +79,10 @@ class NavBarLayout extends React.Component<Props, States> {
                     {this.props.children}
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
+            <ScrollToTop showUnder={160} style={{ bottom: 30, right: 28 }}>
+                <Icon size="huge" color="green"
+                    name="arrow alternate circle up" />
+            </ScrollToTop>
         </ResponsiveMobile>;
     }
 
