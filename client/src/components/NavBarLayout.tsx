@@ -48,6 +48,7 @@ class NavBarLayout extends React.Component<Props, States> {
                 </Menu>
             </Sticky>
             {this.props.children}
+            {this.renderScrollToTop()}
         </ResponsiveDesktop>;
     }
 
@@ -79,10 +80,7 @@ class NavBarLayout extends React.Component<Props, States> {
                     {this.props.children}
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
-            <ScrollToTop showUnder={160} style={{ bottom: 30, right: 28 }}>
-                <Icon size="huge" color="green"
-                    name="arrow alternate circle up" />
-            </ScrollToTop>
+            {this.renderScrollToTop()}
         </ResponsiveMobile>;
     }
 
@@ -104,16 +102,16 @@ class NavBarLayout extends React.Component<Props, States> {
 
     private showSideBar = () => this.setState({ sidebarVisible: true });
 
-    private renderAccountControl() {
+    private renderAccountControl = (): React.ReactElement<any> => {
         return this.props.state.userState.currentUser ?
             this.renderAccountTabsLoggedIn() :
             this.renderAccountTabsBeforeLoggedIn();
     }
 
-    private renderAccountTabsLoggedIn() {
+    private renderAccountTabsLoggedIn = (): React.ReactElement<any> => {
         const user: User | undefined = this.props.state.userState.currentUser;
         if (!user) {
-            return undefined;
+            return <Fragment />;
         }
         const trigger = (
             <span>
@@ -130,7 +128,7 @@ class NavBarLayout extends React.Component<Props, States> {
         </Menu.Menu>;
     }
 
-    private renderAccountTabsBeforeLoggedIn() {
+    private renderAccountTabsBeforeLoggedIn = (): React.ReactElement<any> => {
         return <Menu.Menu position="right">
             <Menu.Item
                 content="Sign in"
@@ -143,6 +141,13 @@ class NavBarLayout extends React.Component<Props, States> {
                 to="/signup/"
             />
         </Menu.Menu>;
+    }
+
+    private renderScrollToTop = (): React.ReactElement<any> => {
+        return <ScrollToTop showUnder={160} style={{ bottom: 30, right: 28 }}>
+            <Icon size="huge" color="green"
+                name="arrow alternate circle up" />
+        </ScrollToTop>;
     }
 }
 
