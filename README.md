@@ -527,7 +527,7 @@ In this section, let's show you how to deploy this project to Azure App Service.
 The Azure free tier gives you plenty of resources to play around with including up to 10 App Service instances, which is what we will be using.
 - [**Docker Desktop**](https://www.docker.com/products/docker-desktop) - Usually you need to sign in or sign up on [Docker hub](https://hub.docker.com/) first.
 
-## Create production MongoDB
+## Create production MongoDB (Option 1: Azure CosmosDB)
 
 In this step, you create a MongoDB database in Azure. When your app is deployed to Azure, it uses this cloud database.
 For MongoDB, we use Azure Cosmos DB. Cosmos DB supports MongoDB client connections.
@@ -561,10 +561,13 @@ With following property in it.
 In the following command, substitute a unique Cosmos DB name for the ```<cosmosdb_name>``` placeholder.
 This name is used as the part of the Cosmos DB endpoint, ```https://<cosmosdb_name>.documents.azure.com/```, so the name needs to be unique across all Cosmos DB accounts in Azure.
 The name must contain only lowercase letters, numbers, and the hyphen (-) character, and must be between 3 and 50 characters long.
+
 ```bash
 az cosmosdb create --name <cosmosdb_name> --resource-group myResourceGroup --kind MongoDB
 ```
+
 When the Cosmos DB account is created several minutes later, the Azure CLI shows information similar to the following example:
+
 ```json
 {
   "consistencyPolicy":
@@ -579,15 +582,18 @@ When the Cosmos DB account is created several minutes later, the Azure CLI shows
   "..." : "Output truncated for readability"
 }
 ```
-## Connect app to production MongoDB
-In this step, you connect Typescript MERN project to the Cosmos DB database you just created, using a MongoDB connection string.
+
 ### Retrieve the database key
+
 To connect to the Cosmos DB database, you need the database key.
 In the Cloud Shell, use following command to retrieve the primary key.
+
 ```bash
 az cosmosdb list-keys --name <cosmosdb_name> --resource-group myResourceGroup
 ```
+
 The Azure CLI shows information similar to the following example:
+
 ```json
 {
   "primaryMasterKey": "RS4CmUwzGRASJPMoc0kiEvdnKmxyRILC9BWisAYh3Hq4zBYKr0XQiSE4pqx3UchBeO4QRCzUt1i7w0rOkitoJw==",
@@ -596,51 +602,92 @@ The Azure CLI shows information similar to the following example:
   "secondaryReadonlyMasterKey": "LpsCicpVZqHRy7qbMgrzbRKjbYCwCKPQRl0QpgReAOxMcggTvxJFA94fTi0oQ7xtxpftTJcXkjTirQ0pT7QFrQ=="
 }
 ```
+
 Copy the value of ```primaryMasterKey```. You need this information in the next step.
+
 ### Configure the connection string in your Node.js application
+
 In your Typescript MERN project open file _.env.production_.
 Replace the two ```<cosmosdb_name>``` placeholders with your Cosmos DB database name, and replace the ```<primary_master_key>``` placeholder with the key you copied in the previous step.
-```
+
+```text
 MONGODB_URI=mongodb://<cosmosdb_name>:<primary_master_key>@<cosmosdb_name>.documents.azure.com:10250/typescript-mern-starter?ssl=true&sslverifycertificate=false
 ```
+
 The ```ssl=true``` option is required because Cosmos DB requires SSL. Save your changes.
-### Test the application in production mode
+
+## Create production MongoDB (Option 2: MongoDB Atlas)
+
+[MongoDB Atlas](https://www.mongodb.com/cloud/atlas) provides free tier cluster for up to 512MB storage. It is more suitable for startup or prototype projects comparing to Azure CosmosDB.
+
+To build a free MongoDB service, you can follow below steps.
+
+1. [Register a MongoDB account](https://cloud.mongodb.com/user?signedOut=true#/atlas/register/accountProfile).
+2. After sign in to the cloud atlas, create a free tier (M0 Sandbox) cluster which take Azure as cloud provider.
+3. Click _Connect_ button in the cluster you just created.
+4. In step _(1) Whitelist your connection IP address_, remove the IP restriction by whitelist all IPs.
+5. In step _(2) Create a MongoDB User_, create a cluster user with admin privilege.
+6. Click _Choose a connection method_.
+7. Click _Connect your application_.
+8. In step _(1) Choose your driver version_, select driver as _Node.js_ and version as **_2.2.12 or later_**.
+9. Click to copy the connection string.
+
+In your Typescript MERN project open file _.env.production_.
+Modify the variable ```MONGODB_URI``` using the connection string you just copied.
+
+```text
+mongodb://<cluster_user_name>:<password>@cluster0-shard-00-00-pyou0.azure.mongodb.net:27017,cluster0-shard-00-01-pyou0.azure.mongodb.net:27017,cluster0-shard-00-02-pyou0.azure.mongodb.net:27017/<your_db_name>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority
+```
+
+Remember to replace the placeholders in above connection string example.
+
+## Test the application in production mode
+
 In file _.env.production_, change the ```ORIGIN_URI``` to the localhost.
 Meanwhile change the port number from 80 to 3000 because your local 80 port may have been blocked.
-```
+
+```text
 PORT=3000
 SERVER_PORT=3000
 ORIGIN_URI=http://localhost
 ```
+
 Open your local terminal.
 Switch the local node env from ```development``` to ```production``` by entering following commands.
+
 ```bash
-# Bash
+# bash
 export NODE_ENV=production
 ```
+
 ```powershell
-# Windows PowerShell
-$env:NODE_ENV = "production" 
+# powershell
+$env:NODE_ENV = "production"
 ```
+
 Please remember to switch the ```NODE_ENV``` back to ```development``` once you are done this section.
 
 Build the production for your TypeScript MERN project.
+
 ```bash
 yarn build
 ```
+
 Start your local production server.
+
 ```bash
 yarn serve
 ```
-In the output of terminal, you should see that **MongoDB is connected successfully**.
 
-Navigate to http://localhost:3000 in a browser.
+Navigate to [http://localhost:3000](http://localhost:3000) in a browser.
 Click _Sign Up_ in the top menu and create a test user.
 If you are successful creating a user and logging in, then your app is writing data to the Cosmos DB database in Azure successfully.
-You can check that in your Azure portal's **Azure Cosmos DB account** page using **Data Explorer**.
+You can verify the data in your Azure portal's **Azure Cosmos DB account** page using **Data Explorer** or in your **MongoDB Cluster** by clicking collection button.
 
 In the terminal, stop Node.js by typing _Ctrl+C_.
+
 ## Build app into a Docker image
+
 Firstly, we will [deploy the production app to Docker image](https://docs.docker.com/get-started/part2/) because of its great flexibility.
 Nowadays almost every cloud service support deploying web app using Docker image.
 Therefore once we have a well constructed Docker image then we can easily deploy our app to **any platform** with little adaption.
