@@ -1,7 +1,7 @@
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "./constants";
 import sleep from "./sleep";
 
-export type Method = "GET" | "POST";
+export type Method = "GET" | "POST" | "PUT";
 
 const TEST_FOR_LOADING: boolean = false;
 
@@ -9,9 +9,7 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
     if (TEST_FOR_LOADING) {
         await sleep(2000);
     }
-    const headers: any = {
-        "Content-Type": "application/json"
-    };
+    const headers: any = {};
     if (withToken) {
         headers["Authorization"] = "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY);
     }
@@ -21,7 +19,11 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
         credentials: "include"
     };
     if (method === "POST") {
+        headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(body);
+    } else if (method === "PUT") {
+        headers["Content-Type"] = "application/octet-stream";
+        options.body = body;
     }
     const response = await fetch(`${window.location.origin}${url}`, options);
     let contentType: string | null = response.headers.get("Content-Type") || response.headers.get("content-type");

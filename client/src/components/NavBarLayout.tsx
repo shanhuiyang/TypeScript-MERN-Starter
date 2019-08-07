@@ -60,14 +60,14 @@ class NavBarLayout extends React.Component<Props, States> {
                 <img src="/favicon.png" alt="logo" style={{marginRight: 10}}/>
                 {"Typescript MERN Starter"}
             </Menu.Item>
-            <Menu.Item content="About" as={NavLink} exact to="/about" />
+            <Menu.Item content="About" as={NavLink} to="/about" />
             {/* Add more nav items here */}
         </Fragment>;
     }
 
     private renderForMobile = (): React.ReactElement<any> => {
         return <ResponsiveMobile>
-            <Sidebar.Pushable raised style={WRAPPER_VIEW_STYLE} >
+            <Sidebar.Pushable raised="true" style={WRAPPER_VIEW_STYLE} >
                 {this.renderMenuForMobile()}
                 <Sidebar.Pusher dimmed={this.state.sidebarVisible} style={WRAPPER_VIEW_STYLE} >
                     <Menu borderless>
@@ -115,7 +115,8 @@ class NavBarLayout extends React.Component<Props, States> {
         }
         const trigger = (
             <span>
-              <Image avatar src={user.avatarUrl} /> {user.name}
+                <Image avatar src={user.avatarUrl ? user.avatarUrl : "/images/avatar.png"} />
+                {user.name}
             </span>
         );
         return <Menu.Menu position="right">

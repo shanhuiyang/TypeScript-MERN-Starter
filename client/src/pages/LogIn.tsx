@@ -4,7 +4,7 @@ import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
 import UserActionCreator from "../models/UserActionCreator";
 import _ from "lodash";
-import { Form, Button, Icon, Container } from "semantic-ui-react";
+import { Form, Button, Icon, Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
@@ -26,6 +26,7 @@ class LogIn extends React.Component<Props, States> {
         if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
+                <Header size={"medium"}>Sign In</Header>
                 <Form>
                     <ResponsiveFormField>
                         <label>Email</label>

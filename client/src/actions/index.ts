@@ -10,7 +10,11 @@ const actions: ActionCreator = {
     handleFetchError(type: string, error: Error): Action {
         const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
         console.error(formattedMessage);
-        toast.error(error.message);
+        if (error.message) {
+            toast.error(error.message);
+        } else if (error.name) {
+            toast.error(error.name);
+        }
         return {
             type
         };

@@ -16,6 +16,7 @@ import article from "./routes/article";
 
 // API keys and Passport configuration
 import "./config/passport-consumer";
+import avatar from "./routes/avatar";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -102,5 +103,7 @@ if (process.env.NODE_ENV === "production") {
 app.use("/auth", auth); // Auth client routes
 app.use("/oauth2", oauth2); // OAuth2 server routes
 app.use("/api/article", article); // Article related routes
+app.use("/api/avatar", avatar); // Avatar update related routes
+// Add more routes like "/api/***" here
 
 export default app;

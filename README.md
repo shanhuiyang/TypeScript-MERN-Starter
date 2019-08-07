@@ -641,6 +641,18 @@ mongodb://<cluster_user_name>:<password>@cluster0-shard-00-00-pyou0.azure.mongod
 
 Remember to replace the placeholders in above connection string example.
 
+## Create a production blob storage
+
+Blob storage is used to store multi-medias.
+Now we support Azure blob storage in this project.
+You can switch to other cloud storage providers easily by modifying the code in ```server/repository/```.
+
+Please refer to [this document](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal) to create a new storage account on Azure.
+
+Then you can paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file _.env.production_.
+
+(TODO elaborate...)
+
 ## Test the application in production mode
 
 In file _.env.production_, change the ```ORIGIN_URI``` to the localhost.

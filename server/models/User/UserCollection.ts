@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt-nodejs";
 import mongoose, { Model, Schema } from "mongoose";
 import UserDocument, { ComparePasswordFunction } from "./UserDocument";
+import storage from "../../repository/storage";
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
@@ -12,10 +13,15 @@ export const userSchema: Schema = new mongoose.Schema({
 }, { timestamps: true });
 
 /**
- * Password hash middleware.
+ * Password hashing & Signing Url middleware.
  */
 userSchema.pre("save", function save(next: any) {
     const user = this as UserDocument;
+    // Stripe signing params for Avatar Url
+    if (user && user.avatarUrl) {
+        const sasAvatarUrl: string = user.avatarUrl;
+        user.avatarUrl = sasAvatarUrl.substring(0, sasAvatarUrl.indexOf("?"));
+    }
     if (!user.isModified("password")) { return next(); }
     bcrypt.genSalt(10, (err: any, salt: any) => {
         if (err) { return next(err); }
@@ -25,6 +31,14 @@ userSchema.pre("save", function save(next: any) {
             next();
         });
     });
+});
+
+userSchema.post("findOne", function findOne(user: UserDocument, next: any) {
+    // Add signing params for Avatar Url so that client can consume
+    if (user && user.avatarUrl) {
+        user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams()}`;
+    }
+    next();
 });
 
 const comparePassword: ComparePasswordFunction = function (candidatePassword, cb) {

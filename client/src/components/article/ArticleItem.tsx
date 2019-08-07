@@ -52,7 +52,8 @@ class ArticleItem extends React.Component<Props, States> {
         const authorInfo: User = this.props.state.articles.authors[article.author];
         if (authorInfo) {
             return <Label image color="teal">
-                <img src={authorInfo.avatarUrl} alt="avatar"/>
+                    <img src={authorInfo.avatarUrl ? authorInfo.avatarUrl : "/images/avatar.png"}
+                        alt="avatar" />
                 {authorInfo.name}
             </Label>;
         } else {

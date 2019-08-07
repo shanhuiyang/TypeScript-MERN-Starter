@@ -12,3 +12,5 @@ export const WRAPPER_VIEW_STYLE: any = {
     padding: 0,
     minHeight: "100%"
 };
+
+export const AVATAR_PREFERABLE_SIZE: number = 250;

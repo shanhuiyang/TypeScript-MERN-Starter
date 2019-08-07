@@ -1,4 +1,4 @@
-import express, { Router, NextFunction } from "express";
+import express, { Router } from "express";
 import * as controllers from "../controllers/article";
 import passport from "passport";
 

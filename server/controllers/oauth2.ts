@@ -15,9 +15,9 @@ import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { MiddlewareRequest } from "oauth2orize";
-import { random } from "../util/random";
 import { MappedError } from "express-validator/shared-typings";
 import { APP_URL } from "../util/secrets";
+import storage from "../repository/storage";
 
 // User authorization endpoint.
 //
@@ -111,21 +111,13 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         return res.status(400).json({ message: errors[0].msg });
     }
 
-    let avatarUrl: string = req.body.avatarUrl;
-    if (!avatarUrl) {
-        if (req.body.gender === Gender.OTHER) {
-            avatarUrl = "/images/avatars/other.png";
-        } else {
-            avatarUrl = `/images/avatars/${req.body.gender}_${random.getRandomInt(1, 8).toString()}.png`;
-        }
-    }
     const user: UserDocument = new UserCollection({
         email: req.body.email,
         password: req.body.password,
         gender: req.body.gender,
         name: req.body.name,
         address: req.body.address,
-        avatarUrl: avatarUrl
+        avatarUrl: req.body.avatarUrl
     });
     UserCollection.findOne({ email: req.body.email }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }
@@ -177,7 +169,6 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
 };
 
 export const profile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    // TODO: Remove/Hide the password
     return res.json({user: req.user});
 };
 
@@ -185,7 +176,9 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
     req.assert("email", "Malicious attack is detected.").equals(req.user.email);
     req.assert("_id", "Malicious attack is detected.").equals(req.user._id.toString());
     req.assert("name", "Name cannot be blank.").notEmpty();
-    req.assert("avatarUrl", "Invalid url.").matches("\/images\/avatars\/.*\.png");
+    if (process.env.NODE_ENV === "production") {
+        req.assert("avatarUrl", "Invalid url.").isURL();
+    }
     req.assert("gender", "Gender is incorrect.").isIn(Object.values(Gender));
     const errors: MappedError[] = req.validationErrors() as MappedError[];
     if (errors && errors.length > 0) {
@@ -202,6 +195,7 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
             if (err) {
                 return res.status(500).json({ message: "Update failed." });
             }
+            user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams()}`;
             res.json(user);
         });
     });

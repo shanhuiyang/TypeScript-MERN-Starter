@@ -18,6 +18,10 @@ export const UPDATE_PROFILE_SUCCESS: string = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILED: string = "UPDATE_PROFILE_FAILED";
 export const SIGN_UP_FAILED: string = "SIGN_UP_FAILED";
 export const LOGOUT: string = "LOGOUT";
+export const UPLOAD_AVATAR_START = "UPLOAD_AVATAR_START";
+export const UPLOAD_AVATAR_SUCCESS = "UPLOAD_AVATAR_SUCCESS";
+export const UPLOAD_AVATAR_FAILED = "UPLOAD_AVATAR_FAILED";
+export const RESET_UPLOADED_AVATAR = "RESET_UPLOADED_AVATAR";
 
 const userActionCreator: UserActionCreator = {
     allowConsent(transactionId: string): any {
@@ -121,6 +125,34 @@ const userActionCreator: UserActionCreator = {
                     dispatch(actions.handleFetchError(UPDATE_PROFILE_FAILED, error));
                 });
             }
+        };
+    },
+    uploadAvatar(payload: Blob): any {
+        return (dispatch: Dispatch<any>): void => {
+            if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
+                dispatch({ type: UPLOAD_AVATAR_FAILED});
+            } else {
+                dispatch({ type: UPLOAD_AVATAR_START});
+                fetch("/api/avatar/create", payload, "PUT", true)
+                .then((json: any) => {
+                    if (json.url) {
+                        dispatch({
+                            type: UPLOAD_AVATAR_SUCCESS,
+                            url: json.url
+                        });
+                    } else {
+                        toast.error("Upload avatar failed.");
+                        dispatch({ type: UPLOAD_AVATAR_FAILED});
+                    }
+                }, (error: Error) => {
+                    dispatch(actions.handleFetchError(UPLOAD_AVATAR_FAILED, error));
+                });
+            }
+        };
+    },
+    resetAvatar(): Action {
+        return {
+            type: RESET_UPLOADED_AVATAR
         };
     },
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any {

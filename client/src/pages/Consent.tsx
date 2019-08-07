@@ -35,7 +35,7 @@ class Consent extends React.Component<Props, States> {
                         <Header size="tiny">Do you approve?</Header>
                     </div>
                     <br />
-                    {/* Add your consent texts here */}
+                    {/* TODO: Add your consent texts here */}
                     <div>
                         <Button primary onClick={this.allow} loading={loading} disabled={loading}>Approve</Button>
                         <Button secondary onClick={this.deny}>Deny</Button>

@@ -11,6 +11,9 @@
 # production
 /build
 
+# local storage folder
+/public/storage
+
 # misc
 .DS_Store
 .env.local

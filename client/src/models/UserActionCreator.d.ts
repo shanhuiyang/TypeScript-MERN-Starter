@@ -9,5 +9,7 @@ export default interface UserActionCreator extends ActionCreatorsMapObject {
     login(email: string, password: string): any;
     logout(): Action;
     updateProfile(user: User): any;
+    uploadAvatar(payload: Blob): any;
+    resetAvatar(): Action;
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any;
 }

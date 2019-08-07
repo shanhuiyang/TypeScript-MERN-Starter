@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 import UserActionCreator from "../models/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
-import { Container, Form, Button, Icon, Radio } from "semantic-ui-react";
+import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
@@ -39,6 +39,7 @@ class SignUp extends React.Component<Props, States> {
         if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
+                <Header size={"medium"}>Sign Up</Header>
                 <Form>
                     <ResponsiveFormField>
                         <label>Email</label>

@@ -1,10 +1,12 @@
 import { AnyAction as Action } from "redux";
-import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START } from "../actions/user";
+import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR } from "../actions/user";
 import UserState from "../models/UserState";
 
 const initialState: UserState = {
     loading: false,
-    currentUser: undefined
+    currentUser: undefined,
+    uploadingAvatar: false,
+    uploadedAvatarUrl: ""
 };
 
 const userState = (state: UserState = initialState, action: Action): UserState => {
@@ -16,11 +18,24 @@ const userState = (state: UserState = initialState, action: Action): UserState =
         case LOGIN_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
             return {
+                ...state,
                 loading: false,
                 currentUser: action.user
             };
         case USER_REQUEST_START:
             return {...state, loading: true};
+        case UPLOAD_AVATAR_START:
+            return {...state, uploadingAvatar: true};
+        case UPLOAD_AVATAR_FAILED:
+            return {...state, uploadingAvatar: false};
+        case UPLOAD_AVATAR_SUCCESS:
+            return {
+                ...state,
+                uploadingAvatar: false,
+                uploadedAvatarUrl: action.url
+            };
+        case RESET_UPLOADED_AVATAR:
+            return { ...state, uploadedAvatarUrl: "" };
         default:
             return {...state, loading: false};
     }
