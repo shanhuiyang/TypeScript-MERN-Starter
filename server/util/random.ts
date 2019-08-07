@@ -6,7 +6,7 @@
  * @return {Number}
  * @api private
  */
-const getRandomInt = (min: number, max: number) => {
+export const getRandomInt = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -17,7 +17,7 @@ const getRandomInt = (min: number, max: number) => {
  * @return {String}
  * @api private
  */
-const getUid = (length: number): string => {
+export const getUid = (length: number): string => {
     let uid: string = "";
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     const charsLength = chars.length;
@@ -27,9 +27,4 @@ const getUid = (length: number): string => {
     }
 
     return uid;
-};
-
-export const random: any = {
-    getRandomInt,
-    getUid
 };

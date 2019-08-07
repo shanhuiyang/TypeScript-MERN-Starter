@@ -16,7 +16,7 @@ import AuthCodeCollection from "../models/OAuth/AuthCodeCollection";
 import AccessToken from "../models/OAuth/AccessToken";
 import AccessTokenCollection from "../models/OAuth/AccessTokenCollection";
 import UserDocument from "../models/User/UserDocument";
-import { random } from "../util/random";
+import * as random from "../util/random";
 import UserCollection from "../models/User/UserCollection";
 
 // Create OAuth 2.0 server
