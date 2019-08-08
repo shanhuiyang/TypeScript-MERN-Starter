@@ -1,7 +1,6 @@
 import {
     SharedKeyCredential,
     TokenCredential,
-    AnonymousCredential,
     StorageURL,
     ServiceURL,
     ContainerURL,
@@ -12,12 +11,13 @@ import {
     AccountSASPermissions,
     SASProtocol,
     AccountSASResourceTypes,
-    AccountSASServices
+    AccountSASServices,
+    Pipeline,
+    Models
 } from "@azure/storage-blob";
 import { BlockBlobUploadResponse } from "@azure/storage-blob/typings/src/generated/src/models";
 import { STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY } from "../../util/secrets";
 import { UploadBlobResult } from "../storage.d";
-import { Promise } from "bluebird";
 
 // Use SharedKeyCredential with storage account and account key
 const sharedKeyCredential = new SharedKeyCredential(STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY);
@@ -26,26 +26,38 @@ const sharedKeyCredential = new SharedKeyCredential(STORAGE_ACCOUNT, STORAGE_ACC
 const tokenCredential = new TokenCredential("token");
 tokenCredential.token = "renewedToken"; // Renew the token by updating token field of token credential
 
-// Use AnonymousCredential when url already includes a SAS signature
-const anonymousCredential = new AnonymousCredential();
-
 // Use sharedKeyCredential, tokenCredential or anonymousCredential to create a pipeline
-const pipeline = StorageURL.newPipeline(sharedKeyCredential);
+const pipeline: Pipeline = StorageURL.newPipeline(sharedKeyCredential);
 // List containers
-const serviceURL = new ServiceURL(
+const serviceURL: ServiceURL = new ServiceURL(
     // When using AnonymousCredential, following url should include a valid SAS or support public access
     `https://${STORAGE_ACCOUNT}.blob.core.windows.net`,
     pipeline
 );
 
-export const uploadBlob = (
+export const uploadBlob = async (
         stream: NodeJS.ReadableStream,
         contentLength: number,
         containerName: string,
         blobName: string): Promise<UploadBlobResult> => {
-    const containerURL = ContainerURL.fromServiceURL(serviceURL, containerName);
-    const blobURL = BlobURL.fromContainerURL(containerURL, blobName);
-    const blockBlobURL = BlockBlobURL.fromBlobURL(blobURL);
+    // Create container if it is not existing
+    let existing: boolean = false;
+    const containerURL: ContainerURL = ContainerURL.fromServiceURL(serviceURL, containerName);
+    const listContainersResponse: Models.ServiceListContainersSegmentResponse =
+        await serviceURL.listContainersSegment(Aborter.none, undefined, { prefix: containerName });
+    for (const container of listContainersResponse.containerItems) {
+        if (containerName === container.name) {
+            existing = true;
+            break;
+        }
+    }
+    if (!existing) {
+        await containerURL.create(Aborter.none);
+    }
+
+    // Upload blob to specified container
+    const blobURL: BlobURL = BlobURL.fromContainerURL(containerURL, blobName);
+    const blockBlobURL: BlockBlobURL = BlockBlobURL.fromBlobURL(blobURL);
     return blockBlobURL
         .upload(Aborter.none, () => stream, contentLength)
         .then((value: BlockBlobUploadResponse) => {

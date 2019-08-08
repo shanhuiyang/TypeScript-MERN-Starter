@@ -647,11 +647,12 @@ Blob storage is used to store multi-medias.
 Now we support Azure blob storage in this project.
 You can switch to other cloud storage providers easily by modifying the code in ```server/repository/```.
 
-Please refer to [this document](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal) to create a new storage account on Azure.
+Please refer to [this document](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal) to create a new storage account on Azure. 
 
+Copy the account name and access key in Settings.
 Then you can paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file _.env.production_.
 
-(TODO elaborate...)
+> **Note!** In development environment, the project store the files in disk instead of cloud storage. Before you can test the cloud storage in development environment, you need to modify _server\repository\storage.ts_, and paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file _.env.development_.
 
 ## Test the application in production mode
 

@@ -13,13 +13,17 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
         blobName
     ).then(
         (value: UploadBlobResult) => {
-            const sasToken: string = storage.generateSigningUrlParams();
-            res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
+            if (value.statusCode >= 200 && value.statusCode < 300) {
+                const sasToken: string = storage.generateSigningUrlParams();
+                res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
+            } else {
+                res.status(value.statusCode).end();
+            }
         }
     ).catch(
         (reason: any) => {
             console.error(JSON.stringify(reason));
-            res.status(400).end();
+            res.status(500).json(reason);
         }
     );
 };
