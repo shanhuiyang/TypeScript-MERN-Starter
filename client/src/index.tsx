@@ -8,18 +8,18 @@ import { toast, ToastContainerProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById("root")
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>,
+    document.getElementById("root")
 );
 
 toast.configure({
-  position: "bottom-right",
-  autoClose: 4000,
-  hideProgressBar: true,
-  closeOnClick: true,
-  pauseOnHover: true
+    position: "bottom-right",
+    autoClose: 4000,
+    hideProgressBar: true,
+    closeOnClick: true,
+    pauseOnHover: true
 } as ToastContainerProps);
