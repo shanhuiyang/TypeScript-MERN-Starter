@@ -16,7 +16,8 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         if (!article) {
             return res.status(404).json({ message: "Not Found" });
         }
-        if (article.author !== req.user._id.toString()) {
+        const user: User = req.user as User;
+        if (article.author !== user._id.toString()) {
             return res.status(401).json({ message: "You are not the author!" });
         }
         ArticleCollection.findByIdAndRemove(req.params.id).exec(
@@ -48,7 +49,8 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         if (!article) {
             return res.status(404).json({ message: "Not Found" });
         }
-        if (article.author !== req.user._id.toString()) {
+        const user: User = req.user as User;
+        if (article.author !== user._id.toString()) {
             return res.status(401).json({ message: "You are not the author!" });
         }
         ArticleCollection.findByIdAndUpdate(
@@ -64,7 +66,8 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    req.assert("author", "Malicious attack is detected.").equals(req.user._id.toString());
+    const user: User = req.user as User;
+    req.assert("author", "Malicious attack is detected.").equals(user._id.toString());
     req.assert("content", "Content cannot be empty.").notEmpty();
     req.assert("content", "Content should be longer than 500 characters.").len({ min: 500 });
     req.assert("title", "Title cannot be empty.").notEmpty();
