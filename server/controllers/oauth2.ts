@@ -18,6 +18,7 @@ import { MiddlewareRequest } from "oauth2orize";
 import { MappedError } from "express-validator/shared-typings";
 import { APP_URL } from "../util/secrets";
 import storage from "../repository/storage";
+import User from "../../client/src/models/User";
 
 // User authorization endpoint.
 //
@@ -173,8 +174,9 @@ export const profile: RequestHandler = (req: Request, res: Response, next: NextF
 };
 
 export const updateProfile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    req.assert("email", "Malicious attack is detected.").equals(req.user.email);
-    req.assert("_id", "Malicious attack is detected.").equals(req.user._id.toString());
+    const user: User = req.user as User;
+    req.assert("email", "Malicious attack is detected.").equals(user.email);
+    req.assert("_id", "Malicious attack is detected.").equals(user._id.toString());
     req.assert("name", "Name cannot be blank.").notEmpty();
     if (process.env.NODE_ENV === "production") {
         req.assert("avatarUrl", "Invalid url.").isURL();

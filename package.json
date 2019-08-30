@@ -79,7 +79,7 @@
     "@types/node": "^9.4.6",
     "@types/nodemailer": "^4.3.4",
     "@types/oauth2orize": "^1.8.5",
-    "@types/passport": "^0.4.3",
+    "@types/passport": "^1.0.1",
     "@types/passport-http": "^0.3.7",
     "@types/passport-http-bearer": "^1.0.33",
     "@types/passport-local": "^1.0.32",

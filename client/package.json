@@ -29,7 +29,6 @@
     "@types/react-router": "^5.0.3",
     "@types/react-router-dom": "^4.3.5",
     "@types/react-toastify": "^4.0.2",
-    "@types/redux-thunk": "^2.1.0",
     "@types/shelljs": "^0.8.5"
   },
   "devDependencies": {
