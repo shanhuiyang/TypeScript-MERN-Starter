@@ -5,7 +5,6 @@ import lusca from "lusca";
 import mongo from "connect-mongo";
 import mongoose from "mongoose";
 import passport from "passport";
-import expressValidator from "express-validator";
 import bluebird from "bluebird";
 import errorHandler from "errorhandler";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
@@ -41,7 +40,6 @@ app.set("origin_uri", process.env.ORIGIN_URI);
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(expressValidator());
 app.use(session({
     resave: true,
     saveUninitialized: true,

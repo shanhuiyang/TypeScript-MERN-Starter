@@ -1,6 +1,8 @@
 # TypeScript MERN Starter
 
-> **Note!** This project is still **under construction**, but it has already been working well. You can go to the [Quick Start](#quick-start) part, then have a try.
+[![Build Status](https://api.travis-ci.org/shanhuiyang/TypeScript-MERN-Starter.svg?branch=master)](https://travis-ci.org/shanhuiyang/TypeScript-MERN-Starter)
+[![Dependency Status](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter.svg)](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter)
+[![Known Vulnerabilities](https://snyk.io/test/github/shanhuiyang/TypeScript-MERN-Starter/badge.svg)](https://snyk.io/test/github/shanhuiyang/TypeScript-MERN-Starter/badge.svg)
 
 **Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
 
@@ -92,7 +94,7 @@ However, it is deprecated after April, 2019.
 This project is a server rendering solution.
 It modeled the ```Post``` object, but did not implement the authentication module.
 
-[TypeScript-Node-Starter](https://github.com/Microsoft/TypeScript-Node-Starter) is an officially built starter project for Node.js by Microsoft.
+[TypeScript-Node-Starter](https://github.com/shanhuiyang/TypeScript-MERN-Starter) is an officially built starter project for Node.js by Microsoft.
 This project is a good starter for Node.js app using Typescript.
 It is also a server rendering solution, using [pug](https://github.com/pugjs/pug).
 

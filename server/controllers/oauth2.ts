@@ -10,15 +10,14 @@ import AccessToken from "../models/OAuth/AccessToken";
 import AccessTokenCollection from "../models/OAuth/AccessTokenCollection";
 import UserDocument from "../models/User/UserDocument";
 import UserCollection from "../models/User/UserCollection";
-import Gender from "../../client/src/models/Gender";
 import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { MiddlewareRequest } from "oauth2orize";
-import { MappedError } from "express-validator/shared-typings";
 import { APP_URL } from "../util/secrets";
 import storage from "../repository/storage";
-import User from "../../client/src/models/User";
+import { validationResult } from "express-validator";
+import { validationErrorResponse } from "./utils";
 
 // User authorization endpoint.
 //
@@ -99,17 +98,9 @@ export const token: RequestHandler[] = [
  * Create a new oauth2 user account.
  */
 export const signUp: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    req.assert("email", "Email is not valid.").isEmail();
-    req.assert("password", "Password must be at least 4 characters long.").len({ min: 4 });
-    req.assert("confirmPassword", "Passwords do not match.").equals(req.body.password);
-    req.assert("name", "Name cannot be blank.").notEmpty();
-    req.assert("gender", "Gender is incorrect.").isIn(Object.values(Gender));
-    req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
-    // TODO: Validate more fields, and respond the error correctly
-    // We only pick an error for user each time
-    const errors: MappedError[] = req.validationErrors() as MappedError[];
-    if (errors && errors.length > 0) {
-        return res.status(400).json({ message: errors[0].msg });
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
     }
 
     const user: UserDocument = new UserCollection({
@@ -143,14 +134,9 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
  * Sign in using email and password.
  */
 export const logIn: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    req.assert("email", "Email is not valid.").isEmail();
-    req.assert("password", "Password cannot be blank.").notEmpty();
-    req.sanitize("email").normalizeEmail({ gmail_remove_dots: false });
-
-    // We only pick an error for user each time
-    const errors: MappedError[] = req.validationErrors() as MappedError[];
-    if (errors && errors.length > 0) {
-        return res.status(400).json({ message: errors[0].msg });
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
     }
 
     passport.authenticate("local", (err: Error, user: UserDocument, info: IVerifyOptions) => {
@@ -174,17 +160,9 @@ export const profile: RequestHandler = (req: Request, res: Response, next: NextF
 };
 
 export const updateProfile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    const user: User = req.user as User;
-    req.assert("email", "Malicious attack is detected.").equals(user.email);
-    req.assert("_id", "Malicious attack is detected.").equals(user._id.toString());
-    req.assert("name", "Name cannot be blank.").notEmpty();
-    if (process.env.NODE_ENV === "production") {
-        req.assert("avatarUrl", "Invalid url.").isURL();
-    }
-    req.assert("gender", "Gender is incorrect.").isIn(Object.values(Gender));
-    const errors: MappedError[] = req.validationErrors() as MappedError[];
-    if (errors && errors.length > 0) {
-        return res.status(400).json({ message: errors[0].msg });
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
     }
 
     UserCollection.findById(req.body._id, (err: Error, user: UserDocument) => {
