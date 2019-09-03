@@ -8,11 +8,10 @@
 
 ![Live Demo](./images/live-demo.png)
 
-This project is intended to build a RESTful MERN start point in TypeScript.
+This project is intended to build a RESTful web app in TypeScript.
 With this project as a start point you can easily build a community or blog app.
 
-MERN is a free and open-source JavaScript software stack for building dynamic web sites and web applications.
-The MERN stack is composed of MongoDB, Express.js, React, and Node.js.
+**MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact, and **N**ode.js.
 
 This project implemented MERN in **TypeScript**.
 TypeScript is a typed super set of JavaScript.
@@ -31,7 +30,7 @@ Not only using TypeScript, but this project is also featured by:
 - **[RESTful-style](https://www.restapitutorial.com/lessons/whatisrest.html)**, powered by an embedded [oauth2 server](https://github.com/jaredhanson/oauth2orize) and [passport.js](http://www.passportjs.org/), this project separate client and server clearly.
 - **[React-router 4.0+](https://reacttraining.com/react-router/)**, with it you can easily define client routes and manage them.
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states.
-- **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter**  for who would like to build an community app on MERN.
+- **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter** for who would like to build an community app using MERN.
 - The client code is created from [create-react-app](https://facebook.github.io/create-react-app/), so now you can get rid of annoying configurations for babel and webpack.
 
 # Quick start
@@ -55,7 +54,7 @@ git clone https://github.com/shanhuiyang/TypeScript-MERN-Starter.git <project_na
 
 ```bash
 cd <project_name>
-yarn install
+yarn
 ```
 
 ## Start your mongoDB server
@@ -85,7 +84,7 @@ Typescript is a success Javascript alternative which can keep the maintainabilit
 The most famous Typescript project is [Angular](https://angular.io).
 Nowadays React also [support Typescript officially](https://facebook.github.io/create-react-app/docs/adding-typescript).
 
-Therefore, the motivation of this project is building a fullstack web app using Javascript, meanwhile we can maintain this web app easily.
+Therefore, the motivation of this project is building a fullstack web app using Typescript, then we can maintain a web app easily.
 
 ## Prior Art
 
@@ -108,13 +107,13 @@ We almost totally imported this project to **TypeScript-MERN-Starter**.
 
 We build this project on following philosophies:
 
-1. Beginner friendly.
-2. Easy to extend.
+1. **Beginner friendly**. You can start the app without any complex configuration for build and runtime. In this document we are trying our best to illustrate how each modules of this app are bound.
+2. **Easy to extend**. We chose well-documented 3rd party packages to use, so that you can extend this app easily by following the working patterns of these packages.
 
 ## Road map
 
-We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/). 
-TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, and iOS.
+We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
+TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, iOS, even Windows and OSX.
 
 # Project structure
 
@@ -184,7 +183,7 @@ Create React App is a great tool for beginner since it is:
 In production build environment, ```react-scripts```, the tool for use with ```Create React App``` will compile all of your (Typescript) source code and resources into bundles and assets in ```client/build``` folder.
 
 For all routes except those for REST APIs, the Node.js server can response ```client/build/static/index.html```.
-That is to say, our server routes all REST APIs, and leave all other possible routes to client. 
+That is to say, our server routes all REST APIs, and leave all other possible routes to client.
 Server will never make up the client app, it will not decide how would the client should look like.
 This is **the first key point to make the RESTful architecture possible**.
 
@@ -235,11 +234,11 @@ We will do following:
 
 > **Note!** The reason why we defined the common interface under ```client``` folder but not a root level ```models``` folder under project root is because of the restriction from ```Create React App```. This tool cannot read the type definition out of it's workspace, i.e. the ```client``` folder. So we have to put our common models in ```client``` folder first.
 
-In summary, ```User``` is the common type used on both sides of an API request. 
+In summary, ```User``` is the common type used on both sides of an API request.
 In client, the React app can render an ```User``` object, post an ```User``` object to, and receive an ```User``` object from server.
 In server, the Node.js app can CRUD ```User``` objects from and to MongoDB.
 When you are going to add a field in your ```User``` definition, you may have to change both sides implementation related to ```User```.
-If you forget to make necessary change on both sides, VS Code will kindly remind you when you are building the project. 
+If you forget to make necessary change on both sides, VS Code will kindly remind you when you are building the project.
 
 You would feel inconvenient that after you defined the ```User``` interface like this,
 
@@ -278,7 +277,7 @@ We are looking forward its evolving so that we can resolve this issue in future.
 ## Embedded OAuth2 server
 
 To protect REST API against unauthorized request, we used [Passport](http://www.passportjs.org/docs/) in this project.
-Passport is an authentication middleware for Express. 
+Passport is an authentication middleware for Express.
 It is designed to serve authenticating requests.
 Suppose you are going to create an article in the web app, the server protected such requests like this:
 
@@ -348,7 +347,7 @@ If **authorization server** says this is authorized request, **resource server**
 
 ### Authorization server
 
-As an **authorization server**, the Node.js server owns user accounts and profiles. 
+As an **authorization server**, the Node.js server owns user accounts and profiles.
 It can respond authorization requests coming from **resource server**, i.e. verify the access token, then send back an corresponding ```User``` object to the **resource server** if the token is valid.
 
 | Folder Path                        | Description                                                           |
@@ -360,7 +359,7 @@ It can respond authorization requests coming from **resource server**, i.e. veri
 
 ### Summary
 
-For developers who would like to use the authorizing mechanism in this project, he/she just need to know how to protect his/her REST API. 
+For developers who would like to use the authorizing mechanism in this project, he/she just need to know how to protect his/her REST API.
 This authorizing mechanism is **the second key point to make the RESTful architecture possible**.
 
 For developers who would like to go deeper, we can summarize for them that:
@@ -380,7 +379,7 @@ Briefly speaking, the Node.js server complete this task in a very simple way.
 
 ### React-router 4.0+
 
-The client powered by [react-router 4.0+](https://reacttraining.com/react-router/) handles all routes except those were handled by Node.js server. 
+The client powered by [react-router 4.0+](https://reacttraining.com/react-router/) handles all routes except those were handled by Node.js server.
 In the file ```client/src/App.tsx```, react-router 4.0+ shows how this works can be done elegantly.
 
 ```Typescript
@@ -424,13 +423,13 @@ This RESTful architecture brings significant performance improvement from severa
 
 ## Styling
 
-In this project, there is no separated file like ```client/public/css/main.css```. 
+In this project, there is no separated file like ```client/public/css/main.css```.
 We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has following advantages.
 
 1. React style. It's components match the mental model React has given us for composing UI great. Most of the time you are shaping your UI using props instead of classes or inline styles.
 2. It provides many useful components which are suitable to compose a community app. [Feed](https://react.semantic-ui.com/views/feed/), [Rating](https://react.semantic-ui.com/modules/rating/), and [Comment](https://react.semantic-ui.com/views/comment/) are fancy examples.
 3. [Good support for react-router](https://react.semantic-ui.com/#augmentation).
-4. As its name hinted, using Semantic-UI React you can build your virtual DOM easy-to-read and compact. 
+4. As its name hinted, using Semantic-UI React you can build your virtual DOM easy-to-read and compact.
 
 On the other hand, you can easily change the styles of React app by import [other 3rd party libraries](https://hackernoon.com/23-best-react-ui-component-libraries-and-frameworks-250a81b2ac42) and replace existing raw components.
 Please refer to [official document](https://reactjs.org/docs/faq-styling.html) for more solutions on this problem.
@@ -469,7 +468,7 @@ You can run following commands using ```yarn <command>```.
 
 ## Debugging client
 
-After you run the command `yarn start` or `yarn debug`, you can visit http://localhost:3000 using Chrome.
+After you run the command `yarn start` or `yarn debug`, you can visit [http://localhost:3000](http://localhost:3000) using Chrome.
 Hit `F12` to open the debug mode of Chrome.
 You can see the debugging window shows on the right side or bottom of the browser.
 There are 2 important tabs in the debugging window.
@@ -649,7 +648,7 @@ Blob storage is used to store multi-medias.
 Now we support Azure blob storage in this project.
 You can switch to other cloud storage providers easily by modifying the code in ```server/repository/```.
 
-Please refer to [this document](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal) to create a new storage account on Azure. 
+Please refer to [this document](https://docs.microsoft.com/en-us/azure/storage/common/storage-quickstart-create-account?toc=%2Fazure%2Fstorage%2Fblobs%2Ftoc.json&tabs=azure-portal) to create a new storage account on Azure.
 
 Copy the account name and access key in Settings.
 Then you can paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file _.env.production_.
@@ -708,15 +707,20 @@ Nowadays almost every cloud service support deploying web app using Docker image
 Therefore once we have a well constructed Docker image then we can easily deploy our app to **any platform** with little adaption.
 In next section we will deploy the Docker image generated in this section to [Azure app service](https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-docker-go).
 Let's generate the Docker image locally in this section.
+
 ### Configure environment variables for production
+
 In file _.env.production_, change the ```ORIGIN_URI``` to the target app url.
 Meanwhile change the ports number from 3000 back to 80.
-```
+
+```text
 PORT=80
 SERVER_PORT=80
 ORIGIN_URI=https://<your_app_name>.azurewebsites.net
 ```
+
 ### Build app into a local Docker image
+
 We are ready to build the app.
 Make sure you are still at the root directory in your repository, which includes a ```Dockerfile```
 
@@ -725,43 +729,58 @@ This creates a Docker image, which we’re going to name using the --tag option.
 Use -t if you want to use the shorter option.
 Replace <your_app_name> with your desired app name.
 This command will take your several minutes to finish for the first time you run it.
+
 ```bash
 docker build --tag=<your_app_name> .
 ```
+
 Where is your built image?
 It’s in your machine’s local Docker image registry:
+
 ```bash
 $ docker image ls
 
 REPOSITORY            TAG               IMAGE ID
 <your_app_name>       latest            326387cea398
 ```
+
 ### Push Docker image to Docker hub
+
 If you don’t have a Docker account, sign up for one at [hub.docker.com](hub.docker.com).
 Make note of <your_username>.
 
 Log in to the Docker public registry on your local machine.
+
 ```bash
 docker login
 ```
+
 We need to tag the image with a meaningful version label using following command, e.g. azure.
 Replace <your_app_name> and <your_username>, and run the command.
+
 ```bash
 docker tag <your_app_name> <your_username>/<your_app_name>:azure
 ```
+
 Finally, upload your tagged image to the repository:
+
 ```bash
 docker push <your_username>/<your_app_name>:azure
 ```
+
 Once complete, the results of this upload are publicly available.
 If you log in to Docker Hub, you see the new image there, with its pull command.
+
 ## Create an Azure app service using Docker image
+
 Traditionally, we can deploy a node.js app using git repository on Azure app service.
 That is to say, you can push your git repository to the Azure app service, then it will start your app by running ```npm run start```.
 In practice this is not a easy-to-use approach since you have very limited ability to control the installation and build process for your app on Azure app service.
 
 Using Docker image you can get rid of many annoying environment issues, and will easily migrate your app to other cloud platforms in future.
+
 ### Add an Azure app service in Azure portal
+
 Open Azure portal, click the quick link of *App Services*.
 Then click the _+Add_ button.
 You will probably see the portal looks like following:
@@ -769,6 +788,7 @@ You will probably see the portal looks like following:
 ![Create an Azure app service in Azure portal](./images/create-app-service.png)
 
 Fill the create wizard like this.
+
 - Resource Group: click *Create new*, and name it like ```myLinuxGroup```
 - Name: use <your_app_name>
 - Publish: click *Docker Image*
@@ -780,6 +800,7 @@ Then click *Next: Docker >*, you will probably see the portal looks like followi
 ![Choose a Docker image for your app service](./images/choose-docker-image.png)
 
 Fill this wizard like following.
+
 - Options: keep it as *Single Container*
 - Image Source: *Docker Hub*
 - Access Type: keep it *public*
@@ -790,28 +811,35 @@ Click ***Review and Create***.
 Then click ***Create*** after the portal navigate you to the next page.
 
 ### Verify your Azure app service
+
 After click *create* for the Azure app service, you will get the finish notification.
 
 ![finish notification](./images/deploy-complete.png)
 
-> **Note!** Indeed it is still preparing the resources internally. If you see 5xx error on your site at [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net), don't feel frustrated. You have to wait up to 20 minutes until you can visit your new app successfully. 
+> **Note!** Indeed it is still preparing the resources internally. If you see 5xx error on your site at [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net), don't feel frustrated. You have to wait up to 20 minutes until you can visit your new app successfully.
 
 After the app is ready, please note that the browser has marked your site trustful, i.e. Azure has served SSL for your site.
 
 **Congratulation!** You have deployed a real working web app!
+
 ## Map custom domain and bind SSL certificate
-Usually the web address https://<your_app_name>.azurewebsites.net cannot fulfil your requirement for a real product, since you would like to give your customer a more concise and noticeable url.
+
+Usually the web address [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net) cannot fulfil your requirement for a real product, since you would like to give your customer a more concise and noticeable url.
 You can follow the steps below to adapt the app you just deployed on Azure to a desired domain name.
+
 1. Register a domain you like.
 2. Modify your _.env.production_, so that ```ORIGIN_URI=https://<domain_you registered>```
-3. Re-deploy your app to https://<your_app_name>.azurewebsites.net by following steps introduced in previous sections.
+3. Re-deploy your app to [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net) by following steps introduced in previous sections.
 4. Follow the tutorial of [map custom domain](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain).
 5. Follow the tutorial of [bind SSL certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl). Please note that bind a valid SSL certificate is must-do for Typescript-MERN-starter projects.
-## Summary
+
+## Summary of Deployment
+
 From this part we can see that deploy a Typescript-MERN-starter project to Azure is very easy.
-What you have to be worry about is just to configure the environment variables correctly. 
+What you have to be worry about is just to configure the environment variables correctly.
 
 Further more, you can do following to improve your engineering experience if you are using Azure as your cloud platform.
+
 1. You can [configure the CI/CD procedure](https://docs.microsoft.com/en-us/azure/app-service/containers/app-service-linux-ci-cd) on Azure app service so that you can save a lot of mouse click in future.
 2. You can write your own [```docker-compose.yml```](https://docs.docker.com/get-started/part3/) to manage/orchestrate multiple services including your app service. For example you can add the [mongodb](https://hub.docker.com/_/mongo) service so that you can avoid using the Azure Cosmos DB. Then when you deploy your docker image, choose *Docker Compose (Preview)* instead of *Single Container* for *Options*.
 
