@@ -10,7 +10,7 @@
   "license": "MIT",
   "scripts": {
     "install-server": "yarn install --ignore-scripts",
-    "install-client": "cd client/web && yarn && cd ../..",
+    "install-client": "cd client/web && yarn && cd .. && yarn && expo install expo-font",
     "postinstall": "yarn install-client",
     "build-server": "yarn build-ts && yarn tslint",
     "build": "cd client/web && yarn build && cd ../.. && yarn build-server",

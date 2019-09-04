@@ -1,19 +1,45 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { ACCESS_TOKEN_KEY } from "./web/src/shared/constants";
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>{`Try to access ACCESS_TOKEN_KEY from web folder as ${ACCESS_TOKEN_KEY}`}</Text>
-    </View>
-  );
-}
+import { Container } from "native-base";
+import { NativeRouter, Route, BackButton } from "react-router-native";
+import { AppLoading } from "expo";
+import * as Font from "expo-font";
+import { Ionicons } from "@expo/vector-icons";
+import Topics from "./src/Topics";
+import Home from "./src/Home";
+import About from "./src/About";
+interface Props {}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+interface States {
+    isReady: boolean;
+}
+export default class App extends React.Component<Props, States> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            isReady: false,
+        };
+      }
+
+    async componentDidMount() {
+        await Font.loadAsync({
+            Roboto: require("./node_modules/native-base/Fonts/Roboto.ttf"),
+            Roboto_medium: require("./node_modules/native-base/Fonts/Roboto_medium.ttf"),
+            ...Ionicons.font,
+        });
+        this.setState({ isReady: true });
+    }
+    render() {
+        if (!this.state.isReady) {
+            return <AppLoading />;
+        } else {
+            return (<NativeRouter>
+                <BackButton />
+                <Container>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/topics" component={Topics} />
+                    <Route path="/about" component={About} />
+                </Container>
+            </NativeRouter>);
+        }
+    }
+}
