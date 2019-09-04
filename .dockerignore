@@ -1,5 +1,5 @@
 node_modules
 dist
-client/node_modules
-client/build
+client/web/node_modules
+client/web/build
 npm-debug.log

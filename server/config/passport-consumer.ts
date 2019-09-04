@@ -5,7 +5,7 @@ import { VerifyCallback } from "passport-oauth2";
 import OAuth2Strategy from "./oauth2orize-strategy";
 import _ from "lodash";
 import Clients from "../models/OAuth/ClientCollection";
-import User from "../../client/src/models/User";
+import User from "../../client/web/src/models/User";
 import { APP_URL } from "../util/secrets";
 
 passport.use("oauth2", new OAuth2Strategy({

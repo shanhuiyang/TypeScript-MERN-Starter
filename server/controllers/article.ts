@@ -1,9 +1,9 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import ArticleDocument from "../models/Article/ArticleDocument";
 import ArticleCollection from "../models/Article/ArticleCollection";
-import ArticleState from "../../client/src/models/ArticleState";
-import Article from "../../client/src/models/Article";
-import User from "../../client/src/models/User";
+import ArticleState from "../../client/web/src/models/ArticleState";
+import Article from "../../client/web/src/models/Article";
+import User from "../../client/web/src/models/User";
 import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument";
 import { validationResult } from "express-validator";
