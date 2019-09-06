@@ -15,6 +15,7 @@
     "build-server": "yarn build-ts && yarn tslint",
     "build": "cd client/web && yarn build && cd ../.. && yarn build-server",
     "start-client": "node start-client.js",
+    "start-mobile": "cd client && yarn start",
     "start": "yarn build-server && concurrently \"yarn serve\" \"yarn start-client\"",
     "serve": "node dist/server/server.js",
     "debug": "yarn build-server && yarn watch-debug",

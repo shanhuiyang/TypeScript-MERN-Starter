@@ -15,11 +15,13 @@
     "react-dom": "^16.8.6",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-web": "^0.11.4",
+    "react-redux": "^7.1.1",
     "react-router-native": "^5.0.1"
   },
   "devDependencies": {
     "@types/react": "^16.8.23",
     "@types/react-native": "^0.57.65",
+    "@types/react-redux": "^7.1.2",
     "@types/react-router-native": "^4.2.4",
     "babel-preset-expo": "^6.0.0",
     "typescript": "^3.4.5"

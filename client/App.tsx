@@ -7,6 +7,8 @@ import { Ionicons } from "@expo/vector-icons";
 import Topics from "./src/Topics";
 import Home from "./src/Home";
 import About from "./src/About";
+import { Provider } from "react-redux";
+import store from "./web/src/store";
 interface Props {}
 
 interface States {
@@ -18,9 +20,10 @@ export default class App extends React.Component<Props, States> {
         this.state = {
             isReady: false,
         };
-      }
+    }
 
     async componentDidMount() {
+        // Load font resources for NativeBase
         await Font.loadAsync({
             Roboto: require("./node_modules/native-base/Fonts/Roboto.ttf"),
             Roboto_medium: require("./node_modules/native-base/Fonts/Roboto_medium.ttf"),
@@ -32,14 +35,22 @@ export default class App extends React.Component<Props, States> {
         if (!this.state.isReady) {
             return <AppLoading />;
         } else {
-            return (<NativeRouter>
-                <BackButton />
-                <Container>
-                    <Route exact path="/" component={Home} />
-                    <Route path="/topics" component={Topics} />
-                    <Route path="/about" component={About} />
-                </Container>
-            </NativeRouter>);
+            return <Provider store={store}>
+                {
+                    this.renderRouter()
+                }
+            </Provider>;
         }
+    }
+
+    private renderRouter = () => {
+        return (<NativeRouter>
+            <BackButton />
+            <Container>
+                <Route exact path="/" component={Home} />
+                <Route path="/topics" component={Topics} />
+                <Route path="/about" component={About} />
+            </Container>
+        </NativeRouter>);
     }
 }
