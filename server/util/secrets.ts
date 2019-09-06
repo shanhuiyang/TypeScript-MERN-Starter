@@ -32,4 +32,4 @@ if (parseInt(process.env["PORT"]) === 80) {
 } else {
     url = `${process.env.ORIGIN_URI}:${process.env.PORT}`;
 }
-export const APP_URL = url;
+export const HOST_URL = url;

@@ -2,10 +2,11 @@ import UserActionCreator from "../models/UserActionCreator";
 import { Dispatch, AnyAction as Action } from "redux";
 import fetch from "../shared/fetch";
 import { ACCESS_TOKEN_KEY } from "../shared/constants";
-import { toast } from "react-toastify";
 import User from "../models/User";
 import actions from ".";
 import Gender from "../models/Gender";
+import RedirectTask from "../models/RedirectTask";
+import { getToast as toast } from "../shared/toast";
 
 export const USER_REQUEST_START: string = "USER_REQUEST_START";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -16,6 +17,7 @@ export const LOGIN_SUCCESS: string = "LOGIN_SUCCESS";
 export const LOGIN_FAILED: string = "LOGIN_FAILED";
 export const UPDATE_PROFILE_SUCCESS: string = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILED: string = "UPDATE_PROFILE_FAILED";
+export const SIGN_UP_SUCCESS: string = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILED: string = "SIGN_UP_FAILED";
 export const LOGOUT: string = "LOGOUT";
 export const UPLOAD_AVATAR_START = "UPLOAD_AVATAR_START";
@@ -31,7 +33,7 @@ const userActionCreator: UserActionCreator = {
             .then((json: any) => {
                 if (json.user && json.accessToken) {
                     localStorage.setItem(ACCESS_TOKEN_KEY, json.accessToken);
-                    toast.success("Sign up successfully.");
+                    toast().success("Sign up successfully.");
                     dispatch({
                         type: CONSENT_REQUEST_SUCCESS,
                         user: json.user
@@ -46,7 +48,7 @@ const userActionCreator: UserActionCreator = {
         };
     },
     denyConsent (): Action {
-        toast.error("Please approve to finish signing up.");
+        toast().error("Please approve to finish signing up.");
         return {
             type: CONSENT_REQUEST_FAILED
         };
@@ -83,7 +85,7 @@ const userActionCreator: UserActionCreator = {
             .then((json: any) => {
                 if (json.user && json.accessToken) {
                     localStorage.setItem(ACCESS_TOKEN_KEY, json.accessToken);
-                    toast.success("Log in successfully.");
+                    toast().success("Log in successfully.");
                     dispatch({
                         type: LOGIN_SUCCESS,
                         user: json.user
@@ -112,13 +114,13 @@ const userActionCreator: UserActionCreator = {
                 fetch("/oauth2/profile", user, "POST", true)
                 .then((json: User) => {
                     if (json) {
-                        toast.success("Update profile successfully.");
+                        toast().success("Update profile successfully.");
                         dispatch({
                             type: UPDATE_PROFILE_SUCCESS,
                             user: json
                         });
                     } else {
-                        toast.error("Update profile failed.");
+                        toast().error("Update profile failed.");
                         dispatch({ type: UPDATE_PROFILE_FAILED});
                     }
                 }, (error: Error) => {
@@ -141,7 +143,7 @@ const userActionCreator: UserActionCreator = {
                             url: json.url
                         });
                     } else {
-                        toast.error("Upload avatar failed.");
+                        toast().error("Upload avatar failed.");
                         dispatch({ type: UPLOAD_AVATAR_FAILED});
                     }
                 }, (error: Error) => {
@@ -159,8 +161,11 @@ const userActionCreator: UserActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
-            .then((json: any) => {
-                // Redirected
+            .then((redirectTask: RedirectTask) => {
+                dispatch({
+                    type: SIGN_UP_SUCCESS,
+                    redirectTask: redirectTask
+                });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));
             });

@@ -2,7 +2,7 @@ import React, { RefObject, ChangeEvent } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/AppState";
 import { Redirect } from "react-router-dom";
-import UserActionCreator from "../models/UserActionCreator";
+import ActionCreator from "../models/ActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
 import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";
@@ -11,7 +11,7 @@ import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props {
     state: AppState;
-    actions: UserActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {
@@ -36,7 +36,10 @@ class SignUp extends React.Component<Props, States> {
         };
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.userState.currentUser) {
+        if (!this.props.state.redirectTask.redirected) {
+            this.props.actions.resetRedirectTask();
+            return <Redirect to={this.props.state.redirectTask.to} />;
+        } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
                 <Header size={"medium"}>Sign Up</Header>

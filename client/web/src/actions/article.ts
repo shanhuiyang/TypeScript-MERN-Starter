@@ -2,9 +2,9 @@ import ArticleActionCreator from "../models/ArticleActionCreator";
 import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
 import actions from ".";
-import { toast } from "react-toastify";
 import ArticleState from "../models/ArticleState";
 import Article from "../models/Article";
+import { getToast as toast } from "../shared/toast";
 
 export const SAVE_ARTICLE_BEGIN: string = "SAVE_ARTICLE_BEGIN";
 export const SAVE_ARTICLE_SUCCESS: string = "SAVE_ARTICLE_SUCCESS";
@@ -37,7 +37,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
             .then((json: any) => {
-                toast.success("Save your article successfully.");
+                toast().success("Save your article successfully.");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -49,7 +49,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
             .then((json: any) => {
-                toast.success("Save your article successfully.");
+                toast().success("Save your article successfully.");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -61,7 +61,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
-                toast.success("Delete your article successfully.");
+                toast().success("Delete your article successfully.");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
