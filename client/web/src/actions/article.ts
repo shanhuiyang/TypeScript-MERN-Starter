@@ -1,7 +1,7 @@
 import ArticleActionCreator from "../models/ArticleActionCreator";
 import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
-import actions from ".";
+import actions from "./common";
 import ArticleState from "../models/ArticleState";
 import Article from "../models/Article";
 import { getToast as toast } from "../shared/toast";

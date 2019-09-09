@@ -6,7 +6,7 @@ interface Props {}
 
 interface States {}
 
-export default class Home extends React.Component<Props, States> {
+export default class User extends React.Component<Props, States> {
     render(): any {
         return <Fragment>
             <Header noLeft>

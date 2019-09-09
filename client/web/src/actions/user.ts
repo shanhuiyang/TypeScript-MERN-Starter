@@ -3,7 +3,7 @@ import { Dispatch, AnyAction as Action } from "redux";
 import fetch from "../shared/fetch";
 import { ACCESS_TOKEN_KEY } from "../shared/constants";
 import User from "../models/User";
-import actions from ".";
+import actions from "./common";
 import Gender from "../models/Gender";
 import RedirectTask from "../models/RedirectTask";
 import { getToast as toast } from "../shared/toast";
