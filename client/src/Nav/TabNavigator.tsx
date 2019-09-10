@@ -6,7 +6,7 @@ export default class TabNavigator extends React.Component<any, any> {
     render() {
         return (<Footer>
             <FooterTab>
-                <NavLink to="/" text="Home" icon="home"/>
+                <NavLink to="/article" text="Home" icon="home"/>
                 <NavLink to="/about" text="About" icon="information-circle"/>
                 <NavLink to="/user" text="User" icon="person"/>
             </FooterTab>

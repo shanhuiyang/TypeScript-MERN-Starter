@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import { RouteComponentProps } from "react-router-native";
 import { Text, Header, Content, Title, Body } from "native-base";
-import TabNavigator from "./TabNavigator";
+import TabNavigator from "./Nav/TabNavigator";
 
-interface IProps extends RouteComponentProps<any> {};
+interface IProps extends RouteComponentProps<any> {}
 
-interface IStates {};
+interface IStates {}
 
 export default class About extends React.Component<IProps, IStates> {
     render(): any {
@@ -16,7 +16,7 @@ export default class About extends React.Component<IProps, IStates> {
                 </Body>
             </Header>
             <Content padder>
-                <Text> This is the about page of react router 4.0 demo.</Text>
+                <Text> This is the about page of Typescript MERN Starter.</Text>
             </Content>
             <TabNavigator/>
         </Fragment>;

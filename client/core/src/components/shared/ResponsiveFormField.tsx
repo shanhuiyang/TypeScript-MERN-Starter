@@ -1,6 +1,6 @@
 import React from "react";
 import { Responsive, Form } from "semantic-ui-react";
-import { MOBILE_DESKTOP_BOUND } from "../../shared/constants";
+import { MOBILE_DESKTOP_BOUND } from "../constants";
 
 export interface Props {
     width?: number;

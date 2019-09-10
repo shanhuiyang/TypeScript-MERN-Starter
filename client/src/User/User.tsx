@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 import { Text, Header, Content, Title, Body } from "native-base";
-import TabNavigator from "./TabNavigator";
+import TabNavigator from "../Nav/TabNavigator";
 
 interface Props {}
 
@@ -11,11 +11,11 @@ export default class User extends React.Component<Props, States> {
         return <Fragment>
             <Header noLeft>
                 <Body>
-                    <Title>Typescript MERN Starter</Title>
+                    <Title>User</Title>
                 </Body>
             </Header>
             <Content padder>
-                <Text> This is the home page of react router 4.0 demo.</Text>
+                <Text> This is page to handle user login, logout, sign up, and update profile.</Text>
             </Content>
             <TabNavigator/>
         </Fragment>;

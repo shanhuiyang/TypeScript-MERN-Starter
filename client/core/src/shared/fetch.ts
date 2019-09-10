@@ -5,7 +5,7 @@ export type Method = "GET" | "POST" | "PUT";
 
 const TEST_FOR_LOADING: boolean = false;
 
-let HOST_URL: string;
+let HOST_URL: string = "http://localhost:3000";
 
 export const setHostUrl = (host: string): void => {
     HOST_URL = host;

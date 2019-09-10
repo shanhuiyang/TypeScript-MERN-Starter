@@ -1,13 +1,13 @@
 import React from "react";
 import { Container } from "native-base";
-import { NativeRouter, Route, BackButton } from "react-router-native";
+import { NativeRouter, Route, BackButton, Redirect } from "react-router-native";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
-import Topics from "./src/Topics";
-import User from "./src/User";
+import Articles from "./src/Article/Articles";
+import User from "./src/User/User";
 import About from "./src/About";
 import { Provider } from "react-redux";
-import store from "./web/src/store";
+import store from "./core/src/shared/store";
 interface Props {}
 
 interface States {
@@ -34,21 +34,16 @@ export default class App extends React.Component<Props, States> {
             return <AppLoading />;
         } else {
             return <Provider store={store}>
-                {
-                    this.renderRouter()
-                }
+                <NativeRouter>
+                    <Container>
+                        <BackButton />
+                        <Route exact path="/" render={() => <Redirect to="/article" />} />
+                        <Route path="/article" render={(props) => <Articles {...props} />} />
+                        <Route path="/about" render={(props) => <About {...props} />} />
+                        <Route path="/user" render={(props) => <User {...props} />} />
+                    </Container>
+                </NativeRouter>
             </Provider>;
         }
-    }
-
-    private renderRouter = () => {
-        return (<NativeRouter>
-            <BackButton />
-            <Container>
-                <Route exact path="/" component={Topics} />
-                <Route path="/about" component={About} />
-                <Route path="/user" component={User} />
-            </Container>
-        </NativeRouter>);
     }
 }

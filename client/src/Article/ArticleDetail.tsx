@@ -1,47 +1,54 @@
 import React, { Fragment } from "react";
 import { Text, Header, Title, Body, Content, Button, Left, Right, Icon, H2, Card, CardItem, Thumbnail } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
-import Topic from "./Topic.d";
+import Article from "../../core/src/models/Article";
+import AppState from "../../core/src/models/AppState";
+import connectPropsAndActions from "../../core/src/shared/connect";
+import User from "../../core/src/models/User";
+import { getHostUrl } from "../../core/src/shared/fetch";
 
-interface IProps extends RouteComponentProps<any> {};
+interface Props extends RouteComponentProps<any> {
+    state: AppState;
+}
 
-interface IStates {};
+interface States {}
 
-export default class TopicDetail extends React.Component<IProps, IStates> {
+class ArticleDetail extends React.Component<Props, States> {
     render(): any {
-        const topic: Topic | undefined = this.props.location.state;
-        // console.log("render the topic " + JSON.stringify(this.props));
-        if (topic) {
+        const article: Article | undefined = this.props.location.state;
+        const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
+        const articleAuthor: User = this.props.state.articles.authors[article.author];
+        if (article) {
             return <Fragment>
                 <Header >
                     <Left>
                         <Button transparent onPress={this.props.history.goBack}>
-                            <Icon name='arrow-back' />
+                            <Icon name="arrow-back" />
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Topic Detail</Title>
+                        <Title>Article Detail</Title>
                     </Body>
                     <Right>{/* nothing but counterbalance */}</Right>
                 </Header>
                 <Content padder>
                     <Card>
                         <CardItem header>
-                            <H2>{topic.title}</H2>
+                            <H2>{article.title}</H2>
                         </CardItem>
                         <CardItem>
                             <Left>
-                                <Thumbnail small source={topic.speakerAvatar} />
+                                <Thumbnail small source={{ uri: `${getHostUrl()}${articleAuthor.avatarUrl}` }} />
                                 <Body>
-                                <Text>{topic.speaker}</Text>
-                                    <Text note>{topic.schedule.toLocaleDateString()}</Text>
+                                <Text>{articleAuthor.name}</Text>
+                                    <Text note>{createDate.toLocaleDateString()}</Text>
                                 </Body>
                             </Left>
                         </CardItem>
                         <CardItem>
                             <Body>
                                 <Text>
-                                    {topic.description}
+                                    {article.content}
                                 </Text>
                             </Body>
                         </CardItem>
@@ -50,7 +57,9 @@ export default class TopicDetail extends React.Component<IProps, IStates> {
                 {/* No Footer in detail page */}
             </Fragment>;
         } else {
-            return <Redirect to="/error" />
+            return <Redirect to="/error" />;
         }
     }
 }
+
+export default connectPropsAndActions(ArticleDetail);

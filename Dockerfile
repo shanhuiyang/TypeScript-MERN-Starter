@@ -9,8 +9,8 @@ COPY yarn.lock .
 RUN yarn install-server
 
 WORKDIR /app/client
-COPY client/web/package.json .
-COPY client/web/yarn.lock .
+COPY client/core/package.json .
+COPY client/core/yarn.lock .
 RUN yarn install
 
 # Build client first
