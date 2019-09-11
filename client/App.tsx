@@ -8,11 +8,18 @@ import User from "./src/User/User";
 import About from "./src/About";
 import { Provider } from "react-redux";
 import store from "./core/src/shared/store";
+import { initToast } from "./core/src/shared/toast";
+import toastWrapper from "./src/Toast";
+import LogIn from "./src/User/LogIn";
+import SignUp from "./src/User/SignUp";
 interface Props {}
-
 interface States {
     isReady: boolean;
 }
+
+// init toast provider using Toast from NativeBase
+initToast(toastWrapper);
+
 export default class App extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
@@ -41,6 +48,8 @@ export default class App extends React.Component<Props, States> {
                         <Route path="/article" render={(props) => <Articles {...props} />} />
                         <Route path="/about" render={(props) => <About {...props} />} />
                         <Route path="/user" render={(props) => <User {...props} />} />
+                        <Route path="/login" render={(props) => <LogIn {...props} />} />
+                        <Route path="/signup" render={(props) => <SignUp {...props} />} />
                     </Container>
                 </NativeRouter>
             </Provider>;

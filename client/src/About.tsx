@@ -3,11 +3,11 @@ import { RouteComponentProps } from "react-router-native";
 import { Text, Header, Content, Title, Body } from "native-base";
 import TabNavigator from "./Nav/TabNavigator";
 
-interface IProps extends RouteComponentProps<any> {}
+interface Props extends RouteComponentProps<any> {}
 
-interface IStates {}
+interface States {}
 
-export default class About extends React.Component<IProps, IStates> {
+export default class About extends React.Component<Props, States> {
     render(): any {
         return <Fragment>
             <Header noLeft>
