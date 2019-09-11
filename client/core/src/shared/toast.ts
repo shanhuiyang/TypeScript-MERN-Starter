@@ -1,4 +1,4 @@
-import ToastInterface from "../models/Toast";
+import ToastInterface from "../models/client/Toast";
 
 let toast: ToastInterface;
 

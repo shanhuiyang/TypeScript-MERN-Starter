@@ -1,4 +1,4 @@
-import CommonActionCreator from "../models/CommonActionCreator";
+import CommonActionCreator from "../models/client/CommonActionCreator";
 import { AnyAction as Action } from "redux";
 import { getToast as toast } from "../shared/toast";
 

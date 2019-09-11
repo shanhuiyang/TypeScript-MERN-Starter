@@ -1,5 +1,5 @@
 import { AnyAction as Action } from "redux";
-import RedirectTask from "../models/RedirectTask";
+import RedirectTask from "../models/client/RedirectTask";
 import { SIGN_UP_SUCCESS } from "../actions/user";
 import { RESET_REDIRECT } from "../actions";
 

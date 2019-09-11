@@ -1,8 +1,8 @@
-import ArticleActionCreator from "../models/ArticleActionCreator";
+import ArticleActionCreator from "../models/client/ArticleActionCreator";
 import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
 import actions from "./common";
-import ArticleState from "../models/ArticleState";
+import ArticleState from "../models/client/ArticleState";
 import Article from "../models/Article";
 import { getToast as toast } from "../shared/toast";
 

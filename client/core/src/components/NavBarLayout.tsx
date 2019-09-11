@@ -1,8 +1,8 @@
 import React, { RefObject, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/AppState";
-import UserActionCreator from "../models/UserActionCreator";
+import AppState from "../models/client/AppState";
+import UserActionCreator from "../models/client/UserActionCreator";
 import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon } from "semantic-ui-react";
 import User from "../models/User";
 import ResponsiveDesktop from "./shared/ResponsiveDesktop";

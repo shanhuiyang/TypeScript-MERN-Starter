@@ -1,11 +1,12 @@
 import React, { Fragment } from "react";
-import { Text, Header, Title, Body, Content, Button, Left, Right, Icon, H2, Card, CardItem, Thumbnail } from "native-base";
+import { Text, Body, Content, Left, H2, Card, CardItem, Thumbnail } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
-import AppState from "../../core/src/models/AppState";
+import AppState from "../../core/src/models/client/AppState";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import { getHostUrl } from "../../core/src/shared/fetch";
+import HeaderWithBack from "../Common/HeaderWithBack";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -20,22 +21,9 @@ class ArticleDetail extends React.Component<Props, States> {
         const articleAuthor: User = this.props.state.articles.authors[article.author];
         if (article) {
             return <Fragment>
-                <Header >
-                    <Left>
-                        <Button transparent onPress={this.props.history.goBack}>
-                            <Icon name="arrow-back" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Article Detail</Title>
-                    </Body>
-                    <Right>{/* nothing but counterbalance */}</Right>
-                </Header>
+                <HeaderWithBack title={article.title} />
                 <Content padder>
                     <Card>
-                        <CardItem header>
-                            <H2>{article.title}</H2>
-                        </CardItem>
                         <CardItem>
                             <Left>
                                 <Thumbnail small source={{ uri: `${getHostUrl()}${articleAuthor.avatarUrl}` }} />

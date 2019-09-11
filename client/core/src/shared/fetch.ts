@@ -1,5 +1,6 @@
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "./constants";
 import sleep from "./sleep";
+import { getStorage as localStorage } from "../shared/storage";
 
 export type Method = "GET" | "POST" | "PUT";
 
@@ -25,7 +26,12 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
     }
     const headers: any = {};
     if (withToken) {
-        headers["Authorization"] = "Bearer " + localStorage.getItem(ACCESS_TOKEN_KEY);
+        const token: string | null = await localStorage().getItem(ACCESS_TOKEN_KEY);
+        if (token) {
+            headers["Authorization"] = "Bearer " + token;
+        } else {
+            return Promise.reject("empty token");
+        }
     }
     const options: any = {
         method: method,

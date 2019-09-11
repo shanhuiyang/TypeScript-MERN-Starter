@@ -1,5 +1,5 @@
 import { AnyAction as Action } from "redux";
-import ArticleState from "../models/ArticleState";
+import ArticleState from "../models/client/ArticleState";
 import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTICLE_BEGIN, SAVE_ARTICLE_FAILED, GET_ARTICLE_FAILED } from "../actions/article";
 
 const initialState: ArticleState = {

@@ -1,8 +1,8 @@
 import React from "react";
 import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/AppState";
+import AppState from "../models/client/AppState";
 import { Redirect, match } from "react-router-dom";
-import ArticleActionCreator from "../models/ArticleActionCreator";
+import ArticleActionCreator from "../models/client/ArticleActionCreator";
 import Article from "../models/Article";
 import ErrorPage from "./ErrorPage";
 import { Container, Header } from "semantic-ui-react";

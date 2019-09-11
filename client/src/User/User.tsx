@@ -1,45 +1,95 @@
 import React, { Fragment } from "react";
-import { Text, Header, Content, Body, ListItem, Left, Button, Icon, Right } from "native-base";
+import { Text, Header, Content, Body, ListItem, Left, Button, Icon, Right, Separator, Thumbnail } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
-import { Link } from "react-router-native";
+import { Link, RouteComponentProps } from "react-router-native";
+import UserActionCreator from "../../core/src/models/client/UserActionCreator";
+import AppState from "../../core/src/models/client/AppState";
+import UserModel from "../../core/src/models/User";
+import connectPropsAndActions from "../../core/src/shared/connect";
 
-interface Props {}
+interface Props extends RouteComponentProps<any> {
+    state: AppState;
+    actions: UserActionCreator;
+}
 
 interface States {}
 
-export default class User extends React.Component<Props, States> {
+class User extends React.Component<Props, States> {
     render(): any {
-        return <Fragment>
+        if (!this.props.state.userState.currentUser) {
+            return <Fragment>
+                <Header noLeft />
+                    {
+                        this.renderBeforeLoggedIn()
+                    }
+                <TabNavigator/>
+            </Fragment>;
+        } else {
+            return <Fragment>
             <Header noLeft />
-            <Content>
-                <Link component={ListItem} icon to="/login">
-                    <Left>
-                        <Button style={{ backgroundColor: "#22CB97" }}>
-                            <Icon active name="log-in" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Text>Sign in</Text>
-                    </Body>
-                    <Right>
-                        <Icon active name="arrow-forward" />
-                    </Right>
-                </Link>
-                <Link component={ListItem} icon to="/signup">
-                    <Left>
-                        <Button style={{ backgroundColor: "#22CB97" }}>
-                            <Icon active name="person-add" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Text>Sign up</Text>
-                    </Body>
-                    <Right>
-                        <Icon active name="arrow-forward" />
-                    </Right>
-                </Link>
-            </Content>
+                {
+                    this.renderBeforeLoggedIn()
+                }
             <TabNavigator/>
         </Fragment>;
+        }
+    }
+
+    private renderBeforeLoggedIn = () => {
+        return <Content>
+            <Link component={ListItem} icon to="/login">
+                <Left>
+                    <Button style={{ backgroundColor: "#22CB97" }}>
+                        <Icon active name="log-in" />
+                    </Button>
+                </Left>
+                <Body>
+                    <Text>Sign in</Text>
+                </Body>
+                <Right>
+                    <Icon active name="arrow-forward" />
+                </Right>
+            </Link>
+            <Link component={ListItem} icon to="/signup">
+                <Left>
+                    <Button style={{ backgroundColor: "#22CB97" }}>
+                        <Icon active name="person-add" />
+                    </Button>
+                </Left>
+                <Body>
+                    <Text>Sign up</Text>
+                </Body>
+                <Right>
+                    <Icon active name="arrow-forward" />
+                </Right>
+            </Link>
+        </Content>;
+    }
+
+    private renderAfterLoggedIn = () => {
+        const user: UserModel = this.props.state.userState.currentUser;
+        return <Content>
+            <Link component={ListItem} icon to="/profile">
+                <Thumbnail square large source={{uri: user.avatarUrl}} />
+                <Text>{user.name}</Text>
+                <Text note>{user.email}</Text>
+            </Link>
+            <Separator />
+            <ListItem icon onPress={this.props.actions.logout}>
+                <Left>
+                    <Button style={{ backgroundColor: "#22CB97" }}>
+                        <Icon active name="log-out" />
+                    </Button>
+                </Left>
+                <Body>
+                    <Text>Log out</Text>
+                </Body>
+                <Right>
+                    <Icon active name="arrow-forward" />
+                </Right>
+            </ListItem>
+        </Content>;
     }
 }
+
+export default connectPropsAndActions(User);

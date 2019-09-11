@@ -1,38 +1,57 @@
 import React, { Component } from "react";
-import { Container, Header, Content, Form, Item, Input, Label, Left, Button, Icon, Text, Title, Body, Right } from "native-base";
-import { RouteComponentProps } from "react-router-native";
-interface Props extends RouteComponentProps<any> {}
+import { Container, Content, Form, Item, Input, Label, Button, Text, Spinner } from "native-base";
+import { RouteComponentProps, Redirect } from "react-router-native";
+import AppState from "../../core/src/models/client/AppState";
+import UserActionCreator from "../../core/src/models/client/UserActionCreator";
+import _ from "lodash";
+import connectPropsAndActions from "../../core/src/shared/connect";
+import HeaderWithBack from "../Common/HeaderWithBack";
+interface Props extends RouteComponentProps<any> {
+    state: AppState;
+    actions: UserActionCreator;
+}
 
 interface States {}
-export default class LogIn extends Component<Props, States> {
+class LogIn extends Component<Props, States> {
+    private email: string;
+    private password: string;
     render() {
-        return (<Container>
-                <Header >
-                    <Left>
-                        <Button transparent onPress={this.props.history.goBack}>
-                            <Icon name="arrow-back" />
-                        </Button>
-                    </Left>
-                    <Body>
-                        <Title>Log in</Title>
-                    </Body>
-                    <Right>{/* nothing but counterbalance */}</Right>
-                </Header>
+        if (!this.props.state.userState.currentUser) {
+            const loading: boolean = this.props.state.userState.loading;
+            return (<Container>
+                <HeaderWithBack title="Log in"/>
                 <Content padder>
                     <Form>
                         <Item>
-                            <Label>Username</Label>
-                            <Input autoFocus={true} />
+                            <Label>Email</Label>
+                            <Input autoFocus={true}
+                                onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
                         <Item>
                             <Label>Password</Label>
-                            <Input textContentType="password" secureTextEntry={true}/>
+                            <Input textContentType="password" secureTextEntry={true}
+                                onChangeText={(input: string) => { this.password = input; }}/>
                         </Item>
-                        <Button block style={{ margin: 12 }}>
-                            <Text>Log in</Text>
-                        </Button>
+                        {
+                            loading ? <Spinner color="blue"/> :
+                            <Button block style={{ margin: 12 }} onPress={ this.login } >
+                                <Text>Log in</Text>
+                            </Button>
+                        }
                     </Form>
                 </Content>
-        </Container>);
+            </Container>);
+        } else {
+            return <Redirect to="/user" />;
+        }
+    }
+    private login = (): void => {
+        if (_.isString(this.email) && _.isString(this.password)) {
+            this.props.actions.login(this.email, this.password);
+        } else {
+            // TODO: prompt error
+        }
     }
 }
+
+export default connectPropsAndActions(LogIn);

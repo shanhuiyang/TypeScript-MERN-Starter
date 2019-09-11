@@ -1,4 +1,4 @@
-import ToastInterface from "../core/src/models/Toast";
+import ToastInterface from "../../core/src/models/client/Toast";
 import { Toast } from "native-base";
 
 const toastWrapper: ToastInterface = {

@@ -1,10 +1,10 @@
 import Article from "../../models/Article";
-import ArticleActionCreator from "../../models/ArticleActionCreator";
+import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import React from "react";
 import { Segment, Item, Label, Button } from "semantic-ui-react";
 import User from "../../models/User";
 import { Link } from "react-router-dom";
-import AppState from "../../models/AppState";
+import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 
 interface Props {

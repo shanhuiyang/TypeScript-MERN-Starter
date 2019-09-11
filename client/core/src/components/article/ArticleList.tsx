@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import AppState from "../../models/AppState";
+import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 import Article from "../../models/Article";
 import { Link } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
 import { Container, Segment, Button, Header, Icon } from "semantic-ui-react";
-import ArticleActionCreator from "../../models/ArticleActionCreator";
+import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import Loading from "./Loading";

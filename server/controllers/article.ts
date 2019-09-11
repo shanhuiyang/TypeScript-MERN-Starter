@@ -1,7 +1,7 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import ArticleDocument from "../models/Article/ArticleDocument";
 import ArticleCollection from "../models/Article/ArticleCollection";
-import ArticleState from "../../client/core/src/models/ArticleState";
+import ArticleState from "../../client/core/src/models/client/ArticleState";
 import Article from "../../client/core/src/models/Article";
 import User from "../../client/core/src/models/User";
 import UserCollection from "../models/User/UserCollection";

@@ -1,12 +1,13 @@
-import UserActionCreator from "../models/UserActionCreator";
+import UserActionCreator from "../models/client/UserActionCreator";
 import { Dispatch, AnyAction as Action } from "redux";
 import fetch from "../shared/fetch";
 import { ACCESS_TOKEN_KEY } from "../shared/constants";
 import User from "../models/User";
 import actions from "./common";
 import Gender from "../models/Gender";
-import RedirectTask from "../models/RedirectTask";
+import RedirectTask from "../models/client/RedirectTask";
 import { getToast as toast } from "../shared/toast";
+import { getStorage as localStorage } from "../shared/storage";
 
 export const USER_REQUEST_START: string = "USER_REQUEST_START";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -32,17 +33,19 @@ const userActionCreator: UserActionCreator = {
             fetch("/oauth2/authorize/decision", { transaction_id: transactionId }, "POST")
             .then((json: any) => {
                 if (json.user && json.accessToken) {
-                    localStorage.setItem(ACCESS_TOKEN_KEY, json.accessToken);
-                    toast().success("Sign up successfully.");
                     dispatch({
                         type: CONSENT_REQUEST_SUCCESS,
                         user: json.user
                     });
+                    return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
                 } else {
-                    console.error("null accessToken or null user profile");
-                    dispatch({ type: CONSENT_REQUEST_FAILED});
+                    return Promise.reject(new Error("null accessToken or null user profile"));
                 }
-            }, (error: Error) => {
+            })
+            .then(() => {
+                toast().success("Sign up successfully.");
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(CONSENT_REQUEST_FAILED, error));
             });
         };
@@ -55,101 +58,110 @@ const userActionCreator: UserActionCreator = {
     },
     authenticate(): any {
         return (dispatch: Dispatch<any>): void => {
-            if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
-                dispatch({ type: AUTHENTICATE_FAILED});
-            } else {
+            localStorage()
+            .getItem(ACCESS_TOKEN_KEY)
+            .then((token: string | null) => {
+                if (!token) {
+                    return Promise.reject(new Error("token is empty"));
+                }
                 dispatch({ type: USER_REQUEST_START});
-                fetch("/oauth2/profile", undefined, "GET", true)
-                .then((json: any) => {
-                    if (json.user) {
-                        dispatch({
-                            type: AUTHENTICATE_SUCCESS,
-                            user: json.user
-                        });
-                    } else {
-                        console.error("null user profile, remove the invalid access token");
-                        localStorage.setItem(ACCESS_TOKEN_KEY, "");
-                        dispatch({ type: AUTHENTICATE_FAILED});
-                    }
-                }, (error: Error) => {
-                    localStorage.setItem(ACCESS_TOKEN_KEY, "");
-                    dispatch(actions.handleFetchError(AUTHENTICATE_FAILED, error));
-                });
-            }
+                return fetch("/oauth2/profile", undefined, "GET", true);
+            })
+            .then((json: any) => {
+                if (json.user) {
+                    dispatch({
+                        type: AUTHENTICATE_SUCCESS,
+                        user: json.user
+                    });
+                } else {
+                    return Promise.reject(new Error("null user profile, remove the invalid access token"));
+                }
+            })
+            .catch((error: Error) => {
+                localStorage().setItem(ACCESS_TOKEN_KEY, "");
+                dispatch(actions.handleFetchError(AUTHENTICATE_FAILED, error));
+            });
         };
     },
     login(email: string, password: string): any {
         return (dispatch: Dispatch<any>): any => {
             dispatch({ type: USER_REQUEST_START});
-            return fetch("/oauth2/login", { email: email, password: password }, "POST")
+            fetch("/oauth2/login", { email: email, password: password }, "POST")
             .then((json: any) => {
                 if (json.user && json.accessToken) {
-                    localStorage.setItem(ACCESS_TOKEN_KEY, json.accessToken);
-                    toast().success("Log in successfully.");
                     dispatch({
                         type: LOGIN_SUCCESS,
                         user: json.user
                     });
+                    return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
                 } else {
-                    console.error("null user profile");
-                    dispatch({ type: LOGIN_FAILED});
+                    return Promise.reject(new Error("null user profile"));
                 }
-            }, (error: Error) => {
+            })
+            .then(() => {
+                toast().success("Log in successfully.");
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(LOGIN_FAILED, error));
             });
         };
     },
     logout(): Action {
-        localStorage.setItem(ACCESS_TOKEN_KEY, "");
+        localStorage().setItem(ACCESS_TOKEN_KEY, "");
         return {
             type: LOGOUT
         };
     },
     updateProfile(user: User): any {
         return (dispatch: Dispatch<any>): void => {
-            if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
-                dispatch({ type: UPDATE_PROFILE_FAILED});
-            } else {
+            localStorage()
+            .getItem(ACCESS_TOKEN_KEY)
+            .then((token: string | null) => {
+                if (!token) {
+                    return Promise.reject(new Error("token is empty"));
+                }
                 dispatch({ type: USER_REQUEST_START});
-                fetch("/oauth2/profile", user, "POST", true)
-                .then((json: User) => {
-                    if (json) {
-                        toast().success("Update profile successfully.");
-                        dispatch({
-                            type: UPDATE_PROFILE_SUCCESS,
-                            user: json
-                        });
-                    } else {
-                        toast().error("Update profile failed.");
-                        dispatch({ type: UPDATE_PROFILE_FAILED});
-                    }
-                }, (error: Error) => {
-                    dispatch(actions.handleFetchError(UPDATE_PROFILE_FAILED, error));
-                });
-            }
+                return fetch("/oauth2/profile", user, "POST", true);
+            })
+            .then((json: User) => {
+                if (json) {
+                    dispatch({
+                        type: UPDATE_PROFILE_SUCCESS,
+                        user: json
+                    });
+                    toast().success("Update profile successfully.");
+                } else {
+                    return Promise.reject(new Error("Update profile failed."));
+                }
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(UPDATE_PROFILE_FAILED, error));
+            });
         };
     },
     uploadAvatar(payload: Blob): any {
         return (dispatch: Dispatch<any>): void => {
-            if (!localStorage.getItem(ACCESS_TOKEN_KEY)) {
-                dispatch({ type: UPLOAD_AVATAR_FAILED});
-            } else {
+            localStorage()
+            .getItem(ACCESS_TOKEN_KEY)
+            .then((token: string | null) => {
+                if (!token) {
+                    return Promise.reject(new Error("token is empty"));
+                }
                 dispatch({ type: UPLOAD_AVATAR_START});
-                fetch("/api/avatar/create", payload, "PUT", true)
-                .then((json: any) => {
-                    if (json.url) {
-                        dispatch({
-                            type: UPLOAD_AVATAR_SUCCESS,
-                            url: json.url
-                        });
-                    } else {
-                        toast().error("Upload avatar failed.");
-                        dispatch({ type: UPLOAD_AVATAR_FAILED});
-                    }
-                }, (error: Error) => {
-                    dispatch(actions.handleFetchError(UPLOAD_AVATAR_FAILED, error));
-                });
-            }
+                return fetch("/api/avatar/create", payload, "PUT", true);
+            })
+            .then((json: any) => {
+                if (json.url) {
+                    dispatch({
+                        type: UPLOAD_AVATAR_SUCCESS,
+                        url: json.url
+                    });
+                } else {
+                    return Promise.reject(new Error("Upload avatar failed."));
+                }
+            }, (error: Error) => {
+                dispatch(actions.handleFetchError(UPLOAD_AVATAR_FAILED, error));
+            });
         };
     },
     resetAvatar(): Action {
@@ -166,7 +178,8 @@ const userActionCreator: UserActionCreator = {
                     type: SIGN_UP_SUCCESS,
                     redirectTask: redirectTask
                 });
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));
             });
         };

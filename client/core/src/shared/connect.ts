@@ -1,7 +1,7 @@
 import { MapStateToPropsParam, MapDispatchToPropsParam, connect } from "react-redux";
 import { Dispatch, bindActionCreators, Action } from "redux";
 import actions from "../actions";
-import ActionCreator from "../models/ActionCreator";
+import ActionCreator from "../models/client/ActionCreator";
 
 const mapStateToProps: MapStateToPropsParam<any, any, any> = (state: any): any => {
     return {

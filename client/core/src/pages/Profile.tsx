@@ -1,7 +1,7 @@
 import React, { RefObject, ChangeEvent } from "react";
 import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/AppState";
-import UserActionCreator from "../models/UserActionCreator";
+import AppState from "../models/client/AppState";
+import UserActionCreator from "../models/client/UserActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
 import { Redirect } from "react-router";

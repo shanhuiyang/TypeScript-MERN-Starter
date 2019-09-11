@@ -1,6 +1,6 @@
 import { AnyAction as Action } from "redux";
 import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR } from "../actions/user";
-import UserState from "../models/UserState";
+import UserState from "../models/client/UserState";
 
 const initialState: UserState = {
     loading: false,

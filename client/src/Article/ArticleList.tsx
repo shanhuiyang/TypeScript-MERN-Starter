@@ -3,8 +3,8 @@ import { match, Route, RouteComponentProps } from "react-router-native";
 import ArticleItem from "./ArticleItem";
 import { Header, Title, Body, Content, List } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
-import AppState from "../../core/src/models/AppState";
-import ArticleActionCreator from "../../core/src/models/ArticleActionCreator";
+import AppState from "../../core/src/models/client/AppState";
+import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import Article from "../../core/src/models/Article";
 

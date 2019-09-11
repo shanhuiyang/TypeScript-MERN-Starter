@@ -8,6 +8,8 @@ import { toast, ToastContainerProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { initToast } from "./shared/toast";
 import { setHostUrl } from "./shared/fetch";
+import { initStorage } from "./shared/storage";
+import storageWrapper from "./components/storage";
 
 // Add necessary configurations here before rendering
 
@@ -17,12 +19,15 @@ setHostUrl(window.location.origin);
 // Initialize toast provider using react-toastify
 toast.configure({
     position: "bottom-right",
-    autoClose: 4000,
+    autoClose: 2000,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true
 } as ToastContainerProps);
 initToast(toast);
+
+// Initialize local storage provider
+initStorage(storageWrapper);
 
 ReactDOM.render(
     <Provider store={store}>

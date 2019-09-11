@@ -1,8 +1,8 @@
 import React, { RefObject, ChangeEvent } from "react";
 import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/AppState";
+import AppState from "../models/client/AppState";
 import { Redirect } from "react-router-dom";
-import ActionCreator from "../models/ActionCreator";
+import ActionCreator from "../models/client/ActionCreator";
 import Gender from "../models/Gender";
 import _ from "lodash";
 import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";

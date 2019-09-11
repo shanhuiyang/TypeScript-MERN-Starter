@@ -1,8 +1,8 @@
 import React, { RefObject } from "react";
 import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/AppState";
+import AppState from "../models/client/AppState";
 import { Redirect } from "react-router-dom";
-import UserActionCreator from "../models/UserActionCreator";
+import UserActionCreator from "../models/client/UserActionCreator";
 import _ from "lodash";
 import { Form, Button, Icon, Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";

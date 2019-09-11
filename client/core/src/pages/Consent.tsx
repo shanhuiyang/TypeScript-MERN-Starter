@@ -1,7 +1,7 @@
 import React from "react";
 import ErrorPage from "./ErrorPage";
-import AppState from "../models/AppState";
-import UserActionCreator from "../models/UserActionCreator";
+import AppState from "../models/client/AppState";
+import UserActionCreator from "../models/client/UserActionCreator";
 import connectPropsAndActions from "../shared/connect";
 import { Redirect } from "react-router-dom";
 import { Container, Header, Button } from "semantic-ui-react";

@@ -1,4 +1,4 @@
-import ActionCreator from "../models/ActionCreator";
+import ActionCreator from "../models/client/ActionCreator";
 import userActionCreator from "./user";
 import articleActionCreator from "./article";
 import commonActionCreator from "./common";

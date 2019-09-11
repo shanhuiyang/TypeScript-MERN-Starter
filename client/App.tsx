@@ -9,20 +9,23 @@ import About from "./src/About";
 import { Provider } from "react-redux";
 import store from "./core/src/shared/store";
 import { initToast } from "./core/src/shared/toast";
-import toastWrapper from "./src/Toast";
+import toastWrapper from "./src/utils/Toast";
 import LogIn from "./src/User/LogIn";
 import SignUp from "./src/User/SignUp";
+import { initStorage } from "./core/src/shared/storage";
+import { AsyncStorage } from "react-native";
 interface Props {}
 interface States {
     isReady: boolean;
 }
 
-// init toast provider using Toast from NativeBase
-initToast(toastWrapper);
-
 export default class App extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
+        // initialize toast provider using Toast from NativeBase
+        initToast(toastWrapper);
+        // initialize local storage provider
+        initStorage(AsyncStorage);
         this.state = {
             isReady: false,
         };
