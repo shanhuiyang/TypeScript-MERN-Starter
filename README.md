@@ -153,7 +153,7 @@ However, it is deprecated after April, 2019.
 This project is a server rendering solution.
 It modeled the ```Post``` object, but did not implement the authentication module.
 
-[TypeScript-Node-Starter](https://github.com/shanhuiyang/TypeScript-MERN-Starter) is an officially built starter project for Node.js by Microsoft.
+[TypeScript-Node-Starter](https://github.com/Microsoft/TypeScript-Node-Starter) is an officially built starter project for Node.js by Microsoft.
 This project is a good starter for Node.js app using Typescript.
 It is also a server rendering solution, using [pug](https://github.com/pugjs/pug).
 
