@@ -7,6 +7,7 @@ import User from "../../models/User";
 import Gender from "../../models/Gender";
 import { initStorage } from "../../shared/storage";
 import storageWrapper from "../../components/storage";
+import { getHostUrl } from "../../shared/fetch";
 
 // Initialize local storage provider
 initStorage(storageWrapper);
@@ -20,7 +21,6 @@ const DUMMY_USER_1: User = {
     _id: "somedummyid"
 };
 const DUMMY_ACCESS_TOKEN: string = "dummy token";
-const LOCAL_HOST_URI: string = "http://localhost";
 
 const middleWares = [thunk];
 const mockStore = configureMockStore(middleWares);
@@ -42,7 +42,7 @@ describe("login", () => {
     });
 
     it("return LOGIN_SUCCESS when login has been done", () => {
-        fetchMock.postOnce(`${LOCAL_HOST_URI}/oauth2/login`, {
+        fetchMock.postOnce(`${getHostUrl()}/oauth2/login`, {
             body: { user: DUMMY_USER_1, accessToken: DUMMY_ACCESS_TOKEN },
             headers: { "content-type": RESPONSE_CONTENT_TYPE.JSON }
         });

@@ -10,6 +10,17 @@
             "name": "Attach by Process ID",
             "processId": "${command:PickProcess}",
             "protocol": "inspector"
-        }
+        },
+        {
+            "name": "Debug create-react-app Tests",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "${workspaceRoot}/client/core/node_modules/.bin/react-scripts",
+            "args": ["test", "--runInBand", "--no-cache", "--env=jsdom"],
+            "cwd": "${workspaceRoot}/client/core",
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+          }
     ]
 }

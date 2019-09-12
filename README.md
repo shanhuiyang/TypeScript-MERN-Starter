@@ -35,6 +35,59 @@ Not only using TypeScript, but this project is also featured by:
 - **Almost ready** for a community app. We modelled ```User``` as well as ```Article```. This is a **real starter** for who would like to build an community app using MERN.
 - The client code is created from [create-react-app](https://facebook.github.io/create-react-app/), so now you can get rid of annoying configurations for babel and webpack.
 
+# Table of Content
+
+- [Quick start](#quick-start)
+  - [Before Start](#before-start)
+  - [Clone the repository](#clone-the-repository)
+  - [Install dependencies](#install-dependencies)
+  - [Start your mongoDB server](#start-your-mongodb-server)
+  - [Build and run the project](#build-and-run-the-project)
+- [Motivation](#motivation)
+  - [Prior Art](#prior-art)
+  - [Philosophy](#philosophy)
+  - [Road map](#road-map)
+- [Project structure](#project-structure)
+  - [Folder structure](#folder-structure)
+  - [Create React App](#create-react-app)
+    - [Serve static assets of client and index.html in production](#serve-static-assets-of-client-and-indexhtml-in-production)
+    - [Proxy API requests in development](#proxy-api-requests-in-development)
+  - [Unified Modeling](#unified-modeling)
+  - [Embedded OAuth2 server](#embedded-oauth2-server)
+    - [OAuth 2.0 protocol](#oauth-20-protocol)
+    - [Resource server](#resource-server)
+    - [Authorization server](#authorization-server)
+    - [Summary](#summary)
+  - [Server routing & client routing](#server-routing---client-routing)
+    - [React-router 4.0-](#react-router-40-)
+    - [Performance perspective](#performance-perspective)
+  - [Styling](#styling)
+- [How to debug](#how-to-debug)
+  - [Available scripts](#available-scripts)
+  - [Debugging client](#debugging-client)
+  - [Debugging server](#debugging-server)
+- [Tests](#tests)
+- [Deploying the app](#deploying-the-app)
+  - [Prerequisite](#prerequisite)
+  - [Create production MongoDB (Option 1: Azure CosmosDB)](#create-production-mongodb--option-1--azure-cosmosdb-)
+    - [Open Azure Cloud Shell](#open-azure-cloud-shell)
+    - [Create a resource group](#create-a-resource-group)
+    - [Create a Cosmos DB account](#create-a-cosmos-db-account)
+    - [Retrieve the database key](#retrieve-the-database-key)
+    - [Configure the connection string in your Node.js application](#configure-the-connection-string-in-your-nodejs-application)
+  - [Create production MongoDB (Option 2: MongoDB Atlas)](#create-production-mongodb--option-2--mongodb-atlas-)
+  - [Create a production blob storage](#create-a-production-blob-storage)
+  - [Test the application in production mode](#test-the-application-in-production-mode)
+  - [Build app into a Docker image](#build-app-into-a-docker-image)
+    - [Configure environment variables for production](#configure-environment-variables-for-production)
+    - [Build app into a local Docker image](#build-app-into-a-local-docker-image)
+    - [Push Docker image to Docker hub](#push-docker-image-to-docker-hub)
+  - [Create an Azure app service using Docker image](#create-an-azure-app-service-using-docker-image)
+    - [Add an Azure app service in Azure portal](#add-an-azure-app-service-in-azure-portal)
+    - [Verify your Azure app service](#verify-your-azure-app-service)
+  - [Map custom domain and bind SSL certificate](#map-custom-domain-and-bind-ssl-certificate)
+  - [Summary of Deployment](#summary-of-deployment)
+
 # Quick start
 
 ## Before Start
@@ -78,6 +131,10 @@ yarn start
 
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
 
+For mobile part, navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
+From that page you can easily start your app for both Android and iOS easiy.
+For more detail of prerequisite please refer to [Installation](https://docs.expo.io/versions/v34.0.0/introduction/installation/) of Expo document.
+
 # Motivation
 
 Up to 2019, React is the most popular front-end framework.
@@ -115,35 +172,45 @@ We build this project on following philosophies:
 
 ## Road map
 
-We would like to extend this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
+We have extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
 TypeScript will show the power of modeling in a **real fullstack** web app across web server, web client, Android, iOS, even Windows and OSX.
 
 # Project structure
 
 In this part, we will not only summarize the folder structure, but also introduce how each of the project gradients works.
 
+Briefly speak, we nested 3 projects in the repo, to get the biggest reusability of code.
+
+![Big picture](./images/big-picture.png)
+
+Therefore, we fused server, web client (for both desktop and mobile), and Android & iOS projects together in this repo.
+
+Please note that we did not invent any framework, what we did is taking the advantages of many popular frameworks from React ecosystem.
+
 ## Folder structure
 
 | Folder Path              | Description                                                                                                                                  |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **.** (the root path of repo)          | **A complete Node.js project**.                                                                                                          |
 | .vscode                  | Contains VS Code specific settings.                                                                                                          |
-| **client**               | **A complete React project**. This project was generated by [create-react-app](https://facebook.github.io/create-react-app/).                |
+| **client**               | **A complete ReactNative project**. This project was generated by [Expo](https://expo.io) targeting to managed work flow.                |
+| **client/App.ts**               | The entrypoint of the ReactNative project.                       |
+| **client/core**               | **A complete React project**. This project was generated by [create-react-app](https://facebook.github.io/create-react-app/).                |
 | client/core/build             | Contains the distributable (or output) from your TypeScript build for client side, e.g. index.html, css, images, and packed Javascript.      |
 | client/core/node_modules      | Contains all your npm dependencies for client side.                                                                                          |
 | client/core/public            | Static assets that will be used client side, they will be moved to client/core/build folder when client building.                                 |
-| **client/core/src**           | Typescript source code for the client React app.                                                                                             |
-| **client/core/src/actions**   | Redux actions implementations.                                                                                                               |
-| **client/core/src/components**| React components which will be used in pages.                                                                                                |
-| **client/core/src/models**    | Typescript definitions. It contains 1. models used **across client & server** and 2. Redux app states & action creators definition.          |
-| **client/core/src/pages**     | React components which usually be destination for a **client route** path.                                                                   |
-| **client/core/src/reducers**  | Redux reducers implementations.                                                                                                              |
-| **client/core/src/shared**    | Common utilities for client.                                                                                                                 |
-| **client/core/src/App.tsx**   | Client's main routers, contains paths to pages.                                                                                              |
-| **client/core/src/index.tsx** | Client's entry point, i.e. the entry point of React app.                                                                                     |
+| client/core/src           | Typescript source code for the client React app. Some of the code could be shared with ReactNative project.                                        |
+| client/core/src/actions   | Redux actions implementations. **Shared code between React.js and ReactNative** projects.                                                 |
+| client/core/src/components | React components which will be used in pages.                                                                                                |
+| client/core/src/models    | Typescript definitions. It contains 1. models **shared across clients (both web and mobile) & server** and 2. Redux app states & action creators definition.          |
+| client/core/src/pages     | React components which usually be destination for a **client route** path.                                                                   |
+| client/core/src/reducers  | Redux reducers implementations. **Shared code between React.js and ReactNative** projects.            |
+| client/core/src/shared    | Common utilities for client. **Shared code between React.js and ReactNative** projects.                                                 |
+| client/core/src/App.tsx   | Web client's main routers, contains paths to pages.                                                                                              |
+| **client/core/src/index.tsx** | Web client's entry point, i.e. the entry point of React app.                                                                                     |
 | client/core/src/react-app-env.d.ts | create-react-app generated file.                                                                                                        |
 | client/core/src/serviceWorker.ts   | create-react-app generated file, which is used for debug.                                                                               |
 | client/core/src/setupProxy.js | Bypasses all REST API calls from serviceWorker to nodejs server we are using.                                                                |
-| **client/core/src/store.ts**  | Redux store configurations, apply middleware such as Thunk.                                                                                  |
 | client/core/env.development   | Defines environment variables for **client** build under ```NODE_ENV``` is ```development```.                                                |
 | client/core/env.production    | Defines environment variables for **client** build under ```NODE_ENV``` is ```production```.                                                 |
 | client/core/package.json      | File that contains npm dependencies as well as [build scripts](#what-if-a-library-isnt-on-definitelytyped) which can only run for client.    |
@@ -153,12 +220,12 @@ In this part, we will not only summarize the folder structure, but also introduc
 | images                   | Images referred by README.md.                                                                                                                |
 | node_modules             | Contains all your npm dependencies for **server** side.                                                                                      |
 | **server**               | Contains your **source code** that will be compiled for server side to the dist dir.                                                         |
-| **server/config**        | Passport authentication strategies and Oauth2orize server configurations. They may be called from auth/oauth2 related controllers or routes. |
-| **server/controllers**   | Controllers define functions that respond to various http requests.                                                                          |
-| **server/models**        | 1. Typescript interface definitions 2. Models define Mongoose schemas that will be used in storing and retrieving data from MongoDB.         |
-| **server/routes**        | Server routing configurations. All the routes here are serving for REST APIs called by client.                                               |
-| **server/util**          | Common utilities for server side code.                                                                                                       |
-| **server/app.ts**        | Initialization for express app, including connection to MongoDB.                                                                             |
+| server/config        | Passport authentication strategies and Oauth2orize server configurations. They may be called from auth/oauth2 related controllers or routes. |
+| server/controllers   | Controllers define functions that respond to various http requests.                                                                          |
+| server/models        | 1. Typescript interface definitions 2. Models define Mongoose schemas that will be used in storing and retrieving data from MongoDB.         |
+| server/routes        | Server routing configurations. All the routes here are serving for REST APIs called by client.                                               |
+| server/util          | Common utilities for server side code.                                                                                                       |
+| server/app.ts        | Initialization for express app, including connection to MongoDB.                                                                             |
 | **server/server.ts**     | Entry point to your express app.                                                                                                             |
 | .dockerignore            | Defines which files or folders should not be include while running ```docker build```.                                                       |
 | .env.development         | Defines environment variables for **server** build under ```NODE_ENV``` is ```development```.                                                |
@@ -518,7 +585,9 @@ Now you can set your breakpoints and wait for them be hit.
 
 You can run all of the tests in project using ```yarn test```, or run tests for client only using ```yarn test-client```.
 
-(Still under construction...)
+Also you can easily debug all of the client tests in debug window of VSCode, since we have configured the debug process in _.vscode/launch.json_.
+
+We will add more tests and grow the code coverage in near future.
 
 # Deploying the app
 
