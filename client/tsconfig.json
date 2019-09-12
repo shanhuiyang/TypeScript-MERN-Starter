@@ -1,25 +1,20 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
+    "allowJs": true,
+    "jsx": "react-native",
+    "lib": ["dom", "esnext"],
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "noEmit": true,
-    "jsx": "preserve",
-    "isolatedModules": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true
   },
   "include": [
-    "src"
+      "App.tsx",
+      "src/**/*",
+      "core/src/actions/**/*",
+      "core/src/models/**/*",
+      "core/src/reducers/**/*",
+      "core/src/shared/**/*"
   ]
 }

@@ -2,7 +2,7 @@ import { RequestHandler, NextFunction, Request, Response } from "express";
 import { UploadBlobResult } from "../repository/storage.d";
 import storage from "../repository/storage";
 import * as random from "../util/random";
-import User from "../../client/src/models/User";
+import User from "../../client/core/src/models/User";
 
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const containerName: string = "avatar";

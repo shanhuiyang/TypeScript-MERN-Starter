@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 
 const STORAGE_ROOT_DIR: string = "storage";
-const STORAGE_ROOT_PATH: string = `${path.dirname(require.main.filename)}/../../client/public/${STORAGE_ROOT_DIR}`;
+const STORAGE_ROOT_PATH: string = `${path.dirname(require.main.filename)}/../../client/core/public/${STORAGE_ROOT_DIR}`;
 if (!fs.existsSync(STORAGE_ROOT_PATH)) {
     fs.mkdirSync(STORAGE_ROOT_PATH);
 }

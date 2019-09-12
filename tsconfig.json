@@ -19,6 +19,6 @@
     },
     "include": [
         "server/**/*",
-        "client/src/models/**/*"
+        "client/core/src/models/**/*"
     ]
 }

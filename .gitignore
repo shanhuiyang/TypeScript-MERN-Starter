@@ -14,7 +14,7 @@ results
 tmp
 
 # Build
-client/build
+client/core/build
 
 # Coverage reports
 coverage
@@ -24,7 +24,7 @@ coverage
 
 # Dependency directory
 node_modules
-client/node_modules
+client/core/node_modules
 bower_components
 
 # Editors

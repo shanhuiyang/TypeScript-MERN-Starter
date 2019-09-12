@@ -4,7 +4,7 @@ import express, { Router } from "express";
 import * as controllers from "../controllers/oauth2";
 import { check } from "express-validator";
 import passport = require("passport");
-import Gender from "../../client/src/models/Gender";
+import Gender from "../../client/core/src/models/Gender";
 
 const oauth2: Router = express.Router();
 oauth2.route("/token").post(controllers.token);

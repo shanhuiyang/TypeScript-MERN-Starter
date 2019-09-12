@@ -5,12 +5,12 @@ import { VerifyCallback } from "passport-oauth2";
 import OAuth2Strategy from "./oauth2orize-strategy";
 import _ from "lodash";
 import Clients from "../models/OAuth/ClientCollection";
-import User from "../../client/src/models/User";
-import { APP_URL } from "../util/secrets";
+import User from "../../client/core/src/models/User";
+import { HOST_URL } from "../util/secrets";
 
 passport.use("oauth2", new OAuth2Strategy({
-        authorizationURL: `${APP_URL}/oauth2/authorize`,
-        tokenURL: `${APP_URL}/oauth2/token`,
+        authorizationURL: `${HOST_URL}/oauth2/authorize`,
+        tokenURL: `${HOST_URL}/oauth2/token`,
         clientID: Clients[0].id,
         clientSecret: Clients[0].secret,
         callbackURL: Clients[0].redirectUri

@@ -14,7 +14,6 @@ import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { MiddlewareRequest } from "oauth2orize";
-import { APP_URL } from "../util/secrets";
 import storage from "../repository/storage";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
@@ -66,7 +65,7 @@ export const authorization: RequestHandler[] = [
         }
     ),
     function (req: MiddlewareRequest, res: Response) {
-      res.redirect(302, `${APP_URL}/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+      res.redirect(302, `/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 

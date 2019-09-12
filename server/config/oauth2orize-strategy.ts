@@ -8,7 +8,7 @@ import AccessTokenCollection from "../models/OAuth/AccessTokenCollection";
 import AccessToken from "../models/OAuth/AccessToken";
 import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument";
-import User from "../../client/src/models/User";
+import User from "../../client/core/src/models/User";
 
 OAuth2Strategy.prototype.userProfile = (token: string, done: (err?: Error | null, profile?: User) => void) => {
     AccessTokenCollection.findOne(

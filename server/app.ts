@@ -68,7 +68,7 @@ if (process.env.NODE_ENV === "development") {
 // Server rendering configuration
 if (process.env.NODE_ENV === "production") {
     app.use(
-        express.static("./client/build", { maxAge: 31557600000 })
+        express.static("./client/core/build", { maxAge: 31557600000 })
     );
     app.use((req: Request, res: Response, next: NextFunction) => {
         if (req.originalUrl.startsWith("/api") ||
@@ -77,7 +77,7 @@ if (process.env.NODE_ENV === "production") {
             next();
         } else {
             const options = {
-                root: "./client/build/",
+                root: "./client/core/build/",
                 dotfiles: "deny",
                 headers: {
                     "x-timestamp": Date.now(),
