@@ -19,15 +19,15 @@ class LogIn extends Component<Props, States> {
         if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container>
-                <HeaderWithBack title="Log in"/>
+                <HeaderWithBack title="Sign in"/>
                 <Content padder>
                     <Form>
-                        <Item>
+                        <Item last>
                             <Label>Email</Label>
                             <Input autoFocus={true}
                                 onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
-                        <Item>
+                        <Item last>
                             <Label>Password</Label>
                             <Input textContentType="password" secureTextEntry={true}
                                 onChangeText={(input: string) => { this.password = input; }}/>
@@ -35,7 +35,7 @@ class LogIn extends Component<Props, States> {
                         {
                             loading ? <Spinner color="blue"/> :
                             <Button block style={{ margin: 12 }} onPress={ this.login } >
-                                <Text>Log in</Text>
+                                <Text>Sign in</Text>
                             </Button>
                         }
                     </Form>

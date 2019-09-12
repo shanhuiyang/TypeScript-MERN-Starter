@@ -1,7 +1,7 @@
 import UserActionCreator from "../models/client/UserActionCreator";
 import { Dispatch, AnyAction as Action } from "redux";
 import fetch from "../shared/fetch";
-import { ACCESS_TOKEN_KEY } from "../shared/constants";
+import { ACCESS_TOKEN_KEY, INVALID_TOKEN_ERROR } from "../shared/constants";
 import User from "../models/User";
 import actions from "./common";
 import Gender from "../models/Gender";
@@ -62,7 +62,7 @@ const userActionCreator: UserActionCreator = {
             .getItem(ACCESS_TOKEN_KEY)
             .then((token: string | null) => {
                 if (!token) {
-                    return Promise.reject(new Error("token is empty"));
+                    return Promise.reject(new Error(INVALID_TOKEN_ERROR));
                 }
                 dispatch({ type: USER_REQUEST_START});
                 return fetch("/oauth2/profile", undefined, "GET", true);
@@ -74,7 +74,7 @@ const userActionCreator: UserActionCreator = {
                         user: json.user
                     });
                 } else {
-                    return Promise.reject(new Error("null user profile, remove the invalid access token"));
+                    return Promise.reject(new Error(INVALID_TOKEN_ERROR));
                 }
             })
             .catch((error: Error) => {
@@ -118,7 +118,7 @@ const userActionCreator: UserActionCreator = {
             .getItem(ACCESS_TOKEN_KEY)
             .then((token: string | null) => {
                 if (!token) {
-                    return Promise.reject(new Error("token is empty"));
+                    return Promise.reject(new Error(INVALID_TOKEN_ERROR));
                 }
                 dispatch({ type: USER_REQUEST_START});
                 return fetch("/oauth2/profile", user, "POST", true);
@@ -145,7 +145,7 @@ const userActionCreator: UserActionCreator = {
             .getItem(ACCESS_TOKEN_KEY)
             .then((token: string | null) => {
                 if (!token) {
-                    return Promise.reject(new Error("token is empty"));
+                    return Promise.reject(new Error(INVALID_TOKEN_ERROR));
                 }
                 dispatch({ type: UPLOAD_AVATAR_START});
                 return fetch("/api/avatar/create", payload, "PUT", true);

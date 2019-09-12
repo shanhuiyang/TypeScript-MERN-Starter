@@ -1,11 +1,9 @@
 import React, { Fragment } from "react";
-import { match, Route } from "react-router-native";
+import { match, Route, RouteComponentProps } from "react-router-native";
 import ArticleDetail from "./ArticleDetail";
 import ArticleList from "./ArticleList";
 
-interface Props {
-    match: match<any>;
-}
+interface Props extends RouteComponentProps<any> {}
 
 interface States {}
 

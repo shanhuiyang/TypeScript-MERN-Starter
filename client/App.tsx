@@ -1,17 +1,13 @@
 import React from "react";
-import { Container } from "native-base";
-import { NativeRouter, Route, BackButton, Redirect } from "react-router-native";
+import { Root } from "native-base";
+import { NativeRouter } from "react-router-native";
 import { AppLoading } from "expo";
 import * as Font from "expo-font";
-import Articles from "./src/Article/Articles";
-import User from "./src/User/User";
-import About from "./src/About";
 import { Provider } from "react-redux";
+import Routes from "./src/Routes";
 import store from "./core/src/shared/store";
 import { initToast } from "./core/src/shared/toast";
 import toastWrapper from "./src/utils/Toast";
-import LogIn from "./src/User/LogIn";
-import SignUp from "./src/User/SignUp";
 import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
 interface Props {}
@@ -43,19 +39,13 @@ export default class App extends React.Component<Props, States> {
         if (!this.state.isReady) {
             return <AppLoading />;
         } else {
-            return <Provider store={store}>
-                <NativeRouter>
-                    <Container>
-                        <BackButton />
-                        <Route exact path="/" render={() => <Redirect to="/article" />} />
-                        <Route path="/article" render={(props) => <Articles {...props} />} />
-                        <Route path="/about" render={(props) => <About {...props} />} />
-                        <Route path="/user" render={(props) => <User {...props} />} />
-                        <Route path="/login" render={(props) => <LogIn {...props} />} />
-                        <Route path="/signup" render={(props) => <SignUp {...props} />} />
-                    </Container>
-                </NativeRouter>
-            </Provider>;
+            return <Root>
+                <Provider store={store}>
+                    <NativeRouter>
+                        <Routes />
+                    </NativeRouter>
+                </Provider>
+            </Root>;
         }
     }
 }

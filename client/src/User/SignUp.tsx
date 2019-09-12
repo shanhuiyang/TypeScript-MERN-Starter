@@ -14,7 +14,7 @@ export default class SignUp extends Component<Props, States> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Log in</Title>
+                        <Title>Sign up</Title>
                     </Body>
                     <Right>{/* nothing but counterbalance */}</Right>
                 </Header>
@@ -26,6 +26,10 @@ export default class SignUp extends Component<Props, States> {
                         </Item>
                         <Item>
                             <Label>Password</Label>
+                            <Input textContentType="password" secureTextEntry={true}/>
+                        </Item>
+                        <Item last>
+                            <Label>Confirm Password</Label>
                             <Input textContentType="password" secureTextEntry={true}/>
                         </Item>
                         <Button block style={{ margin: 12 }}>

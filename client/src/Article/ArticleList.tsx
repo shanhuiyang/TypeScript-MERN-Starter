@@ -4,19 +4,20 @@ import ArticleItem from "./ArticleItem";
 import { Header, Title, Body, Content, List } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
 import AppState from "../../core/src/models/client/AppState";
-import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
+import ActionCreator from "../../core/src/models/client/ActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import Article from "../../core/src/models/Article";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
-    actions: ArticleActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {}
 
 class ArticleList extends React.Component<Props, States> {
     componentDidMount() {
+        // get all articles
         if (!this.props.state.articles.valid) {
             this.props.actions.getAllArticles();
         }

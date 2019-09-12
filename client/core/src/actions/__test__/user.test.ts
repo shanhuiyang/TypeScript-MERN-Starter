@@ -5,6 +5,11 @@ import fetchMock from "fetch-mock";
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "../../shared/constants";
 import User from "../../models/User";
 import Gender from "../../models/Gender";
+import { initStorage } from "../../shared/storage";
+import storageWrapper from "../../components/storage";
+
+// Initialize local storage provider
+initStorage(storageWrapper);
 
 const DUMMY_USER_1: User = {
     email: "dummy@corp.com",

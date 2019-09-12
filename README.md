@@ -12,7 +12,7 @@
 This project is intended to build a RESTful web app in TypeScript.
 With this project as a start point you can easily build a community or blog app.
 
-**MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact, and **N**ode.js.
+**MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact & **R**eactNative, and **N**ode.js.
 
 This project implemented MERN in **TypeScript**.
 TypeScript is a typed super set of JavaScript.
@@ -28,6 +28,7 @@ TypeScript has brought the following benefits to MERN:
 
 Not only using TypeScript, but this project is also featured by:
 
+- **Real fullstack**, since you can build node **server**, Mongo DB, multimedia storage, **website** (for both desktop and mobile), **Android** app, and **iOS** app based on this project **in single programming language**.
 - **[RESTful-style](https://www.restapitutorial.com/lessons/whatisrest.html)**, powered by an embedded [oauth2 server](https://github.com/jaredhanson/oauth2orize) and [passport.js](http://www.passportjs.org/), this project separate client and server clearly.
 - **[React-router 4.0+](https://reacttraining.com/react-router/)**, with it you can easily define client routes and manage them.
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states.
@@ -44,6 +45,7 @@ To build and run this app locally you will need a few things:
 - Install [MongoDB](https://docs.mongodb.com/manual/installation/)
 - Install [VS Code](https://code.visualstudio.com/)
 - Install [Yarn](https://yarnpkg.com/)
+- Install [Expo](https://expo.io)
 
 ## Clone the repository
 

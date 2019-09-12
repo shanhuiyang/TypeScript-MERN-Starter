@@ -1,4 +1,4 @@
-import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "./constants";
+import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE, INVALID_TOKEN_ERROR } from "./constants";
 import sleep from "./sleep";
 import { getStorage as localStorage } from "../shared/storage";
 
@@ -30,7 +30,7 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
         if (token) {
             headers["Authorization"] = "Bearer " + token;
         } else {
-            return Promise.reject("empty token");
+            return Promise.reject(INVALID_TOKEN_ERROR);
         }
     }
     const options: any = {
