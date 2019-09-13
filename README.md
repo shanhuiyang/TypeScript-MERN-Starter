@@ -131,6 +131,10 @@ yarn start
 
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
 
+## Start the mobile apps
+
+First of all, you need to get the IP address of your develop server
+
 For mobile part, navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
 From that page you can easily start your app for both Android and iOS easiy.
 For more detail of prerequisite please refer to [Installation](https://docs.expo.io/versions/v34.0.0/introduction/installation/) of Expo document.
@@ -509,7 +513,7 @@ Please refer to [official document](https://reactjs.org/docs/faq-styling.html) f
 In this project, you can debug your server and client **at the same time**.
 You can debug the server in VS Code, meanwhile you can debug the client in [Chrome](https://www.google.com/chrome/).
 
-> **Note!** If you are going to debug your app in local area networks (LAN), please change the `ORIGIN_URI` in file  _.env.development_ from `localhost` to your host IP, e.g. `192.168.1.13`. **Debugging your web client on mobile devices** usually requires debugging in LAN. 
+> **Note!** If you are going to debug your app in local area networks (LAN), please change the `HOST_NAME_DEV` in file  _client/core/src/models/HostUrl.ts_ from `localhost` to your host IP, e.g. `192.168.1.13`. **Debugging your app on mobile devices** usually requires debugging in LAN.
 
 ## Available scripts
 
@@ -729,14 +733,8 @@ Then you can paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file 
 
 ## Test the application in production mode
 
-In file _.env.production_, change the ```ORIGIN_URI``` to the localhost.
-Meanwhile change the port number from 80 to 3000 because your local 80 port may have been blocked.
-
-```text
-PORT=3000
-SERVER_PORT=3000
-ORIGIN_URI=http://localhost
-```
+In file _client/core/src/models/HostUrl.ts_, change the `HOST_NAME_PROD` to the `http://localhost`.
+Meanwhile change the `HOST_PORT_PROD` from 80 to 3000 because your local 80 port may have been blocked.
 
 Open your local terminal.
 Switch the local node env from ```development``` to ```production``` by entering following commands.
@@ -782,14 +780,8 @@ Let's generate the Docker image locally in this section.
 
 ### Configure environment variables for production
 
-In file _.env.production_, change the ```ORIGIN_URI``` to the target app url.
-Meanwhile change the ports number from 3000 back to 80.
-
-```text
-PORT=80
-SERVER_PORT=80
-ORIGIN_URI=https://<your_app_name>.azurewebsites.net
-```
+In file _client/core/src/models/HostUrl.ts_, change the `HOST_NAME_PROD` to the target app url.
+Meanwhile change the `HOST_PORT_PROD` from 3000 back to 80.
 
 ### Build app into a local Docker image
 
@@ -900,7 +892,7 @@ Usually the web address [https://<your_app_name>.azurewebsites.net](https://<you
 You can follow the steps below to adapt the app you just deployed on Azure to a desired domain name.
 
 1. Register a domain you like.
-2. Modify your _.env.production_, so that ```ORIGIN_URI=https://<domain_you registered>```
+2. Modify your _client/core/src/models/HostUrl.ts_, so that `export const HOST_NAME_PROD: string = "https://<domain_name_you_registered>";`
 3. Re-deploy your app to [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net) by following steps introduced in previous sections.
 4. Follow the tutorial of [map custom domain](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain).
 5. Follow the tutorial of [bind SSL certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl). Please note that bind a valid SSL certificate is must-do for Typescript-MERN-starter projects.

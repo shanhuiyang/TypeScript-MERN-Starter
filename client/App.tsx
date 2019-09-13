@@ -10,18 +10,29 @@ import { initToast } from "./core/src/shared/toast";
 import toastWrapper from "./src/utils/Toast";
 import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
+import { setHostUrl } from "./core/src/shared/fetch";
+import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
 interface Props {}
 interface States {
     isReady: boolean;
 }
 
+if (__DEV__) {
+    setHostUrl(HOST_URL_DEV);
+} else {
+    setHostUrl(HOST_URL_PROD);
+}
+
+
+// initialize toast provider using Toast from NativeBase
+initToast(toastWrapper);
+// initialize local storage provider
+initStorage(AsyncStorage);
+
+
 export default class App extends React.Component<Props, States> {
     constructor(props: Props) {
         super(props);
-        // initialize toast provider using Toast from NativeBase
-        initToast(toastWrapper);
-        // initialize local storage provider
-        initStorage(AsyncStorage);
         this.state = {
             isReady: false,
         };

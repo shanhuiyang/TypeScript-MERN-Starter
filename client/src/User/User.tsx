@@ -40,7 +40,7 @@ class User extends React.Component<Props, States> {
         return <Content>
             <Link component={ListItem} icon to="/login">
                 <Left>
-                    <Button style={{ backgroundColor: "#22CB97" }}>
+                    <Button style={{ backgroundColor: "darkturquoise" }}>
                         <Icon active name="log-in" />
                     </Button>
                 </Left>
@@ -53,7 +53,7 @@ class User extends React.Component<Props, States> {
             </Link>
             <Link component={ListItem} icon to="/signup">
                 <Left>
-                    <Button style={{ backgroundColor: "#22CB97" }}>
+                    <Button style={{ backgroundColor: "darkturquoise" }}>
                         <Icon active name="person-add" />
                     </Button>
                 </Left>
@@ -70,7 +70,7 @@ class User extends React.Component<Props, States> {
     private renderAfterLoggedIn = () => {
         const user: UserModel = this.props.state.userState.currentUser;
         return <Content>
-            <Link component={ListItem} thumbnail to="/profile">
+            <Link component={ListItem} thumbnail to="/profile" last>
                 <Left>
                     <Thumbnail square source={{ uri: `${getHostUrl()}${user.avatarUrl}` }} />
                 </Left>
@@ -83,7 +83,7 @@ class User extends React.Component<Props, States> {
             <Separator />
             <ListItem icon onPress={this.props.actions.logout}>
                 <Left>
-                    <Button style={{ backgroundColor: "#22CB97" }}>
+                    <Button style={{ backgroundColor: "deeppink" }}>
                         <Icon active name="log-out" />
                     </Button>
                 </Left>
