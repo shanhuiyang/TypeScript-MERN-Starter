@@ -60,7 +60,7 @@ Not only using TypeScript, but this project is also featured by:
     - [Authorization server](#authorization-server)
     - [Summary](#summary)
   - [Server routing & client routing](#server-routing---client-routing)
-    - [React-router 4.0-](#react-router-40-)
+    - [React-router 4.0+](#react-router-40+)
     - [Performance perspective](#performance-perspective)
   - [Styling](#styling)
 - [How to debug](#how-to-debug)
@@ -134,10 +134,12 @@ Finally, navigate to [http://localhost:3000](http://localhost:3000) and you shou
 
 ## Start the mobile apps
 
-First of all, you need to get the IP address of your develop server
+First of all, you need to get the IP address of your development server. Then modify the constant `HOST_NAME_DEV` in _client/core/src/models/HostUrl.ts_ with the IP address you got.
 
-For mobile part, navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
-From that page you can easily start your app for both Android and iOS easiy.
+Then `yarn start` will also start the react-native project using expo-cli.
+So you can navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
+From that page you can easily start your app for both Android and iOS easily.
+
 For more detail of prerequisite please refer to [Installation](https://docs.expo.io/versions/v34.0.0/introduction/installation/) of Expo document.
 
 # Motivation
