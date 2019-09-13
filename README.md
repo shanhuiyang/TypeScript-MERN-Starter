@@ -10,7 +10,8 @@
 ![Live Demo](./images/live-demo.png)
 
 This project is intended to build a RESTful web app in TypeScript.
-With this project as a start point you can easily build a community or blog app.
+
+**With this project you can build a web app with server, website, Android and iOS in one programming language.**
 
 **MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact & **R**eactNative, and **N**ode.js.
 
