@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+import { HOST_URL_PROD, HOST_URL_DEV, SERVER_PORT_PROD, SERVER_PORT_DEV, HOST_NAME_PROD, HOST_NAME_DEV } from "../../client/core/src/models/HostUrl";
 
 export const ENVIRONMENT = process.env.NODE_ENV;
 const prod = ENVIRONMENT === "production";
@@ -27,9 +28,17 @@ if (!MONGODB_URI) {
 }
 
 let url: string;
-if (parseInt(process.env["PORT"]) === 80) {
-    url = process.env.ORIGIN_URI;
+let server_port: number;
+let origin: string;
+if (prod) {
+    url = HOST_URL_PROD;
+    server_port = SERVER_PORT_PROD;
+    origin = HOST_NAME_PROD;
 } else {
-    url = `${process.env.ORIGIN_URI}:${process.env.PORT}`;
+    url = HOST_URL_DEV;
+    server_port = SERVER_PORT_DEV;
+    origin = HOST_NAME_DEV;
 }
 export const HOST_URL = url;
+export const SERVER_PORT = server_port;
+export const ORIGIN_URI = origin;

@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import passport from "passport";
 import bluebird from "bluebird";
 import errorHandler from "errorhandler";
-import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
+import { MONGODB_URI, SESSION_SECRET, SERVER_PORT, ORIGIN_URI } from "./util/secrets";
 import { Response, Request, NextFunction } from "express";
 import oauth2 from "./routes/oauth2";
 import auth from "./routes/auth";
@@ -35,8 +35,8 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
 
 // Express configuration
 const app = express();
-app.set("server_port", process.env.SERVER_PORT);
-app.set("origin_uri", process.env.ORIGIN_URI);
+app.set("server_port", SERVER_PORT);
+app.set("origin_uri", ORIGIN_URI);
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
