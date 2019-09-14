@@ -94,6 +94,11 @@ const userActionCreator: UserActionCreator = {
                         user: json.user
                     });
                     return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
+                } else if (!json.redirected && json.to) {
+                    dispatch({
+                        type: SIGN_UP_SUCCESS,
+                        redirectTask: json
+                    });
                 } else {
                     return Promise.reject(new Error("null user profile"));
                 }

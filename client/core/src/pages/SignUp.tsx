@@ -37,7 +37,6 @@ class SignUp extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         if (!this.props.state.redirectTask.redirected) {
-            this.props.actions.resetRedirectTask();
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;

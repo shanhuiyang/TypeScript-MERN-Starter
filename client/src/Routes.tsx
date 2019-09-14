@@ -7,6 +7,7 @@ import Me from "./User/Me";
 import LogIn from "./User/LogIn";
 import SignUp from "./User/SignUp";
 import Home from "./Home";
+import Consent from "./User/Consent";
 
 interface Props {}
 
@@ -23,6 +24,7 @@ export default class Routes extends React.Component<Props, States> {
                 <Route path="/me" render={(props) => <Me {...props} />} />
                 <Route path="/login" render={(props) => <LogIn {...props} />} />
                 <Route path="/signup" render={(props) => <SignUp {...props} />} />
+                <Route path="/consent" render={ (props) => <Consent {...props} /> } />
             </Switch>
         </Container>;
     }

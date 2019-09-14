@@ -23,7 +23,9 @@ class LogIn extends React.Component<Props, States> {
         this.passwordRef = React.createRef();
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.userState.currentUser) {
+        if (!this.props.state.redirectTask.redirected) {
+            return <Redirect to={this.props.state.redirectTask.to} />;
+        } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
                 <Header size={"medium"}>Sign In</Header>
