@@ -11,8 +11,8 @@ const actions: CommonActionCreator = {
             // Suppress not logged-in error.
             return { type };
         }
-        const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
-        console.error(formattedMessage);
+        // const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
+        // console.error(formattedMessage);
         if (error.message) {
             toast().error(error.message);
         } else if (error.name) {

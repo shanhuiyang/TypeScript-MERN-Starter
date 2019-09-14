@@ -22,6 +22,10 @@ class Consent extends React.Component<Props, States> {
         this.params = new URLSearchParams(this.props.location.search);
         this.transactionId = this.params.get("transactionID");
     }
+    componentDidMount() {
+        // This page is only redirected to
+        this.props.actions.resetRedirectTask();
+    }
     render(): React.ReactElement<any> {
         if (!this.transactionId) {
             const error: Error = { name: "No Transaction ID", message: "" };

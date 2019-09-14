@@ -13,7 +13,10 @@ const redirectTask = (state: RedirectTask = initialState, action: Action): Redir
         case SIGN_UP_SUCCESS:
             return action.redirectTask;
         case RESET_REDIRECT:
-            return initialState;
+            return {
+                redirected: true,
+                ...state
+            };
         default:
             return state;
     }

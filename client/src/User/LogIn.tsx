@@ -16,7 +16,9 @@ class LogIn extends Component<Props, States> {
     private email: string;
     private password: string;
     render() {
-        if (!this.props.state.userState.currentUser) {
+        if (!this.props.state.redirectTask.redirected) {
+            return <Redirect to={this.props.state.redirectTask.to} />;
+        } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container>
                 <HeaderWithBack title="Sign in"/>
