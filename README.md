@@ -11,7 +11,7 @@
 
 This project is intended to build a RESTful web app in TypeScript.
 
-**With this project you can build a web app with server, website, Android and iOS in one programming language.**
+**With this project you can build a web app including server, website, Android and iOS in one programming language.**
 
 **MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact & **R**eactNative, and **N**ode.js.
 
@@ -59,7 +59,7 @@ Not only using TypeScript, but this project is also featured by:
     - [Resource server](#resource-server)
     - [Authorization server](#authorization-server)
     - [Summary](#summary)
-  - [Server routing & client routing](#server-routing---client-routing)
+  - [Server routing & client routing](#server-routing-&-client-routing)
     - [React-router 4.0+](#react-router-40+)
     - [Performance perspective](#performance-perspective)
   - [Styling](#styling)

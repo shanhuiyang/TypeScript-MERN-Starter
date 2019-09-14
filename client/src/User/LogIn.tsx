@@ -42,7 +42,7 @@ class LogIn extends Component<Props, States> {
                 </Content>
             </Container>);
         } else {
-            return <Redirect to="/user" />;
+            return <Redirect to="/me" />;
         }
     }
     private login = (): void => {
