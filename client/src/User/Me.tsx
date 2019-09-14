@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Text, Header, Content, Body, ListItem, Left, Button, Icon, Image, Right, Separator, Card, CardItem, Thumbnail } from "native-base";
+import { Text, Header, Content, Body, ListItem, Left, Button, Icon, Right, Separator, Thumbnail } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
 import { Link, RouteComponentProps } from "react-router-native";
 import UserActionCreator from "../../core/src/models/client/UserActionCreator";
@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps<any> {
 
 interface States {}
 
-class User extends React.Component<Props, States> {
+class Me extends React.Component<Props, States> {
     render(): any {
         if (!this.props.state.userState.currentUser) {
             return <Fragment>
@@ -98,4 +98,4 @@ class User extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(User);
+export default connectPropsAndActions(Me);
