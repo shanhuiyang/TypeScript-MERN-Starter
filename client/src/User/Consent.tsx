@@ -3,7 +3,7 @@ import AppState from "../../core/src/models/client/AppState";
 import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import { Redirect, RouteComponentProps } from "react-router-native";
-import { Container, Content, Text, Button, Spinner, View } from "native-base";
+import { Container, Content, Text, Button, Spinner, Card, CardItem, Left, Body, Right } from "native-base";
 import HeaderWithBack from "../Common/HeaderWithBack";
 
 interface Props extends RouteComponentProps<any> {
@@ -41,32 +41,42 @@ class Consent extends React.Component<Props, States> {
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container>
-                    <HeaderWithBack title="Sign in"/>
-                    <Content padder>
-                        <View>
-                            <Text>{`Hi ${this.params["email"]},`}</Text>
-                            <Text>{`${this.params["client_name"]} is requesting access to your account.`}</Text>
-                            <Text>Do you approve?</Text>
-                        </View>
-                        {/* TODO: Add your consent texts here */}
-                        <View>
+                <HeaderWithBack title="" />
+                <Content>
+                    <Card transparent>
+                        <CardItem>
+                            <Body>
+                                <Text>{`Hi ${this.params["email"]},`}</Text>
+                            </Body>
+                        </CardItem>
+                        <CardItem>
+                            <Body>
+                                <Text>
+                                    {`${this.params["client_name"]} is requesting access to your account.`}
+                                </Text>
+                                <Text>
+                                    Do you approve?
+                                </Text>
+                            </Body>
+                        </CardItem>
+                        <CardItem>
                             {
                                 loading ? <Spinner color="blue"/> :
-                                <Button onPress={this.allow}>
+                                <Button primary onPress={this.allow}>
                                     <Text>
                                         Approve
                                     </Text>
                                 </Button>
                             }
-                            <Button onPress={this.deny}>
+                            <Button light onPress={this.deny} style={{marginLeft: 12}}>
                                 <Text>
                                     Deny
                                 </Text>
                             </Button>
-                        </View>
-                    </Content>
-                </Container>
-            );
+                        </CardItem>
+                    </Card>
+                </Content>
+            </Container >);
         } else {
             return <Redirect to="/" />;
         }

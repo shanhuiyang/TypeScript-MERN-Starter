@@ -7,6 +7,7 @@ import AppState from "../../core/src/models/client/AppState";
 import UserModel from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import { getHostUrl } from "../../core/src/shared/fetch";
+import { getAvatarSource } from "../utils/avatarUrl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -70,16 +71,16 @@ class Me extends React.Component<Props, States> {
     private renderAfterLoggedIn = () => {
         const user: UserModel = this.props.state.userState.currentUser;
         return <Content>
-            <Link component={ListItem} thumbnail to="/profile" last>
+            <ListItem thumbnail last>
                 <Left>
-                    <Thumbnail square source={{ uri: `${getHostUrl()}${user.avatarUrl}` }} />
+                    <Thumbnail square source={ getAvatarSource(user.avatarUrl) } />
                 </Left>
                 <Body>
                     <Text>{user.name}</Text>
                     <Text note numberOfLines={1}>{`Account: ${user.email}`}</Text>
                 </Body>
                 <Right />
-            </Link>
+            </ListItem>
             <Separator />
             <ListItem icon onPress={this.props.actions.logout}>
                 <Left>
