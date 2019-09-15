@@ -7,6 +7,7 @@ import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import { getHostUrl } from "../../core/src/shared/fetch";
 import HeaderWithBack from "../Common/HeaderWithBack";
+import { getAvatarSource } from "../utils/avatarUrl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -22,13 +23,13 @@ class ArticleDetail extends React.Component<Props, States> {
         if (article) {
             return <Fragment>
                 <HeaderWithBack title={article.title} />
-                <Content padder>
-                    <Card>
+                <Content>
+                    <Card transparent>
                         <CardItem>
                             <Left>
-                                <Thumbnail small source={{ uri: `${getHostUrl()}${articleAuthor.avatarUrl}` }} />
+                                <Thumbnail small source={ getAvatarSource(articleAuthor.avatarUrl) } />
                                 <Body>
-                                <Text>{articleAuthor.name}</Text>
+                                    <Text>{articleAuthor.name}</Text>
                                     <Text note>{createDate.toLocaleDateString()}</Text>
                                 </Body>
                             </Left>

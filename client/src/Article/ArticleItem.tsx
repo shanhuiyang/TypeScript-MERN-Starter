@@ -7,6 +7,7 @@ import User from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
 import { getHostUrl } from "../../core/src/shared/fetch";
+import { getAvatarSource } from "../utils/avatarUrl";
 
 interface Props extends RouteComponentProps<any> {
     value: Article;
@@ -26,7 +27,7 @@ class ArticleItem extends React.Component<Props, States> {
                 state: article
             }} component={ListItem} avatar>
             <Left>
-                <Thumbnail small source={{ uri: `${getHostUrl()}${articleAuthor.avatarUrl}` }} />
+                <Thumbnail small source={ getAvatarSource(articleAuthor.avatarUrl) } />
             </Left>
             <Body>
                 <Text>{article.title}</Text>
