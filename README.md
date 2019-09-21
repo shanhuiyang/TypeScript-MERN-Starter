@@ -7,7 +7,12 @@
 
 **Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
 
-![Live Demo](./images/live-demo.png)
+| Supported Clients        | Preview                 |
+| ------------------------ | ----------------------- |
+| Web                      | <img src="./images/demo-desktop-web.png" alt="Web Preview" width="600"/>  |
+| Web (Mobile)             | <img src="./images/demo-mobile-web-0.png" alt="Mobile Web Preview" width="200"/><img src="./images/demo-mobile-web-1.png" alt="Mobile Web Preview" width="200"/><img src="./images/demo-mobile-web-2.png" alt="Mobile Web Preview" width="200"/> |
+| Android                  | <img src="./images/demo-android-0.png" alt="Android Preview" width="200"/><img src="./images/demo-android-1.png" alt="Android Preview" width="200"/><img src="./images/demo-android-2.png" alt="Android Preview" width="200"/>   |
+| iOS                      | <img src="./images/demo-ios-0.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-1.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-2.png" alt="iOS Preview" width="200"/>   |
 
 This project is intended to build a RESTful web app in TypeScript.
 
