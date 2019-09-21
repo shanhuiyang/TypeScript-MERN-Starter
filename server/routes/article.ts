@@ -7,7 +7,7 @@ const updateArticleValidations = [
     check("title").not().isEmpty(),
     check("content").not().isEmpty(),
     check("title").isLength({ max: 100 }),
-    check("content").isLength({ min: 500 }),
+    check("content").isLength({ min: 100 }),
 ];
 
 const article: Router = express.Router();
@@ -27,6 +27,9 @@ article.route("/edit").post(
     controllers.update
 );
 article.route("/").get(controllers.read);
-article.route("/remove/:id").get(controllers.remove);
+article.route("/remove/:id").get(
+    passport.authenticate("bearer", { session: false }),
+    controllers.remove
+);
 
 export default article;

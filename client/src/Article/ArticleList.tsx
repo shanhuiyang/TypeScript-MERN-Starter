@@ -44,18 +44,26 @@ class ArticleList extends React.Component<Props, States> {
                     }
                 </List>
             </Content>
-            <View style={{flex: 0}}>
+            {this.renderAddButton()}
+            {/* only show Footer in list page, do not show Footer in detail page */}
+            <Route exact path={match.url} component={TabNavigator} />
+        </Fragment>;
+    }
+
+    private renderAddButton = (): any => {
+        if (this.props.state.userState.currentUser) {
+            return <View style={{flex: 0}}>
                 <Fab active={true} direction="up" style={{ backgroundColor: "darkturquoise" }}
                     position="bottomRight" onPress={() => {
                         // Use <Link component={Fab} to={`${match.url}/create`} /> does not work well
                         // So we use the raw method to navigate to the create page
-                        this.props.history.push(`${match.url}/create`); }}>
+                        this.props.history.push(`${this.props.match.url}/create`); }}>
                     <Icon name="add" />
                 </Fab>
-            </View>
-            {/* only show Footer in list page, do not show Footer in detail page */}
-            <Route exact path={match.url} component={TabNavigator} />
-        </Fragment>;
+            </View>;
+        } else {
+            return undefined;
+        }
     }
 }
 
