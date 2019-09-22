@@ -3,6 +3,7 @@ import { match, Route, RouteComponentProps, Switch } from "react-router-native";
 import ArticleDetail from "./ArticleDetail";
 import ArticleList from "./ArticleList";
 import CreateArticle from "./CreateArticle";
+import EditArticle from "./EditArticle";
 
 interface Props extends RouteComponentProps<any> {}
 
@@ -15,6 +16,7 @@ export default class Articles extends React.Component<Props, States> {
             <Switch>
                 <Route exact path={match.url} render={(props) => <ArticleList {...props} />} />
                 <Route path={`${match.url}/create`} render={(props) => <CreateArticle {...props} />} />
+                <Route path={`${match.url}/edit/:articleId`} render={(props) => <EditArticle {...props} />} />
                 <Route path={`${match.url}/:articleId`} render={(props) => <ArticleDetail {...props} />} />
             </Switch>
         </Fragment>;

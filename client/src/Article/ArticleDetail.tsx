@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { Text, Body, Content, Left, Card, CardItem, Thumbnail } from "native-base";
+import { Text, Body, Content, Left, Card, CardItem, Thumbnail, View, Fab, Icon } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
 import AppState from "../../core/src/models/client/AppState";
@@ -42,10 +42,28 @@ class ArticleDetail extends React.Component<Props, States> {
                         </CardItem>
                     </Card>
                 </Content>
+                {this.renderEditButton()}
                 {/* No Footer in detail page */}
             </Fragment>;
         } else {
             return <Redirect to="/error" />;
+        }
+    }
+
+    private renderEditButton = (): any => {
+        if (this.props.state.userState.currentUser) {
+            return <View style={{flex: 0}}>
+                <Fab active={true} direction="up" style={{ backgroundColor: "darkturquoise" }}
+                    position="bottomRight" onPress={() => {
+                        // Use <Link component={Fab} to={`${match.url}/edit`} /> does not work well
+                        // So we use the raw method to navigate to the edit page
+                        const target: string = this.props.match.url.replace(/^(.+)(\/[0-9a-z]+$)/, "$1/edit$2");
+                        this.props.history.push(target, this.props.location.state); }}>
+                    <Icon name="create" />
+                </Fab>
+            </View>;
+        } else {
+            return undefined;
         }
     }
 }
