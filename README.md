@@ -38,7 +38,7 @@ Not only using TypeScript, but this project is also featured by:
 - **[RESTful-style](https://www.restapitutorial.com/lessons/whatisrest.html)**. Powered by an embedded [oauth2 server](https://github.com/jaredhanson/oauth2orize) and [passport.js](http://www.passportjs.org/), this project separate client and server clearly. Then the REST server can serve for both website and other clients simultaneously.
 - **[React-router 4.0+](https://reacttraining.com/react-router/)**, with it you can easily define client routes and manage them.
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states. Also **all clients shared the same state machine** implemented by Redux, we reduced a lot of effort when you develop for multi-clients.
-- **Almost ready** for a community app. We modelled `User` as well as `Article`. This is a **real starter** for who would like to build an community app using MERN.
+- **Almost ready** for a community app. We modeled `User` as well as `Article`. This is a **real starter** for who would like to build a community app using MERN.
 - The web client code is created from **[create-react-app](https://facebook.github.io/create-react-app/)**, so now you can get rid of annoying configurations for babel and webpack.
 - The Android/iOS client is created from **[Expo](https://expo.io)**, which is a tool encapsulated a lot of complexity when you develop on ReactNative.
 
