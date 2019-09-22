@@ -6,7 +6,6 @@ import ArticleActionCreator from "../../core/src/models/client/ArticleActionCrea
 import User from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
-import { getHostUrl } from "../../core/src/shared/fetch";
 import { getAvatarSource } from "../utils/avatarUrl";
 
 interface Props extends RouteComponentProps<any> {

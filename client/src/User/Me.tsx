@@ -6,7 +6,6 @@ import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import AppState from "../../core/src/models/client/AppState";
 import UserModel from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
-import { getHostUrl } from "../../core/src/shared/fetch";
 import { getAvatarSource } from "../utils/avatarUrl";
 
 interface Props extends RouteComponentProps<any> {

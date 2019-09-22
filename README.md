@@ -56,6 +56,7 @@ Not only using TypeScript, but this project is also featured by:
   - [Philosophy](#philosophy)
   - [Road map](#road-map)
 - [Project structure](#project-structure)
+  - [Dependencies](#dependencies)
   - [Folder structure](#folder-structure)
   - [Create React App](#create-react-app)
     - [Serve static assets of client and index.html in production](#serve-static-assets-of-client-and-indexhtml-in-production)
@@ -201,6 +202,7 @@ We have extended this project from MERN to MER**R**N, where the additional R sta
 In next period of time, we will working on:
 
 - Globalization. The text strings should be well managed and easily be extended for multi-languages.
+- Better error alert.
 - Tests. The core of client (such as actions, reducers), and server (such as routes, controllers) should be well covered by unit tests.
 - Rich text editors.
 - Incoming issues.
