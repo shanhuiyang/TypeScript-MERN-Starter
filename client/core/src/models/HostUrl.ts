@@ -5,6 +5,7 @@
 // Android emulator also cannot fetch http://localhost correctly. see https://github.com/facebook/react-native/issues/10404 for the detail of this issue.
 export const HOST_NAME_DEV: string = "http://localhost";
 export const HOST_PORT_DEV: number = 3000;
+// If you would like to change SERVER_PORT_DEV, please modify client/core/src/setupProxy.js accordingly.
 export const SERVER_PORT_DEV: number = 3001;
 export const HOST_URL_DEV: string = `${HOST_NAME_DEV}:${HOST_PORT_DEV}`;
 export const HOST_NAME_PROD: string = "https://<your_app_name>.azurewebsites.net";
