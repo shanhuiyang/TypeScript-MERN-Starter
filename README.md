@@ -203,6 +203,7 @@ In next period of time, we will working on:
 
 - Globalization. The text strings should be well managed and easily be extended for multi-languages.
 - Better error alert.
+- Use types as many as possible.
 - Tests. The core of client (such as actions, reducers), and server (such as routes, controllers) should be well covered by unit tests.
 - Rich text editors.
 - Incoming issues.
