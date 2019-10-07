@@ -19,7 +19,7 @@ setHostUrl(window.location.origin);
 // Initialize toast provider using react-toastify
 toast.configure({
     position: "bottom-right",
-    autoClose: 2000,
+    autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: true,
     pauseOnHover: true
