@@ -111,7 +111,7 @@ To build and run this app locally you will need a few things:
 - Install [MongoDB](https://docs.mongodb.com/manual/installation/)
 - Install [VS Code](https://code.visualstudio.com/)
 - Install [Yarn](https://yarnpkg.com/)
-- Install [Expo](https://expo.io)
+- Install [Expo Cli](https://expo.io/tools#cli)
 
 ## Clone the repository
 

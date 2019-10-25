@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import React from "react";
-import { IntlProvider } from "react-intl";
+import ConnectedIntlProvider from "./shared/intl";
 import { Provider } from "react-redux";
 import store from "./shared/store";
 import { toast, ToastContainerProps } from "react-toastify";
@@ -32,11 +32,11 @@ initStorage(storageWrapper);
 
 ReactDOM.render(
     <Provider store={store}>
-        <IntlProvider locale="en">
+        <ConnectedIntlProvider>
             <BrowserRouter>
                 <App />
             </BrowserRouter>
-        </IntlProvider>
+        </ConnectedIntlProvider>
     </Provider>,
     document.getElementById("root")
 );
