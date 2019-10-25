@@ -6,12 +6,19 @@ import * as Font from "expo-font";
 import { Provider } from "react-redux";
 import Routes from "./src/Routes";
 import store from "./core/src/shared/store";
+import ConnectedIntlProvider from "./core/src/shared/intl";
 import { initToast } from "./core/src/shared/toast";
 import toastWrapper from "./src/utils/Toast";
 import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
 import { setHostUrl } from "./core/src/shared/fetch";
 import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
+
+// You should manually add Intl polyfill for react-native app
+import "intl";
+import "intl/locale-data/jsonp/en";
+import "intl/locale-data/jsonp/zh";
+
 interface Props {}
 interface States {
     isReady: boolean;
@@ -52,9 +59,11 @@ export default class App extends React.Component<Props, States> {
         } else {
             return <Root>
                 <Provider store={store}>
-                    <NativeRouter>
-                        <Routes />
-                    </NativeRouter>
+                    <ConnectedIntlProvider>
+                        <NativeRouter>
+                            <Routes />
+                        </NativeRouter>
+                    </ConnectedIntlProvider>
                 </Provider>
             </Root>;
         }

@@ -1,5 +1,5 @@
 import { Translation } from "../models/Translation";
-import EnUS from "../shared/translations/zh-cn";
+import EnUS from "../shared/translations/en-us";
 
 const initialState: Translation = EnUS;
 
