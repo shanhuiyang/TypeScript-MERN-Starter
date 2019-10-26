@@ -58,7 +58,7 @@ class ArticleDetail extends React.Component<Props, States> {
     }
 
     private renderEditButton = (article: Article): any => {
-        if (article && this.props.state.userState.currentUser._id === article.author) {
+        if (article && this.props.state.userState.currentUser && this.props.state.userState.currentUser._id === article.author) {
             return <View style={{flex: 0}}>
                 <Fab active={true} direction="up" style={{ backgroundColor: "darkturquoise" }}
                     position="bottomRight" onPress={() => {
