@@ -6,6 +6,7 @@ import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import _ from "lodash";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import HeaderWithBack from "../Common/HeaderWithBack";
+import { FormattedMessage } from "react-intl";
 interface Props extends RouteComponentProps<any> {
     state: AppState;
     actions: UserActionCreator;
@@ -21,23 +22,29 @@ class LogIn extends Component<Props, States> {
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container>
-                <HeaderWithBack title="Sign in"/>
+                <HeaderWithBack titleId="page.me.login"/>
                 <Content padder>
                     <Form>
                         <Item last>
-                            <Label>Email</Label>
+                            <Label>
+                                <FormattedMessage id="user.email"/>
+                            </Label>
                             <Input autoFocus={true}
                                 onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
                         <Item last>
-                            <Label>Password</Label>
+                            <Label>
+                                <FormattedMessage id="user.password"/>
+                            </Label>
                             <Input textContentType="password" secureTextEntry={true}
                                 onChangeText={(input: string) => { this.password = input; }}/>
                         </Item>
                         {
                             loading ? <Spinner color="blue"/> :
                             <Button block style={{ margin: 12 }} onPress={ this.login } >
-                                <Text>Sign in</Text>
+                                <Text>
+                                    <FormattedMessage id="component.button.submit"/>
+                                </Text>
                             </Button>
                         }
                     </Form>

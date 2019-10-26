@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import { Container, Header, Content, Form, Item, Input, Label, Left, Button, Icon, Text, Title, Body, Right, Picker, Spinner } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import Gender from "../../core/src/models/Gender";
-import _ from "lodash";
 import AppState from "../../core/src/models/client/AppState";
 import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
-interface Props extends RouteComponentProps<any> {
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
+interface Props extends RouteComponentProps<any>, IntlProps {
     state: AppState;
     actions: UserActionCreator;
 }
@@ -15,12 +16,14 @@ interface States {
     selectedGender: Gender;
 }
 class SignUp extends Component<Props, States> {
+    message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     private email: string;
     private password: string;
     private confirmedPassword: string;
     private name: string;
     constructor(props: Props) {
         super(props);
+        this.message = this.props.intl.formatMessage;
         this.state = {
             selectedGender: Gender.MALE
         };
@@ -38,32 +41,44 @@ class SignUp extends Component<Props, States> {
                         </Button>
                     </Left>
                     <Body>
-                        <Title>Sign up</Title>
+                        <Title>
+                            <FormattedMessage id="page.me.sign_up"/>
+                        </Title>
                     </Body>
                     <Right>{/* nothing but counterbalance */}</Right>
                 </Header>
                 <Content padder>
                     <Form>
                         <Item>
-                            <Label>Email</Label>
+                            <Label>
+                                <FormattedMessage id="user.email"/>
+                            </Label>
                             <Input autoFocus={true} onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
                         <Item>
-                            <Label>Password</Label>
+                            <Label>
+                                <FormattedMessage id="user.password"/>
+                            </Label>
                             <Input textContentType="password" secureTextEntry={true}
                                 onChangeText={(input: string) => { this.password = input; }} />
                         </Item>
                         <Item>
-                            <Label>Confirm Password</Label>
+                            <Label>
+                                <FormattedMessage id="user.confirm_password"/>
+                            </Label>
                             <Input textContentType="password" secureTextEntry={true}
                                 onChangeText={(input: string) => { this.confirmedPassword = input; }} />
                         </Item>
                         <Item>
-                            <Label>Name</Label>
+                            <Label>
+                                <FormattedMessage id="user.name"/>
+                            </Label>
                             <Input onChangeText={(input: string) => { this.name = input; }} />
                         </Item>
                         <Item last>
-                            <Label>Gender</Label>
+                            <Label>
+                                <FormattedMessage id="user.gender"/>
+                            </Label>
                             <Picker mode="dropdown"
                                 iosHeader="Gender"
                                 iosIcon={<Icon name="arrow-down" />}
@@ -78,7 +93,9 @@ class SignUp extends Component<Props, States> {
                         {
                             loading ? <Spinner color="blue"/> :
                             <Button block style={{ margin: 12 }} onPress={this.signUp} >
-                                <Text>Sign up</Text>
+                                <Text>
+                                    <FormattedMessage id="page.me.sign_up"/>
+                                </Text>
                             </Button>
                         }
                     </Form>
@@ -90,7 +107,7 @@ class SignUp extends Component<Props, States> {
     }
 
     private renderGenderItem = (gender: string): React.ReactElement<any> => {
-        return <Picker.Item label={_.upperFirst(gender)} value={gender} key={gender} />;
+        return <Picker.Item label={this.message({ id: `user.gender.${gender}`})} value={gender} key={gender} />;
     }
 
     private onGenderValueChange = (itemValue: string, itemPosition: number): void => {
@@ -105,4 +122,4 @@ class SignUp extends Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(SignUp);
+export default injectIntl(connectPropsAndActions(SignUp));

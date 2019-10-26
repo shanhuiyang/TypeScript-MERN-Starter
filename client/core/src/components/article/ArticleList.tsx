@@ -9,6 +9,7 @@ import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import Loading from "./Loading";
+import { FormattedMessage } from "react-intl";
 
 interface Props {
     state: AppState;
@@ -58,20 +59,24 @@ class ArticleList extends React.Component<Props, States> {
             if (this.props.state.articles.loading) {
                 return <Loading />;
             } else if (this.props.state.userState.currentUser) {
-                const buttonText: string = "Add Article";
                 if (articles && articles.length > 0) {
                     return <Button fluid basic primary as={Link} to={editUri} animated="vertical">
-                        <Button.Content visible>{buttonText}</Button.Content>
-                        <Button.Content hidden><Icon name="add" />{buttonText}</Button.Content>
+                        <Button.Content visible>
+                            <FormattedMessage id="page.article.add" />
+                        </Button.Content>
+                        <Button.Content hidden>
+                            <Icon name="add" />
+                            <FormattedMessage id="page.article.add" />
+                        </Button.Content>
                     </Button>;
                 } else {
                     return <Segment placeholder>
                         <Header icon>
                         <Icon name="edit outline" />
-                            No articles are added up to now.
+                        <FormattedMessage id="page.article.empty" />
                         </Header>
                         <Button primary as={Link} to={editUri}>
-                            {buttonText}
+                            <FormattedMessage id="page.article.add" />
                         </Button>
                     </Segment>;
                 }
@@ -84,7 +89,7 @@ class ArticleList extends React.Component<Props, States> {
                             <Icon name="github" />
                         </Header>
                         <Button primary as="a" href="https://github.com/shanhuiyang/TypeScript-MERN-Starter">
-                            Learn More
+                            <FormattedMessage id="page.about.learn_more" />
                         </Button>
                     </Segment>;
                 }

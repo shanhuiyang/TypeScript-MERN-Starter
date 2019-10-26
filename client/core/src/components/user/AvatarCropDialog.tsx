@@ -3,7 +3,9 @@ import { Modal, Button, Item } from "semantic-ui-react";
 import AvatarEditor from "react-avatar-editor";
 import { toast } from "react-toastify";
 import { AVATAR_PREFERABLE_SIZE } from "../../shared/styles";
-interface Props {
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
+interface Props extends IntlProps {
     open: boolean;
     avatarSource: string;
     onCancel: () => void;
@@ -13,7 +15,7 @@ interface States {
     scale: number;
     rotate: number;
 }
-export default class AvatarCropDialog extends React.Component<Props, States> {
+class AvatarCropDialog extends React.Component<Props, States> {
     private editorRef: RefObject<AvatarEditor> = createRef();
     state: States = {
         scale: 1,
@@ -21,8 +23,11 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
     };
 
     render () {
+        const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         return <Modal open={this.props.open}>
-            <Modal.Header>Adjust Your Profile Image</Modal.Header>
+            <Modal.Header>
+                <FormattedMessage id="page.avatar.title"/>
+            </Modal.Header>
             <Modal.Content image>
                 <AvatarEditor image={this.props.avatarSource} ref={this.editorRef}
                     width={AVATAR_PREFERABLE_SIZE} height={AVATAR_PREFERABLE_SIZE} border={50} color={[255, 255, 255, 0.6]} // RGBA
@@ -31,7 +36,9 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
                     <Item.Group>
                         <Item>
                             <Item.Content>
-                                <Item.Header>Rotate</Item.Header>
+                                <Item.Header>
+                                    <FormattedMessage id="page.avatar.rotate"/>
+                                </Item.Header>
                                 <Item.Description>
                                     <Button icon="undo" onClick={this.rotateCounterclockwise}/>
                                     <Button icon="redo" onClick={this.rotateClockwise}/>
@@ -40,7 +47,9 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
                         </Item>
                         <Item>
                             <Item.Content>
-                                <Item.Header>Zoom</Item.Header>
+                                <Item.Header>
+                                    <FormattedMessage id="page.avatar.zoom"/>
+                                </Item.Header>
                                 <Item.Description>
                                 <input name="scale" type="range"
                                     onChange={this.handleScale}
@@ -52,7 +61,7 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
                         <Item>
                             <Item.Content>
                                 <Item.Description>
-                                    Is it okay to use this photo?
+                                    <FormattedMessage id="page.avatar.inquiry"/>
                                 </Item.Description>
                             </Item.Content>
                         </Item>
@@ -60,8 +69,8 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
                 </Modal.Description>
             </Modal.Content>
             <Modal.Actions actions={[
-                { key: "cancel", content: "Cancel", positive: false, onClick: this.props.onCancel },
-                { key: "confirm", content: "Confirm", positive: true, onClick: this.save }
+                { key: "cancel", content: message({id: "component.button.cancel"}), positive: false, onClick: this.props.onCancel },
+                { key: "confirm", content: message({id: "component.button.confirm"}), positive: true, onClick: this.save }
                 ]} />
         </Modal>;
     }
@@ -84,3 +93,5 @@ export default class AvatarCropDialog extends React.Component<Props, States> {
         }
     }
 }
+
+export default injectIntl(AvatarCropDialog);

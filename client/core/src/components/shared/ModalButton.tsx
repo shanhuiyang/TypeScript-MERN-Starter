@@ -3,6 +3,7 @@
  */
 import React from "react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
+import { FormattedMessage } from "react-intl";
 
 export interface ModalButtonProps {
     buttonText: string;
@@ -39,10 +40,12 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
             </Modal.Content>
             <Modal.Actions>
             <Button basic color="red" inverted onClick={ this.handleClose }>
-                <Icon name="remove" /> No
+                <Icon name="remove" />
+                <FormattedMessage id="component.button.cancel" />
             </Button>
             <Button color="green" inverted onClick={ this.props.onConfirm }>
-                <Icon name="checkmark" /> Yes
+                <Icon name="checkmark" />
+                <FormattedMessage id="component.button.confirm" />
             </Button>
             </Modal.Actions>
         </Modal>);

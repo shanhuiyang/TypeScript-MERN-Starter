@@ -1,4 +1,4 @@
-import React, { Fragment, RefObject, createRef } from "react";
+import React, { Fragment } from "react";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
 import { Redirect, match, RouteComponentProps } from "react-router-native";
@@ -6,7 +6,6 @@ import ArticleActionCreator from "../../core/src/models/client/ArticleActionCrea
 import Article from "../../core/src/models/Article";
 import ArticleEditor from "./ArticleEditor";
 import HeaderWithBack from "../Common/HeaderWithBack";
-import { Text, View, Spinner, Button } from "native-base";
 
 interface Props extends RouteComponentProps<any> {
     match: match<any>;
@@ -17,7 +16,6 @@ interface Props extends RouteComponentProps<any> {
 interface States {}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
-    private articleEditor: RefObject<any> = createRef();
     render(): React.ReactElement<any> {
         if (!this.props.state.articles.valid) {
             return <Redirect to="/" />;
@@ -35,28 +33,20 @@ class EditArticle extends React.Component<Props, States> {
         if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articles.loading;
             return <Fragment>
-                <HeaderWithBack title="Edit Article" rightText="Delete" rightAction={this.removeArticle}/>
-                <ArticleEditor article={article} ref={this.articleEditor}/>
-                <View>
-                    {
-                        loading ? <Spinner /> :
-                        <Button full onPress={ this.editArticle } >
-                            <Text style={{color: "white"}}>Submit</Text>
-                        </Button>
-                    }
-                </View>
+                <HeaderWithBack titleId="page.article.edit" rightTextId="component.button.delete" rightAction={this.removeArticle}/>
+                <ArticleEditor article={article} onSubmit={this.editArticle} submitTextId="component.button.update" loading={loading}/>
             </Fragment>;
         } else {
             return <Redirect to="/" />;
         }
     }
 
-    private editArticle = (): void => {
+    private editArticle = (title: string, content: string): void => {
         if (this.props.state.userState.currentUser) {
             this.props.actions.editArticle({
                 author: this.props.state.userState.currentUser._id,
-                title: this.articleEditor.current.title,
-                content: this.articleEditor.current.content,
+                title: title,
+                content: content,
                 _id: this.articleId
             } as Article);
         }

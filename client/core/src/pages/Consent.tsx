@@ -6,6 +6,7 @@ import connectPropsAndActions from "../shared/connect";
 import { Redirect } from "react-router-dom";
 import { Container, Header, Button } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
+import { FormattedMessage } from "react-intl";
 
 interface Props {
     location: Location;
@@ -34,15 +35,25 @@ class Consent extends React.Component<Props, States> {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
                     <div>
-                        <Header size="medium">Hi {this.params.get("email")},</Header>
-                        <Header size="tiny">{this.params.get("client_name")} is requesting access to your account.</Header>
-                        <Header size="tiny">Do you approve?</Header>
+                        <Header size="medium">
+                            <FormattedMessage id="page.consent.greeting" values={{email: this.params.get("email")}}/>
+                        </Header>
+                        <Header size="tiny">
+                            <FormattedMessage id="page.consent.description" values={{app_name: this.params.get("client_name")}}/>
+                        </Header>
+                        <Header size="tiny">
+                            <FormattedMessage id="page.consent.inquiry"/>
+                        </Header>
                     </div>
                     <br />
                     {/* TODO: Add your consent texts here */}
                     <div>
-                        <Button primary onClick={this.allow} loading={loading} disabled={loading}>Approve</Button>
-                        <Button secondary onClick={this.deny}>Deny</Button>
+                        <Button primary onClick={this.allow} loading={loading} disabled={loading}>
+                            <FormattedMessage id="component.button.approve"/>
+                        </Button>
+                        <Button secondary onClick={this.deny}>
+                            <FormattedMessage id="component.button.deny"/>
+                        </Button>
                     </div>
                 </Container>
             );

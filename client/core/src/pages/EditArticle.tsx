@@ -9,8 +9,10 @@ import { Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ArticleEditor from "../components/article/ArticleEditor";
 import { ModalButtonProps } from "../components/shared/ModalButton";
+import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
-interface Props {
+interface Props extends IntlProps {
     match: match<any>;
     state: AppState;
     actions: ArticleActionCreator;
@@ -20,6 +22,7 @@ interface States {}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
+        const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         if (!this.props.state.articles.valid) {
             return <Redirect to="/" />;
         }
@@ -40,13 +43,15 @@ class EditArticle extends React.Component<Props, States> {
         if (this.props.state.userState.currentUser) {
             return (
                 <Container text style={CONTAINER_STYLE}>
-                    <Header size={"medium"}>Edit Article</Header>
-                    <ArticleEditor article={article} submitText={"Update"} onSubmit={this.editArticle} loading={this.props.state.articles.loading}
+                    <Header size={"medium"}>
+                        <FormattedMessage id="page.article.edit" />
+                    </Header>
+                    <ArticleEditor article={article} submitTextId="component.button.update" onSubmit={this.editArticle} loading={this.props.state.articles.loading}
                         negativeButtonProps={{
-                            buttonText: "Delete",
+                            buttonText: message({id: "component.button.delete"}),
                             descriptionIcon: "delete",
-                            descriptionText: "Delete Article " + article.title,
-                            warningText: "You cannot store this article after delete. Are you sure to delete?",
+                            descriptionText: message({id: "page.article.delete"}, {title: article.title}),
+                            warningText: message({id: "page.article.delete_confirmation"}),
                             onConfirm: this.removeArticle
                         } as ModalButtonProps}/>
                 </Container>
@@ -72,4 +77,4 @@ class EditArticle extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(EditArticle);
+export default injectIntl(connectPropsAndActions(EditArticle));

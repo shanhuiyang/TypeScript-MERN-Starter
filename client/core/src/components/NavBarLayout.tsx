@@ -129,8 +129,12 @@ class NavBarLayout extends React.Component<Props, States> {
         return <Menu.Menu position="right">
             <Dropdown trigger={trigger} pointing="top left" className="link item">
                 <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to="/profile">Update Profile</Dropdown.Item>
-                    <Dropdown.Item onClick={this.props.actions.logout}>Logout</Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/profile">
+                        <FormattedMessage id="page.me.update"/>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={this.props.actions.logout}>
+                        <FormattedMessage id="page.me.logout"/>
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         </Menu.Menu>;
@@ -139,15 +143,15 @@ class NavBarLayout extends React.Component<Props, States> {
     private renderAccountTabsBeforeLoggedIn = (): React.ReactElement<any> => {
         return <Menu.Menu position="right">
             <Menu.Item
-                content="Sign in"
                 as={NavLink}
-                to="/login/"
-            />
+                to="/login/" >
+                <FormattedMessage id="page.me.login"/>
+            </Menu.Item>
             <Menu.Item
-                content="Sign up"
                 as={NavLink}
-                to="/signup/"
-            />
+                to="/signup/" >
+                <FormattedMessage id="page.me.sign_up"/>
+            </Menu.Item>
         </Menu.Menu>;
     }
 

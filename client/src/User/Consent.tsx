@@ -3,8 +3,9 @@ import AppState from "../../core/src/models/client/AppState";
 import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import { Redirect, RouteComponentProps } from "react-router-native";
-import { Container, Content, Text, Button, Spinner, Card, CardItem, Left, Body, Right } from "native-base";
+import { Container, Content, Text, Button, Spinner, Card, CardItem, Body } from "native-base";
 import HeaderWithBack from "../Common/HeaderWithBack";
+import { FormattedMessage } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -41,21 +42,23 @@ class Consent extends React.Component<Props, States> {
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container>
-                <HeaderWithBack title="" />
+                <HeaderWithBack/>
                 <Content>
                     <Card transparent>
                         <CardItem>
                             <Body>
-                                <Text>{`Hi ${this.params["email"]},`}</Text>
+                                <Text>
+                                    <FormattedMessage id="page.consent.greeting" values={{email: this.params["email"]}}/>
+                                </Text>
                             </Body>
                         </CardItem>
                         <CardItem>
                             <Body>
                                 <Text>
-                                    {`${this.params["client_name"]} is requesting access to your account.`}
+                                    <FormattedMessage id="page.consent.description" values={{app_name: this.params["client_name"]}}/>
                                 </Text>
                                 <Text>
-                                    Do you approve?
+                                    <FormattedMessage id="page.consent.inquiry"/>
                                 </Text>
                             </Body>
                         </CardItem>
@@ -64,13 +67,13 @@ class Consent extends React.Component<Props, States> {
                                 loading ? <Spinner color="blue"/> :
                                 <Button primary onPress={this.allow}>
                                     <Text>
-                                        Approve
+                                        <FormattedMessage id="component.button.approve"/>
                                     </Text>
                                 </Button>
                             }
                             <Button light onPress={this.deny} style={{marginLeft: 12}}>
                                 <Text>
-                                    Deny
+                                    <FormattedMessage id="component.button.deny"/>
                                 </Text>
                             </Button>
                         </CardItem>

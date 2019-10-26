@@ -19,7 +19,7 @@ export default class About extends React.Component<Props, States> {
                 </Body>
             </Header>
             <Content padder>
-                <Text numberOfLines={10}>
+                <Text style={{height: 200}}>
                     <FormattedMessage id="page.about.introduction"/>
                 </Text>
             </Content>

@@ -3,19 +3,20 @@
  */
 import React, { Fragment, RefObject, createRef } from "react";
 import { Button } from "semantic-ui-react";
+import { injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
 
-export interface Props {
+export interface Props extends IntlProps {
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface States {}
 
-export default class FileSelectButton extends React.Component<Props, States> {
+class FileSelectButton extends React.Component<Props, States> {
     private fileInputRef: RefObject<HTMLInputElement> = createRef();
     render(): React.ReactElement<any> {
         return (<Fragment>
         <Button
-            content="Choose File"
+            content={this.props.intl.formatMessage({id: "component.button.file_select"})}
             labelPosition="left"
             icon="file"
             onClick={this.onClick} />
@@ -33,3 +34,5 @@ export default class FileSelectButton extends React.Component<Props, States> {
         }
     }
 }
+
+export default injectIntl(FileSelectButton);

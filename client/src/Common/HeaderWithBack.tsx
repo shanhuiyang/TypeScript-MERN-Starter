@@ -2,9 +2,10 @@ import React from "react";
 
 import { Header, Left, Button, Icon, Title, Body, Right, Text } from "native-base";
 import { RouteComponentProps, withRouter } from "react-router-native";
+import { FormattedMessage } from "react-intl";
 interface Props extends RouteComponentProps<any> {
-    title: string;
-    rightText?: string;
+    titleId?: string; // It could be a message id of translation or raw text.
+    rightTextId?: string; // It could be a message id of translation or raw text.
     rightIconName?: string;
     rightAction?: () => void;
 }
@@ -21,15 +22,21 @@ class HeaderWithBack extends React.Component<Props, States> {
                 </Button>
             </Left>
             <Body>
-                <Title>{this.props.title}</Title>
+                <Title>
+                    {
+                        this.props.titleId ? <FormattedMessage id={this.props.titleId} /> : undefined
+                    }
+                </Title>
             </Body>
             {
-                this.props.rightText || this.props.rightIconName ?
+                this.props.rightTextId || this.props.rightIconName ?
                 <Right>
                     <Button transparent onPress={this.props.rightAction}>
                         {
-                            this.props.rightText ?
-                            <Text>{this.props.rightText}</Text> :
+                            this.props.rightTextId ?
+                            <Text>
+                                <FormattedMessage id={this.props.rightTextId}/>
+                            </Text> :
                             <Icon name={this.props.rightIconName} />
                         }
                     </Button>
