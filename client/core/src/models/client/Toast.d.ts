@@ -1,4 +1,4 @@
 export default interface ToastInterface {
-    success(msg: string): void;
-    error(msg: string): void;
+    success(messageId: string): void;
+    error(messageId: string): void;
 }

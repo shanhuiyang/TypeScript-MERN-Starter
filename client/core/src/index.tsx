@@ -5,37 +5,30 @@ import React from "react";
 import ConnectedIntlProvider from "./shared/intl";
 import { Provider } from "react-redux";
 import store from "./shared/store";
-import { toast, ToastContainerProps } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { initToast } from "./shared/toast";
 import { setHostUrl } from "./shared/fetch";
 import { initStorage } from "./shared/storage";
 import storageWrapper from "./components/storage";
 import { SET_LOCALE } from "./actions/common";
+import ToastWrapper from "./components/ToastWrapper";
 
 // Add necessary configurations here before rendering
 
 // Set host url for HTTP requests
 setHostUrl(window.location.origin);
 
-// Initialize toast provider using react-toastify
-toast.configure({
-    position: "bottom-right",
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true
-} as ToastContainerProps);
-initToast(toast);
-
-// Initialize local storage provider
-initStorage(storageWrapper);
-
 // Initialize language
 store.dispatch({
     type: SET_LOCALE,
     locale: navigator.language
 });
+
+// Initialize toast provider
+initToast(new ToastWrapper(store));
+
+// Initialize local storage provider
+initStorage(storageWrapper);
 
 ReactDOM.render(
     <Provider store={store}>

@@ -1,6 +1,6 @@
-import { Translation } from "../models/Translation";
-import ZhCN from "../shared/translations/zh-CN";
-import EnUS from "../shared/translations/en-US";
+import Translation from "../models/client/Translation.d";
+import ZhCN from "../shared/translations/zh-cn";
+import EnUS from "../shared/translations/en-us";
 import { SET_LOCALE } from "../actions/common";
 import _ from "lodash";
 

@@ -1,4 +1,4 @@
-import { Translation } from "../../models/Translation";
+import Translation from "../../models/client/Translation";
 
 const TRANSLATION: Translation = {
     locale: "zh-CN",
@@ -52,6 +52,15 @@ const TRANSLATION: Translation = {
         "component.button.delete": "删除",
         "component.button.edit": "编辑",
         "component.button.create": "创建",
+        "toast.user.general_error": "找不到该用户，请检查",
+        "toast.user.invalid_token_error": "请先登录",
+        "toast.user.sign_in_successfully": "登录成功",
+        "toast.user.deny_consent": "请授权以完成注册",
+        "toast.user.update_profile_successfully": "个人信息更新成功",
+        "toast.user.update_profile_failed": "个人信息更新失败",
+        "toast.user.upload_avatar_failed": "头像更新失败",
+        "toast.article.save_successfully": "成功保存您的文章",
+        "toast.article.delete_successfully": "成功删除您的文章",
     }
 };
 

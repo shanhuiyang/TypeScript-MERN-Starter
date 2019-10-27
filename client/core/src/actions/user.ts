@@ -39,11 +39,11 @@ const userActionCreator: UserActionCreator = {
                     });
                     return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
                 } else {
-                    return Promise.reject(new Error("null accessToken or null user profile"));
+                    return Promise.reject(new Error("toast.user.general_error"));
                 }
             })
             .then(() => {
-                toast().success("Sign up successfully.");
+                toast().success("toast.user.sign_in_successfully");
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(CONSENT_REQUEST_FAILED, error));
@@ -51,7 +51,7 @@ const userActionCreator: UserActionCreator = {
         };
     },
     denyConsent (): Action {
-        toast().error("Please approve to finish signing up.");
+        toast().error("toast.user.deny_consent");
         return {
             type: CONSENT_REQUEST_FAILED
         };
@@ -100,11 +100,11 @@ const userActionCreator: UserActionCreator = {
                         redirectTask: json
                     });
                 } else {
-                    return Promise.reject(new Error("null user profile"));
+                    return Promise.reject(new Error("toast.user.general_error"));
                 }
             })
             .then(() => {
-                toast().success("Log in successfully.");
+                toast().success("toast.user.sign_in_successfully");
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(LOGIN_FAILED, error));
@@ -134,9 +134,9 @@ const userActionCreator: UserActionCreator = {
                         type: UPDATE_PROFILE_SUCCESS,
                         user: json
                     });
-                    toast().success("Update profile successfully.");
+                    toast().success("toast.user.update_profile_successfully");
                 } else {
-                    return Promise.reject(new Error("Update profile failed."));
+                    return Promise.reject(new Error("toast.user.update_profile_failed"));
                 }
             })
             .catch((error: Error) => {
@@ -162,7 +162,7 @@ const userActionCreator: UserActionCreator = {
                         url: json.url
                     });
                 } else {
-                    return Promise.reject(new Error("Upload avatar failed."));
+                    return Promise.reject(new Error("toast.user.upload_avatar_failed"));
                 }
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(UPLOAD_AVATAR_FAILED, error));

@@ -1,4 +1,4 @@
-import { Translation } from "../../models/Translation";
+import Translation from "../../models/client/Translation";
 
 const TRANSLATION: Translation = {
     locale: "en-US",
@@ -52,6 +52,15 @@ const TRANSLATION: Translation = {
         "component.button.delete": "Delete",
         "component.button.edit": "Edit",
         "component.button.create": "Create",
+        "toast.user.general_error": "Cannot find the user, please check.",
+        "toast.user.invalid_token_error": "Please log in first.",
+        "toast.user.sign_in_successfully": "Sign in successfully.",
+        "toast.user.deny_consent": "Please approve to finish signing up.",
+        "toast.user.update_profile_successfully": "Update profile successfully.",
+        "toast.user.update_profile_failed": "Update profile failed.",
+        "toast.user.upload_avatar_failed": "Upload avatar failed.",
+        "toast.article.save_successfully": "Save your article successfully.",
+        "toast.article.delete_successfully": "Delete your article successfully.",
     }
 };
 
