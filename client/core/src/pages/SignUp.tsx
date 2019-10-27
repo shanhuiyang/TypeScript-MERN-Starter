@@ -4,12 +4,13 @@ import AppState from "../models/client/AppState";
 import { Redirect } from "react-router-dom";
 import ActionCreator from "../models/client/ActionCreator";
 import Gender from "../models/Gender";
-import _ from "lodash";
 import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
-interface Props {
+interface Props extends IntlProps {
     state: AppState;
     actions: ActionCreator;
 }
@@ -21,12 +22,14 @@ interface States {
 const DEFAULT_SELECTED_GENDER: Gender = Gender.MALE;
 
 class SignUp extends React.Component<Props, States> {
+    message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     emailRef: RefObject<HTMLInputElement>;
     passwordRef: RefObject<HTMLInputElement>;
     confirmPasswordRef: RefObject<HTMLInputElement>;
     nameRef: RefObject<HTMLInputElement>;
     constructor(props: Props) {
         super(props);
+        this.message = this.props.intl.formatMessage;
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
         this.confirmPasswordRef = React.createRef();
@@ -41,33 +44,45 @@ class SignUp extends React.Component<Props, States> {
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
-                <Header size={"medium"}>Sign Up</Header>
+                <Header size={"medium"}>
+                    <FormattedMessage id="page.me.sign_up"/>
+                </Header>
                 <Form>
                     <ResponsiveFormField>
-                        <label>Email</label>
-                        <input placeholder="Email" ref={this.emailRef} />
+                        <label>
+                            <FormattedMessage id="user.email"/>
+                        </label>
+                        <input placeholder={this.message({ id: "user.email"})} ref={this.emailRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
-                        <label>Password</label>
-                        <input type="password" placeholder="Password" ref={this.passwordRef} />
+                        <label>
+                            <FormattedMessage id="user.password"/>
+                        </label>
+                        <input type="password" placeholder={this.message({ id: "user.password"})} ref={this.passwordRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
-                        <label>Confirm Password</label>
-                        <input type="password" placeholder="Confirm Password" ref={this.confirmPasswordRef} />
+                        <label>
+                            <FormattedMessage id="user.confirm_password"/>
+                        </label>
+                        <input type="password" placeholder={this.message({ id: "user.confirm_password"})} ref={this.confirmPasswordRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
-                        <label>Name</label>
-                        <input placeholder="Name" ref={this.nameRef} />
+                        <label>
+                            <FormattedMessage id="user.name"/>
+                        </label>
+                        <input placeholder={this.message({ id: "user.name"})} ref={this.nameRef} />
                     </ResponsiveFormField>
                     <Form.Group inline>
-                        <label>Gender</label>
+                        <label>
+                            <FormattedMessage id="user.gender"/>
+                        </label>
                             {
                                 Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
                             }
                     </Form.Group>
                     <Button primary type="submit" onClick={ this.signUp } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
-                        Submit
+                        <FormattedMessage id="component.button.submit"/>
                     </Button>
                 </Form>
             </Container>);
@@ -79,7 +94,7 @@ class SignUp extends React.Component<Props, States> {
         return <Form.Field
             key={gender}
             control={Radio}
-            label={_.upperFirst(gender)}
+            label={this.message({ id: `user.gender.${gender}`})}
             value={gender}
             checked={this.state.selectedGender === gender}
             onChange={this.onSelectedGenderChange} />;
@@ -99,4 +114,4 @@ class SignUp extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(SignUp);
+export default injectIntl(connectPropsAndActions(SignUp));

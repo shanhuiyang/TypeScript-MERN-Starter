@@ -4,11 +4,12 @@
 import React from "react";
 import { Link, RouteComponentProps, withRouter } from "react-router-native";
 import { Button, Icon, Text } from "native-base";
+import { FormattedMessage } from "react-intl";
 
 interface IProps extends RouteComponentProps<any> {
     to: string;
     icon: string;
-    text: string;
+    textId: string;
 }
 
 interface IStates {}
@@ -19,7 +20,9 @@ class NavLink extends React.Component<IProps, IStates> {
             active={this.props.location.pathname === this.props.to}
             to={this.props.to} replace >
             <Icon name={this.props.icon} />
-            <Text>{this.props.text}</Text>
+            <Text>
+                <FormattedMessage id={this.props.textId}/>
+            </Text>
         </Link>;
     }
 }

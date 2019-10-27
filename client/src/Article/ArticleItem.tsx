@@ -7,6 +7,7 @@ import User from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
 import { getAvatarSource } from "../utils/avatarUrl";
+import { FormattedDate, FormattedTime } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {
     value: Article;
@@ -33,7 +34,10 @@ class ArticleItem extends React.Component<Props, States> {
                 <Text note>{articleAuthor.name}</Text>
             </Body>
             <Right>
-                <Text note>{createDate.toLocaleDateString()}</Text>
+                <Text note>
+                    <FormattedDate value={createDate} />
+                    <FormattedTime value={createDate} />
+                </Text>
             </Right>
         </Link>;
     }

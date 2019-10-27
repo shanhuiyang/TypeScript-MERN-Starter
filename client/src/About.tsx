@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { RouteComponentProps } from "react-router-native";
 import { Text, Header, Content, Title, Body } from "native-base";
 import TabNavigator from "./Nav/TabNavigator";
+import { FormattedMessage } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {}
 
@@ -12,11 +13,15 @@ export default class About extends React.Component<Props, States> {
         return <Fragment>
             <Header noLeft>
                 <Body>
-                    <Title>About</Title>
+                    <Title>
+                        <FormattedMessage id="page.about"/>
+                    </Title>
                 </Body>
             </Header>
             <Content padder>
-                <Text> This is the about page of Typescript MERN Starter.</Text>
+                <Text style={{height: 200}}>
+                    <FormattedMessage id="page.about.introduction"/>
+                </Text>
             </Content>
             <TabNavigator/>
         </Fragment>;

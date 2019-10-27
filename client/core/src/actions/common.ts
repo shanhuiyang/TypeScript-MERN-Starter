@@ -4,6 +4,7 @@ import { getToast as toast } from "../shared/toast";
 import { INVALID_TOKEN_ERROR } from "../shared/constants";
 
 export const RESET_REDIRECT: string = "RESET_REDIRECT";
+export const SET_LOCALE: string = "SET_LOCALE";
 
 const actions: CommonActionCreator = {
     handleFetchError(type: string, error: Error): Action {
@@ -23,6 +24,12 @@ const actions: CommonActionCreator = {
     resetRedirectTask(): Action {
         return {
             type: RESET_REDIRECT
+        };
+    },
+    setLocale(locale: string): Action {
+        return {
+            type: SET_LOCALE,
+            locale: locale
         };
     }
 };

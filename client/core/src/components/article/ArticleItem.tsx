@@ -6,6 +6,7 @@ import User from "../../models/User";
 import { Link } from "react-router-dom";
 import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
+import { FormattedMessage, FormattedDate, FormattedTime } from "react-intl";
 
 interface Props {
     article: Article;
@@ -28,6 +29,7 @@ class ArticleItem extends React.Component<Props, States> {
                     <Item.Description
                         style={{
                             whiteSpace: "pre-line",
+                            wordWrap: "break-word",
                             paddingTop: DESCRIPTION_PADDING,
                             paddingBottom: DESCRIPTION_PADDING,
                             fontSize: "1.2rem" // Make the font size slightly larger to adapt to mobile devices
@@ -39,7 +41,9 @@ class ArticleItem extends React.Component<Props, States> {
                         flexDirection: "row",
                         justifyContent: "space-between"}}>
                         <div style={{color: "grey"}}>
-                            created at {createDate.toLocaleString()}
+                            <FormattedMessage id="page.article.created_at" />
+                            <FormattedDate value={createDate} />
+                            <FormattedTime value={createDate} />
                         </div>
                         {this.renderEditButton(article)}
                     </Item.Extra>
@@ -64,7 +68,10 @@ class ArticleItem extends React.Component<Props, States> {
     private renderEditButton = (article: Article): React.ReactElement<any> | undefined => {
         if (article.author === (this.props.state.userState.currentUser && this.props.state.userState.currentUser._id)) {
             const uri: string = `/article/edit/${article._id}`;
-            return <Button primary as={Link} to={uri}><i className="fa fa-edit"></i>Edit</Button>;
+            return <Button primary as={Link} to={uri}>
+                <i className="fa fa-edit"></i>
+                <FormattedMessage id="component.button.edit" />
+            </Button>;
         } else {
             return undefined;
         }

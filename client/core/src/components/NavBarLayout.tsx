@@ -9,6 +9,7 @@ import ResponsiveDesktop from "./shared/ResponsiveDesktop";
 import ResponsiveMobile from "./shared/ResponsiveMobile";
 import { WRAPPER_VIEW_STYLE } from "../shared/styles";
 import ScrollToTop from "react-scroll-up";
+import { FormattedMessage } from "react-intl";
 
 interface Props {
     containerRef: RefObject<any>;
@@ -58,9 +59,11 @@ class NavBarLayout extends React.Component<Props, States> {
                 as={Link}
                 exact="true" to="/">
                 <img src="/favicon.png" alt="logo" style={{marginRight: 10}}/>
-                {"Typescript MERN Starter"}
+                <FormattedMessage id="app.name"/>
             </Menu.Item>
-            <Menu.Item content="About" as={NavLink} to="/about" />
+            <Menu.Item as={NavLink} to="/about" >
+                <FormattedMessage id="page.about"/>
+            </Menu.Item>
             {/* Add more nav items here */}
         </Fragment>;
     }
@@ -73,7 +76,7 @@ class NavBarLayout extends React.Component<Props, States> {
                     <Menu borderless>
                         <Menu.Item as={Button} onClick={this.showSideBar}>
                             <Icon name="sidebar" style={{marginRight: 10}}/>
-                            {"Typescript MERN Starter"}
+                            <FormattedMessage id="app.name"/>
                         </Menu.Item>
                         {this.renderAccountControl()}
                     </Menu>
@@ -90,10 +93,14 @@ class NavBarLayout extends React.Component<Props, States> {
             onHide={this.hideSideBar}
             target={this.props.containerRef}
             visible={this.state.sidebarVisible} >
-            <Menu.Item icon="home" content="Home"
-                as={NavLink} exact to="/" onClick={this.hideSideBar}/>
-            <Menu.Item icon="info circle" content="About"
-                as={NavLink} to="/about" onClick={this.hideSideBar}/>
+            <Menu.Item as={NavLink} exact to="/" onClick={this.hideSideBar}>
+                <Icon name="home" />
+                <FormattedMessage id="page.home"/>
+            </Menu.Item>
+            <Menu.Item as={NavLink} to="/about" onClick={this.hideSideBar}>
+                <Icon name="info circle" />
+                <FormattedMessage id="page.about"/>
+            </Menu.Item>
             {/* Add more nav items here */}
         </Sidebar>;
     }
@@ -122,8 +129,12 @@ class NavBarLayout extends React.Component<Props, States> {
         return <Menu.Menu position="right">
             <Dropdown trigger={trigger} pointing="top left" className="link item">
                 <Dropdown.Menu>
-                    <Dropdown.Item as={NavLink} to="/profile">Update Profile</Dropdown.Item>
-                    <Dropdown.Item onClick={this.props.actions.logout}>Logout</Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/profile">
+                        <FormattedMessage id="page.me.update"/>
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={this.props.actions.logout}>
+                        <FormattedMessage id="page.me.logout"/>
+                    </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         </Menu.Menu>;
@@ -132,15 +143,15 @@ class NavBarLayout extends React.Component<Props, States> {
     private renderAccountTabsBeforeLoggedIn = (): React.ReactElement<any> => {
         return <Menu.Menu position="right">
             <Menu.Item
-                content="Sign in"
                 as={NavLink}
-                to="/login/"
-            />
+                to="/login/" >
+                <FormattedMessage id="page.me.login"/>
+            </Menu.Item>
             <Menu.Item
-                content="Sign up"
                 as={NavLink}
-                to="/signup/"
-            />
+                to="/signup/" >
+                <FormattedMessage id="page.me.sign_up"/>
+            </Menu.Item>
         </Menu.Menu>;
     }
 

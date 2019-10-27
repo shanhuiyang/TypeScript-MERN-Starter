@@ -7,6 +7,7 @@ import AppState from "../../core/src/models/client/AppState";
 import UserModel from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import { getAvatarSource } from "../utils/avatarUrl";
+import { FormattedMessage } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -45,7 +46,9 @@ class Me extends React.Component<Props, States> {
                     </Button>
                 </Left>
                 <Body>
-                    <Text>Sign in</Text>
+                    <Text>
+                        <FormattedMessage id="page.me.login"/>
+                    </Text>
                 </Body>
                 <Right>
                     <Icon active name="arrow-forward" />
@@ -58,7 +61,9 @@ class Me extends React.Component<Props, States> {
                     </Button>
                 </Left>
                 <Body>
-                    <Text>Sign up</Text>
+                    <Text>
+                        <FormattedMessage id="page.me.sign_up"/>
+                    </Text>
                 </Body>
                 <Right>
                     <Icon active name="arrow-forward" />
@@ -76,7 +81,9 @@ class Me extends React.Component<Props, States> {
                 </Left>
                 <Body>
                     <Text>{user.name}</Text>
-                    <Text note numberOfLines={1}>{`Account: ${user.email}`}</Text>
+                    <Text note numberOfLines={1}>
+                        <FormattedMessage id="user.email"/>{`: ${user.email}`}
+                    </Text>
                 </Body>
                 <Right />
             </ListItem>
@@ -88,7 +95,9 @@ class Me extends React.Component<Props, States> {
                     </Button>
                 </Left>
                 <Body>
-                    <Text>Log out</Text>
+                    <Text>
+                        <FormattedMessage id="page.me.logout"/>
+                    </Text>
                 </Body>
                 <Right>
                     <Icon active name="arrow-forward" />

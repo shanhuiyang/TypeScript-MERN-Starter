@@ -10,9 +10,12 @@
   "dependencies": {
     "expo": "^34.0.1",
     "expo-font": "~6.0.1",
+    "expo-localization": "~6.0.0",
+    "intl": "^1.2.5",
     "native-base": "2.13.5",
     "react": "16.8.3",
     "react-dom": "16.8.3",
+    "react-intl": "^3.3.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-web": "^0.11.4",
     "react-redux": "6.0.1",

@@ -3,10 +3,11 @@ import { Form, Button, FormGroup } from "semantic-ui-react";
 import { RefObject } from "react";
 import React from "react";
 import ModalButton, { ModalButtonProps } from "../shared/ModalButton";
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
 
-interface Props {
+interface Props extends IntlProps {
     article?: Article;
-    submitText: string;
+    submitTextId: string;
     onSubmit: (title: string, content: string) => void;
     negativeButtonProps?: ModalButtonProps;
     loading?: boolean;
@@ -14,7 +15,7 @@ interface Props {
 
 interface States {}
 
-export default class ArticleEditor extends React.Component<Props, States> {
+class ArticleEditor extends React.Component<Props, States> {
     titleRef: RefObject<HTMLInputElement>;
     contentRef: RefObject<HTMLTextAreaElement>;
     constructor(props: Props) {
@@ -32,17 +33,21 @@ export default class ArticleEditor extends React.Component<Props, States> {
         return (
             <Form>
                 <Form.Field>
-                    <label>Title</label>
+                    <label>
+                        <FormattedMessage id="page.article.title" />
+                    </label>
                     <input ref={this.titleRef} autoFocus={true} defaultValue={originalTitle} />
                 </Form.Field>
                 <Form.Field>
-                    <label>Content</label>
-                    <textarea placeholder="no less than 100 characters"
+                    <label>
+                        <FormattedMessage id="page.article.content" />
+                    </label>
+                    <textarea placeholder={this.props.intl.formatMessage({id: "page.article.content_placeholder"})}
                         ref={this.contentRef} rows={24} defaultValue={originalContent} />
                 </Form.Field>
                 <FormGroup inline>
                     <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
-                        {this.props.submitText}
+                        <FormattedMessage id={this.props.submitTextId} />
                     </Form.Field>
                     {
                         this.props.negativeButtonProps ?
@@ -62,3 +67,5 @@ export default class ArticleEditor extends React.Component<Props, States> {
         this.props.onSubmit(title, content);
     }
 }
+
+export default injectIntl(ArticleEditor);

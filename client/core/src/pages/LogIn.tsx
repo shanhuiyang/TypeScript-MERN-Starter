@@ -7,8 +7,10 @@ import _ from "lodash";
 import { Form, Button, Icon, Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
-interface Props {
+interface Props extends IntlProps {
     state: AppState;
     actions: UserActionCreator;
 }
@@ -23,24 +25,31 @@ class LogIn extends React.Component<Props, States> {
         this.passwordRef = React.createRef();
     }
     render(): React.ReactElement<any> {
+        const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         if (!this.props.state.redirectTask.redirected) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
             return (<Container text style={CONTAINER_STYLE}>
-                <Header size={"medium"}>Sign In</Header>
+                <Header size={"medium"}>
+                    <FormattedMessage id="page.me.login"/>
+                </Header>
                 <Form>
                     <ResponsiveFormField>
-                        <label>Email</label>
-                        <input placeholder="Email" ref={this.emailRef} />
+                        <label>
+                            <FormattedMessage id="user.email"/>
+                        </label>
+                        <input placeholder={ message({id: "user.email"}) } ref={this.emailRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
-                        <label>Password</label>
-                        <input type="password" placeholder="Password" ref={this.passwordRef} />
+                        <label>
+                            <FormattedMessage id="user.password"/>
+                        </label>
+                        <input type="password" placeholder={ message({id: "user.password"}) } ref={this.passwordRef} />
                     </ResponsiveFormField>
                     <Button primary type="submit" onClick={ this.login } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
-                        Submit
+                        <FormattedMessage id="component.button.submit"/>
                     </Button>
                 </Form>
             </Container>);
@@ -60,4 +69,4 @@ class LogIn extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(LogIn);
+export default injectIntl(connectPropsAndActions(LogIn));

@@ -6,6 +6,7 @@ import ArticleActionCreator from "../models/client/ArticleActionCreator";
 import { Container, Header } from "semantic-ui-react";
 import ArticleEditor from "../components/article/ArticleEditor";
 import { CONTAINER_STYLE } from "../shared/styles";
+import { FormattedMessage } from "react-intl";
 
 interface Props {
     state: AppState;
@@ -21,8 +22,10 @@ class CreateArticle extends React.Component<Props, States> {
             const loading: boolean | undefined = this.props.state.articles.loading;
             return (
                 <Container text style={CONTAINER_STYLE}>
-                    <Header size={"medium"}>Create Article</Header>
-                    <ArticleEditor onSubmit={this.createArticle} submitText={"Create"} loading={loading}/>
+                    <Header size={"medium"}>
+                        <FormattedMessage id="page.article.add" />
+                    </Header>
+                    <ArticleEditor onSubmit={this.createArticle} submitTextId="component.button.submit" loading={loading}/>
                 </Container>
             );
         } else {

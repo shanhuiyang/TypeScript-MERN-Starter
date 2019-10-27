@@ -37,7 +37,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
             .then((json: any) => {
-                toast().success("Save your article successfully.");
+                toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -49,7 +49,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
             .then((json: any) => {
-                toast().success("Save your article successfully.");
+                toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -61,7 +61,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
-                toast().success("Delete your article successfully.");
+                toast().success("toast.article.delete_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));

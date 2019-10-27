@@ -3,7 +3,6 @@ import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/client/AppState";
 import UserActionCreator from "../models/client/UserActionCreator";
 import Gender from "../models/Gender";
-import _ from "lodash";
 import { Redirect } from "react-router";
 import { Container, Form, Button, Icon, Radio, Image, Placeholder, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE, AVATAR_PREFERABLE_SIZE } from "../shared/styles";
@@ -11,8 +10,10 @@ import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 import User from "../models/User";
 import AvatarCropDialog from "../components/user/AvatarCropDialog";
 import FileSelectButton from "../components/shared/FileSelectButton";
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
-interface Props {
+interface Props extends IntlProps {
     state: AppState;
     actions: UserActionCreator;
 }
@@ -24,11 +25,13 @@ interface States {
 }
 
 class Profile extends React.Component<Props, States> {
+    message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     addressRef: RefObject<HTMLInputElement>;
     websiteRef: RefObject<HTMLInputElement>;
     nameRef: RefObject<HTMLInputElement>;
     constructor(props: Props) {
         super(props);
+        this.message = this.props.intl.formatMessage;
         this.addressRef = React.createRef();
         this.websiteRef = React.createRef();
         this.nameRef = React.createRef();
@@ -57,7 +60,9 @@ class Profile extends React.Component<Props, States> {
                 : "/images/avatar.png";
             const avatarStyle: any = {height: AVATAR_PREFERABLE_SIZE, width: AVATAR_PREFERABLE_SIZE};
             return (<Container text style={CONTAINER_STYLE}>
-                <Header size={"medium"}>Update Profile</Header>
+                <Header size={"medium"}>
+                    <FormattedMessage id="page.me.update"/>
+                </Header>
                 <Form>
                     <ResponsiveFormField>
                         {
@@ -74,7 +79,9 @@ class Profile extends React.Component<Props, States> {
                         }
                     </ResponsiveFormField>
                     <Form.Group inline>
-                        <label>Photo</label>
+                        <label>
+                            <FormattedMessage id="user.photo"/>
+                        </label>
                         <FileSelectButton onChange={this.onAvatarSelected}/>
                         <AvatarCropDialog
                             open={this.state.cropAvatarDialogOpen}
@@ -83,30 +90,40 @@ class Profile extends React.Component<Props, States> {
                             onConfirm={this.updateAvatarUrl} />
                     </Form.Group>
                     <ResponsiveFormField>
-                        <label>Email</label>
+                        <label>
+                            <FormattedMessage id="user.email"/>
+                        </label>
                         <input value={user.email} disabled />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
-                        <label>Name</label>
+                        <label>
+                            <FormattedMessage id="user.name"/>
+                        </label>
                         <input defaultValue={user.name} ref={this.nameRef} />
                     </ResponsiveFormField>
                     <Form.Group inline>
-                        <label>Gender</label>
+                        <label>
+                            <FormattedMessage id="user.gender"/>
+                        </label>
                             {
                                 Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
                             }
                     </Form.Group>
                     <ResponsiveFormField width={12}>
-                        <label>Address</label>
+                        <label>
+                            <FormattedMessage id="user.address"/>
+                        </label>
                         <input defaultValue={user.address} ref={this.addressRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField width={12}>
-                        <label>Web site</label>
+                        <label>
+                            <FormattedMessage id="user.website"/>
+                        </label>
                         <input defaultValue={user.website} ref={this.websiteRef} />
                     </ResponsiveFormField>
                     <Button primary type="submit" onClick={ this.update } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
-                        Submit
+                        <FormattedMessage id="component.button.submit"/>
                     </Button>
                 </Form>
             </Container>);
@@ -118,7 +135,7 @@ class Profile extends React.Component<Props, States> {
         return <Form.Field
             key={gender}
             control={Radio}
-            label={_.upperFirst(gender)}
+            label={this.message({ id: `user.gender.${gender}`})}
             value={gender}
             checked={this.state.selectedGender === gender}
             onChange={this.onSelectedGenderChange} />;
@@ -167,4 +184,4 @@ class Profile extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Profile);
+export default injectIntl(connectPropsAndActions(Profile));

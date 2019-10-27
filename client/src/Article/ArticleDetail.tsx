@@ -7,6 +7,7 @@ import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { getAvatarSource } from "../utils/avatarUrl";
+import { FormattedDate, FormattedTime } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -21,15 +22,21 @@ class ArticleDetail extends React.Component<Props, States> {
         const articleAuthor: User = this.props.state.articles.authors[article.author];
         if (article) {
             return <Fragment>
-                <HeaderWithBack title={article.title} />
+                <HeaderWithBack/>
                 <Content>
                     <Card transparent>
+                        <CardItem header>
+                            <Text>{article.title}</Text>
+                        </CardItem>
                         <CardItem>
                             <Left>
                                 <Thumbnail small source={ getAvatarSource(articleAuthor.avatarUrl) } />
                                 <Body>
                                     <Text>{articleAuthor.name}</Text>
-                                    <Text note>{createDate.toLocaleDateString()}</Text>
+                                    <Text note>
+                                        <FormattedDate value={createDate} />
+                                        <FormattedTime value={createDate} />
+                                    </Text>
                                 </Body>
                             </Left>
                         </CardItem>
@@ -42,7 +49,7 @@ class ArticleDetail extends React.Component<Props, States> {
                         </CardItem>
                     </Card>
                 </Content>
-                {this.renderEditButton()}
+                {this.renderEditButton(article)}
                 {/* No Footer in detail page */}
             </Fragment>;
         } else {
@@ -50,8 +57,8 @@ class ArticleDetail extends React.Component<Props, States> {
         }
     }
 
-    private renderEditButton = (): any => {
-        if (this.props.state.userState.currentUser) {
+    private renderEditButton = (article: Article): any => {
+        if (article && this.props.state.userState.currentUser && this.props.state.userState.currentUser._id === article.author) {
             return <View style={{flex: 0}}>
                 <Fab active={true} direction="up" style={{ backgroundColor: "darkturquoise" }}
                     position="bottomRight" onPress={() => {

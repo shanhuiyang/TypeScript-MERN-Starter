@@ -7,6 +7,7 @@ import AppState from "../../core/src/models/client/AppState";
 import ActionCreator from "../../core/src/models/client/ActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import Article from "../../core/src/models/Article";
+import { FormattedMessage } from "react-intl";
 interface Props extends RouteComponentProps<any> {
     state: AppState;
     actions: ActionCreator;
@@ -32,7 +33,7 @@ class ArticleList extends React.Component<Props, States> {
         return <Fragment>
             <Header noLeft>
                 <Body>
-                    <Title>Typescript MERN Starter</Title>
+                    <Title><FormattedMessage id="app.name"/></Title>
                 </Body>
             </Header>
             <Content>
