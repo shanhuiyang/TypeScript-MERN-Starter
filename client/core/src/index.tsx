@@ -11,6 +11,7 @@ import { initToast } from "./shared/toast";
 import { setHostUrl } from "./shared/fetch";
 import { initStorage } from "./shared/storage";
 import storageWrapper from "./components/storage";
+import { SET_LOCALE } from "./actions/common";
 
 // Add necessary configurations here before rendering
 
@@ -29,6 +30,12 @@ initToast(toast);
 
 // Initialize local storage provider
 initStorage(storageWrapper);
+
+// Initialize language
+store.dispatch({
+    type: SET_LOCALE,
+    locale: navigator.language
+});
 
 ReactDOM.render(
     <Provider store={store}>

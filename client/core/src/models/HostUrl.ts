@@ -1,5 +1,5 @@
 // This file is intended to remove the repetition of url & port settings across server and clients.
-// Do not use .env flie to store the domain and port since it's difficult to share across platforms.
+// Do not use .env file to store the domain and port since it's difficult to share across platforms.
 
 // You should use explicit ip address such as http://172.21.55.1 instead of http://localhost here if you would like to debug/test the app in LAN for mobile devices.
 // Android emulator also cannot fetch http://localhost correctly. see https://github.com/facebook/react-native/issues/10404 for the detail of this issue.

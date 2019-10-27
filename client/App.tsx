@@ -8,16 +8,18 @@ import Routes from "./src/Routes";
 import store from "./core/src/shared/store";
 import ConnectedIntlProvider from "./core/src/shared/intl";
 import { initToast } from "./core/src/shared/toast";
-import toastWrapper from "./src/utils/Toast";
+import toastWrapper from "./src/Common/Toast";
 import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
 import { setHostUrl } from "./core/src/shared/fetch";
 import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
+import * as Localization from "expo-localization";
 
 // You should manually add Intl polyfill for react-native app
 import "intl";
 import "intl/locale-data/jsonp/en";
 import "intl/locale-data/jsonp/zh";
+import { SET_LOCALE } from "./core/src/actions/common";
 
 interface Props {}
 interface States {
@@ -30,12 +32,15 @@ if (__DEV__) {
     setHostUrl(HOST_URL_PROD);
 }
 
-
 // initialize toast provider using Toast from NativeBase
 initToast(toastWrapper);
 // initialize local storage provider
 initStorage(AsyncStorage);
-
+// initialize locale from system language
+store.dispatch({
+    type: SET_LOCALE,
+    locale: Localization.locale
+});
 
 export default class App extends React.Component<Props, States> {
     constructor(props: Props) {

@@ -1,7 +1,7 @@
 import { Translation } from "../../models/Translation";
 
 const TRANSLATION: Translation = {
-    locale: "zh-cn",
+    locale: "zh-CN",
     messages: {
         "app.name": "Typescript MERN Starter",
         "app.footer": "Copyright © 2019 公司版权所有",

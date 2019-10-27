@@ -2118,6 +2118,13 @@ expo-linear-gradient@~6.0.0:
   resolved "https://registry.yarnpkg.com/expo-linear-gradient/-/expo-linear-gradient-6.0.0.tgz#5fb0fb955dd22ef4ab032e543cb1c249885bf0b5"
   integrity sha512-TGHSK7MsoU1wZXx9uEivMggAR/KT4wTSE0xBfhB8qsziGXoHZdoT79/tZ3HyWtCG7+JVUEFXfUOBxtOlZOu5tg==
 
+expo-localization@~6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/expo-localization/-/expo-localization-6.0.0.tgz#bbd6ee912ac6ba3a37e8ec334fbbeacb227e037f"
+  integrity sha512-ZU0621WDqmoMoko0p+lzGsLIsUTifHhsFqpf0w7S0fC+6djCBD47HFGzbm01sTVrRMS+tOsoVxa8D31ZaBqy5Q==
+  dependencies:
+    rtl-detect "^1.0.2"
+
 expo-location@~6.0.0:
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/expo-location/-/expo-location-6.0.0.tgz#da4e22ee5aa951d2c65d94f9916323eb4b3f8a01"
@@ -4815,6 +4822,11 @@ rsvp@^3.3.3:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-3.6.2.tgz#2e96491599a96cde1b515d5674a8f7a91452926a"
   integrity sha512-OfWGQTb9vnwRjwtA2QwpG2ICclHC3pgXZO5xt8H2EfgDquO0qVdSb5T88L4qJVAEugbS56pAuV4XZM58UX8ulw==
+
+rtl-detect@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/rtl-detect/-/rtl-detect-1.0.2.tgz#8eca316f5c6563d54df4e406171dd7819adda67f"
+  integrity sha512-5X1422hvphzg2a/bo4tIDbjFjbJUOaPZwqE6dnyyxqwFqfR+tBcvfqapJr0o0VygATVCGKiODEewhZtKF+90AA==
 
 run-async@^2.2.0:
   version "2.3.0"
