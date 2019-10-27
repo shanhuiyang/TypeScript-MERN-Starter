@@ -29,6 +29,7 @@ class ArticleItem extends React.Component<Props, States> {
                     <Item.Description
                         style={{
                             whiteSpace: "pre-line",
+                            wordWrap: "break-word",
                             paddingTop: DESCRIPTION_PADDING,
                             paddingBottom: DESCRIPTION_PADDING,
                             fontSize: "1.2rem" // Make the font size slightly larger to adapt to mobile devices

@@ -28,7 +28,7 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
         return (<Modal
             open={!this.state.closed} onClose={this.handleClose}
             trigger={
-                <Button {...this.props} onClick={this.handleOpen} content={this.props.buttonText} />
+                <Button onClick={this.handleOpen} content={this.props.buttonText} />
             }
             basic
             size="small">

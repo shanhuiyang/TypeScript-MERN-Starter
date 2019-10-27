@@ -965,13 +965,6 @@
   resolved "https://registry.yarnpkg.com/@types/qs/-/qs-6.5.3.tgz#1c3b71b091eaeaf5924538006b7f70603ce63d38"
   integrity sha512-Jugo5V/1bS0fRhy2z8+cUAHEyWOATaz4rbyLVvcFs7+dXp5HfwpEwzF1Q11bB10ApUqHf+yTauxI0UXQDwGrbA==
 
-"@types/react-intl@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-3.0.0.tgz#a2cce0024b6cfe403be28ccf67f49d720fa810ec"
-  integrity sha512-k8F3d05XQGEqSWIfK97bBjZe4z9RruXU9Wa7OZ2iUC5pdeIpzuQDZe/9C2J3Xir5//ZtAkhcv08Wfx3n5TBTQg==
-  dependencies:
-    react-intl "*"
-
 "@types/react-native@^0.57.65":
   version "0.57.65"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.57.65.tgz#9da4773aaa95924bce42a54a5c19cfd8ffd5022b"
@@ -4408,7 +4401,7 @@ react-dom@16.8.3:
     prop-types "^15.6.2"
     scheduler "^0.13.3"
 
-react-intl@*, react-intl@^3.3.2:
+react-intl@^3.3.2:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-3.4.0.tgz#25986ac75b3c0073c0a7bce31ab2cb1b8bbf421c"
   integrity sha512-pW+z0ngVtPzICQeBrvoxk/YOotjFjVMvqxf/q0hjfM4CLvzIWJW/7MQcOz8ujD0Agf146mYOUv0//a9JM4H6Tg==

@@ -1,8 +1,8 @@
 import ToastInterface from "../models/client/Toast";
 
 let toast: ToastInterface = {
-    success: (messageId: string) => {},
-    error: (messageId: string) => {}
+    success: (message: string) => {},
+    error: (message: string) => {}
 };
 
 export const initToast = (toastImplementation: ToastInterface): void => {

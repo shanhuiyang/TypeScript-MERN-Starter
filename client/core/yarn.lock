@@ -1425,13 +1425,6 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react-intl@^3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@types/react-intl/-/react-intl-3.0.0.tgz#a2cce0024b6cfe403be28ccf67f49d720fa810ec"
-  integrity sha512-k8F3d05XQGEqSWIfK97bBjZe4z9RruXU9Wa7OZ2iUC5pdeIpzuQDZe/9C2J3Xir5//ZtAkhcv08Wfx3n5TBTQg==
-  dependencies:
-    react-intl "*"
-
 "@types/react-redux@^7.1.2":
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/@types/react-redux/-/react-redux-7.1.2.tgz#02303b77d87e54f327c09507cf80ee3ca3063898"
@@ -8403,7 +8396,7 @@ react-error-overlay@^6.0.1:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.1.tgz#b8d3cf9bb991c02883225c48044cb3ee20413e0f"
   integrity sha512-V9yoTr6MeZXPPd4nV/05eCBvGH9cGzc52FN8fs0O0TVQ3HYYf1n7EgZVtHbldRq5xU9zEzoXIITjYNIfxDDdUw==
 
-react-intl@*, react-intl@^3.3.2:
+react-intl@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-3.3.2.tgz#e60ba59736b612654653be2409be3b9711a646af"
   integrity sha512-Y2QMrcVxkVSzuTD/3+wkbJOV+vYcu60KsKY5XqJ6IkzseFY68myk7ijJ1UHXOP/xBdJtwiXVOCG10EDwDGj/xQ==

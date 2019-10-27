@@ -14,11 +14,19 @@ export default class ToastWrapper {
             pauseOnHover: true
         } as ToastContainerProps);
     }
-    success(messageId: string): void {
-        toast.success(this.store.getState().translations.messages[messageId]);
+    success(message: string): void {
+        let displayText: string = this.store.getState().translations.messages[message];
+        if (!displayText) {
+            displayText = message;
+        }
+        toast.success(displayText);
     }
 
-    error(messageId: string): void {
-        toast.error(this.store.getState().translations.messages[messageId]);
+    error(message: string): void {
+        let displayText: string = this.store.getState().translations.messages[message];
+        if (!displayText) {
+            displayText = message;
+        }
+        toast.error(displayText);
     }
 }

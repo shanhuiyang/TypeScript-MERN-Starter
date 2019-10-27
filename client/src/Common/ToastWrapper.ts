@@ -7,16 +7,24 @@ export default class ToastWrapper {
     constructor(store: Store<AppState, AnyAction>) {
         this.store = store;
     }
-    success(messageId: string): void {
+    success(message: string): void {
+        let displayText: string = this.store.getState().translations.messages[message];
+        if (!displayText) {
+            displayText = message;
+        }
         Toast.show({
-            text: this.store.getState().translations.messages[messageId],
+            text: displayText,
             type: "success"
         });
     }
 
-    error(messageId: string): void {
+    error(message: string): void {
+        let displayText: string = this.store.getState().translations.messages[message];
+        if (!displayText) {
+            displayText = message;
+        }
         Toast.show({
-            text: this.store.getState().translations.messages[messageId],
+            text: displayText,
             type: "danger"
         });
     }
