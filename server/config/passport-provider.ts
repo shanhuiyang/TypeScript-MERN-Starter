@@ -32,7 +32,7 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
         if (err) {
             return done(err); }
         if (!user) {
-            return done({ message: `Email ${email} not found.` }, false );
+            return done({ message: "toast.user.email_not_found" }, false );
         }
         user.comparePassword(password, (err: Error, isMatch: boolean) => {
             if (err) {
@@ -41,7 +41,7 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
             if (isMatch) {
                 return done(undefined, user);
             }
-            return done({ message: "Password is incorrect." }, false);
+            return done({ message: "toast.user.password_error" }, false);
         });
     });
 }));

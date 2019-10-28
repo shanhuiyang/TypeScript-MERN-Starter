@@ -42,10 +42,10 @@ export const authorization: RequestHandler[] = [
                 (value: Client) => clientId === value.id
             );
             if (!client) {
-                done(new Error("Invalid client!"));
+                done(new Error("toast.client.invalid"));
             }
             if (client.redirectUri !== redirectUri) {
-                done(new Error("Incorrect redirectUri!"));
+                done(new Error("toast.client.incorrect_url"));
             }
             return done(undefined, client, redirectUri);
         },
@@ -113,7 +113,7 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
     UserCollection.findOne({ email: req.body.email }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }
         if (existingUser) {
-            return res.status(409).json({ message: "Account with that email address already exists." });
+            return res.status(409).json({ message: "toast.user.upload_exist_account" });
         }
         user.save((err: any) => {
             if (err) {
@@ -143,11 +143,11 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
             return res.status(401).json({ message: err.message });
         }
         if (!user) {
-            return res.status(401).json({ message: "Login failed." });
+            return res.status(401).json({ message: "toast.user.sign_in_failed" });
         }
         req.logIn(user, (err) => {
             if (err) {
-                return res.status(401).json({ message: "Login failed." });
+                return res.status(401).json({ message: "toast.user.sign_in_failed" });
             }
             res.redirect(302, "/auth/oauth2"); // Get access token
         });
@@ -167,12 +167,12 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
     UserCollection.findById(req.body._id, (err: Error, user: UserDocument) => {
         if (err) { return next(err); }
         if (!user) {
-            return res.status(404).json({ message: "Account cannot be found." });
+            return res.status(404).json({ message: "toast.user.account_not_found" });
         }
         Object.assign(user, req.body);
         user.save((err: any) => {
             if (err) {
-                return res.status(500).json({ message: "Update failed." });
+                return res.status(500).json({ message: "toast.user.update_profile_failed" });
             }
             user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams()}`;
             res.json(user);

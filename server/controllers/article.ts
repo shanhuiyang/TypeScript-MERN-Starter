@@ -15,11 +15,11 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
             return next(error);
         }
         if (!article) {
-            return res.status(404).json({ message: "Not Found" });
+            return res.status(404).json({ message: "toast.article.not_found" });
         }
         const user: User = req.user as User;
         if (article.author !== user._id.toString()) {
-            return res.status(401).json({ message: "You are not the author!" });
+            return res.status(401).json({ message: "toast.user.attack_alert" });
         }
         ArticleCollection.findByIdAndRemove(req.params.id).exec(
             (error: Error, removed: Article) => {
@@ -43,11 +43,11 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
             return next(error);
         }
         if (!article) {
-            return res.status(404).json({ message: "Not Found" });
+            return res.status(404).json({ message: "toast.article.not_found" });
         }
         const user: User = req.user as User;
         if (article.author !== user._id.toString()) {
-            return res.status(401).json({ message: "You are not the author!" });
+            return res.status(401).json({ message: "toast.user.attack_alert" });
         }
         ArticleCollection.findByIdAndUpdate(
             req.body._id, {content: req.body.content, title: req.body.title}

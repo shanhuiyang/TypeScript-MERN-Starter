@@ -34,15 +34,15 @@ class ArticleEditor extends React.Component<Props, States> {
             <Form>
                 <Form.Field>
                     <label>
-                        <FormattedMessage id="page.article.title" />
+                        <FormattedMessage id="article.title" />
                     </label>
                     <input ref={this.titleRef} autoFocus={true} defaultValue={originalTitle} />
                 </Form.Field>
                 <Form.Field>
                     <label>
-                        <FormattedMessage id="page.article.content" />
+                        <FormattedMessage id="article.content" />
                     </label>
-                    <textarea placeholder={this.props.intl.formatMessage({id: "page.article.content_placeholder"})}
+                    <textarea placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                         ref={this.contentRef} rows={24} defaultValue={originalContent} />
                 </Form.Field>
                 <FormGroup inline>

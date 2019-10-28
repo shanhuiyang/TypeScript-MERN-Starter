@@ -6,10 +6,9 @@ export const validationErrorResponse = (res: Response,
                                         ): Response | false => {
     if (!errors.isEmpty()) {
         const error: any /*ValidationError*/ = errors.array()[0];
-        const message: string = `${error.msg} of ${error.param}: ${error.value}`;
         return res
             .status(400)
-            .json({message: message});
+            .json({message: error.msg});
     } else {
         return false;
     }

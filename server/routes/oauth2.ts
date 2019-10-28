@@ -12,20 +12,20 @@ oauth2.route("/authorize").get(controllers.authorization);
 oauth2.route("/authorize/decision").post(controllers.decision);
 oauth2.route("/signup").post(
     [
-        check("email").isEmail(),
-        check("password").isLength({ min: 6 }),
-        check("confirmPassword", "confirmed Password field must have the same value as the password field")
+        check("email", "toast.user.email").isEmail(),
+        check("password", "toast.user.password_too_short").isLength({ min: 6 }),
+        check("confirmPassword", "toast.user.confirm_password")
             .exists()
             .custom((value, { req }) => value === req.body.password),
-        check("name").not().isEmpty(),
-        check("gender").isIn(Object.values(Gender))
+        check("name", "toast.user.name").not().isEmpty(),
+        check("gender", "toast.user.gender").isIn(Object.values(Gender))
     ],
     controllers.signUp
 );
 oauth2.route("/login").post(
     [
-        check("email").isEmail(),
-        check("password").not().isEmpty(),
+        check("email", "toast.user.email").isEmail(),
+        check("password", "toast.user.password_empty").not().isEmpty(),
     ],
     controllers.logIn);
 oauth2.route("/profile")
@@ -35,14 +35,14 @@ oauth2.route("/profile")
     .post(
         passport.authenticate("bearer", { session: false }),
         [
-            check("email", "Malicious attack is detected.")
+            check("email", "toast.user.attack_alert")
                 .exists()
                 .custom((value, { req }) => value === req.user.email),
-            check("_id", "Malicious attack is detected.")
+            check("_id", "toast.user.attack_alert")
                 .exists()
                 .custom((value, { req }) => value === req.user._id.toString()),
-            check("name").not().isEmpty(),
-            check("gender").isIn(Object.values(Gender))
+            check("name", "toast.user.name").not().isEmpty(),
+            check("gender", "toast.user.gender").isIn(Object.values(Gender))
         ],
         controllers.updateProfile
     );
