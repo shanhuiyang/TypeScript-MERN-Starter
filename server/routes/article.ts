@@ -4,10 +4,10 @@ import { check } from "express-validator";
 import passport from "passport";
 
 const updateArticleValidations = [
-    check("title").not().isEmpty(),
-    check("content").not().isEmpty(),
-    check("title").isLength({ max: 100 }),
-    check("content").isLength({ min: 100 }),
+    check("title", "toast.article.title_empty").not().isEmpty(),
+    check("content", "toast.article.content_empty").not().isEmpty(),
+    check("title", "toast.article.title_too_long").isLength({ max: 100 }),
+    check("content", "toast.article.content_too_short").isLength({ min: 100 }),
 ];
 
 const article: Router = express.Router();
@@ -19,7 +19,7 @@ article.route("/create").post(
 article.route("/edit").post(
     passport.authenticate("bearer", { session: false }),
     [
-        check("author", "Malicious attack is detected.")
+        check("author", "toast.user.attack_alert")
             .exists()
             .custom((value, { req }) => value === req.user._id.toString()),
         ...updateArticleValidations

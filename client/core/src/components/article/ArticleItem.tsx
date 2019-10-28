@@ -41,7 +41,7 @@ class ArticleItem extends React.Component<Props, States> {
                         flexDirection: "row",
                         justifyContent: "space-between"}}>
                         <div style={{color: "grey"}}>
-                            <FormattedMessage id="page.article.created_at" />
+                            <FormattedMessage id="article.created_at" />
                             <FormattedDate value={createDate} />
                             <FormattedTime value={createDate} />
                         </div>

@@ -28,13 +28,13 @@ class ArticleEditor extends React.Component<Props, States> {
             <Fragment>
                 <Content padder>
                     <Item regular style={{marginBottom: 12}}>
-                        <Input autoFocus={true} placeholder={this.props.intl.formatMessage({id: "page.article.title"})}
+                        <Input autoFocus={true} placeholder={this.props.intl.formatMessage({id: "article.title"})}
                             defaultValue={originalTitle}
                             onChangeText={(input: string) => { this.title = input; }} />
                     </Item>
                     <Item regular>
                         <Textarea rowSpan={20} bordered={false} underline={false}
-                            placeholder={this.props.intl.formatMessage({id: "page.article.content_placeholder"})}
+                            placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                             defaultValue={originalContent}
                             onChangeText={(input: string) => { this.content = input; }} style={{padding: 12}}/>
                     </Item>
