@@ -29,7 +29,7 @@ class LogIn extends Component<Props, States> {
                             <Label>
                                 <FormattedMessage id="user.email"/>
                             </Label>
-                            <Input autoFocus={true}
+                            <Input autoCapitalize="none" autoFocus={true}
                                 onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
                         <Item last>

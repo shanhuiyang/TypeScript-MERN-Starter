@@ -17,6 +17,10 @@ export const userSchema: Schema = new mongoose.Schema({
  */
 userSchema.pre("save", function save(next: any) {
     const user = this as UserDocument;
+    // email cannot have capital character
+    if (user && user.email) {
+        user.email = user.email.toLowerCase();
+    }
     // Stripe signing params for Avatar Url
     if (user && user.avatarUrl) {
         const sasAvatarUrl: string = user.avatarUrl;

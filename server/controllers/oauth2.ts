@@ -17,6 +17,7 @@ import { MiddlewareRequest } from "oauth2orize";
 import storage from "../repository/storage";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
+import _ from "lodash";
 
 // User authorization endpoint.
 //
@@ -110,7 +111,7 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         address: req.body.address,
         avatarUrl: req.body.avatarUrl
     });
-    UserCollection.findOne({ email: req.body.email }, (err: Error, existingUser: UserDocument) => {
+    UserCollection.findOne({ email: _.toLower(req.body.email) }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }
         if (existingUser) {
             return res.status(409).json({ message: "toast.user.upload_exist_account" });

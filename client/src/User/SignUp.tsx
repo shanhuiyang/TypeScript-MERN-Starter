@@ -53,7 +53,7 @@ class SignUp extends Component<Props, States> {
                             <Label>
                                 <FormattedMessage id="user.email"/>
                             </Label>
-                            <Input autoFocus={true} onChangeText={(input: string) => { this.email = input; }} />
+                            <Input autoCapitalize="none" autoFocus={true} onChangeText={(input: string) => { this.email = input; }} />
                         </Item>
                         <Item>
                             <Label>
@@ -73,7 +73,7 @@ class SignUp extends Component<Props, States> {
                             <Label>
                                 <FormattedMessage id="user.name"/>
                             </Label>
-                            <Input onChangeText={(input: string) => { this.name = input; }} />
+                            <Input autoCapitalize="none" onChangeText={(input: string) => { this.name = input; }} />
                         </Item>
                         <Item last>
                             <Label>
