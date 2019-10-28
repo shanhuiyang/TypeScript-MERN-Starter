@@ -1,5 +1,6 @@
 node_modules
 dist
+client/node_modules
 client/core/node_modules
 client/core/build
 npm-debug.log
