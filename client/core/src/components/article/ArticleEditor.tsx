@@ -4,6 +4,12 @@ import { RefObject } from "react";
 import React from "react";
 import ModalButton, { ModalButtonProps } from "../shared/ModalButton";
 import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import "codemirror/lib/codemirror.css";
+import "tui-editor/dist/tui-editor.min.css";
+import "tui-editor/dist/tui-editor-contents.min.css";
+import { Editor } from "@toast-ui/react-editor";
+import connectPropsAndActions from "../../shared/connect";
+import AppState from "../../models/client/AppState";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -11,13 +17,14 @@ interface Props extends IntlProps {
     onSubmit: (title: string, content: string) => void;
     negativeButtonProps?: ModalButtonProps;
     loading?: boolean;
+    state: AppState;
 }
 
 interface States {}
 
 class ArticleEditor extends React.Component<Props, States> {
     titleRef: RefObject<HTMLInputElement>;
-    contentRef: RefObject<HTMLTextAreaElement>;
+    contentRef: RefObject<any>;
     constructor(props: Props) {
         super(props);
         this.titleRef = React.createRef();
@@ -42,8 +49,15 @@ class ArticleEditor extends React.Component<Props, States> {
                     <label>
                         <FormattedMessage id="article.content" />
                     </label>
-                    <textarea placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
-                        ref={this.contentRef} rows={24} defaultValue={originalContent} />
+                    <Editor
+                        language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
+                        ref={this.contentRef}
+                        initialValue={originalContent}
+                        previewStyle="tab"
+                        height="600px"
+                        initialEditType="wysiwyg"
+                        usageStatistics={false}
+                        useCommandShortcut={true} />
                 </Form.Field>
                 <FormGroup inline>
                     <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
@@ -63,9 +77,9 @@ class ArticleEditor extends React.Component<Props, States> {
 
     private onSubmit = (): void => {
         const title: any = this.titleRef.current && this.titleRef.current.value;
-        const content: any = this.contentRef.current && this.contentRef.current.value;
+        const content: any = this.contentRef.current && this.contentRef.current.getInstance().getMarkdown();
         this.props.onSubmit(title, content);
     }
 }
 
-export default injectIntl(ArticleEditor);
+export default injectIntl(connectPropsAndActions(ArticleEditor));
