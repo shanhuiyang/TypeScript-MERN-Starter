@@ -30,6 +30,10 @@ const TRANSLATION: Translation = {
         "page.article.delete": "Delete Article: {title}",
         "page.article.delete_confirmation": "You cannot store this article after delete. Are you sure to delete?",
         "page.article.empty": "No articles are added up to now.",
+        "page.insert_image.title": "Insert Image",
+        "page.insert_image.fill_description": "Image Description",
+        "page.insert_image.fill_link": "Image Link",
+        "page.insert_image.upload": "Upload from Disk",
 
         // Models.
         // pattern: <model_name>.<model_property>.<model_property_values>
@@ -50,7 +54,7 @@ const TRANSLATION: Translation = {
         "article.created_at": "Created at ",
         "article.updated_at": "Updated at ",
 
-        // Component
+        // Components.
         // pattern: component.<component_name>.<action>
         "component.button.file_select": "Choose File",
         "component.button.submit": "Submit",
@@ -63,7 +67,7 @@ const TRANSLATION: Translation = {
         "component.button.edit": "Edit",
         "component.button.create": "Create",
 
-        // Toast
+        // Toasts.
         // pattern: toast.<model>.<info>
         "toast.user.general_error": "Cannot find the user, please check.",
         "toast.user.invalid_token_error": "Please log in first.",
@@ -85,6 +89,7 @@ const TRANSLATION: Translation = {
         "toast.article.content_too_short": "Content could not be shorter than 100 characters.",
         "toast.article.invalid_author": "You are not the author!",
         "toast.article.not_found": "Article not found!",
+        "toast.article.insert_image_failed": "Failed to insert the image",
         "toast.user.attack_alert": "Malicious attack is detected.",
         "toast.user.email": "Invalid email.",
         "toast.user.email_not_found": "This email is not found.",

@@ -12,6 +12,9 @@ export const SAVE_ARTICLE_FAILED: string = "SAVE_ARTICLE_FAILED";
 export const GET_ARTICLE_BEGIN: string = "GET_ARTICLE_BEGIN";
 export const GET_ARTICLE_SUCCESS: string = "GET_ARTICLE_SUCCESS";
 export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
+export const INSERT_IMAGE_BEGIN: string = "INSERT_IMAGE_BEGIN";
+export const INSERT_IMAGE_SUCCESS: string = "INSERT_IMAGE_SUCCESS";
+export const INSERT_IMAGE_FAILED: string = "INSERT_IMAGE_FAILED";
 
 const articleActionCreator: ArticleActionCreator = {
     getAllArticles(): any {

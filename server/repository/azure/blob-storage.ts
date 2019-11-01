@@ -13,7 +13,10 @@ import {
     AccountSASResourceTypes,
     AccountSASServices,
     Pipeline,
-    Models
+    Models,
+    generateBlobSASQueryParameters,
+    BlobSASPermissions,
+    IBlobSASSignatureValues
 } from "@azure/storage-blob";
 import { BlockBlobUploadResponse } from "@azure/storage-blob/typings/src/generated/src/models";
 import { STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY } from "../../util/secrets";
@@ -67,23 +70,31 @@ export const uploadBlob = async (
                     statusCode: value._response.status
                 } as UploadBlobResult);
             });
+        })
+        .catch((error: Error) => {
+            return new Promise<UploadBlobResult>((resolve: any, reject: any): any => {
+                reject(error.message);
+            });
         });
 };
 
-export const generateSigningUrlParams = (): string => {
+export const generateSigningUrlParams = (containerName: string, blobName: string, neverExpire?: boolean): string => {
     const now = new Date();
-    now.setMinutes(now.getMinutes() - 5); // Skip clock skew with server
-    const expireTime = new Date();
-    expireTime.setDate(expireTime.getDate() + 1);
-    return generateAccountSASQueryParameters(
-        {
-            expiryTime: expireTime,
-            permissions: AccountSASPermissions.parse("r").toString(), // Readonly
-            protocol: SASProtocol.HTTPSandHTTP,
-            resourceTypes: AccountSASResourceTypes.parse("sco").toString(),
-            services: AccountSASServices.parse("b").toString(), // Blob
-            startTime: now,
-        },
+    now.setMinutes(now.getMinutes() - 15); // Skip clock skew with server
+    const blobSASSignatureValues: IBlobSASSignatureValues = {
+        containerName: containerName,
+        blobName: blobName,
+        startTime: now,
+        permissions: BlobSASPermissions.parse("r").toString(), // Readonly
+        protocol: SASProtocol.HTTPS,
+    };
+    if (!neverExpire) {
+        const expiryTime = new Date();
+        expiryTime.setDate(expiryTime.getDate() + 1);
+        blobSASSignatureValues.expiryTime = expiryTime;
+    }
+    return generateBlobSASQueryParameters(
+        blobSASSignatureValues,
         sharedKeyCredential
     ).toString();
 };

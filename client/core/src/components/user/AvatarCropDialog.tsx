@@ -30,7 +30,7 @@ class AvatarCropDialog extends React.Component<Props, States> {
             </Modal.Header>
             <Modal.Content image>
                 <AvatarEditor image={this.props.avatarSource} ref={this.editorRef}
-                    width={AVATAR_PREFERABLE_SIZE} height={AVATAR_PREFERABLE_SIZE} border={50} color={[255, 255, 255, 0.6]} // RGBA
+                    width={AVATAR_PREFERABLE_SIZE} height={AVATAR_PREFERABLE_SIZE} border={50} color={[255, 255, 255, 0.6]}
                     scale={this.state.scale} rotate={this.state.rotate} onLoadFailure={this.onAvatarLoadError}/>
                 <Modal.Description style={{marginRight: 10, marginLeft: 10}} >
                     <Item.Group>

@@ -44,67 +44,72 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
         headers["Content-Type"] = "application/json";
         options.body = JSON.stringify(body);
     } else if (method === "PUT") {
-        headers["Content-Type"] = "application/octet-stream";
+        headers["Content-Type"] = (body as File).type;
         options.body = body;
     }
-    const response = await fetch(completeUrl, options); // TODO: decouple this
-    let contentType: string | null = response.headers.get("Content-Type") || response.headers.get("content-type");
-    if (response.ok) {
-        if (contentType === null) {
-            return response.text();
-        }
-        contentType = contentType.toLowerCase();
-        if (contentType.startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
-            return response.text();
-        }
-        else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
-            return response.json();
-        }
-        else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.url) {
-            // Drop the html because we use client routing instead of server routing
-            let targetTo: string = response.url;
-            if (targetTo.startsWith(getHostUrl())) {
-                targetTo = targetTo.substring(getHostUrl().length);
+    return fetch(completeUrl, options)
+    .then((response: Response) => {
+        let contentType: string | null = response.headers.get("Content-Type") || response.headers.get("content-type");
+        if (response.ok) {
+            if (contentType === null) {
+                return response.text();
             }
-            return Promise.resolve({ redirected: false, to: targetTo });
+            contentType = contentType.toLowerCase();
+            if (contentType.startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
+                return response.text();
+            }
+            else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
+                return response.json();
+            }
+            else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.url) {
+                // Drop the html because we use client routing instead of server routing
+                let targetTo: string = response.url;
+                if (targetTo.startsWith(getHostUrl())) {
+                    targetTo = targetTo.substring(getHostUrl().length);
+                }
+                return Promise.resolve({ redirected: false, to: targetTo });
+            }
+            else {
+                return response.text();
+            }
         }
         else {
-            return response.text();
-        }
-    }
-    else {
-        if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
-            return response.json().then((body: any) => {
+            if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
+                return response.json().then((body: any) => {
+                    return Promise.reject(({
+                        name: `${response.status} ${response.statusText}`,
+                        message: body && body.message
+                    } as Error));
+                });
+            }
+            else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
+                return response.text().then((textBody: any) => {
+                    return Promise.reject(({
+                        name: `${response.status} ${response.statusText}`,
+                        message: textBody
+                    } as Error));
+                });
+            }
+            else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.HTML)) {
+                return response.text().then((htmlBody: any) => {
+                    return Promise.reject(({
+                        name: `${response.status} ${response.statusText}`,
+                        message: "",
+                        stack: htmlBody
+                    } as Error));
+                });
+            }
+            else {
                 return Promise.reject(({
                     name: `${response.status} ${response.statusText}`,
-                    message: body && body.message
+                    message: ""
                 } as Error));
-            });
+            }
         }
-        else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
-            return response.text().then((textBody: any) => {
-                return Promise.reject(({
-                    name: `${response.status} ${response.statusText}`,
-                    message: textBody
-                } as Error));
-            });
-        }
-        else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.HTML)) {
-            return response.text().then((htmlBody: any) => {
-                return Promise.reject(({
-                    name: `${response.status} ${response.statusText}`,
-                    message: "",
-                    stack: htmlBody
-                } as Error));
-            });
-        }
-        else {
-            return Promise.reject(({
-                name: `${response.status} ${response.statusText}`,
-                message: ""
-            } as Error));
-        }
-    }
+    })
+    .catch((error: Error) => {
+        console.log(error.message);
+    });
 };
 
 export default _fetch;

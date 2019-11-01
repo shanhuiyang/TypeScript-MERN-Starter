@@ -20,16 +20,21 @@ export const uploadBlob = (
         if (!fs.existsSync(targetDir)) {
             fs.mkdirSync(targetDir);
         }
-        const fd: number = fs.openSync(targetPath, "w");
         const writable: NodeJS.WritableStream = fs.createWriteStream(targetPath);
-        stream.pipe(writable);
-        fs.closeSync(fd);
-        resolve({
-            blobUrl: blobURL,
-            statusCode: 200
-        } as UploadBlobResult);
+        stream
+            .pipe(writable)
+            .on("finish", () => {
+                resolve({
+                    blobUrl: blobURL,
+                    statusCode: 200
+                } as UploadBlobResult);
+            })
+            .on("error", (error: any) => {
+                reject(error);
+            });
     });
 };
-export const generateSigningUrlParams = (): string => {
+export const generateSigningUrlParams = (containerName: string, blobName: string, neverExpire?: boolean): string => {
+    console.log(`[blob-storage] Generate Signing url for container: ${containerName} blob: ${blobName} neverExpire: ${!!neverExpire}`);
     return "";
 };

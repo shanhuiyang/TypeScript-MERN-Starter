@@ -31,5 +31,9 @@ article.route("/remove/:id").get(
     passport.authenticate("bearer", { session: false }),
     controllers.remove
 );
+article.route("/insert/image").put(
+    passport.authenticate("bearer", { session: false }),
+    controllers.insertImage
+);
 
 export default article;

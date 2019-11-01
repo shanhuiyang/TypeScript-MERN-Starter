@@ -9,3 +9,6 @@ if (process.env.NODE_ENV === "production") {
     storage = LocalStorage;
 }
 export default storage;
+
+export const CONTAINER_AVATAR: string = "avatar";
+export const CONTAINER_ARTICLE: string = "article";

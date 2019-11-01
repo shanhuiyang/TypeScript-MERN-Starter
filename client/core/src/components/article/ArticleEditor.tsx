@@ -10,6 +10,8 @@ import "tui-editor/dist/tui-editor-contents.min.css";
 import { Editor } from "@toast-ui/react-editor";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
+import fetch from "../../shared/fetch";
+import { getToast as toast } from "../../shared/toast";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -53,11 +55,14 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={originalContent}
-                        previewStyle="tab"
+                        previewStyle="tab" // TODO: put it in the user preferences
                         height="600px"
-                        initialEditType="wysiwyg"
+                        initialEditType="wysiwyg" // TODO: put it in the user preferences
                         usageStatistics={false}
-                        useCommandShortcut={true} />
+                        useCommandShortcut={true}
+                        hooks={{
+                            addImageBlobHook: this.onInsertImage,
+                        }} />
                 </Form.Field>
                 <FormGroup inline>
                     <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
@@ -79,6 +84,19 @@ class ArticleEditor extends React.Component<Props, States> {
         const title: any = this.titleRef.current && this.titleRef.current.value;
         const content: any = this.contentRef.current && this.contentRef.current.getInstance().getMarkdown();
         this.props.onSubmit(title, content);
+    }
+
+    private onInsertImage = (blob: File, callback: (url: string, altText: string) => void): void => {
+        fetch("/api/article/insert/image", blob, "PUT", true)
+        .then((json: any) => {
+            if (json && json.url) {
+                callback(json.url, blob.name);
+            } else {
+                toast().error("toast.article.insert_image_failed");
+            }
+        }, (error: Error) => {
+            toast().error("toast.article.insert_image_failed");
+        });
     }
 }
 
