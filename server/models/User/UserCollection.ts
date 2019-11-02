@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt-nodejs";
 import mongoose, { Model, Schema } from "mongoose";
 import UserDocument, { ComparePasswordFunction } from "./UserDocument";
-import storage from "../../repository/storage";
+import storage, { CONTAINER_AVATAR } from "../../repository/storage";
+import { getBlobNameFromUrl } from "../../repository/utils";
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
@@ -40,7 +41,8 @@ userSchema.pre("save", function save(next: any) {
 userSchema.post("findOne", function findOne(user: UserDocument, next: any) {
     // Add signing params for Avatar Url so that client can consume
     if (user && user.avatarUrl) {
-        user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams()}`;
+        const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
+        user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
     }
     next();
 });

@@ -15,16 +15,16 @@ class FileSelectButton extends React.Component<Props, States> {
     private fileInputRef: RefObject<HTMLInputElement> = createRef();
     render(): React.ReactElement<any> {
         return (<Fragment>
-        <Button
-            content={this.props.intl.formatMessage({id: "component.button.file_select"})}
-            labelPosition="left"
-            icon="file"
-            onClick={this.onClick} />
-        <input
-            ref={this.fileInputRef}
-            type="file"
-            hidden
-            onChange={this.props.onChange} />
+            <Button
+                content={this.props.intl.formatMessage({id: "component.button.file_select"})}
+                labelPosition="left"
+                icon="file"
+                onClick={this.onClick} />
+            <input
+                ref={this.fileInputRef}
+                type="file"
+                hidden
+                onChange={this.props.onChange} />
         </Fragment>);
     }
     private onClick = (event: any): void => {

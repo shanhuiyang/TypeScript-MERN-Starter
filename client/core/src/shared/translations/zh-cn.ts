@@ -30,6 +30,10 @@ const TRANSLATION: Translation = {
         "page.article.delete": "删除文章：{title}",
         "page.article.delete_confirmation": "删除后的文章不可恢复，您确定要删除吗？",
         "page.article.empty": "目前还没有任何文章。",
+        "page.insert_image.title": "插入图片",
+        "page.insert_image.fill_description": "图片描述",
+        "page.insert_image.fill_link": "图片链接",
+        "page.insert_image.upload": "本地上传",
 
         // Models.
         // pattern: <model_name>.<model_property>.<model_property_values>
@@ -50,7 +54,7 @@ const TRANSLATION: Translation = {
         "article.created_at": "创建于",
         "article.updated_at": "更新于",
 
-        // Component
+        // Components.
         // pattern: component.<component_name>.<action>
         "component.button.file_select": "选择文件",
         "component.button.submit": "提交",
@@ -63,7 +67,7 @@ const TRANSLATION: Translation = {
         "component.button.edit": "编辑",
         "component.button.create": "创建",
 
-        // Toast
+        // Toasts.
         // pattern: toast.<model>.<info>
         "toast.user.general_error": "找不到该用户，请检查",
         "toast.user.invalid_token_error": "请先登录",
@@ -85,6 +89,7 @@ const TRANSLATION: Translation = {
         "toast.article.content_too_short": "正文不能短于100字",
         "toast.article.invalid_author": "您并非本文的作者！",
         "toast.article.not_found": "不存在的文章！",
+        "toast.article.insert_image_failed": "图片插入失败",
         "toast.user.attack_alert": "侦测到非法攻击",
         "toast.user.email": "这不是一个合法的邮箱",
         "toast.user.email_not_found": "找不到该邮箱",

@@ -156,8 +156,8 @@ class Profile extends React.Component<Props, States> {
                 }
             );
             reader.readAsDataURL(e.target.files[0]);
-          }
-      };
+        }
+    };
     private update = (): void => {
         if  (this.props.state.userState.currentUser) {
             const user: User = this.props.state.userState.currentUser;

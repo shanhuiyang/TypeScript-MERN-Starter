@@ -14,10 +14,11 @@ import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
 import { MiddlewareRequest } from "oauth2orize";
-import storage from "../repository/storage";
+import storage, { CONTAINER_AVATAR } from "../repository/storage";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
 import _ from "lodash";
+import { getBlobNameFromUrl } from "../repository/utils";
 
 // User authorization endpoint.
 //
@@ -175,7 +176,8 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
             if (err) {
                 return res.status(500).json({ message: "toast.user.update_profile_failed" });
             }
-            user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams()}`;
+            const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
+            user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
             res.json(user);
         });
     });

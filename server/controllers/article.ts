@@ -8,6 +8,9 @@ import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
+import * as random from "../util/random";
+import storage, { CONTAINER_ARTICLE } from "../repository/storage";
+import { UploadBlobResult } from "../repository/storage.d";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
@@ -106,4 +109,39 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             res.json({data: articles, authors: authorsDic} as ArticleState);
         });
     });
+};
+export const insertImage: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    const user: User = req.user as User;
+    const ext: string = checkImageType(req.headers["content-type"]);
+    const blobName: string  = `${user._id}_article_${random.getUid(8)}.${ext}`;
+    storage.uploadBlob(
+        req,
+        parseInt(req.headers["content-length"]),
+        CONTAINER_ARTICLE,
+        blobName
+    ).then(
+        (value: UploadBlobResult) => {
+            if (value.statusCode >= 200 && value.statusCode < 300) {
+                const sasToken: string = storage.generateSigningUrlParams(CONTAINER_ARTICLE, blobName, true);
+                res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
+            } else {
+                res.status(value.statusCode).end();
+            }
+        }
+    ).catch(
+        (reason: any) => {
+            console.error(JSON.stringify(reason));
+            res.status(500).json(reason);
+        }
+    );
+};
+const checkImageType = (contentType: string): string => {
+    switch (contentType) {
+        case "image/png":
+            return "png";
+        case "image/jpeg":
+            return "jpg";
+        default:
+            return "";
+    }
 };

@@ -16,6 +16,7 @@ import article from "./routes/article";
 // API keys and Passport configuration
 import "./config/passport-consumer";
 import avatar from "./routes/avatar";
+import bodyParser from "body-parser";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -37,6 +38,8 @@ mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
 const app = express();
 app.set("server_port", SERVER_PORT);
 app.set("origin_uri", ORIGIN_URI);
+app.use(bodyParser.json({limit: "16mb"}));
+app.use(bodyParser.urlencoded({ limit: "16mb", extended: true }));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
