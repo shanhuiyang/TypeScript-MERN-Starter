@@ -1,0 +1,13 @@
+@charset "UTF-8";
+/**
+* This style sheet is used to override the unwanted styles in tui-editor.css and .tui-editor-contents.css
+*/
+.tui-editor-defaultUI {
+    border: 1px solid rgba(34, 36, 38, .15);
+    border-radius: .28571429rem;
+    padding: 2px;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+.tui-editor-contents {
+    font-size: 1.1rem;
+}

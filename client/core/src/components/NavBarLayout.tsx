@@ -156,7 +156,7 @@ class NavBarLayout extends React.Component<Props, States> {
     }
 
     private renderScrollToTop = (): React.ReactElement<any> => {
-        return <ScrollToTop showUnder={160} style={{ bottom: 30, right: 28 }}>
+        return <ScrollToTop showUnder={1000} style={{ bottom: 20, right: 28 }}>
             <Icon size="huge" color="green"
                 name="arrow alternate circle up" />
         </ScrollToTop>;

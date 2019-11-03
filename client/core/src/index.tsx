@@ -12,6 +12,7 @@ import { initStorage } from "./shared/storage";
 import storageWrapper from "./components/storage";
 import { SET_LOCALE } from "./actions/common";
 import ToastWrapper from "./components/ToastWrapper";
+import "./css/no-iframe.css";
 
 // Add necessary configurations here before rendering
 
