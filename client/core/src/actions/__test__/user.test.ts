@@ -8,6 +8,7 @@ import Gender from "../../models/Gender";
 import { initStorage } from "../../shared/storage";
 import storageWrapper from "../../components/storage";
 import { getHostUrl } from "../../shared/fetch";
+import { DEFAULT_PREFERENCES } from "../../shared/preferences";
 
 // Initialize local storage provider
 initStorage(storageWrapper);
@@ -18,6 +19,7 @@ const DUMMY_USER_1: User = {
     name: "Dummy User",
     avatarUrl: "https://avatar.corp.com/dummy",
     gender: Gender.MALE,
+    preferences: DEFAULT_PREFERENCES,
     _id: "somedummyid"
 };
 const DUMMY_ACCESS_TOKEN: string = "dummy token";

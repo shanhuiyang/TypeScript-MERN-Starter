@@ -1,6 +1,7 @@
 import { AnyAction as Action } from "redux";
-import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR } from "../actions/user";
+import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR, UPDATE_PREFERENCES_SUCCESS } from "../actions/user";
 import UserState from "../models/client/UserState";
+import User from "../models/User";
 
 const initialState: UserState = {
     loading: false,
@@ -21,6 +22,15 @@ const userState = (state: UserState = initialState, action: Action): UserState =
                 ...state,
                 loading: false,
                 currentUser: action.user
+            };
+        case UPDATE_PREFERENCES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                currentUser: {
+                    ...(state.currentUser as User),
+                    preferences: action.preferences
+                }
             };
         case USER_REQUEST_START:
             return {...state, loading: true};

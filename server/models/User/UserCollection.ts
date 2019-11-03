@@ -10,7 +10,11 @@ export const userSchema: Schema = new mongoose.Schema({
     gender: String,
     address: String,
     website: String,
-    avatarUrl: String
+    avatarUrl: String,
+    preferences: {
+        type: Map,
+        of: String
+    }
 }, { timestamps: true });
 
 /**

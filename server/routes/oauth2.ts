@@ -5,6 +5,7 @@ import * as controllers from "../controllers/oauth2";
 import { check } from "express-validator";
 import passport = require("passport");
 import Gender from "../../client/core/src/models/Gender";
+import EditorType from "../../client/core/src/models/EditorType";
 
 const oauth2: Router = express.Router();
 oauth2.route("/token").post(controllers.token);
@@ -45,6 +46,17 @@ oauth2.route("/profile")
             check("gender", "toast.user.gender").isIn(Object.values(Gender))
         ],
         controllers.updateProfile
+    );
+oauth2.route("/preferences")
+    .post(
+        passport.authenticate("bearer", { session: false }),
+        [
+            check("id", "toast.user.attack_alert")
+                .exists()
+                .custom((value, { req }) => value === req.user._id.toString()),
+            check("preferences.editorType", "toast.user.preferences.editorType").isIn(Object.values(EditorType))
+        ],
+        controllers.updatePreferences
     );
 
 export default oauth2;

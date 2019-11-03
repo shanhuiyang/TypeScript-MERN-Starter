@@ -8,6 +8,8 @@ import Gender from "../models/Gender";
 import RedirectTask from "../models/client/RedirectTask";
 import { getToast as toast } from "../shared/toast";
 import { getStorage as localStorage } from "../shared/storage";
+import { DEFAULT_PREFERENCES } from "../shared/preferences";
+import Preferences from "../models/Preferences";
 
 export const USER_REQUEST_START: string = "USER_REQUEST_START";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -18,6 +20,8 @@ export const LOGIN_SUCCESS: string = "LOGIN_SUCCESS";
 export const LOGIN_FAILED: string = "LOGIN_FAILED";
 export const UPDATE_PROFILE_SUCCESS: string = "UPDATE_PROFILE_SUCCESS";
 export const UPDATE_PROFILE_FAILED: string = "UPDATE_PROFILE_FAILED";
+export const UPDATE_PREFERENCES_SUCCESS: string = "UPDATE_PREFERENCES_SUCCESS";
+export const UPDATE_PREFERENCES_FAILED: string = "UPDATE_PREFERENCES_FAILED";
 export const SIGN_UP_SUCCESS: string = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILED: string = "SIGN_UP_FAILED";
 export const LOGOUT: string = "LOGOUT";
@@ -134,13 +138,40 @@ const userActionCreator: UserActionCreator = {
                         type: UPDATE_PROFILE_SUCCESS,
                         user: json
                     });
-                    toast().success("toast.user.update_profile_successfully");
+                    toast().success("toast.user.update_successfully");
                 } else {
-                    return Promise.reject(new Error("toast.user.update_profile_failed"));
+                    return Promise.reject(new Error("toast.user.update_failed"));
                 }
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(UPDATE_PROFILE_FAILED, error));
+            });
+        };
+    },
+    updatePreferences(id: string, preferences: Preferences): any {
+        return (dispatch: Dispatch<any>): void => {
+            localStorage()
+            .getItem(ACCESS_TOKEN_KEY)
+            .then((token: string | null) => {
+                if (!token) {
+                    return Promise.reject(new Error(INVALID_TOKEN_ERROR));
+                }
+                dispatch({ type: USER_REQUEST_START});
+                return fetch("/oauth2/preferences", { id, preferences }, "POST", true);
+            })
+            .then((json: Preferences) => {
+                if (json) {
+                    dispatch({
+                        type: UPDATE_PREFERENCES_SUCCESS,
+                        preferences: json
+                    });
+                    toast().success("toast.user.update_successfully");
+                } else {
+                    return Promise.reject(new Error("toast.user.update_failed"));
+                }
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(UPDATE_PREFERENCES_FAILED, error));
             });
         };
     },
@@ -177,7 +208,15 @@ const userActionCreator: UserActionCreator = {
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
-            fetch("/oauth2/signup", { email, password, confirmPassword, name, gender }, "POST")
+            const preferences: Preferences = DEFAULT_PREFERENCES;
+            fetch("/oauth2/signup", {
+                email,
+                password,
+                confirmPassword,
+                name,
+                gender,
+                preferences
+            }, "POST")
             .then((redirectTask: RedirectTask) => {
                 dispatch({
                     type: SIGN_UP_SUCCESS,

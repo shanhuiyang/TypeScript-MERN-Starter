@@ -61,7 +61,7 @@ class Profile extends React.Component<Props, States> {
             const avatarStyle: any = {height: AVATAR_PREFERABLE_SIZE, width: AVATAR_PREFERABLE_SIZE};
             return (<Container text style={CONTAINER_STYLE}>
                 <Header size={"medium"}>
-                    <FormattedMessage id="page.me.update"/>
+                    <FormattedMessage id="page.me.profile"/>
                 </Header>
                 <Form>
                     <ResponsiveFormField>
