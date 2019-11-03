@@ -7,6 +7,7 @@ import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from
 import "codemirror/lib/codemirror.css";
 import "tui-editor/dist/tui-editor.min.css";
 import "tui-editor/dist/tui-editor-contents.min.css";
+import "../../css/tui-editor-override.css";
 import { Editor } from "@toast-ui/react-editor";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
@@ -55,10 +56,12 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={originalContent}
+                        placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                         previewStyle="tab" // TODO: put it in the user preferences
-                        height="600px"
+                        height="380px"
                         initialEditType="wysiwyg" // TODO: put it in the user preferences
                         usageStatistics={false}
+                        hideModeSwitch={true}
                         useCommandShortcut={true}
                         hooks={{
                             addImageBlobHook: this.onInsertImage,

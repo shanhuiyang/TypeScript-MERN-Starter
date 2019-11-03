@@ -1,0 +1,7 @@
+@charset "UTF-8";
+/**
+ * Block iframe in this app
+ */
+iframe { 
+    display: none !important; 
+}
