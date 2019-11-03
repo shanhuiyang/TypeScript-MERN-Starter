@@ -1,5 +1,6 @@
- import Gender from "./Gender";
+import Gender from "./Gender";
 import { UnifiedModel } from "./UnifiedModel";
+import Preferences from "./Preferences";
 export default interface User extends UnifiedModel {
     email: string;
     password?: string;
@@ -8,4 +9,5 @@ export default interface User extends UnifiedModel {
     avatarUrl: string;
     address?: string;
     website?: string;
+    preferences: Preferences;
 }

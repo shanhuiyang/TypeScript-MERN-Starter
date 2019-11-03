@@ -110,7 +110,8 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         gender: req.body.gender,
         name: req.body.name,
         address: req.body.address,
-        avatarUrl: req.body.avatarUrl
+        avatarUrl: req.body.avatarUrl,
+        preferences: req.body.preferences
     });
     UserCollection.findOne({ email: _.toLower(req.body.email) }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }
@@ -174,11 +175,31 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
         Object.assign(user, req.body);
         user.save((err: any) => {
             if (err) {
-                return res.status(500).json({ message: "toast.user.update_profile_failed" });
+                return res.status(500).json({ message: "toast.user.update_failed" });
             }
             const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
             user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
             res.json(user);
+        });
+    });
+};
+export const updatePreferences: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+
+    UserCollection.findById(req.body.id, (err: Error, user: UserDocument) => {
+        if (err) { return next(err); }
+        if (!user) {
+            return res.status(404).json({ message: "toast.user.account_not_found" });
+        }
+        user.preferences = req.body.preferences;
+        user.save((err: any) => {
+            if (err) {
+                return res.status(500).json({ message: "toast.user.update_failed" });
+            }
+            res.json(user.preferences);
         });
     });
 };

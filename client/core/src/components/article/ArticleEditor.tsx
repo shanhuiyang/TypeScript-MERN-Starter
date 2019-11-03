@@ -13,6 +13,7 @@ import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
 import fetch from "../../shared/fetch";
 import { getToast as toast } from "../../shared/toast";
+import { DEFAULT_PREFERENCES } from "../../shared/preferences";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -40,6 +41,14 @@ class ArticleEditor extends React.Component<Props, States> {
             originalTitle = this.props.article.title;
             originalContent = this.props.article.content;
         }
+        let editorType: string;
+        if (this.props.state.userState.currentUser &&
+            this.props.state.userState.currentUser.preferences &&
+            this.props.state.userState.currentUser.preferences.editorType) {
+            editorType = this.props.state.userState.currentUser.preferences.editorType;
+        } else {
+            editorType = DEFAULT_PREFERENCES.editorType;
+        }
         return (
             <Form>
                 <Form.Field>
@@ -59,7 +68,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                         previewStyle="tab" // TODO: put it in the user preferences
                         height="380px"
-                        initialEditType="wysiwyg" // TODO: put it in the user preferences
+                        initialEditType={editorType}
                         usageStatistics={false}
                         hideModeSwitch={true}
                         useCommandShortcut={true}

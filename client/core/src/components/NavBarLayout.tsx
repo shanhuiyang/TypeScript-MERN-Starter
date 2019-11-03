@@ -130,8 +130,12 @@ class NavBarLayout extends React.Component<Props, States> {
             <Dropdown trigger={trigger} pointing="top left" className="link item">
                 <Dropdown.Menu>
                     <Dropdown.Item as={NavLink} to="/profile">
-                        <FormattedMessage id="page.me.update"/>
+                        <FormattedMessage id="page.me.profile"/>
                     </Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/preferences">
+                        <FormattedMessage id="page.me.preferences"/>
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
                     <Dropdown.Item onClick={this.props.actions.logout}>
                         <FormattedMessage id="page.me.logout"/>
                     </Dropdown.Item>

@@ -16,7 +16,6 @@ import article from "./routes/article";
 // API keys and Passport configuration
 import "./config/passport-consumer";
 import avatar from "./routes/avatar";
-import bodyParser from "body-parser";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);

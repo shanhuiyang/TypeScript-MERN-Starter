@@ -12,6 +12,7 @@ import EditArticle from "./pages/EditArticle";
 import About from "./pages/About";
 import Footer from "./components/Footer";
 import { WRAPPER_VIEW_STYLE } from "./shared/styles";
+import Preferences from "./pages/Preferences";
 interface Props {}
 
 interface States {}
@@ -38,6 +39,7 @@ export default class App extends React.Component<Props, States> {
                                 <Route path="/signup" render={ (props) => <SignUp {...props} /> } />
                                 <Route path="/consent" render={ (props) => <Consent {...props} /> } />
                                 <Route path="/profile" render={ (props) => <Profile {...props} /> } />
+                                <Route path="/preferences" render={ (props) => <Preferences {...props} /> } />
                                 <Route path="/article/create" render={ (props) => <CreateArticle {...props} /> } />
                                 <Route path="/article/edit/:id" render={ (props) => <EditArticle {...props} /> } />
                                 <Route path="/about" component={About} />
