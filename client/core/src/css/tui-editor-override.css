@@ -11,3 +11,6 @@
 .tui-editor-contents {
     font-size: 1.1rem;
 }
+.tui-editor-contents > p {
+    word-wrap: break-word;
+}
