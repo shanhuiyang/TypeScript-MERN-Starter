@@ -18,6 +18,7 @@ interface Props extends IntlProps {
 
 interface States {
     selectedEditorType: EditorType;
+    editing: boolean;
 }
 
 class Preferences extends React.Component<Props, States> {
@@ -27,6 +28,7 @@ class Preferences extends React.Component<Props, States> {
         this.message = this.props.intl.formatMessage;
         this.state = {
             selectedEditorType: DEFAULT_PREFERENCES.editorType,
+            editing: false
         };
     }
 
@@ -54,7 +56,8 @@ class Preferences extends React.Component<Props, States> {
                                 Object.values(EditorType).map((value: string) => this.renderEditorTypeRadio(value))
                             }
                     </Form.Group>
-                    <Button primary type="submit" onClick={ this.update } loading={loading} disabled={loading}>
+                    <Button primary type="submit" onClick={ this.update }
+                        loading={loading} disabled={loading || !this.state.editing}>
                         <Icon name="check circle outline" />
                         <FormattedMessage id="component.button.submit"/>
                     </Button>
@@ -75,7 +78,8 @@ class Preferences extends React.Component<Props, States> {
     };
     private onSelectedEditorTypeChange = (event: ChangeEvent, data: any): void => {
         this.setState({
-            selectedEditorType: data.value as EditorType
+            selectedEditorType: data.value as EditorType,
+            editing: true
         });
     }
     private update = (): void => {

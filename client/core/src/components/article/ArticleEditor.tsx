@@ -24,7 +24,9 @@ interface Props extends IntlProps {
     state: AppState;
 }
 
-interface States {}
+interface States {
+    editing: boolean;
+}
 
 class ArticleEditor extends React.Component<Props, States> {
     titleRef: RefObject<HTMLInputElement>;
@@ -33,6 +35,9 @@ class ArticleEditor extends React.Component<Props, States> {
         super(props);
         this.titleRef = React.createRef();
         this.contentRef = React.createRef();
+        this.state = {
+            editing: false
+        };
     }
     render(): React.ReactElement<any> {
         let originalTitle: string = "";
@@ -55,7 +60,9 @@ class ArticleEditor extends React.Component<Props, States> {
                     <label>
                         <FormattedMessage id="article.title" />
                     </label>
-                    <input ref={this.titleRef} autoFocus={true} defaultValue={originalTitle} />
+                    <input ref={this.titleRef} autoFocus={true}
+                        defaultValue={originalTitle}
+                        onChange={this.startEditing}/>
                 </Form.Field>
                 <Form.Field>
                     <label>
@@ -72,18 +79,27 @@ class ArticleEditor extends React.Component<Props, States> {
                         usageStatistics={false}
                         hideModeSwitch={true}
                         useCommandShortcut={true}
+                        events={{
+                            change: () => {
+                                if (originalContent !== this.contentRef.current.getInstance().getMarkdown()) {
+                                    this.startEditing();
+                                }
+                            }
+                        }}
                         hooks={{
                             addImageBlobHook: this.onInsertImage,
                         }} />
                 </Form.Field>
                 <FormGroup inline>
-                    <Form.Field control={Button} onClick={this.onSubmit} primary loading={this.props.loading} disabled={this.props.loading}>
+                    <Form.Field control={Button} onClick={this.onSubmit} primary
+                        loading={this.props.loading}
+                        disabled={this.props.loading || !this.state.editing}>
                         <FormattedMessage id={this.props.submitTextId} />
                     </Form.Field>
                     {
                         this.props.negativeButtonProps ?
                             <Form.Field>
-                                <ModalButton {...this.props.negativeButtonProps}/>
+                                <ModalButton {...this.props.negativeButtonProps} disabled={this.props.loading}/>
                             </Form.Field>
                             : undefined
                     }
@@ -109,6 +125,13 @@ class ArticleEditor extends React.Component<Props, States> {
         }, (error: Error) => {
             toast().error("toast.article.insert_image_failed");
         });
+    }
+    private startEditing = () => {
+        if (!this.state.editing) {
+            this.setState({
+                editing: true
+            });
+        }
     }
 }
 

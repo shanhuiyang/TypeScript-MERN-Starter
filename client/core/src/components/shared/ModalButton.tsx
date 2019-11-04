@@ -11,6 +11,7 @@ export interface ModalButtonProps {
     descriptionText: string;
     descriptionIcon: string;
     onConfirm: () => void;
+    disabled?: boolean;
 }
 
 interface States {
@@ -28,7 +29,7 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
         return (<Modal
             open={!this.state.closed} onClose={this.handleClose}
             trigger={
-                <Button onClick={this.handleOpen} content={this.props.buttonText} />
+                <Button onClick={this.handleOpen} content={this.props.buttonText} disabled={this.props.disabled}/>
             }
             basic
             size="small">

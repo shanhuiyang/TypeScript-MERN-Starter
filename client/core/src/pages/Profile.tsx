@@ -22,6 +22,7 @@ interface States {
     selectedGender: Gender;
     selectedAvatar: string | undefined;
     cropAvatarDialogOpen: boolean;
+    editing: boolean;
 }
 
 class Profile extends React.Component<Props, States> {
@@ -38,7 +39,8 @@ class Profile extends React.Component<Props, States> {
         this.state = {
             selectedGender: Gender.MALE,
             selectedAvatar: undefined,
-            cropAvatarDialogOpen: false
+            cropAvatarDialogOpen: false,
+            editing: false
         };
     }
 
@@ -99,7 +101,7 @@ class Profile extends React.Component<Props, States> {
                         <label>
                             <FormattedMessage id="user.name"/>
                         </label>
-                        <input defaultValue={user.name} ref={this.nameRef} />
+                        <input defaultValue={user.name} ref={this.nameRef} onChange={this.startEditing}/>
                     </ResponsiveFormField>
                     <Form.Group inline>
                         <label>
@@ -113,15 +115,16 @@ class Profile extends React.Component<Props, States> {
                         <label>
                             <FormattedMessage id="user.address"/>
                         </label>
-                        <input defaultValue={user.address} ref={this.addressRef} />
+                        <input defaultValue={user.address} ref={this.addressRef} onChange={this.startEditing}/>
                     </ResponsiveFormField>
                     <ResponsiveFormField width={12}>
                         <label>
                             <FormattedMessage id="user.website"/>
                         </label>
-                        <input defaultValue={user.website} ref={this.websiteRef} />
+                        <input defaultValue={user.website} ref={this.websiteRef} onChange={this.startEditing}/>
                     </ResponsiveFormField>
-                    <Button primary type="submit" onClick={ this.update } loading={loading} disabled={loading}>
+                    <Button primary type="submit" onClick={ this.update }
+                        loading={loading} disabled={loading || !this.state.editing}>
                         <Icon name="check circle outline" />
                         <FormattedMessage id="component.button.submit"/>
                     </Button>
@@ -142,7 +145,8 @@ class Profile extends React.Component<Props, States> {
     };
     private onSelectedGenderChange = (event: ChangeEvent, data: any): void => {
         this.setState({
-            selectedGender: data.value as Gender
+            selectedGender: data.value as Gender,
+            editing: true
         });
     }
     private onAvatarSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -151,7 +155,8 @@ class Profile extends React.Component<Props, States> {
             reader.addEventListener("load", () => {
                     this.setState({
                         selectedAvatar: reader.result as string,
-                        cropAvatarDialogOpen: true
+                        cropAvatarDialogOpen: true,
+                        editing: true
                     });
                 }
             );
@@ -180,6 +185,13 @@ class Profile extends React.Component<Props, States> {
         this.closeAvatarCropDialog();
         if (avatarData) {
             this.props.actions.uploadAvatar(avatarData);
+        }
+    }
+    private startEditing = () => {
+        if (!this.state.editing) {
+            this.setState({
+                editing: true
+            });
         }
     }
 }
