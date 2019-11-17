@@ -14,15 +14,14 @@
 | Android                  | <img src="./images/demo-android-0.png" alt="Android Preview" width="200"/><img src="./images/demo-android-1.png" alt="Android Preview" width="200"/><img src="./images/demo-android-2.png" alt="Android Preview" width="200"/>   |
 | iOS                      | <img src="./images/demo-ios-0.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-1.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-2.png" alt="iOS Preview" width="200"/>   |
 
-This project is intended to build a RESTful web app for all platforms in TypeScript.
+This project is intended to build a community app for all platforms in TypeScript.
 
 **With this project you can build a web app including server, website, Android app and iOS app in one programming language.**
 
 **MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact & **R**eactNative, and **N**ode.js.
-
 This project implemented MERN in **TypeScript**.
+
 TypeScript is a typed super set of JavaScript.
-It has become popular recently in applications due to the benefits it can bring.
 If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding.
 You can check out its documentation [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
@@ -195,17 +194,31 @@ We build this project on following philosophies:
 1. **Beginner friendly**. You can start the app without any complex configuration for build and runtime. In this document we are trying our best to illustrate how each modules of this app are bound.
 2. **Easy to extend**. There is no complex configurations in it, so that you can also focus on your business logic. We chose well-documented 3rd party packages to use, so that you can extend this app easily by following the working patterns of these packages.
 
-## Road map
+## Work items
 
-We have extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
+We have already extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
 
-In next period of time, we will working on:
+In next period of time (Before Feb 1st 2020), we will working on:
 
-- Globalization. The text strings should be well managed and easily be extended for multi-languages.
-- Better error alert.
+- Better documents.
 - Use types as many as possible.
+- Use Promises instead of callbacks.
+- ~~Globalization. The text strings should be well managed and easily be extended for multi-languages.~~
+- ~~Better error alert.~~
 - Tests. The core of client (such as actions, reducers), and server (such as routes, controllers) should be well covered by unit tests.
-- Rich text editors.
+- Better article UX.
+  - Using the list-detail structure.
+  - User can add comments to articles.
+  - Comment received notification for article authors.
+- Rich text editors. Using markdown as the exchanging text format.
+  - Auto saving.
+  - Unsaved alert if users are going to close the page.
+  - Support emoji.
+- Improving the authentication.
+  - Email verification for signing up.
+  - Password modification.
+  - Forget password.
+- Themes customizing.
 - Incoming issues.
 
 # Project structure
