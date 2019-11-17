@@ -31,6 +31,9 @@ interface States {
 class ArticleEditor extends React.Component<Props, States> {
     titleRef: RefObject<HTMLInputElement>;
     contentRef: RefObject<any>;
+
+    originalTitle: string = "";
+    originalContent: string = "";
     constructor(props: Props) {
         super(props);
         this.titleRef = React.createRef();
@@ -40,11 +43,9 @@ class ArticleEditor extends React.Component<Props, States> {
         };
     }
     render(): React.ReactElement<any> {
-        let originalTitle: string = "";
-        let originalContent: string = "";
         if (this.props.article) {
-            originalTitle = this.props.article.title;
-            originalContent = this.props.article.content;
+            this.originalTitle = this.props.article.title;
+            this.originalContent = this.props.article.content;
         }
         let editorType: string;
         if (this.props.state.userState.currentUser &&
@@ -61,8 +62,8 @@ class ArticleEditor extends React.Component<Props, States> {
                         <FormattedMessage id="article.title" />
                     </label>
                     <input ref={this.titleRef} autoFocus={true}
-                        defaultValue={originalTitle}
-                        onChange={this.startEditing}/>
+                        defaultValue={this.originalTitle}
+                        onChange={this.onEditing}/>
                 </Form.Field>
                 <Form.Field>
                     <label>
@@ -71,7 +72,7 @@ class ArticleEditor extends React.Component<Props, States> {
                     <Editor
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
-                        initialValue={originalContent}
+                        initialValue={this.originalContent}
                         placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                         previewStyle="tab" // TODO: put it in the user preferences
                         height="380px"
@@ -81,9 +82,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         useCommandShortcut={true}
                         events={{
                             change: () => {
-                                if (originalContent !== this.contentRef.current.getInstance().getMarkdown()) {
-                                    this.startEditing();
-                                }
+                                this.onEditing();
                             }
                         }}
                         hooks={{
@@ -126,8 +125,13 @@ class ArticleEditor extends React.Component<Props, States> {
             toast().error("toast.article.insert_image_failed");
         });
     }
-    private startEditing = () => {
-        if (!this.state.editing) {
+    private onEditing = () => {
+        if (this.originalTitle === (this.titleRef.current && this.titleRef.current.value)
+            && this.originalContent === this.contentRef.current.getInstance().getMarkdown()) {
+            this.setState({
+                editing: false
+            });
+        } else {
             this.setState({
                 editing: true
             });

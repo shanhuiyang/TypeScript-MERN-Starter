@@ -40,11 +40,11 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
             </p>
             </Modal.Content>
             <Modal.Actions>
-            <Button basic color="red" inverted onClick={ this.handleClose }>
+            <Button basic color="green" inverted onClick={ this.handleClose }>
                 <Icon name="remove" />
                 <FormattedMessage id="component.button.cancel" />
             </Button>
-            <Button color="green" inverted onClick={ this.props.onConfirm }>
+            <Button color="red" inverted onClick={ this.props.onConfirm }>
                 <Icon name="checkmark" />
                 <FormattedMessage id="component.button.confirm" />
             </Button>
