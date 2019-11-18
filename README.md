@@ -53,7 +53,7 @@ Not only using TypeScript, but this project is also featured by:
 - [Motivation](#motivation)
   - [Prior Art](#prior-art)
   - [Philosophy](#philosophy)
-  - [Road map](#road-map)
+  - [Work Items](#work-items)
 - [Project structure](#project-structure)
   - [Dependencies](#dependencies)
   - [Folder structure](#folder-structure)
@@ -213,7 +213,6 @@ In next period of time (Before Feb 1st 2020), we will working on:
 - Rich text editors. Using markdown as the exchanging text format.
   - Auto saving.
   - Unsaved alert if users are going to close the page.
-  - Support emoji.
 - Improving the authentication.
   - Email verification for signing up.
   - Password modification.
