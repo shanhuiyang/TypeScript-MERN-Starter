@@ -56,7 +56,7 @@ const TRANSLATION: Translation = {
         "article.content": "正文",
         "article.content_placeholder": "不少于100字",
         "article.created_at": "创建于",
-        "article.updated_at": "更新于",
+        "article.updated_at": "最后更新于",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -69,7 +69,9 @@ const TRANSLATION: Translation = {
         "component.button.update": "更新",
         "component.button.delete": "删除",
         "component.button.edit": "编辑",
+        "component.button.see_all": "查看全文",
         "component.button.create": "创建",
+        "component.button.scroll_up": "回到顶部",
 
         // Toasts.
         // pattern: toast.<model>.<info>

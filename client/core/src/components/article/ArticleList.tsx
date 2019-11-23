@@ -2,16 +2,19 @@ import React, { Fragment } from "react";
 import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 import Article from "../../models/Article";
-import { Link } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
-import { Container, Segment, Button, Header, Icon } from "semantic-ui-react";
+import { Container, Segment, Header, Icon } from "semantic-ui-react";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import Loading from "./Loading";
-import { FormattedMessage } from "react-intl";
+import GitHubLink from "../shared/GitHubLink";
+import MenuFab from "../shared/MenuFab";
+import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
+import FabActionProps from "../../models/client/FabActionProps";
 
-interface Props {
+interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
     actions: ArticleActionCreator;
 }
@@ -33,6 +36,7 @@ class ArticleList extends React.Component<Props, States> {
 
     render(): React.ReactElement<any> {
         return <Container text style={CONTAINER_STYLE}>
+            {this.renderFab()}
             {this.renderCreateArticleSection()}
             {this.renderArticles()}
         </Container>;
@@ -52,49 +56,43 @@ class ArticleList extends React.Component<Props, States> {
             </Fragment>;
         }
     }
-
+    private renderFab = (): React.ReactElement<any> => {
+        const actions: FabActionProps[] = [{
+            text: this.props.intl.formatMessage({id: "component.button.scroll_up"}),
+            icon: "arrow up",
+            onClick: () => { window.scrollTo(0, 0); },
+        }];
+        if (this.props.state.userState.currentUser) {
+            const editUri: string = "/article/create";
+            actions.unshift({
+                text: this.props.intl.formatMessage({id: "page.article.add"}),
+                icon: "add",
+                onClick: () => { this.props.history.push(editUri); },
+            });
+        }
+        return <MenuFab fabActions={actions}/>;
+    }
     private renderCreateArticleSection = (): React.ReactElement<any> | undefined => {
-        const editUri: string = "/article/create";
         const articles: Article [] = this.props.state.articles.data;
             if (this.props.state.articles.loading) {
                 return <Loading />;
             } else if (this.props.state.userState.currentUser) {
-                if (articles && articles.length > 0) {
-                    return <Button fluid basic primary as={Link} to={editUri} animated="vertical">
-                        <Button.Content visible>
-                            <FormattedMessage id="page.article.add" />
-                        </Button.Content>
-                        <Button.Content hidden>
-                            <Icon name="add" />
-                            <FormattedMessage id="page.article.add" />
-                        </Button.Content>
-                    </Button>;
-                } else {
+                if (!articles || articles.length === 0) {
                     return <Segment placeholder>
                         <Header icon>
                         <Icon name="edit outline" />
                         <FormattedMessage id="page.article.empty" />
                         </Header>
-                        <Button primary as={Link} to={editUri}>
-                            <FormattedMessage id="page.article.add" />
-                        </Button>
                     </Segment>;
                 }
             } else {
                 if (articles && articles.length > 0) {
                     return undefined;
                 } else {
-                    return <Segment placeholder>
-                        <Header icon style={{display: "flex", flexDirection: "row", justifyContent: "center"}}>
-                            <Icon name="github" />
-                        </Header>
-                        <Button primary as="a" href="https://github.com/shanhuiyang/TypeScript-MERN-Starter">
-                            <FormattedMessage id="page.about.learn_more" />
-                        </Button>
-                    </Segment>;
+                    return <GitHubLink />;
                 }
             }
     }
 }
 
-export default connectPropsAndActions(ArticleList);
+export default injectIntl(withRouter(connectPropsAndActions(ArticleList)));

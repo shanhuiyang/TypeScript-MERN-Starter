@@ -1,13 +1,14 @@
 import Article from "../../models/Article";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import React from "react";
-import { Segment, Item, Label, Button } from "semantic-ui-react";
+import { Segment, Item, Label, Button, Icon } from "semantic-ui-react";
 import User from "../../models/User";
 import { Link } from "react-router-dom";
 import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 import { FormattedMessage, FormattedDate, FormattedTime } from "react-intl";
 import { Viewer } from "@toast-ui/react-editor";
+import { getFirstNLines } from "../../shared/string";
 
 interface Props {
     article: Article;
@@ -21,12 +22,13 @@ class ArticleItem extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const { article } = this.props;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
+        const previewContent: string = getFirstNLines(article.content, 5);
         return <Segment key={createDate.getMilliseconds()}>
             <Item>
                 <Item.Content>
                     <Item.Header as="h2">{article.title}</Item.Header>
                     <Item.Meta>{this.renderAuthorInfo(article)}</Item.Meta>
-                    <Viewer style={{fontSize: 20}} initialValue={article.content} />
+                    <Viewer style={{fontSize: 20}} initialValue={previewContent} />
                     <Item.Extra style={{
                         display: "flex",
                         flexDirection: "row",
@@ -35,7 +37,7 @@ class ArticleItem extends React.Component<Props, States> {
                             <FormattedMessage id="article.created_at" />
                             <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
                         </div>
-                        {this.renderEditButton(article)}
+                        {this.renderSeeAllButton(article)}
                     </Item.Extra>
                 </Item.Content>
             </Item>
@@ -55,16 +57,12 @@ class ArticleItem extends React.Component<Props, States> {
         }
     }
 
-    private renderEditButton = (article: Article): React.ReactElement<any> | undefined => {
-        if (article.author === (this.props.state.userState.currentUser && this.props.state.userState.currentUser._id)) {
-            const uri: string = `/article/edit/${article._id}`;
-            return <Button primary as={Link} to={uri}>
-                <i className="fa fa-edit"></i>
-                <FormattedMessage id="component.button.edit" />
-            </Button>;
-        } else {
-            return undefined;
-        }
+    private renderSeeAllButton = (article: Article): React.ReactElement<any> | undefined => {
+        const uri: string = `/article/${article._id}`;
+        return <Button as={Link} to={uri}>
+            <FormattedMessage id="component.button.see_all" />
+            <Icon name="angle double right"/>
+        </Button>;
     }
 }
 
