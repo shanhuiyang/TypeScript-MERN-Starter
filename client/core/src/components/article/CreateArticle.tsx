@@ -1,12 +1,13 @@
 import React from "react";
-import connectPropsAndActions from "../shared/connect";
-import AppState from "../models/client/AppState";
+import connectPropsAndActions from "../../shared/connect";
+import AppState from "../../models/client/AppState";
 import { Redirect } from "react-router-dom";
-import ArticleActionCreator from "../models/client/ArticleActionCreator";
+import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import { Container, Header } from "semantic-ui-react";
-import ArticleEditor from "../components/article/ArticleEditor";
-import { CONTAINER_STYLE } from "../shared/styles";
+import ArticleEditor from "./ArticleEditor";
+import { CONTAINER_STYLE } from "../../shared/styles";
 import { FormattedMessage } from "react-intl";
+import { MOBILE_DESKTOP_BOUND } from "../constants";
 
 interface Props {
     state: AppState;
@@ -20,8 +21,10 @@ class CreateArticle extends React.Component<Props, States> {
             return <Redirect to="/" />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articles.loading;
+            const containerStyle: any = (window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ?
+                {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20} : CONTAINER_STYLE;
             return (
-                <Container text style={CONTAINER_STYLE}>
+                <Container style={containerStyle}>
                     <Header size={"medium"}>
                         <FormattedMessage id="page.article.add" />
                     </Header>

@@ -56,7 +56,7 @@ const TRANSLATION: Translation = {
         "article.content": "Content",
         "article.content_placeholder": "no less than 100 characters",
         "article.created_at": "Created at ",
-        "article.updated_at": "Updated at ",
+        "article.updated_at": "Last updated at ",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -69,7 +69,9 @@ const TRANSLATION: Translation = {
         "component.button.update": "Update",
         "component.button.delete": "Delete",
         "component.button.edit": "Edit",
+        "component.button.see_all": "See all",
         "component.button.create": "Create",
+        "component.button.scroll_up": "Scroll to top",
 
         // Toasts.
         // pattern: toast.<model>.<info>

@@ -1,38 +1,24 @@
 /**
- * A button widget which will show a modal layer to warn users before it take the real actions.
+ * A modal layer which shows a modal layer to warn users before it take the real actions.
  */
 import React from "react";
 import { Button, Header, Icon, Modal } from "semantic-ui-react";
 import { FormattedMessage } from "react-intl";
 
 export interface ModalButtonProps {
-    buttonText: string;
+    open: boolean;
     warningText: string;
     descriptionText: string;
     descriptionIcon: string;
     onConfirm: () => void;
-    disabled?: boolean;
+    onCancel: () => void;
 }
 
-interface States {
-    closed: boolean;
-}
+interface States {}
 
-export default class ModalButton extends React.Component<ModalButtonProps, States> {
-    constructor(props: ModalButtonProps) {
-        super(props);
-        this.state = { closed: true };
-    }
-    handleOpen = (): void => this.setState({ closed: false });
-    handleClose = (): void => this.setState({ closed: true });
+export default class WarningModal extends React.Component<ModalButtonProps, States> {
     render(): React.ReactElement<any> {
-        return (<Modal
-            open={!this.state.closed} onClose={this.handleClose}
-            trigger={
-                <Button onClick={this.handleOpen} content={this.props.buttonText} disabled={this.props.disabled}/>
-            }
-            basic
-            size="small">
+        return (<Modal open={this.props.open} basic size="small">
             <Header icon={this.props.descriptionIcon} content={this.props.descriptionText} />
             <Modal.Content>
             <p>
@@ -40,7 +26,7 @@ export default class ModalButton extends React.Component<ModalButtonProps, State
             </p>
             </Modal.Content>
             <Modal.Actions>
-            <Button basic color="green" inverted onClick={ this.handleClose }>
+            <Button basic color="green" inverted onClick={ this.props.onCancel }>
                 <Icon name="remove" />
                 <FormattedMessage id="component.button.cancel" />
             </Button>

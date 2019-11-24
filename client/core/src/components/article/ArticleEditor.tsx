@@ -2,7 +2,6 @@ import Article from "../../models/Article";
 import { Form, Button, FormGroup } from "semantic-ui-react";
 import { RefObject } from "react";
 import React from "react";
-import ModalButton, { ModalButtonProps } from "../shared/ModalButton";
 import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
 import "codemirror/lib/codemirror.css";
 import "tui-editor/dist/tui-editor.min.css";
@@ -14,12 +13,13 @@ import AppState from "../../models/client/AppState";
 import fetch from "../../shared/fetch";
 import { getToast as toast } from "../../shared/toast";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
+import { MOBILE_DESKTOP_BOUND } from "../constants";
+import ResponsiveFormField from "../shared/ResponsiveFormField";
 
 interface Props extends IntlProps {
     article?: Article;
     submitTextId: string;
     onSubmit: (title: string, content: string) => void;
-    negativeButtonProps?: ModalButtonProps;
     loading?: boolean;
     state: AppState;
 }
@@ -29,11 +29,11 @@ interface States {
 }
 
 class ArticleEditor extends React.Component<Props, States> {
-    titleRef: RefObject<HTMLInputElement>;
-    contentRef: RefObject<any>;
+    private titleRef: RefObject<HTMLInputElement>;
+    private contentRef: RefObject<any>;
 
-    originalTitle: string = "";
-    originalContent: string = "";
+    private originalTitle: string = "";
+    private originalContent: string = "";
     constructor(props: Props) {
         super(props);
         this.titleRef = React.createRef();
@@ -57,14 +57,14 @@ class ArticleEditor extends React.Component<Props, States> {
         }
         return (
             <Form>
-                <Form.Field>
+                <ResponsiveFormField>
                     <label>
                         <FormattedMessage id="article.title" />
                     </label>
                     <input ref={this.titleRef} autoFocus={true}
                         defaultValue={this.originalTitle}
                         onChange={this.onEditing}/>
-                </Form.Field>
+                </ResponsiveFormField>
                 <Form.Field>
                     <label>
                         <FormattedMessage id="article.content" />
@@ -74,7 +74,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         ref={this.contentRef}
                         initialValue={this.originalContent}
                         placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
-                        previewStyle="tab" // TODO: put it in the user preferences
+                        previewStyle={(window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ? "vertical" : "tab"}
                         height="380px"
                         initialEditType={editorType}
                         usageStatistics={false}
@@ -95,13 +95,6 @@ class ArticleEditor extends React.Component<Props, States> {
                         disabled={this.props.loading || !this.state.editing}>
                         <FormattedMessage id={this.props.submitTextId} />
                     </Form.Field>
-                    {
-                        this.props.negativeButtonProps ?
-                            <Form.Field>
-                                <ModalButton {...this.props.negativeButtonProps} disabled={this.props.loading}/>
-                            </Form.Field>
-                            : undefined
-                    }
                 </FormGroup>
             </Form>
         );

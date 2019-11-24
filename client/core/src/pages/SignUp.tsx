@@ -22,14 +22,14 @@ interface States {
 const DEFAULT_SELECTED_GENDER: Gender = Gender.MALE;
 
 class SignUp extends React.Component<Props, States> {
-    message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
-    emailRef: RefObject<HTMLInputElement>;
-    passwordRef: RefObject<HTMLInputElement>;
-    confirmPasswordRef: RefObject<HTMLInputElement>;
-    nameRef: RefObject<HTMLInputElement>;
+    private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
+    private emailRef: RefObject<HTMLInputElement>;
+    private passwordRef: RefObject<HTMLInputElement>;
+    private confirmPasswordRef: RefObject<HTMLInputElement>;
+    private nameRef: RefObject<HTMLInputElement>;
     constructor(props: Props) {
         super(props);
-        this.message = this.props.intl.formatMessage;
+        this.getString = this.props.intl.formatMessage;
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
         this.confirmPasswordRef = React.createRef();
@@ -52,25 +52,25 @@ class SignUp extends React.Component<Props, States> {
                         <label>
                             <FormattedMessage id="user.email"/>
                         </label>
-                        <input placeholder={this.message({ id: "user.email"})} ref={this.emailRef} />
+                        <input placeholder={this.getString({ id: "user.email"})} ref={this.emailRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
                         <label>
                             <FormattedMessage id="user.password"/>
                         </label>
-                        <input type="password" placeholder={this.message({ id: "user.password"})} ref={this.passwordRef} />
+                        <input type="password" placeholder={this.getString({ id: "user.password"})} ref={this.passwordRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
                         <label>
                             <FormattedMessage id="user.confirm_password"/>
                         </label>
-                        <input type="password" placeholder={this.message({ id: "user.confirm_password"})} ref={this.confirmPasswordRef} />
+                        <input type="password" placeholder={this.getString({ id: "user.confirm_password"})} ref={this.confirmPasswordRef} />
                     </ResponsiveFormField>
                     <ResponsiveFormField>
                         <label>
                             <FormattedMessage id="user.name"/>
                         </label>
-                        <input placeholder={this.message({ id: "user.name"})} ref={this.nameRef} />
+                        <input placeholder={this.getString({ id: "user.name"})} ref={this.nameRef} />
                     </ResponsiveFormField>
                     <Form.Group inline>
                         <label>
@@ -94,7 +94,7 @@ class SignUp extends React.Component<Props, States> {
         return <Form.Field
             key={gender}
             control={Radio}
-            label={this.message({ id: `user.gender.${gender}`})}
+            label={this.getString({ id: `user.gender.${gender}`})}
             value={gender}
             checked={this.state.selectedGender === gender}
             onChange={this.onSelectedGenderChange} />;
