@@ -5,7 +5,7 @@ import { Redirect, match, RouteComponentProps } from "react-router-dom";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
-import { Container, Header, Divider, Icon, Label } from "semantic-ui-react";
+import { Container, Header, Divider, Label, Rating, RatingProps } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import "react-tiny-fab/dist/styles.css";
 import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage, FormattedTime, FormattedDate } from "react-intl";
@@ -13,6 +13,7 @@ import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
 import MenuFab from "../shared/MenuFab";
+import UserLabel from "../user/UserLabel";
 import User from "../../models/User";
 import FabActionProps from "../../models/client/FabActionProps";
 
@@ -116,37 +117,46 @@ class ArticleDetail extends React.Component<Props, States> {
     private renderMetaInfo = (article: Article): React.ReactElement<any> => {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const updateDate: Date = article.updatedAt ? new Date(article.updatedAt) : new Date(0);
-        return <Container text>
-            {this.renderAuthorInfo(article)}
-            <Label>
-                <Icon name="heart" />{ 3 /*TODO: Add rating*/}
-            </Label>
-            <Label right style={{color: "grey"}}>
-                <FormattedMessage id="article.created_at" />
-                <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
-            </Label>
-            <Label right style={{color: "grey"}}>
-                <FormattedMessage id="article.updated_at" />
-                <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
-            </Label>
-            <Divider />
-            {/*TODO: Add comments*/}
+        return <Fragment>
+            <Container text>
+                {this.renderRating(article)}
+                <UserLabel user={this.props.state.articles.authors[article.author]} />
+                <Label style={{color: "grey"}}>
+                    <FormattedMessage id="article.created_at" />
+                    <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
+                </Label>
+                <Label style={{color: "grey"}}>
+                    <FormattedMessage id="article.updated_at" />
+                    <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
+                </Label>
+                <Divider />
+                {/*TODO: Add comments*/}
+            </Container>
+        </Fragment>;
+    }
+    private renderRating = (article: Article): any => {
+        const user: User | undefined = this.props.state.userState.currentUser;
+        const hasRated: boolean =
+            !!user && article.likes && (article.likes.findIndex((value: string) => user._id === value) >= 0);
+        return <Container text textAlign="center" style={CONTAINER_STYLE}>
+            <label style={{color: "grey"}}>
+                <Rating size="huge" icon="star" defaultRating={hasRated ? 1 : 0} maxRating={1}
+                    disabled={!user || article.author === user._id} onRate={
+                        (event: React.MouseEvent<HTMLDivElement>, data: RatingProps): void => {
+                            if (!this.props.state.userState.currentUser) {
+                                return;
+                            }
+                            this.props.actions.rate(
+                                data.rating as number,
+                                article._id,
+                                this.props.state.userState.currentUser._id);
+                        }}/>
+                { article.likes ? article.likes.length : 0 }
+            </label>
         </Container>;
     }
-    private renderAuthorInfo = (article: Article): React.ReactElement<any> | undefined => {
-        const authorInfo: User = this.props.state.articles.authors[article.author];
-        if (authorInfo) {
-            return <Label image color="teal">
-                    <img src={authorInfo.avatarUrl ? authorInfo.avatarUrl : "/images/avatar.png"}
-                        alt="avatar" />
-                {authorInfo.name}
-            </Label>;
-        } else {
-            return undefined;
-        }
-    }
     private removeArticle = (): void => {
-        this.props.actions.removeArticle(this.articleId);
+            this.props.actions.removeArticle(this.articleId);
     }
 }
 

@@ -64,6 +64,44 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         );
     });
 };
+export const rate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+
+    ArticleCollection.findById(req.query.id).exec((error: Error, article: ArticleDocument) => {
+        if (error) {
+            return next(error);
+        }
+        if (!article) {
+            return res.status(404).json({ message: "toast.article.not_found" });
+        }
+        const user: User = req.user as User;
+        if (article.author === user._id.toString()) {
+            return res.status(401).json({ message: "toast.user.attack_alert" });
+        }
+        const likes: string[] = article.likes;
+        if (Number.parseInt(req.query.rating) === 1) {
+            likes.push(req.query.user);
+        } else if (Number.parseInt(req.query.rating) === 0) {
+            const toRemove: number = likes.findIndex((value: string) => value === req.query.user);
+            likes.splice(toRemove);
+        } else {
+            return res.status(400).end();
+        }
+        ArticleCollection.findByIdAndUpdate(
+            req.query.id, {likes: likes}
+        ).exec(
+            (error: Error, updated: Article) => {
+                if (error) {
+                    return next(error);
+                }
+                return res.status(200).end();
+            }
+        );
+    });
+};
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {

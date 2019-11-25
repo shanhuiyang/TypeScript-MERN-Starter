@@ -15,6 +15,8 @@ export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
 export const INSERT_IMAGE_BEGIN: string = "INSERT_IMAGE_BEGIN";
 export const INSERT_IMAGE_SUCCESS: string = "INSERT_IMAGE_SUCCESS";
 export const INSERT_IMAGE_FAILED: string = "INSERT_IMAGE_FAILED";
+export const RATE_SUCCESS: string = "RATE_SUCCESS";
+export const RATE_FAILED: string = "RATE_FAILED";
 
 const articleActionCreator: ArticleActionCreator = {
     getAllArticles(): any {
@@ -68,6 +70,22 @@ const articleActionCreator: ArticleActionCreator = {
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             }, (error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
+            });
+        };
+    },
+    rate(rating: number, article: string, user: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({type: SAVE_ARTICLE_BEGIN});
+            fetch(`/api/article/rate?id=${article}&user=${user}&rating=${rating}`, undefined, "GET", /*withToken*/ true)
+            .then((json: any) => {
+                dispatch({
+                    type: RATE_SUCCESS,
+                    article: article,
+                    user: user,
+                    rating: rating
+                });
+            }, (error: Error) => {
+                dispatch(actions.handleFetchError(RATE_FAILED, error));
             });
         };
     }
