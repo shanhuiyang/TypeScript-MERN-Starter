@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 import * as controllers from "../controllers/article";
-import { check } from "express-validator";
+import { check, query } from "express-validator";
 import passport from "passport";
 
 const updateArticleValidations = [
@@ -30,6 +30,15 @@ article.route("/").get(controllers.read);
 article.route("/remove/:id").get(
     passport.authenticate("bearer", { session: false }),
     controllers.remove
+);
+article.route("/rate").get(
+    passport.authenticate("bearer", { session: false }),
+    [
+        query("id", "toast.user.attack_alert").not().isEmpty(),
+        query("user", "toast.user.attack_alert").not().isEmpty(),
+        query("rating", "toast.user.attack_alert").not().isEmpty(),
+    ],
+    controllers.rate
 );
 article.route("/insert/image").put(
     passport.authenticate("bearer", { session: false }),

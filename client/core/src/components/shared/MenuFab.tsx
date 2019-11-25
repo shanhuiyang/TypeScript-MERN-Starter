@@ -18,7 +18,7 @@ class MenuFab extends React.Component<Props, States> {
             icon={<Icon name="ellipsis vertical" style={fabIconStyle}/>} >
             {
                 this.props.fabActions.map((action: FabActionProps) =>
-                <Action text={action.text}
+                <Action text={action.text} key={action.text}
                     onClick={action.onClick}>
                     <Icon name={action.icon} style={fabIconStyle}/>
                 </Action>)
