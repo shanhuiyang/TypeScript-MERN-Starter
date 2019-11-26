@@ -1,11 +1,13 @@
-import UserState from "./UserState";
-import ArticleState from "./ArticleState";
-import RedirectTask from "./RedirectTask";
-import Translation from "./Translation";
+import UserState from "./UserState.d";
+import ArticleState from "./ArticleState.d";
+import RedirectTask from "./RedirectTask.d";
+import Translation from "./Translation.d";
+import Comment from "../Comment.d";
 
 export default interface AppState {
     translations: Translation;
     redirectTask: RedirectTask;
     userState: UserState;
-    articles: ArticleState;
+    articleState: ArticleState;
+    comments: Comment[]; // Comments for currently displayed article/photo/video
 }

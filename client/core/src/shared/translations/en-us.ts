@@ -72,6 +72,9 @@ const TRANSLATION: Translation = {
         "component.button.see_all": "See all",
         "component.button.create": "Create",
         "component.button.scroll_up": "Scroll to top",
+        "component.comment.title": "Comment",
+        "component.comment.placeholder": "Leave a reply",
+        "component.comment.submit": "Add Reply",
 
         // Toasts.
         // pattern: toast.<model>.<info>

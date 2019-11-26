@@ -17,10 +17,10 @@ interface Props {
 interface States {}
 class CreateArticle extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             return <Redirect to="/" />;
         } else if (this.props.state.userState.currentUser) {
-            const loading: boolean | undefined = this.props.state.articles.loading;
+            const loading: boolean | undefined = this.props.state.articleState.loading;
             const containerStyle: any = (window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ?
                 {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20} : CONTAINER_STYLE;
             return (

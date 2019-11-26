@@ -5,7 +5,7 @@ import { Redirect, match, RouteComponentProps } from "react-router-dom";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
-import { Container, Header, Divider, Label, Rating, RatingProps } from "semantic-ui-react";
+import { Container, Header, Label, Rating, RatingProps } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import "react-tiny-fab/dist/styles.css";
 import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage, FormattedTime, FormattedDate } from "react-intl";
@@ -16,6 +16,8 @@ import MenuFab from "../shared/MenuFab";
 import UserLabel from "../user/UserLabel";
 import User from "../../models/User";
 import FabActionProps from "../../models/client/FabActionProps";
+import CommentSection from "../comment/CommentSection";
+import CommentTarget from "../../models/CommentTarget";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -40,7 +42,7 @@ class ArticleDetail extends React.Component<Props, States> {
         window.scrollTo(0, 0);
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             return <Redirect to="/" />;
         }
         const notFoundError: Error = {
@@ -51,7 +53,7 @@ class ArticleDetail extends React.Component<Props, States> {
         if (!this.articleId) {
             return <ErrorPage error={notFoundError} />;
         }
-        const article: Article | undefined = this.props.state.articles.data.find(
+        const article: Article | undefined = this.props.state.articleState.data.find(
             (value: Article): boolean => value._id === this.articleId
         );
         if (!article) {
@@ -120,7 +122,7 @@ class ArticleDetail extends React.Component<Props, States> {
         return <Fragment>
             <Container text>
                 {this.renderRating(article)}
-                <UserLabel user={this.props.state.articles.authors[article.author]} />
+                <UserLabel user={this.props.state.articleState.authors[article.author]} />
                 <Label style={{color: "grey"}}>
                     <FormattedMessage id="article.created_at" />
                     <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
@@ -129,8 +131,7 @@ class ArticleDetail extends React.Component<Props, States> {
                     <FormattedMessage id="article.updated_at" />
                     <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
                 </Label>
-                <Divider />
-                {/*TODO: Add comments*/}
+                <CommentSection targetId={article._id} target={CommentTarget.ARTICLE} />
             </Container>
         </Fragment>;
     }

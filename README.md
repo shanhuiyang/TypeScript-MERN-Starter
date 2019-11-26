@@ -210,6 +210,7 @@ In next period of time (Before Feb 1st 2020), we will working on:
   - Using the list-detail structure.
   - User can add comments to articles.
   - Comment received notification for article authors.
+  - Pagination.
 - Rich text editors. Using markdown as the exchanging text format.
   - Auto saving.
   - Unsaved alert if users are going to close the page.

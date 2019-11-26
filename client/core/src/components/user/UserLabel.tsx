@@ -1,3 +1,7 @@
+/**
+ * A label which contains mini user avatar and user name.
+ * You may would like to use UserAvatar sometimes.
+ */
 import React from "react";
 import { Label } from "semantic-ui-react";
 import User from "../../models/User.d";

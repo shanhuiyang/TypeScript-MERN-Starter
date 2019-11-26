@@ -23,13 +23,13 @@ interface States {}
 
 class ArticleList extends React.Component<Props, States> {
     componentDidMount() {
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             this.props.actions.getAllArticles();
         }
     }
 
     componentDidUpdate(prevProps: Props) {
-        if (prevProps.state.articles.valid && !this.props.state.articles.valid) {
+        if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
             this.props.actions.getAllArticles();
         }
     }
@@ -43,12 +43,12 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     private renderArticles = (): React.ReactElement<any> => {
-        if (this.props.state.articles.loading) {
+        if (this.props.state.articleState.loading) {
             return <Loading />;
         } else {
             return <Fragment>
             {
-                this.props.state.articles.data
+                this.props.state.articleState.data
                 .sort(byCreatedAt).map(
                     (article: Article) => <ArticleItem key={article._id} article={article} />
                 )
@@ -73,8 +73,8 @@ class ArticleList extends React.Component<Props, States> {
         return <MenuFab fabActions={actions}/>;
     }
     private renderCreateArticleSection = (): React.ReactElement<any> | undefined => {
-        const articles: Article [] = this.props.state.articles.data;
-            if (this.props.state.articles.loading) {
+        const articles: Article [] = this.props.state.articleState.data;
+            if (this.props.state.articleState.loading) {
                 return <Loading />;
             } else if (this.props.state.userState.currentUser) {
                 if (!articles || articles.length === 0) {

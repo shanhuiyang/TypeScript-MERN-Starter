@@ -8,10 +8,10 @@ const initialState: ArticleState = {
     loading: false,
     valid: false,
     data: [],
-    authors: {}
+    authors: {},
 };
 
-const articles = (state: ArticleState = initialState, action: Action): ArticleState => {
+const article = (state: ArticleState = initialState, action: Action): ArticleState => {
     switch (action.type) {
         case GET_ARTICLE_BEGIN:
         case SAVE_ARTICLE_BEGIN:
@@ -42,4 +42,4 @@ const articles = (state: ArticleState = initialState, action: Action): ArticleSt
     }
 };
 
-export default articles;
+export default article;
