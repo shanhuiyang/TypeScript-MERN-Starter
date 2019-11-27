@@ -28,7 +28,7 @@ class ArticleItem extends React.Component<Props, States> {
                 <Item.Content>
                     <Item.Header as="h2">{article.title}</Item.Header>
                     <Item.Meta>
-                        <UserLabel user={this.props.state.articles.authors[article.author]} />
+                        <UserLabel user={this.props.state.articleState.authors[article.author]} />
                     </Item.Meta>
                     <Viewer style={{fontSize: 20}} initialValue={previewContent} />
                     <Item.Extra style={{

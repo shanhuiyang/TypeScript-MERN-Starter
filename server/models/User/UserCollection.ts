@@ -6,7 +6,7 @@ import { getBlobNameFromUrl } from "../../repository/utils";
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
-    name: String,
+    name: { type: String, unique: true },
     gender: String,
     address: String,
     website: String,

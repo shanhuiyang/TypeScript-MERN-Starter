@@ -72,6 +72,9 @@ const TRANSLATION: Translation = {
         "component.button.see_all": "查看全文",
         "component.button.create": "创建",
         "component.button.scroll_up": "回到顶部",
+        "component.comment.title": "评论",
+        "component.comment.placeholder": "留下你的看法",
+        "component.comment.submit": "添加回复",
 
         // Toasts.
         // pattern: toast.<model>.<info>

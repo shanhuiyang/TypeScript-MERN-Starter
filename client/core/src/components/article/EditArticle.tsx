@@ -24,7 +24,7 @@ class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
         const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             return <Redirect to="/" />;
         }
         const notFoundError: Error = {
@@ -35,7 +35,7 @@ class EditArticle extends React.Component<Props, States> {
         if (!this.articleId) {
             return <ErrorPage error={notFoundError} />;
         }
-        const article: Article | undefined = this.props.state.articles.data.find(
+        const article: Article | undefined = this.props.state.articleState.data.find(
             (value: Article): boolean => value._id === this.articleId
         );
         if (!article) {
@@ -49,7 +49,7 @@ class EditArticle extends React.Component<Props, States> {
                     <Header size={"medium"}>
                         <FormattedMessage id="page.article.edit" />
                     </Header>
-                    <ArticleEditor article={article} submitTextId="component.button.update" onSubmit={this.editArticle} loading={this.props.state.articles.loading}
+                    <ArticleEditor article={article} submitTextId="component.button.update" onSubmit={this.editArticle} loading={this.props.state.articleState.loading}
                         negativeButtonProps={{
                             descriptionIcon: "delete",
                             descriptionText: message({id: "page.article.delete"}, {title: article.title}),
