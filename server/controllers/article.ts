@@ -1,11 +1,11 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import ArticleDocument from "../models/Article/ArticleDocument";
 import ArticleCollection from "../models/Article/ArticleCollection";
-import ArticleState from "../../client/core/src/models/client/ArticleState";
-import Article from "../../client/core/src/models/Article";
-import User from "../../client/core/src/models/User";
+import Article from "../../client/core/src/models/Article.d";
+import User from "../../client/core/src/models/User.d";
+import GetArticlesResponse from "../../client/core/src/models/response/GetArticlesResponse.d";
 import UserCollection from "../models/User/UserCollection";
-import UserDocument from "../models/User/UserDocument";
+import UserDocument from "../models/User/UserDocument.d";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
 import * as random from "../util/random";
@@ -29,7 +29,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
                 if (error) {
                     return next(error);
                 }
-                res.status(200).end();
+                return res.status(200).end();
             }
         );
     });
@@ -59,7 +59,7 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
                 if (error) {
                     return next(error);
                 }
-                res.status(200).end();
+                return res.status(200).end();
             }
         );
     });
@@ -83,9 +83,9 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
         }
         const likes: string[] = article.likes;
         if (Number.parseInt(req.query.rating) === 1) {
-            likes.push(req.query.user);
+            likes.push(user._id.toString());
         } else if (Number.parseInt(req.query.rating) === 0) {
-            const toRemove: number = likes.findIndex((value: string) => value === req.query.user);
+            const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove);
         } else {
             return res.status(400).end();
@@ -118,7 +118,7 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
         if (error) {
             return next(error);
         }
-        res.status(200).send();
+        return res.status(200).send();
     });
 };
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -144,7 +144,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             authors.forEach((author: User): void => {
                 authorsDic[author._id] = author;
             });
-            res.json({data: articles, authors: authorsDic} as ArticleState);
+            return res.json({data: articles, authors: authorsDic} as GetArticlesResponse);
         });
     });
 };
@@ -161,15 +161,15 @@ export const insertImage: RequestHandler = (req: Request, res: Response, next: N
         (value: UploadBlobResult) => {
             if (value.statusCode >= 200 && value.statusCode < 300) {
                 const sasToken: string = storage.generateSigningUrlParams(CONTAINER_ARTICLE, blobName, true);
-                res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
+                return res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
             } else {
-                res.status(value.statusCode).end();
+                return res.status(value.statusCode).end();
             }
         }
     ).catch(
         (reason: any) => {
             console.error(JSON.stringify(reason));
-            res.status(500).json(reason);
+            return res.status(500).json(reason);
         }
     );
 };

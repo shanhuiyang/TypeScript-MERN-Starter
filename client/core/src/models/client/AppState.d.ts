@@ -1,13 +1,16 @@
 import UserState from "./UserState.d";
 import ArticleState from "./ArticleState.d";
+import CommentState from "./CommentState.d";
 import RedirectTask from "./RedirectTask.d";
 import Translation from "./Translation.d";
 import Comment from "../Comment.d";
+import User from "../User.d";
 
 export default interface AppState {
     translations: Translation;
     redirectTask: RedirectTask;
     userState: UserState;
     articleState: ArticleState;
-    comments: Comment[]; // Comments for currently displayed article/photo/video
+    commentState: CommentState; // Comments for currently displayed article/photo/video
+    userDictionary: {[id: string]: User}; // User dictionary of all content authors
 }

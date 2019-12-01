@@ -120,6 +120,7 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         }
         user.save((err: any) => {
             if (err) {
+                // TODO: resolve the MongoError: E11000 duplicate key error collection: admin.users index: name_1 dup key: { name: "xx xx" }
                 return next(err);
             }
             req.logIn(user, (err) => {

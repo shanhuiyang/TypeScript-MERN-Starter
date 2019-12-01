@@ -21,7 +21,7 @@ class ArticleItem extends React.Component<Props, States> {
     render(): any {
         const article: Article = this.props.value;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const articleAuthor: User = this.props.state.articles.authors[article.author];
+        const articleAuthor: User = this.props.state.userDictionary[article.author];
         return <Link to={{
                 pathname: `${this.props.match.url}/${article._id}`,
                 state: article

@@ -3,14 +3,16 @@ import userState from "./user";
 import articleState from "./article";
 import redirectTask from "./redirectTask";
 import translations from "./translations";
-import comments from "./comments";
+import commentState from "./comment";
+import userDictionary from "./userDictionary";
 
 const reducer = combineReducers({
     userState,
     articleState,
     redirectTask,
     translations,
-    comments
+    commentState,
+    userDictionary
 });
 
 export default reducer;

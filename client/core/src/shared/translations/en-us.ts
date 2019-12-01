@@ -6,6 +6,7 @@ const TRANSLATION: Translation = {
         // App basic info
         "app.name": "Typescript MERN Starter",
         "app.footer": "Copyright © 2019 Company, Inc. All Rights Reserved.",
+        "app.connect_error": "Failed to fetch", // Do not change this phrase, it is used as keywords.
 
         // Pages.
         // pattern: page.<page_name>.<section>
@@ -108,7 +109,10 @@ const TRANSLATION: Translation = {
         "toast.user.confirm_password": "confirmed password field must have the same value as the password field",
         "toast.user.name": "Name could not be empty.",
         "toast.user.gender": "Invalid gender.",
-        "toast.user.preferences.editorType": "Invalid editor type",
+        "toast.user.preferences.editor_type": "Invalid editor type",
+        "toast.comment.content_empty": "Comment could not be empty.",
+        "toast.comment.add_successfully": "Comment successfully.",
+        "toast.comment.add_failed": "Comment failed.",
     }
 };
 

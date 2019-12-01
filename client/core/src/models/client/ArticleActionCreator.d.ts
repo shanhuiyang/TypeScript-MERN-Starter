@@ -6,5 +6,5 @@ export default interface ArticleActionCreator extends ActionCreatorsMapObject {
     createArticle(title: string, content: string, author: string): any;
     editArticle(article: Article): any;
     removeArticle(id: string): any;
-    rate(rating: number, article: string, user: string): any;
+    rateArticle(rating: number, id: string): any;
 }

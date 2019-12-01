@@ -54,7 +54,7 @@ oauth2.route("/preferences")
             check("id", "toast.user.attack_alert")
                 .exists()
                 .custom((value, { req }) => value === req.user._id.toString()),
-            check("preferences.editorType", "toast.user.preferences.editorType").isIn(Object.values(EditorType))
+            check("preferences.editorType", "toast.user.preferences.editor_type").isIn(Object.values(EditorType))
         ],
         controllers.updatePreferences
     );

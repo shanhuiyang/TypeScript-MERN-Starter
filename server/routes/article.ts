@@ -35,7 +35,6 @@ article.route("/rate").get(
     passport.authenticate("bearer", { session: false }),
     [
         query("id", "toast.user.attack_alert").not().isEmpty(),
-        query("user", "toast.user.attack_alert").not().isEmpty(),
         query("rating", "toast.user.attack_alert").not().isEmpty(),
     ],
     controllers.rate

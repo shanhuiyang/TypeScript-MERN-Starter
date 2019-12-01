@@ -8,7 +8,6 @@ const initialState: ArticleState = {
     loading: false,
     valid: false,
     data: [],
-    authors: {},
 };
 
 const article = (state: ArticleState = initialState, action: Action): ArticleState => {
@@ -17,7 +16,7 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
         case SAVE_ARTICLE_BEGIN:
             return {...state, loading: true};
         case GET_ARTICLE_SUCCESS:
-            return {...action.articles, valid: true, loading: false};
+            return {data: action.articles, valid: true, loading: false};
         case SAVE_ARTICLE_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
             return {...state, valid: false, loading: false};

@@ -218,6 +218,7 @@ In next period of time (Before Feb 1st 2020), we will working on:
   - Email verification for signing up.
   - Password modification.
   - Forget password.
+- User-friend time display.
 - Themes customizing.
 - Incoming issues.
 

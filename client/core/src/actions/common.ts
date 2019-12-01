@@ -2,6 +2,7 @@ import CommonActionCreator from "../models/client/CommonActionCreator";
 import { AnyAction as Action } from "redux";
 import { getToast as toast } from "../shared/toast";
 import { INVALID_TOKEN_ERROR } from "../shared/constants";
+import EnUS from "../shared/translations/en-us";
 
 export const RESET_REDIRECT: string = "RESET_REDIRECT";
 export const SET_LOCALE: string = "SET_LOCALE";
@@ -14,7 +15,10 @@ const actions: CommonActionCreator = {
         }
         // const formattedMessage: string = `${error.name}\n${JSON.stringify(error.message)}`;
         // console.error(formattedMessage);
-        if (error.message) {
+        if (error.message === EnUS.messages["app.connect_error"]) {
+            // Hijack "failed to fetch"
+            toast().error("app.connect_error");
+        } else if (error.message) {
             toast().error(error.message);
         } else if (error.name) {
             toast().error(error.name);

@@ -2,8 +2,8 @@ import ArticleActionCreator from "../models/client/ArticleActionCreator";
 import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
 import actions from "./common";
-import ArticleState from "../models/client/ArticleState";
 import Article from "../models/Article";
+import GetArticlesResponse from "../models/response/GetArticlesResponse.d";
 import { getToast as toast } from "../shared/toast";
 
 export const SAVE_ARTICLE_BEGIN: string = "SAVE_ARTICLE_BEGIN";
@@ -23,16 +23,18 @@ const articleActionCreator: ArticleActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: GET_ARTICLE_BEGIN});
             fetch("/api/article", undefined, "GET")
-            .then((json: ArticleState) => {
+            .then((json: GetArticlesResponse) => {
                 if (json && json.data && json.authors) {
                     dispatch({
                         type: GET_ARTICLE_SUCCESS,
-                        articles: json
+                        articles: json.data,
+                        authors: json.authors
                     });
                 } else {
                     dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
                 }
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, error));
             });
         };
@@ -44,7 +46,8 @@ const articleActionCreator: ArticleActionCreator = {
             .then((json: any) => {
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });
         };
@@ -56,7 +59,8 @@ const articleActionCreator: ArticleActionCreator = {
             .then((json: any) => {
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });
         };
@@ -68,23 +72,24 @@ const articleActionCreator: ArticleActionCreator = {
             .then((json: any) => {
                 toast().success("toast.article.delete_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
             });
         };
     },
-    rate(rating: number, article: string, user: string): any {
+    rateArticle(rating: number, id: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
-            fetch(`/api/article/rate?id=${article}&user=${user}&rating=${rating}`, undefined, "GET", /*withToken*/ true)
+            fetch(`/api/article/rate?id=${id}&rating=${rating}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
                 dispatch({
                     type: RATE_SUCCESS,
-                    article: article,
-                    user: user,
+                    article: id,
                     rating: rating
                 });
-            }, (error: Error) => {
+            })
+            .catch((error: Error) => {
                 dispatch(actions.handleFetchError(RATE_FAILED, error));
             });
         };

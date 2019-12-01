@@ -6,6 +6,7 @@ const TRANSLATION: Translation = {
         // App basic info
         "app.name": "Typescript MERN Starter",
         "app.footer": "Copyright © 2019 公司版权所有",
+        "app.connect_error": "无法连接服务器",
 
         // Pages.
         // pattern: page.<page_name>.<section>
@@ -108,7 +109,10 @@ const TRANSLATION: Translation = {
         "toast.user.confirm_password": "密码不一致",
         "toast.user.name": "名字不能为空",
         "toast.user.gender": "这不是一个合法的性别",
-        "toast.user.preferences.editorType": "这不是一个合法的编辑器类型",
+        "toast.user.preferences.editor_type": "这不是一个合法的编辑器类型",
+        "toast.comment.content_empty": "评论不能为空",
+        "toast.comment.add_successfully": "评论成功",
+        "toast.comment.add_failed": "评论失败",
     }
 };
 
