@@ -19,7 +19,7 @@ class ArticleDetail extends React.Component<Props, States> {
     render(): any {
         const article: Article | undefined = this.props.location.state;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const articleAuthor: User = this.props.state.articles.authors[article.author];
+        const articleAuthor: User = this.props.state.userDictionary[article.author];
         if (article) {
             return <Fragment>
                 <HeaderWithBack/>

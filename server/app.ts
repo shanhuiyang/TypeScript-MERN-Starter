@@ -12,6 +12,7 @@ import { Response, Request, NextFunction } from "express";
 import oauth2 from "./routes/oauth2";
 import auth from "./routes/auth";
 import article from "./routes/article";
+import comment from "./routes/comment";
 
 // API keys and Passport configuration
 import "./config/passport-consumer";
@@ -102,6 +103,7 @@ app.use("/auth", auth); // Auth client routes
 app.use("/oauth2", oauth2); // OAuth2 server routes
 app.use("/api/article", article); // Article related routes
 app.use("/api/avatar", avatar); // Avatar update related routes
+app.use("/api/comment", comment); // Comment related routes
 // Add more routes like "/api/***" here
 
 export default app;

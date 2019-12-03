@@ -17,7 +17,7 @@ import UserLabel from "../user/UserLabel";
 import User from "../../models/User";
 import FabActionProps from "../../models/client/FabActionProps";
 import CommentSection from "../comment/CommentSection";
-import CommentTarget from "../../models/CommentTarget";
+import CommentTargetType from "../../models/CommentTargetType";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -33,6 +33,7 @@ class ArticleDetail extends React.Component<Props, States> {
     private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     constructor(props: Props) {
         super(props);
+        this.articleId = this.props.match && this.props.match.params && this.props.match.params.articleId;
         this.getString = this.props.intl.formatMessage;
         this.state = {
             openDeleteWarning: false
@@ -40,6 +41,7 @@ class ArticleDetail extends React.Component<Props, States> {
     }
     componentDidMount() {
         window.scrollTo(0, 0);
+        this.props.actions.getComments(CommentTargetType.ARTICLE, this.articleId);
     }
     render(): React.ReactElement<any> {
         if (!this.props.state.articleState.valid) {
@@ -49,7 +51,6 @@ class ArticleDetail extends React.Component<Props, States> {
             name: "404 Not Found",
             message: `not found for ${window.location.href} `
         };
-        this.articleId = this.props.match && this.props.match.params && this.props.match.params.articleId;
         if (!this.articleId) {
             return <ErrorPage error={notFoundError} />;
         }
@@ -122,7 +123,7 @@ class ArticleDetail extends React.Component<Props, States> {
         return <Fragment>
             <Container text>
                 {this.renderRating(article)}
-                <UserLabel user={this.props.state.articleState.authors[article.author]} />
+                <UserLabel user={this.props.state.userDictionary[article.author]} />
                 <Label style={{color: "grey"}}>
                     <FormattedMessage id="article.created_at" />
                     <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
@@ -131,7 +132,7 @@ class ArticleDetail extends React.Component<Props, States> {
                     <FormattedMessage id="article.updated_at" />
                     <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
                 </Label>
-                <CommentSection targetId={article._id} target={CommentTarget.ARTICLE} />
+                <CommentSection targetId={article._id} target={CommentTargetType.ARTICLE} />
             </Container>
         </Fragment>;
     }
@@ -147,10 +148,9 @@ class ArticleDetail extends React.Component<Props, States> {
                             if (!this.props.state.userState.currentUser) {
                                 return;
                             }
-                            this.props.actions.rate(
+                            this.props.actions.rateArticle(
                                 data.rating as number,
-                                article._id,
-                                this.props.state.userState.currentUser._id);
+                                article._id);
                         }}/>
                 { article.likes ? article.likes.length : 0 }
             </label>
