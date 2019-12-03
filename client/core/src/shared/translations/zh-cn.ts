@@ -76,6 +76,8 @@ const TRANSLATION: Translation = {
         "component.comment.title": "评论",
         "component.comment.placeholder": "留下你的看法",
         "component.comment.submit": "添加回复",
+        "component.comment.reply": "回复",
+        "component.comment.delete": "删除",
 
         // Toasts.
         // pattern: toast.<model>.<info>

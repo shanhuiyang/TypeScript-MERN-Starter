@@ -76,6 +76,8 @@ const TRANSLATION: Translation = {
         "component.comment.title": "Comment",
         "component.comment.placeholder": "Leave a reply",
         "component.comment.submit": "Add Reply",
+        "component.comment.reply": "Reply",
+        "component.comment.delete": "Delete",
 
         // Toasts.
         // pattern: toast.<model>.<info>
