@@ -80,6 +80,14 @@ class ArticleEditor extends React.Component<Props, States> {
                         usageStatistics={false}
                         hideModeSwitch={true}
                         useCommandShortcut={true}
+                        toolbarItems={[
+                            "image", "link", "table", "divider",
+                            "bold", "italic", "strike", "divider",
+                            "heading", "hr", "quote", "divider",
+                            "ol", "ul", "task", "divider",
+                            "indent", "outdent", "divider",
+                            "code", "codeblock"
+                        ]}
                         events={{
                             change: () => {
                                 this.onEditing();
