@@ -78,6 +78,9 @@ const TRANSLATION: Translation = {
         "component.comment.submit": "添加回复",
         "component.comment.reply": "回复",
         "component.comment.delete": "删除",
+        "component.comment.delete_title": "删除评论",
+        "component.comment.delete_confirmation": "删除后的评论不可恢复，您确定要删除吗？",
+
 
         // Toasts.
         // pattern: toast.<model>.<info>
@@ -115,6 +118,9 @@ const TRANSLATION: Translation = {
         "toast.comment.content_empty": "评论不能为空",
         "toast.comment.add_successfully": "评论成功",
         "toast.comment.add_failed": "评论失败",
+        "toast.comment.delete_parent": "抱歉，你不能删除一个有人回复过的评论",
+        "toast.comment.delete_successfully": "删除成功",
+        "toast.comment.delete_failed": "删除失败",
     }
 };
 

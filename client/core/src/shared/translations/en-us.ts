@@ -30,7 +30,7 @@ const TRANSLATION: Translation = {
         "page.article.add": "Add Article",
         "page.article.edit": "Edit Article",
         "page.article.delete": "Delete Article: {title}",
-        "page.article.delete_confirmation": "You cannot store this article after delete. Are you sure to delete?",
+        "page.article.delete_confirmation": "You cannot restore this article after delete. Are you sure to delete?",
         "page.article.empty": "No articles are added up to now.",
         "page.insert_image.title": "Insert Image",
         "page.insert_image.fill_description": "Image Description",
@@ -78,6 +78,8 @@ const TRANSLATION: Translation = {
         "component.comment.submit": "Add Reply",
         "component.comment.reply": "Reply",
         "component.comment.delete": "Delete",
+        "component.comment.delete_title": "Delete Comment",
+        "component.comment.delete_confirmation": "You cannot restore this comment after delete. Are you sure to delete?",
 
         // Toasts.
         // pattern: toast.<model>.<info>
@@ -115,6 +117,9 @@ const TRANSLATION: Translation = {
         "toast.comment.content_empty": "Comment could not be empty.",
         "toast.comment.add_successfully": "Comment successfully.",
         "toast.comment.add_failed": "Comment failed.",
+        "toast.comment.delete_parent": "Sorry, you cannot delete a comment someone has replied to it.",
+        "toast.comment.delete_successfully": "Delete successfully.",
+        "toast.comment.delete_failed": "Delete failed.",
     }
 };
 

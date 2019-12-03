@@ -21,4 +21,9 @@ comment.route("/add").post(
     controllers.add
 );
 
+comment.route("/remove/:id").get(
+    passport.authenticate("bearer", { session: false }),
+    controllers.remove
+);
+
 export default comment;

@@ -2,7 +2,7 @@
  * This component shows a section which usually below the article
  * In future, this section can be used to show comments below photo, video, etc
  */
-import React, { RefObject, createRef } from "react";
+import React, { RefObject, createRef, Fragment } from "react";
 import { Comment, Form, Button, Header } from "semantic-ui-react";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
@@ -15,8 +15,9 @@ import CommentTargetType from "../../models/CommentTargetType";
 import ActionCreator from "../../models/client/ActionCreator";
 import { byUpdatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
+import WarningModal from "../shared/WarningModal";
 
-const MAXIMUM_THREAD_DEPTH: number = 5;
+const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
 interface Props extends IntlProps {
     targetId: string;
     target: CommentTargetType;
@@ -27,16 +28,18 @@ interface States {
     showReplyFormForCommentId: string;
     commentEditing: boolean;
     replyCommentEditing: boolean;
+    openDeleteWarning: boolean;
 }
 class CommentSection extends React.Component<Props, States> {
     private commentFormRef: RefObject<any>;
     private replyCommentFormRef: RefObject<any>;
-    componentWillUpdate(nextProps: Props) {
-        if (this.props.state.commentState.updating === ADD_COMMENT_START
-            && nextProps.state.commentState.updating === ADD_COMMENT_SUCCESS) {
-                // Reset
+    private toDeleteId: string = "";
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.state.commentState.updating === ADD_COMMENT_START
+            && this.props.state.commentState.updating === ADD_COMMENT_SUCCESS) {
+            // Reset
             this.commentFormRef.current.value = "";
-            this.replyCommentFormRef.current.value = "";
+            this.replyCommentFormRef.current && (this.replyCommentFormRef.current.value = "");
             this.setState({
                 showReplyFormForCommentId: ""
             });
@@ -49,10 +52,12 @@ class CommentSection extends React.Component<Props, States> {
         this.state = {
             showReplyFormForCommentId: "",
             commentEditing: false,
-            replyCommentEditing: false
+            replyCommentEditing: false,
+            openDeleteWarning: false
         };
     }
     render(): React.ReactElement<any> {
+        const getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         return <Comment.Group threaded>
             <Header as="h3" dividing>
                 <FormattedMessage id={"component.comment.title"} />
@@ -62,8 +67,17 @@ class CommentSection extends React.Component<Props, States> {
             {
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
-                    .sort(byUpdatedAt).map((value: CommentClass) => this.renderComment(value))
+                    .sort(byUpdatedAt).reverse().map((value: CommentClass) => this.renderComment(value))
             }
+            <WarningModal
+                descriptionIcon="delete" open={this.state.openDeleteWarning}
+                descriptionText={getString({id: "component.comment.delete_title"})}
+                warningText={getString({id: "component.comment.delete_confirmation"})}
+                onConfirm={() => {
+                    this.props.actions.deleteComment(this.toDeleteId);
+                    this.setState({openDeleteWarning: false});
+                }}
+                onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
         </Comment.Group>;
     }
     renderReplyForm = (editing: boolean, id: string, ref: RefObject<any>): React.ReactElement<any> | undefined => {
@@ -132,38 +146,44 @@ class CommentSection extends React.Component<Props, States> {
                 <Comment.Text>
                     {comment.content}
                 </Comment.Text>
-                <Comment.Actions>
-                    {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
-                    {
-                        this.props.state.userState.currentUser
-                        && stackDepth <= MAXIMUM_THREAD_DEPTH ?
-                        /* eslint-disable-next-line */
-                        <a onClick={() => {this.onToggleReplyForm(comment._id); }}>
-                            <FormattedMessage id="component.comment.reply"/>
-                        </a> :
-                        undefined
-                    }
-                    {
-                        this.props.state.userState.currentUser
-                        && this.props.state.userState.currentUser._id === comment.user ?
-                        /* eslint-disable-next-line */
-                        <a onClick={() => {}}>
-                            <FormattedMessage id="component.comment.delete"/>
-                        </a> :
-                        undefined
-                    }
-                </Comment.Actions>
+                {this.renderActions(comment, stackDepth)}
             </Comment.Content>
             <Comment.Group threaded>
                 {this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)}
                 {/* Recursively render the children */
                     this.props.state.commentState.data
                         .filter((value: CommentClass, index: number) => (value.parent === comment._id))
-                        .sort(byUpdatedAt).map((value: CommentClass) => this.renderComment(value, stackDepth + 1))
+                        .sort(byUpdatedAt).reverse()
+                        .map((value: CommentClass) => this.renderComment(value, stackDepth + 1))
                 }
             </Comment.Group>
         </Comment>;
-    }
+    };
+    renderActions = (comment: CommentClass, stackDepth: number): any => {
+        return <Comment.Actions>
+            {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
+            {
+                this.props.state.userState.currentUser
+                && stackDepth < MAXIMUM_THREAD_STACK_DEPTH ?
+                /* eslint-disable-next-line */
+                <Comment.Action onClick={() => {this.onToggleReplyForm(comment._id); }}>
+                    <FormattedMessage id="component.comment.reply"/>
+                </Comment.Action> :
+                undefined
+            }
+            {
+                this.props.state.userState.currentUser
+                && this.props.state.userState.currentUser._id === comment.user ?
+                /* eslint-disable-next-line */
+                <Fragment>
+                    <Comment.Action onClick={() => { this.deleteComment(comment._id); }}>
+                        <FormattedMessage id="component.comment.delete"/>
+                    </Comment.Action>
+                </Fragment> :
+                undefined
+            }
+        </Comment.Actions>;
+    };
     onToggleReplyForm = (id: string): void => {
         console.log("onToggleReplyForm: " + id);
         if (this.state.showReplyFormForCommentId === id) {
@@ -175,6 +195,10 @@ class CommentSection extends React.Component<Props, States> {
                 showReplyFormForCommentId: id
             });
         }
+    };
+    deleteComment = (id: string): void => {
+        this.setState({openDeleteWarning: true });
+        this.toDeleteId = id;
     }
 }
 

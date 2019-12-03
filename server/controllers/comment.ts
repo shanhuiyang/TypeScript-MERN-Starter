@@ -61,7 +61,6 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
     }
 };
 export const add: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    console.log("enter comment controller");
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {
         return invalid;
@@ -70,7 +69,6 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
         targetType: req.query.targetType,
         targetId: req.query.targetId,
         parent: req.query.parent ? req.query.parent : undefined,
-        children: [],
         content: req.body.content,
         user: (req.user as User)._id.toString(),
         likes: []
@@ -79,7 +77,7 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
     .then((saved: Comment) => {
         if (req.query.parent) {
             CommentCollection
-            .findByIdAndUpdate(req.query.parent, { $push: { children: saved._id  } })
+            .findById(req.query.parent)
             .exec()
             .then((value: CommentDocument) => {
                 return res.json(saved);
@@ -94,6 +92,26 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
     })
     .catch((error: Error) => {
         return next(error);
+    });
+};
+export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+    CommentCollection.findOne({parent: req.params.id})
+    .exec().then((child: Comment) => {
+        if (!child) {
+            CommentCollection.findByIdAndDelete(req.params.id)
+            .exec().then((value: Comment) => {
+                if (value.user !== (req.user as User)._id.toString()) {
+                    return res.status(401).json({ message: "toast.user.attack_alert" });
+                }
+                return res.status(200).end();
+            });
+        } else {
+            return res.status(401).json({message: "toast.comment.delete_parent"});
+        }
     });
 };
 

@@ -67,6 +67,23 @@ const commentActionCreator: CommentActionCreator = {
     },
     rateComment(rating: number, id: string): any {
         // TODO
+    },
+    deleteComment(id: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({type: DELETE_COMMENT_START});
+            fetch(`/api/comment/remove/${id}`, undefined, "GET", true)
+            .then((json: any) => {
+                toast().success("toast.comment.delete_successfully");
+                dispatch({
+                    type: DELETE_COMMENT_SUCCESS,
+                    id: id
+                });
+            })
+            .catch((error: Error) => {
+                toast().error("toast.comment.delete_failed");
+                return dispatch(actions.handleFetchError(DELETE_COMMENT_FAILED, error));
+            });
+        };
     }
 };
 

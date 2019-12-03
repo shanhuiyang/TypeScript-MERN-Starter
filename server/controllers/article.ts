@@ -11,6 +11,7 @@ import { validationErrorResponse } from "./utils";
 import * as random from "../util/random";
 import storage, { CONTAINER_ARTICLE } from "../repository/storage";
 import { UploadBlobResult } from "../repository/storage.d";
+import CommentCollection from "../models/Article/CommentCollection";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
@@ -29,6 +30,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
                 if (error) {
                     return next(error);
                 }
+                CommentCollection.remove({targetId: req.params.id}).exec();
                 return res.status(200).end();
             }
         );
