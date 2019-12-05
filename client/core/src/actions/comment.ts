@@ -65,8 +65,21 @@ const commentActionCreator: CommentActionCreator = {
             });
         };
     },
-    rateComment(rating: number, id: string): any {
-        // TODO
+    rateComment(rating: number, id: string, user: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            fetch(`/api/comment/rate?id=${id}&rating=${rating}`, undefined, "GET", /*withToken*/ true)
+            .then((json: any) => {
+                dispatch({
+                    type: RATE_COMMENT_SUCCESS,
+                    comment: id,
+                    rating: rating,
+                    user: user
+                });
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(RATE_COMMENT_FAILED, error));
+            });
+        };
     },
     deleteComment(id: string): any {
         return (dispatch: Dispatch<any>): void => {

@@ -74,24 +74,24 @@ class ArticleList extends React.Component<Props, States> {
     }
     private renderCreateArticleSection = (): React.ReactElement<any> | undefined => {
         const articles: Article [] = this.props.state.articleState.data;
-            if (this.props.state.articleState.loading) {
-                return <Loading />;
-            } else if (this.props.state.userState.currentUser) {
-                if (!articles || articles.length === 0) {
-                    return <Segment placeholder>
-                        <Header icon>
-                        <Icon name="edit outline" />
-                        <FormattedMessage id="page.article.empty" />
-                        </Header>
-                    </Segment>;
-                }
-            } else {
-                if (articles && articles.length > 0) {
-                    return undefined;
-                } else {
-                    return <GitHubLink />;
-                }
+        if (this.props.state.articleState.loading) {
+            return <Loading />;
+        } else if (this.props.state.userState.currentUser) {
+            if (!articles || articles.length === 0) {
+                return <Segment placeholder>
+                    <Header icon>
+                    <Icon name="edit outline" />
+                    <FormattedMessage id="page.article.empty" />
+                    </Header>
+                </Segment>;
             }
+        } else {
+            if (articles && articles.length > 0) {
+                return undefined;
+            } else {
+                return <GitHubLink />;
+            }
+        }
     }
 }
 

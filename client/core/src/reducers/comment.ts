@@ -1,5 +1,5 @@
 import { AnyAction as Action } from "redux";
-import { LOAD_COMMENTS_START, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILED, ADD_COMMENT_START, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILED, DELETE_COMMENT_SUCCESS } from "../actions/comment";
+import { LOAD_COMMENTS_START, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILED, ADD_COMMENT_START, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILED, DELETE_COMMENT_SUCCESS, RATE_COMMENT_SUCCESS } from "../actions/comment";
 import CommentState from "../models/client/CommentState";
 import Comment from "../models/Comment";
 
@@ -48,6 +48,18 @@ const comments = (state: CommentState = initialState, action: Action): CommentSt
             cloneData.splice(toRemove, 1);
             return {...state, data: cloneData};
         }
+        case RATE_COMMENT_SUCCESS:
+            const cloneData: Comment[] = [...state.data];
+            const index: number = cloneData.findIndex((comment: Comment) => comment._id === action.comment);
+            if (index >= 0) {
+                if (action.rating === 1) {
+                    cloneData[index].likes.push(action.user);
+                } else {
+                    const toRemove: number = cloneData[index].likes.findIndex((value: string) => value === action.user);
+                    cloneData[index].likes.splice(toRemove, 1);
+                }
+            }
+            return {...state, data: cloneData};
         default:
             return state;
     }

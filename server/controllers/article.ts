@@ -88,7 +88,7 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
             likes.push(user._id.toString());
         } else if (Number.parseInt(req.query.rating) === 0) {
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
-            likes.splice(toRemove);
+            likes.splice(toRemove, 1);
         } else {
             return res.status(400).end();
         }
@@ -98,6 +98,9 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
             (error: Error, updated: Article) => {
                 if (error) {
                     return next(error);
+                }
+                if (!updated) {
+                    return res.status(500).end();
                 }
                 return res.status(200).end();
             }

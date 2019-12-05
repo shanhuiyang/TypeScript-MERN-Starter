@@ -5,7 +5,7 @@ import { Redirect, match, RouteComponentProps } from "react-router-dom";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
-import { Container, Header, Label, Rating, RatingProps } from "semantic-ui-react";
+import { Container, Header, Label, Rating, RatingProps, Popup } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import "react-tiny-fab/dist/styles.css";
 import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage, FormattedTime, FormattedDate } from "react-intl";
@@ -18,6 +18,7 @@ import User from "../../models/User";
 import FabActionProps from "../../models/client/FabActionProps";
 import CommentSection from "../comment/CommentSection";
 import CommentTargetType from "../../models/CommentTargetType";
+import { getNameList } from "../../shared/string";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -122,7 +123,11 @@ class ArticleDetail extends React.Component<Props, States> {
         const updateDate: Date = article.updatedAt ? new Date(article.updatedAt) : new Date(0);
         return <Fragment>
             <Container text>
-                {this.renderRating(article)}
+                <Popup
+                    trigger={this.renderRating(article)}
+                    disabled={article.likes.length === 0}
+                    content={getNameList(article.likes, this.props.state.userDictionary)}
+                    position="top center" />
                 <UserLabel user={this.props.state.userDictionary[article.author]} />
                 <Label style={{color: "grey"}}>
                     <FormattedMessage id="article.created_at" />
@@ -142,7 +147,7 @@ class ArticleDetail extends React.Component<Props, States> {
             !!user && article.likes && (article.likes.findIndex((value: string) => user._id === value) >= 0);
         return <Container text textAlign="center" style={CONTAINER_STYLE}>
             <label style={{color: "grey"}}>
-                <Rating size="huge" icon="star" defaultRating={hasRated ? 1 : 0} maxRating={1}
+                <Rating size="huge" icon="heart" defaultRating={hasRated ? 1 : 0} maxRating={1}
                     disabled={!user || article.author === user._id} onRate={
                         (event: React.MouseEvent<HTMLDivElement>, data: RatingProps): void => {
                             if (!this.props.state.userState.currentUser) {
@@ -150,7 +155,8 @@ class ArticleDetail extends React.Component<Props, States> {
                             }
                             this.props.actions.rateArticle(
                                 data.rating as number,
-                                article._id);
+                                article._id,
+                                user && user._id);
                         }}/>
                 { article.likes ? article.likes.length : 0 }
             </label>

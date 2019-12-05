@@ -3,7 +3,7 @@
  * In future, this section can be used to show comments below photo, video, etc
  */
 import React, { RefObject, createRef, Fragment } from "react";
-import { Comment, Form, Button, Header } from "semantic-ui-react";
+import { Comment, Form, Button, Header, RatingProps, Rating, Popup } from "semantic-ui-react";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
 import User from "../../models/User.d";
@@ -16,6 +16,7 @@ import ActionCreator from "../../models/client/ActionCreator";
 import { byUpdatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
 import WarningModal from "../shared/WarningModal";
+import { getNameList } from "../../shared/string";
 
 const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
 interface Props extends IntlProps {
@@ -80,7 +81,7 @@ class CommentSection extends React.Component<Props, States> {
                 onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
         </Comment.Group>;
     }
-    renderReplyForm = (editing: boolean, id: string, ref: RefObject<any>): React.ReactElement<any> | undefined => {
+    private renderReplyForm = (editing: boolean, id: string, ref: RefObject<any>): React.ReactElement<any> | undefined => {
         if (!this.props.state.userState.currentUser) {
             return undefined;
         }
@@ -103,7 +104,7 @@ class CommentSection extends React.Component<Props, States> {
             </Form>
         </div>;
     };
-    onTextChange = (event: any, ref: RefObject<any>): void => {
+    private onTextChange = (event: any, ref: RefObject<any>): void => {
         if (ref === this.commentFormRef && ref.current) {
             if (this.state.commentEditing && !ref.current.value) {
                 this.setState({commentEditing: false});
@@ -118,7 +119,7 @@ class CommentSection extends React.Component<Props, States> {
             }
         }
     }
-    onSubmitComment = (id: string, ref: RefObject<any>): void => {
+    private onSubmitComment = (id: string, ref: RefObject<any>): void => {
         if (ref.current && ref.current.value) {
             this.props.actions.addComment(
                 this.props.target,
@@ -128,7 +129,7 @@ class CommentSection extends React.Component<Props, States> {
             );
         }
     };
-    renderComment = (comment: CommentClass, stackDepth: number = 0): React.ReactElement<any> => {
+    private renderComment = (comment: CommentClass, stackDepth: number = 0): React.ReactElement<any> => {
         const createDate: Date = comment.createdAt ? new Date(comment.createdAt) : new Date(0);
         const author: User = this.props.state.userDictionary[comment.user];
         return <Comment key={createDate.getMilliseconds()}>
@@ -159,7 +160,7 @@ class CommentSection extends React.Component<Props, States> {
             </Comment.Group>
         </Comment>;
     };
-    renderActions = (comment: CommentClass, stackDepth: number): any => {
+    private renderActions = (comment: CommentClass, stackDepth: number): any => {
         return <Comment.Actions>
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
@@ -182,9 +183,14 @@ class CommentSection extends React.Component<Props, States> {
                 </Fragment> :
                 undefined
             }
+            <Popup
+                trigger={this.renderRating(comment)}
+                disabled={comment.likes.length === 0}
+                content={getNameList(comment.likes, this.props.state.userDictionary)}
+                position="bottom center" />
         </Comment.Actions>;
     };
-    onToggleReplyForm = (id: string): void => {
+    private onToggleReplyForm = (id: string): void => {
         console.log("onToggleReplyForm: " + id);
         if (this.state.showReplyFormForCommentId === id) {
             this.setState({
@@ -196,9 +202,28 @@ class CommentSection extends React.Component<Props, States> {
             });
         }
     };
-    deleteComment = (id: string): void => {
+    private deleteComment = (id: string): void => {
         this.setState({openDeleteWarning: true });
         this.toDeleteId = id;
+    }
+    private renderRating = (comment: CommentClass): any => {
+        const user: User | undefined = this.props.state.userState.currentUser;
+        const hasRated: boolean =
+            !!user && comment.likes && (comment.likes.findIndex((value: string) => user._id === value) >= 0);
+        return <label style={{color: "grey"}}>
+            <Rating size="small" icon="heart" defaultRating={hasRated ? 1 : 0} maxRating={1}
+                disabled={!user || comment.user === user._id} onRate={
+                    (event: React.MouseEvent<HTMLDivElement>, data: RatingProps): void => {
+                        if (!this.props.state.userState.currentUser) {
+                            return;
+                        }
+                        this.props.actions.rateComment(
+                            data.rating as number,
+                            comment._id,
+                            user && user._id);
+                    }}/>
+            { comment.likes ? comment.likes.length : 0 }
+        </label>;
     }
 }
 

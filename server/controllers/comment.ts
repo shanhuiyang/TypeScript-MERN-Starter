@@ -115,4 +115,44 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 
-export const rate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {};
+export const rate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+
+    CommentCollection.findById(req.query.id).exec((error: Error, comment: CommentDocument) => {
+        if (error) {
+            return next(error);
+        }
+        if (!comment) {
+            return res.status(404).json({ message: "toast.user.attack_alert" });
+        }
+        const user: User = req.user as User;
+        if (comment.user === user._id.toString()) {
+            return res.status(401).json({ message: "toast.user.attack_alert" });
+        }
+        const likes: string[] = comment.likes;
+        if (Number.parseInt(req.query.rating) === 1) {
+            likes.push(user._id.toString());
+        } else if (Number.parseInt(req.query.rating) === 0) {
+            const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
+            likes.splice(toRemove, 1);
+        } else {
+            return res.status(400).end();
+        }
+        CommentCollection.findByIdAndUpdate(
+            req.query.id, {likes: likes}
+        ).exec(
+            (error: Error, updated: Comment) => {
+                if (error) {
+                    return next(error);
+                }
+                if (!updated) {
+                    return res.status(500).end();
+                }
+                return res.status(200).end();
+            }
+        );
+    });
+};

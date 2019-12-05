@@ -7,7 +7,7 @@ import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 import { FormattedMessage, FormattedDate, FormattedTime } from "react-intl";
 import { Viewer } from "@toast-ui/react-editor";
-import { getFirstNLines } from "../../shared/string";
+import { getArticleAbstract } from "../../shared/string";
 import UserLabel from "../user/UserLabel";
 
 interface Props {
@@ -22,7 +22,7 @@ class ArticleItem extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const { article } = this.props;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const previewContent: string = getFirstNLines(article.content, 5);
+        const previewContent: string = getArticleAbstract(article.content, 5);
         return <Segment key={createDate.getMilliseconds()}>
             <Item>
                 <Item.Content>

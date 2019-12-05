@@ -20,7 +20,14 @@ comment.route("/add").post(
     ],
     controllers.add
 );
-
+comment.route("/rate").get(
+    passport.authenticate("bearer", { session: false }),
+    [
+        query("id", "toast.user.attack_alert").not().isEmpty(),
+        query("rating", "toast.user.attack_alert").not().isEmpty(),
+    ],
+    controllers.rate
+);
 comment.route("/remove/:id").get(
     passport.authenticate("bearer", { session: false }),
     controllers.remove
