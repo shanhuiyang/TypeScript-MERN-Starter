@@ -209,17 +209,19 @@ In next period of time (Before Feb 1st 2020), we will working on:
 - Better article UX.
   - Using the list-detail structure.
   - User can add comments to articles.
-  - Comment received notification for article authors.
   - Pagination.
 - Rich text editors. Using markdown as the exchanging text format.
-  - Auto saving.
+  - Emoji.
+  - @Someone.
   - Unsaved alert if users are going to close the page.
+- Notification
+  - Someone is @ed.
+  - Comment received for article authors.
 - Improving the authentication.
   - Email verification for signing up.
   - Password modification.
   - Forget password.
 - User-friend time display.
-- Themes customizing.
 - Incoming issues.
 
 # Project structure

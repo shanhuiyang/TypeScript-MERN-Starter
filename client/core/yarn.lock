@@ -8671,10 +8671,10 @@ react-scripts@^3.1.1:
   optionalDependencies:
     fsevents "2.0.7"
 
-react-tiny-fab@^3.0.0:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-tiny-fab/-/react-tiny-fab-3.0.3.tgz#dd394d336f4fc6d0b29881452c6a288fff0c122c"
-  integrity sha512-Su0nnIyDB5s1VBYzGms/Sf352gncdHmgfYkpsq20BKAErmaC7a0xA4uWTM+PBOUA0hpJnSc0tN4EM+AocpiLcA==
+react-tiny-fab@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/react-tiny-fab/-/react-tiny-fab-3.2.0.tgz#cc169e91eacb9248aa95244a7ba0fe97526f73e8"
+  integrity sha512-cAF6u/UOCiO5yixIUfBQlFYmkUcD5a7Uzy1kbXaly/zAUILSnQns/FEm22xNJ+S5he0XEYnn11XAUtbnstaN5A==
 
 react-toastify@^5.3.2:
   version "5.3.2"

@@ -68,16 +68,18 @@ class NavBarLayout extends React.Component<Props, States> {
 
     private renderForMobile = (): React.ReactElement<any> => {
         return <ResponsiveMobile>
+            <Sticky context={this.props.containerRef}>
+                <Menu borderless>
+                    <Menu.Item as={Button} onClick={this.showSideBar}>
+                        <Icon name="sidebar" style={{marginRight: 10}}/>
+                        <FormattedMessage id="app.name"/>
+                    </Menu.Item>
+                    {this.renderAccountControl()}
+                </Menu>
+            </Sticky>
+            {this.renderMenuForMobile()}
             <Sidebar.Pushable raised="true" style={WRAPPER_VIEW_STYLE} >
-                {this.renderMenuForMobile()}
-                <Sidebar.Pusher dimmed={this.state.sidebarVisible} style={WRAPPER_VIEW_STYLE} >
-                    <Menu borderless>
-                        <Menu.Item as={Button} onClick={this.showSideBar}>
-                            <Icon name="sidebar" style={{marginRight: 10}}/>
-                            <FormattedMessage id="app.name"/>
-                        </Menu.Item>
-                        {this.renderAccountControl()}
-                    </Menu>
+                <Sidebar.Pusher dimmed={false} style={WRAPPER_VIEW_STYLE}>
                     {this.props.children}
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
@@ -89,7 +91,8 @@ class NavBarLayout extends React.Component<Props, States> {
             animation="overlay" icon="labeled" inverted
             onHide={this.hideSideBar}
             target={this.props.containerRef}
-            visible={this.state.sidebarVisible} >
+            visible={this.state.sidebarVisible}
+            style={{zIndex: 999}} >
             <Menu.Item as={NavLink} exact to="/" onClick={this.hideSideBar}>
                 <Icon name="home" />
                 <FormattedMessage id="page.home"/>
