@@ -13,8 +13,8 @@ import AppState from "../../models/client/AppState";
 import fetch from "../../shared/fetch";
 import { getToast as toast } from "../../shared/toast";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
-import { MOBILE_DESKTOP_BOUND } from "../constants";
 import ResponsiveFormField from "../shared/ResponsiveFormField";
+import { isMobile } from "../dimension";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -74,7 +74,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         ref={this.contentRef}
                         initialValue={this.originalContent}
                         placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
-                        previewStyle={(window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ? "vertical" : "tab"}
+                        previewStyle={isMobile() ? "tab" : "vertical"}
                         height="380px"
                         initialEditType={editorType}
                         usageStatistics={false}

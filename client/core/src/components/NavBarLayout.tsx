@@ -3,7 +3,7 @@ import { NavLink, Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/client/AppState";
 import UserActionCreator from "../models/client/UserActionCreator";
-import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon } from "semantic-ui-react";
+import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon, Dimmer } from "semantic-ui-react";
 import User from "../models/User";
 import ResponsiveDesktop from "./shared/ResponsiveDesktop";
 import ResponsiveMobile from "./shared/ResponsiveMobile";
@@ -42,7 +42,7 @@ class NavBarLayout extends React.Component<Props, States> {
     private renderForDesktop = (): React.ReactElement<any> => {
         return <ResponsiveDesktop>
             <Sticky context={this.props.containerRef}>
-                <Menu borderless>
+                <Menu borderless style={{border: 0, borderRadius: 0}}>
                     {this.renderMenuForDesktop()}
                     {this.renderAccountControl()}
                 </Menu>
@@ -69,18 +69,23 @@ class NavBarLayout extends React.Component<Props, States> {
     private renderForMobile = (): React.ReactElement<any> => {
         return <ResponsiveMobile>
             <Sticky context={this.props.containerRef}>
-                <Menu borderless>
+                <Dimmer.Dimmable as={Menu} dimmed={this.state.sidebarVisible} blurring
+                    borderless style={{border: 0, borderRadius: 0, zIndex: 999}}>
+                    <Dimmer active={this.state.sidebarVisible} onClickOutside={this.hideSideBar} />
                     <Menu.Item as={Button} onClick={this.showSideBar}>
                         <Icon name="sidebar" style={{marginRight: 10}}/>
                         <FormattedMessage id="app.name"/>
                     </Menu.Item>
                     {this.renderAccountControl()}
-                </Menu>
+                </Dimmer.Dimmable>
             </Sticky>
             {this.renderMenuForMobile()}
             <Sidebar.Pushable raised="true" style={WRAPPER_VIEW_STYLE} >
                 <Sidebar.Pusher dimmed={false} style={WRAPPER_VIEW_STYLE}>
-                    {this.props.children}
+                    <Dimmer.Dimmable dimmed={this.state.sidebarVisible} blurring style={WRAPPER_VIEW_STYLE}>
+                        <Dimmer active={this.state.sidebarVisible} onClickOutside={this.hideSideBar} />
+                        {this.props.children}
+                    </Dimmer.Dimmable>
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         </ResponsiveMobile>;
@@ -92,7 +97,7 @@ class NavBarLayout extends React.Component<Props, States> {
             onHide={this.hideSideBar}
             target={this.props.containerRef}
             visible={this.state.sidebarVisible}
-            style={{zIndex: 999}} >
+            style={{zIndex: 9999}} >
             <Menu.Item as={NavLink} exact to="/" onClick={this.hideSideBar}>
                 <Icon name="home" />
                 <FormattedMessage id="page.home"/>

@@ -7,7 +7,7 @@ import { Container, Header } from "semantic-ui-react";
 import ArticleEditor from "./ArticleEditor";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import { FormattedMessage } from "react-intl";
-import { MOBILE_DESKTOP_BOUND } from "../constants";
+import { isMobile } from "../dimension";
 
 interface Props {
     state: AppState;
@@ -21,8 +21,8 @@ class CreateArticle extends React.Component<Props, States> {
             return <Redirect to="/" />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articleState.loading;
-            const containerStyle: any = (window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ?
-                {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20} : CONTAINER_STYLE;
+            const containerStyle: any = isMobile() ? CONTAINER_STYLE :
+                {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20};
             return (
                 <Container style={containerStyle}>
                     <Header size={"medium"}>

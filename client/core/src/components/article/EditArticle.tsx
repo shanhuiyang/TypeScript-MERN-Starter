@@ -11,7 +11,7 @@ import ArticleEditor from "./ArticleEditor";
 import { ModalButtonProps } from "../shared/WarningModal";
 import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-import { MOBILE_DESKTOP_BOUND } from "../constants";
+import { isMobile } from "../dimension";
 
 interface Props extends IntlProps {
     match: match<any>;
@@ -42,8 +42,8 @@ class EditArticle extends React.Component<Props, States> {
             return <ErrorPage error={notFoundError} />;
         }
         if (this.props.state.userState.currentUser) {
-            const containerStyle: any = (window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ?
-                {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20} : CONTAINER_STYLE;
+            const containerStyle: any = isMobile() ? CONTAINER_STYLE :
+                {...CONTAINER_STYLE, paddingLeft: 20, paddingRight: 20};
             return (
                 <Container style={containerStyle}>
                     <Header size={"medium"}>

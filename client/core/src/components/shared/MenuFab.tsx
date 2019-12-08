@@ -3,7 +3,7 @@ import { Icon } from "semantic-ui-react";
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import FabActionProps from "../../models/client/FabActionProps";
-import { MOBILE_DESKTOP_BOUND } from "../constants";
+import { isMobile } from "../dimension";
 
 interface Props {
     fabActions: FabActionProps[];
@@ -23,7 +23,7 @@ class MenuFab extends React.Component<Props, States> {
                 text={action.text}/>;
         } else {
             return <Fab
-                event={(window as any).visualViewport.width > MOBILE_DESKTOP_BOUND ? "hover" : "click"}
+                event={isMobile() ? "click" : "hover"}
                 icon={<Icon name="ellipsis vertical" style={fabIconStyle}/>} >
                 {
                     this.props.fabActions.map((action: FabActionProps) =>
