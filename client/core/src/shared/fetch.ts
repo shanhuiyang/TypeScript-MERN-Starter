@@ -1,6 +1,7 @@
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE, INVALID_TOKEN_ERROR } from "./constants";
 import sleep from "./sleep";
 import { getStorage as localStorage } from "../shared/storage";
+import fetch from "isomorphic-fetch";
 
 export type Method = "GET" | "POST" | "PUT";
 
