@@ -161,6 +161,7 @@ class CommentSection extends React.Component<Props, States> {
         </Comment>;
     };
     private renderActions = (comment: CommentClass, stackDepth: number): any => {
+        const likersPopUpContent: string = getNameList(comment.likes, this.props.state.userDictionary);
         return <Comment.Actions>
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
@@ -185,8 +186,8 @@ class CommentSection extends React.Component<Props, States> {
             }
             <Popup
                 trigger={this.renderRating(comment)}
-                disabled={comment.likes.length === 0}
-                content={getNameList(comment.likes, this.props.state.userDictionary)}
+                disabled={!likersPopUpContent}
+                content={likersPopUpContent}
                 position="bottom center" />
         </Comment.Actions>;
     };

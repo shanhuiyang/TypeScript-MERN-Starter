@@ -15,10 +15,10 @@ interface States {}
 
 class CreateArticle extends React.Component<Props, States> {
     render(): any {
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             return <Redirect to="/article" />;
         } else if (this.props.state.userState.currentUser) {
-            const loading: boolean | undefined = this.props.state.articles.loading;
+            const loading: boolean | undefined = this.props.state.articleState.loading;
             return <Fragment>
                 <HeaderWithBack titleId="page.article.add" />
                 <ArticleEditor onSubmit={this.createArticle} submitTextId="component.button.submit" loading={loading}/>

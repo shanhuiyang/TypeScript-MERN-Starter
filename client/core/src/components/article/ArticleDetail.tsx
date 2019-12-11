@@ -121,12 +121,13 @@ class ArticleDetail extends React.Component<Props, States> {
     private renderMetaInfo = (article: Article): React.ReactElement<any> => {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const updateDate: Date = article.updatedAt ? new Date(article.updatedAt) : new Date(0);
+        const likersPopUpContent: string = getNameList(article.likes, this.props.state.userDictionary);
         return <Fragment>
             <Container text>
                 <Popup
                     trigger={this.renderRating(article)}
-                    disabled={article.likes.length === 0}
-                    content={getNameList(article.likes, this.props.state.userDictionary)}
+                    disabled={!likersPopUpContent}
+                    content={likersPopUpContent}
                     position="top center" />
                 <UserLabel user={this.props.state.userDictionary[article.author]} />
                 <Label style={{color: "grey"}}>

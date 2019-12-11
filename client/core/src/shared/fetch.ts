@@ -2,6 +2,10 @@ import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE, INVALID_TOKEN_ERROR } from "./
 import sleep from "./sleep";
 import { getStorage as localStorage } from "../shared/storage";
 
+if (typeof document !== "undefined" && !!(document as any).documentMode) {
+    console.log("This is IE detected.");
+}
+
 export type Method = "GET" | "POST" | "PUT";
 
 const TEST_FOR_LOADING: boolean = false;
