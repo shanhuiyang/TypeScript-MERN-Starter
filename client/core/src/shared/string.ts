@@ -22,8 +22,6 @@ export const getArticleAbstract = (text: string, n: number): string => {
 export const getNameList = (ids: string [], userDictionary: {[id: string]: User}): string => {
     if (!ids || ids.length === 0) {
         return "";
-    } else if (ids.length === 1) {
-        return userDictionary[ids[0]].name;
     } else {
         return ids
             .map((id: string) => userDictionary[id] ? userDictionary[id].name : "")
