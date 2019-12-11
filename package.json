@@ -28,7 +28,9 @@
     "watch-ts": "tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json",
     "serve-debug": "nodemon --inspect dist/server/server.js",
-    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn serve-debug\" \"yarn start-client\" \"yarn start-mobile\""
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"yarn watch-ts\" \"yarn serve-debug\" \"yarn start-client\" \"yarn start-mobile\"",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "async": "^3.1.0",
@@ -94,9 +96,11 @@
     "supertest": "^4.0.2",
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "snyk": "^1.258.2"
   },
   "devDependencies": {
     "ts-jest": "^24.0.2"
-  }
+  },
+  "snyk": true
 }
