@@ -26,8 +26,8 @@ export const getNameList = (ids: string [], userDictionary: {[id: string]: User}
         return userDictionary[ids[0]].name;
     } else {
         return ids
-            .slice(1)
-            .map((id: string) => userDictionary[id].name)
-            .reduce((prev: string, curr: string, index: number) => (prev + ", " + curr), userDictionary[ids[0]].name);
+            .map((id: string) => userDictionary[id] ? userDictionary[id].name : "")
+            .filter((value: string) => !!value)
+            .join(", ");
     }
 };
