@@ -17,21 +17,21 @@ interface States {}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             return <Redirect to="/" />;
         }
         this.articleId = this.props.match && this.props.match.params && this.props.match.params.articleId;
         if (!this.articleId) {
             return <Redirect to="/" />;
         }
-        const article: Article | undefined = this.props.state.articles.data.find(
+        const article: Article | undefined = this.props.state.articleState.data.find(
             (value: Article): boolean => value._id === this.articleId
         );
         if (!article) {
             return <Redirect to="/" />;
         }
         if (this.props.state.userState.currentUser) {
-            const loading: boolean | undefined = this.props.state.articles.loading;
+            const loading: boolean | undefined = this.props.state.articleState.loading;
             return <Fragment>
                 <HeaderWithBack titleId="page.article.edit" rightTextId="component.button.delete" rightAction={this.removeArticle}/>
                 <ArticleEditor article={article} onSubmit={this.editArticle} submitTextId="component.button.update" loading={loading}/>

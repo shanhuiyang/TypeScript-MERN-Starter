@@ -18,13 +18,13 @@ interface States {}
 class ArticleList extends React.Component<Props, States> {
     componentDidMount() {
         // get all articles
-        if (!this.props.state.articles.valid) {
+        if (!this.props.state.articleState.valid) {
             this.props.actions.getAllArticles();
         }
     }
 
     componentDidUpdate(prevProps: Props) {
-        if (prevProps.state.articles.valid && !this.props.state.articles.valid) {
+        if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
             this.props.actions.getAllArticles();
         }
     }
@@ -39,7 +39,7 @@ class ArticleList extends React.Component<Props, States> {
             <Content>
                 <List>
                     {
-                        this.props.state.articles.data.map(
+                        this.props.state.articleState.data.map(
                             (value: Article) => (<ArticleItem value={value} key={value._id} />)
                         )
                     }
