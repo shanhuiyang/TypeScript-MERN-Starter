@@ -2,8 +2,8 @@ import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE, INVALID_TOKEN_ERROR } from "./
 import sleep from "./sleep";
 import { getStorage as localStorage } from "../shared/storage";
 
-if (typeof document !== "undefined" && !!(document as any).documentMode) {
-    console.log("This is IE detected.");
+if (typeof fetch === "undefined") {
+    require("isomorphic-fetch");
 }
 
 export type Method = "GET" | "POST" | "PUT";
