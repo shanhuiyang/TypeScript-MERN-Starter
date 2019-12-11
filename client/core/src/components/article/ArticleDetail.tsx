@@ -122,6 +122,11 @@ class ArticleDetail extends React.Component<Props, States> {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const updateDate: Date = article.updatedAt ? new Date(article.updatedAt) : new Date(0);
         const likersPopUpContent: string = getNameList(article.likes, this.props.state.userDictionary);
+        const labelStyle: any = {
+            color: "grey",
+            marginTop: 2,
+            marginBottom: 2
+        };
         return <Fragment>
             <Container text>
                 <Popup
@@ -130,14 +135,18 @@ class ArticleDetail extends React.Component<Props, States> {
                     content={likersPopUpContent}
                     position="top center" />
                 <UserLabel user={this.props.state.userDictionary[article.author]} />
-                <Label style={{color: "grey"}}>
+                <Label style={labelStyle}>
                     <FormattedMessage id="article.created_at" />
                     <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
                 </Label>
-                <Label style={{color: "grey"}}>
-                    <FormattedMessage id="article.updated_at" />
-                    <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
-                </Label>
+                {
+                    article.createdAt === article.updatedAt ?
+                    undefined :
+                    <Label style={labelStyle}>
+                        <FormattedMessage id="article.updated_at" />
+                        <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
+                    </Label>
+                }
                 <CommentSection targetId={article._id} target={CommentTargetType.ARTICLE} />
             </Container>
         </Fragment>;

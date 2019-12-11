@@ -40,6 +40,12 @@ class Preferences extends React.Component<Props, States> {
         }
     }
 
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.state.userState.loading && !this.props.state.userState.loading) {
+            this.setState({editing: false});
+        }
+    }
+
     render(): React.ReactElement<any> {
         if (this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -77,10 +83,15 @@ class Preferences extends React.Component<Props, States> {
             onChange={this.onSelectedEditorTypeChange} />;
     };
     private onSelectedEditorTypeChange = (event: ChangeEvent, data: any): void => {
-        this.setState({
-            selectedEditorType: data.value as EditorType,
-            editing: true
-        });
+        if (this.props.state.userState.currentUser &&
+            this.props.state.userState.currentUser.preferences &&
+            this.props.state.userState.currentUser.preferences.editorType) {
+            const nextEditorType: EditorType = data.value as EditorType;
+            this.setState({
+                selectedEditorType: nextEditorType,
+                editing: nextEditorType !== this.props.state.userState.currentUser.preferences.editorType
+            });
+        }
     }
     private update = (): void => {
         if  (this.props.state.userState.currentUser) {

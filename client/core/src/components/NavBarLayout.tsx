@@ -71,7 +71,6 @@ class NavBarLayout extends React.Component<Props, States> {
             <Sticky context={this.props.containerRef}>
                 <Dimmer.Dimmable as={Menu} dimmed={this.state.sidebarVisible} blurring
                     borderless style={{border: 0, borderRadius: 0, zIndex: 999}}>
-                    <Dimmer active={this.state.sidebarVisible} onClickOutside={this.hideSideBar} />
                     <Menu.Item as={Button} onClick={this.showSideBar}>
                         <Icon name="sidebar" style={{marginRight: 10}}/>
                         <FormattedMessage id="app.name"/>
@@ -83,7 +82,6 @@ class NavBarLayout extends React.Component<Props, States> {
             <Sidebar.Pushable raised="true" style={WRAPPER_VIEW_STYLE} >
                 <Sidebar.Pusher dimmed={false} style={WRAPPER_VIEW_STYLE}>
                     <Dimmer.Dimmable dimmed={this.state.sidebarVisible} blurring style={WRAPPER_VIEW_STYLE}>
-                        <Dimmer active={this.state.sidebarVisible} onClickOutside={this.hideSideBar} />
                         {this.props.children}
                     </Dimmer.Dimmable>
                 </Sidebar.Pusher>
