@@ -7,7 +7,7 @@ const initialState: UserState = {
     loading: false,
     currentUser: undefined,
     uploadingAvatar: false,
-    uploadedAvatarUrl: ""
+    uploadedAvatarUrl: undefined
 };
 
 const userState = (state: UserState = initialState, action: Action): UserState => {
@@ -45,7 +45,7 @@ const userState = (state: UserState = initialState, action: Action): UserState =
                 uploadedAvatarUrl: action.url
             };
         case RESET_UPLOADED_AVATAR:
-            return { ...state, uploadedAvatarUrl: "" };
+            return { ...state, uploadedAvatarUrl: undefined };
         default:
             return {...state, loading: false};
     }

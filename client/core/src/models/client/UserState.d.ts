@@ -4,5 +4,5 @@ export default interface UserState {
     currentUser: User | undefined;
     loading: boolean;
     uploadingAvatar: boolean;
-    uploadedAvatarUrl: string;
+    uploadedAvatarUrl: string | undefined;
 }
