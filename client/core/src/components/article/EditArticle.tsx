@@ -25,7 +25,7 @@ class EditArticle extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         if (!this.props.state.articleState.valid) {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
@@ -59,7 +59,7 @@ class EditArticle extends React.Component<Props, States> {
                 </Container>
             );
         } else {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
     }
 

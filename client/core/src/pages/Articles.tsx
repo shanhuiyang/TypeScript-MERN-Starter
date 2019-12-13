@@ -5,12 +5,29 @@ import ArticleDetail from "../components/article/ArticleDetail";
 import ArticleList from "../components/article/ArticleList";
 import CreateArticle from "../components/article/CreateArticle";
 import EditArticle from "../components/article/EditArticle";
+import AppState from "../models/client/AppState";
+import ArticleActionCreator from "../models/client/ArticleActionCreator";
+import connectPropsAndActions from "../shared/connect";
 
-interface Props extends RouteComponentProps<any> {}
+interface Props extends RouteComponentProps<any> {
+    state: AppState;
+    actions: ArticleActionCreator;
+}
 
 interface States {}
 
-export default class Articles extends React.Component<Props, States> {
+class Articles extends React.Component<Props, States> {
+    componentDidMount() {
+        if (!this.props.state.articleState.valid) {
+            this.props.actions.getAllArticles();
+        }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
+            this.props.actions.getAllArticles();
+        }
+    }
     render(): any {
         const match: match<any> = this.props.match;
         return <Fragment>
@@ -23,3 +40,5 @@ export default class Articles extends React.Component<Props, States> {
         </Fragment>;
     }
 }
+
+export default connectPropsAndActions(Articles);

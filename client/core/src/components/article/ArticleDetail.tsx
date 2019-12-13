@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
-import { Redirect, match, RouteComponentProps } from "react-router-dom";
+import { match, RouteComponentProps } from "react-router-dom";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
@@ -19,6 +19,7 @@ import FabActionProps from "../../models/client/FabActionProps";
 import CommentSection from "../comment/CommentSection";
 import CommentTargetType from "../../models/CommentTargetType";
 import { getNameList } from "../../shared/string";
+import Loading from "./Loading";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -45,8 +46,8 @@ class ArticleDetail extends React.Component<Props, States> {
         this.props.actions.getComments(CommentTargetType.ARTICLE, this.articleId);
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.articleState.valid) {
-            return <Redirect to="/" />;
+        if (this.props.state.articleState.loading) {
+            return <Loading/>;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
