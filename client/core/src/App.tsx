@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import { WRAPPER_VIEW_STYLE } from "./shared/styles";
 import Preferences from "./pages/Preferences";
 import Articles from "./pages/Articles";
+import { isIE } from "./shared/platform";
 interface Props {}
 
 interface States {}
@@ -44,8 +45,13 @@ export default class App extends React.Component<Props, States> {
                                 {/* add more routes here */}
                                 <Route render={ (props) => <ErrorPage {...props} error={notFoundError} /> } />
                             </Switch>
+                            {
+                                isIE() ? <Footer /> : undefined
+                            }
                         </main>
-                        <Footer />
+                        {
+                            isIE() ? undefined : <Footer />
+                        }
                     </NavBarLayout>
                 } />
             </div>
