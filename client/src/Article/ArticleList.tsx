@@ -16,18 +16,6 @@ interface Props extends RouteComponentProps<any> {
 interface States {}
 
 class ArticleList extends React.Component<Props, States> {
-    componentDidMount() {
-        // get all articles
-        if (!this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
-        }
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
-        }
-    }
     render(): any {
         const match: match<any> = this.props.match;
         return <Fragment>

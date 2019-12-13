@@ -22,17 +22,6 @@ interface Props extends IntlProps, RouteComponentProps<any> {
 interface States {}
 
 class ArticleList extends React.Component<Props, States> {
-    componentDidMount() {
-        if (!this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
-        }
-    }
-
-    componentDidUpdate(prevProps: Props) {
-        if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
-        }
-    }
 
     render(): React.ReactElement<any> {
         return <Container text style={CONTAINER_STYLE}>

@@ -18,7 +18,7 @@ interface States {}
 class CreateArticle extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         if (!this.props.state.articleState.valid) {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articleState.loading;
             const containerStyle: any = isMobile() ? CONTAINER_STYLE :
@@ -32,7 +32,7 @@ class CreateArticle extends React.Component<Props, States> {
                 </Container>
             );
         } else {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
     }
 

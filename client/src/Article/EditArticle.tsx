@@ -18,17 +18,17 @@ class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
         if (!this.props.state.articleState.valid) {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
         this.articleId = this.props.match && this.props.match.params && this.props.match.params.articleId;
         if (!this.articleId) {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
         const article: Article | undefined = this.props.state.articleState.data.find(
             (value: Article): boolean => value._id === this.articleId
         );
         if (!article) {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
         if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articleState.loading;
@@ -37,7 +37,7 @@ class EditArticle extends React.Component<Props, States> {
                 <ArticleEditor article={article} onSubmit={this.editArticle} submitTextId="component.button.update" loading={loading}/>
             </Fragment>;
         } else {
-            return <Redirect to="/" />;
+            return <Redirect to="/article" />;
         }
     }
 
