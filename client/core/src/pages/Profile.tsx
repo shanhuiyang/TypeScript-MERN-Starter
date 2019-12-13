@@ -20,9 +20,10 @@ interface Props extends IntlProps {
 
 interface States {
     selectedGender: Gender;
-    selectedAvatar: string | undefined;
+    selectedAvatar: string;
     cropAvatarDialogOpen: boolean;
-    editing: boolean;
+    textEditing: boolean;
+    genderEditing: boolean;
 }
 
 class Profile extends React.Component<Props, States> {
@@ -38,9 +39,10 @@ class Profile extends React.Component<Props, States> {
         this.nameRef = React.createRef();
         this.state = {
             selectedGender: Gender.MALE,
-            selectedAvatar: undefined,
+            selectedAvatar: "",
             cropAvatarDialogOpen: false,
-            editing: false
+            textEditing: false,
+            genderEditing: false
         };
     }
 
@@ -48,6 +50,15 @@ class Profile extends React.Component<Props, States> {
         this.props.actions.resetAvatar();
         if (this.props.state.userState.currentUser) {
             this.setState({selectedGender: this.props.state.userState.currentUser.gender});
+        }
+    }
+
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.state.userState.loading && !this.props.state.userState.loading) {
+            this.setState({
+                textEditing: false,
+                genderEditing: false
+            });
         }
     }
 
@@ -101,7 +112,7 @@ class Profile extends React.Component<Props, States> {
                         <label>
                             <FormattedMessage id="user.name"/>
                         </label>
-                        <input defaultValue={user.name} ref={this.nameRef} onChange={this.startEditing}/>
+                        <input defaultValue={user.name} ref={this.nameRef} onChange={this.startTextEditing}/>
                     </ResponsiveFormField>
                     <Form.Group inline>
                         <label>
@@ -115,16 +126,16 @@ class Profile extends React.Component<Props, States> {
                         <label>
                             <FormattedMessage id="user.address"/>
                         </label>
-                        <input defaultValue={user.address} ref={this.addressRef} onChange={this.startEditing}/>
+                        <input defaultValue={user.address} ref={this.addressRef} onChange={this.startTextEditing}/>
                     </ResponsiveFormField>
                     <ResponsiveFormField width={12}>
                         <label>
                             <FormattedMessage id="user.website"/>
                         </label>
-                        <input defaultValue={user.website} ref={this.websiteRef} onChange={this.startEditing}/>
+                        <input defaultValue={user.website} ref={this.websiteRef} onChange={this.startTextEditing}/>
                     </ResponsiveFormField>
                     <Button primary type="submit" onClick={ this.update }
-                        loading={loading} disabled={loading || !this.state.editing}>
+                        loading={loading} disabled={loading || !this.isEditing()}>
                         <Icon name="check circle outline" />
                         <FormattedMessage id="component.button.submit"/>
                     </Button>
@@ -133,6 +144,9 @@ class Profile extends React.Component<Props, States> {
         } else {
             return <Redirect to="/login" />;
         }
+    }
+    private isEditing = (): boolean => {
+        return this.state.textEditing || this.state.genderEditing;
     }
     private renderGenderRadio = (gender: string): React.ReactElement<any> | undefined => {
         return <Form.Field
@@ -144,10 +158,13 @@ class Profile extends React.Component<Props, States> {
             onChange={this.onSelectedGenderChange} />;
     };
     private onSelectedGenderChange = (event: ChangeEvent, data: any): void => {
-        this.setState({
-            selectedGender: data.value as Gender,
-            editing: true
-        });
+        if (this.props.state.userState.currentUser) {
+            const nextValue: Gender = data.value as Gender;
+            this.setState({
+                selectedGender: nextValue,
+                genderEditing: nextValue !== this.props.state.userState.currentUser.gender
+            });
+        }
     }
     private onAvatarSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files && e.target.files.length > 0) {
@@ -155,8 +172,7 @@ class Profile extends React.Component<Props, States> {
             reader.addEventListener("load", () => {
                     this.setState({
                         selectedAvatar: reader.result as string,
-                        cropAvatarDialogOpen: true,
-                        editing: true
+                        cropAvatarDialogOpen: true
                     });
                 }
             );
@@ -185,13 +201,26 @@ class Profile extends React.Component<Props, States> {
         this.closeAvatarCropDialog();
         if (avatarData) {
             this.props.actions.uploadAvatar(avatarData);
+            this.setState({
+                textEditing: true
+            });
         }
     }
-    private startEditing = () => {
-        if (!this.state.editing) {
-            this.setState({
-                editing: true
-            });
+    private startTextEditing = () => {
+        if (this.props.state.userState) {
+            const user: User = this.props.state.userState.currentUser as User;
+            if (user.name === (this.nameRef.current && this.nameRef.current.value)
+                && user.address === (this.addressRef.current && this.addressRef.current.value)
+                && user.website === (this.websiteRef.current && this.websiteRef.current.value)
+                && user.avatarUrl === this.props.state.userState.uploadedAvatarUrl) {
+                this.setState({
+                    textEditing: false
+                });
+            } else {
+                this.setState({
+                    textEditing: true
+                });
+            }
         }
     }
 }

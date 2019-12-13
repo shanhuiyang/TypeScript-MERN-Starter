@@ -18,7 +18,7 @@ interface Props extends IntlProps {
 
 interface States {
     selectedEditorType: EditorType;
-    editing: boolean;
+    editorTypeChanged: boolean;
 }
 
 class Preferences extends React.Component<Props, States> {
@@ -28,7 +28,7 @@ class Preferences extends React.Component<Props, States> {
         this.message = this.props.intl.formatMessage;
         this.state = {
             selectedEditorType: DEFAULT_PREFERENCES.editorType,
-            editing: false
+            editorTypeChanged: false
         };
     }
 
@@ -42,7 +42,7 @@ class Preferences extends React.Component<Props, States> {
 
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.userState.loading && !this.props.state.userState.loading) {
-            this.setState({editing: false});
+            this.setState({editorTypeChanged: false});
         }
     }
 
@@ -63,7 +63,7 @@ class Preferences extends React.Component<Props, States> {
                             }
                     </Form.Group>
                     <Button primary type="submit" onClick={ this.update }
-                        loading={loading} disabled={loading || !this.state.editing}>
+                        loading={loading} disabled={loading || !this.isPreferencesChanged()}>
                         <Icon name="check circle outline" />
                         <FormattedMessage id="component.button.submit"/>
                     </Button>
@@ -72,6 +72,9 @@ class Preferences extends React.Component<Props, States> {
         } else {
             return <Redirect to="/login" />;
         }
+    }
+    private isPreferencesChanged = (): boolean => {
+        return this.state.editorTypeChanged;
     }
     private renderEditorTypeRadio = (editorType: string): React.ReactElement<any> | undefined => {
         return <Form.Field
@@ -89,7 +92,7 @@ class Preferences extends React.Component<Props, States> {
             const nextEditorType: EditorType = data.value as EditorType;
             this.setState({
                 selectedEditorType: nextEditorType,
-                editing: nextEditorType !== this.props.state.userState.currentUser.preferences.editorType
+                editorTypeChanged: nextEditorType !== this.props.state.userState.currentUser.preferences.editorType
             });
         }
     }
