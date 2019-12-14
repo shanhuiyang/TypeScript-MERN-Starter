@@ -28,7 +28,10 @@ class CreateArticle extends React.Component<Props, States> {
                     <Header size={"medium"}>
                         <FormattedMessage id="page.article.add" />
                     </Header>
-                    <ArticleEditor onSubmit={this.createArticle} submitTextId="component.button.submit" loading={loading}/>
+                    <ArticleEditor
+                        onSubmit={this.createArticle}
+                        submitTextId="component.button.submit"
+                        loading={loading}/>
                 </Container>
             );
         } else {

@@ -8,12 +8,10 @@ import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import ArticleEditor from "./ArticleEditor";
-import { ModalButtonProps } from "../shared/WarningModal";
-import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
-import { PrimitiveType } from "intl-messageformat";
+import { FormattedMessage } from "react-intl"
 import { isMobile } from "../dimension";
 
-interface Props extends IntlProps {
+interface Props {
     match: match<any>;
     state: AppState;
     actions: ArticleActionCreator;
@@ -23,7 +21,6 @@ interface States {}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
-        const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         if (!this.props.state.articleState.valid) {
             return <Redirect to="/article" />;
         }
@@ -49,13 +46,10 @@ class EditArticle extends React.Component<Props, States> {
                     <Header size={"medium"}>
                         <FormattedMessage id="page.article.edit" />
                     </Header>
-                    <ArticleEditor article={article} submitTextId="component.button.update" onSubmit={this.editArticle} loading={this.props.state.articleState.loading}
-                        negativeButtonProps={{
-                            descriptionIcon: "delete",
-                            descriptionText: message({id: "page.article.delete"}, {title: article.title}),
-                            warningText: message({id: "page.article.delete_confirmation"}),
-                            onConfirm: this.removeArticle
-                        } as ModalButtonProps}/>
+                    <ArticleEditor article={article}
+                        submitTextId="component.button.update"
+                        onSubmit={this.editArticle}
+                        loading={this.props.state.articleState.loading} />
                 </Container>
             );
         } else {
@@ -73,10 +67,6 @@ class EditArticle extends React.Component<Props, States> {
             } as Article);
         }
     }
-
-    private removeArticle = (): void => {
-        this.props.actions.removeArticle(this.articleId);
-    }
 }
 
-export default injectIntl(connectPropsAndActions(EditArticle));
+export default connectPropsAndActions(EditArticle);

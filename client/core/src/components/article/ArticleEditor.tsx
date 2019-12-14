@@ -75,7 +75,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         initialValue={this.originalContent}
                         placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
                         previewStyle={isMobile() ? "tab" : "vertical"}
-                        height="380px"
+                        height="54vh"
                         initialEditType={editorType}
                         usageStatistics={false}
                         hideModeSwitch={true}
