@@ -195,10 +195,10 @@
   dependencies:
     "@types/express" "*"
 
-"@types/connect-mongo@^0.0.44":
-  version "0.0.44"
-  resolved "https://registry.yarnpkg.com/@types/connect-mongo/-/connect-mongo-0.0.44.tgz#11c72af95ea20b3af5b44dcd31fc808dc7a130b3"
-  integrity sha512-/J2a3sgT8SVKi2/wuBTKV3dKwN4bqQyeRqTPlBjnQEw3QVu0Dq6TtI/uupP2bgMfje9IbVj+MnwA4jhixxMZmQ==
+"@types/connect-mongo@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/connect-mongo/-/connect-mongo-3.0.0.tgz#2d5e05bfb4b01be7e52b639fc7129ce8c36286a4"
+  integrity sha512-rboH0fuacE583k/vI4JZYobDvsbvCRoXaQe/2TVgbnV4wnLkawc8PCLbgBjA0mp7OFckv7GpmtQ6t8hRgyCrUg==
   dependencies:
     "@types/express" "*"
     "@types/express-session" "*"

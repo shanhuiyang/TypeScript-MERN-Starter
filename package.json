@@ -64,7 +64,7 @@
     "@types/bluebird": "^3.5.20",
     "@types/body-parser": "^1.16.8",
     "@types/compression": "^1.0.1",
-    "@types/connect-mongo": "^0.0.44",
+    "@types/connect-mongo": "^3.0.0",
     "@types/connect-ensure-login": "^0.1.4",
     "@types/dotenv": "^8.2.0",
     "@types/errorhandler": "^0.0.32",
