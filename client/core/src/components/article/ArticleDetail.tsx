@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
 import { match, RouteComponentProps } from "react-router-dom";
-import ArticleActionCreator from "../../models/client/ArticleActionCreator";
+import ActionCreator from "../../models/client/ActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header, Label, Rating, RatingProps, Popup } from "semantic-ui-react";
@@ -12,10 +12,9 @@ import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, Form
 import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
-import MenuFab from "../shared/MenuFab";
 import UserLabel from "../user/UserLabel";
 import User from "../../models/User";
-import FabActionProps from "../../models/client/FabActionProps";
+import FabAction from "../../models/client/FabAction";
 import CommentSection from "../comment/CommentSection";
 import CommentTargetType from "../../models/CommentTargetType";
 import { getNameList } from "../../shared/string";
@@ -24,7 +23,7 @@ import Loading from "./Loading";
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
     state: AppState;
-    actions: ArticleActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {
@@ -43,7 +42,21 @@ class ArticleDetail extends React.Component<Props, States> {
     }
     componentDidMount() {
         window.scrollTo(0, 0);
-        this.props.actions.getComments(CommentTargetType.ARTICLE, this.articleId);
+        if (this.articleId) {
+            this.props.actions.getComments(CommentTargetType.ARTICLE, this.articleId);
+            this.addFabActions();
+        }
+    }
+    componentDidUpdate(prevProps: Props) {
+        if ((prevProps.state.articleState.loading
+            && !this.props.state.articleState.loading) ||
+            (!prevProps.state.userState.currentUser
+            && this.props.state.userState.currentUser)) {
+            this.addFabActions();
+        }
+    }
+    componentWillUnmount() {
+        this.props.actions.setFabActions([]);
     }
     render(): React.ReactElement<any> {
         if (this.props.state.articleState.loading) {
@@ -62,9 +75,6 @@ class ArticleDetail extends React.Component<Props, States> {
         if (!article) {
             return <ErrorPage error={notFoundError} />;
         }
-        const isAuthor: boolean = article.author === (
-            this.props.state.userState.currentUser &&
-            this.props.state.userState.currentUser._id);
         // TODO: handle loading
         return (
             <Fragment>
@@ -80,18 +90,29 @@ class ArticleDetail extends React.Component<Props, States> {
                     { this.renderMetaInfo(article) }
                 </div>
                 {
-                    this.renderEditorFab(article, isAuthor)
+                    this.renderDeleteWarningModal(article)
                 }
             </Fragment>
         );
     }
-    private renderEditorFab = (article: Article, isAuthor: boolean): React.ReactElement<any> => {
-        const actions: FabActionProps[] = [{
+    private isAuthorOf = (article: Article): boolean => {
+        return article.author === (
+            this.props.state.userState.currentUser &&
+            this.props.state.userState.currentUser._id);
+    }
+    private addFabActions = (): void => {
+        const article: Article | undefined = this.props.state.articleState.data.find(
+            (value: Article): boolean => value._id === this.articleId
+        );
+        if (!article) {
+            return;
+        }
+        const actions: FabAction[] = [{
             text: this.getString({id: "component.button.scroll_up"}),
             icon: "arrow up",
             onClick: () => { window.scrollTo(0, 0); },
         }];
-        if (isAuthor) {
+        if (this.isAuthorOf(article)) {
             actions.unshift({
                 text: this.getString({id: "component.button.delete"}),
                 icon: "trash alternate",
@@ -106,18 +127,17 @@ class ArticleDetail extends React.Component<Props, States> {
                 },
             });
         }
-        return <Fragment>
-            <MenuFab fabActions={actions}/>
-            {
-                isAuthor ? <WarningModal
-                    descriptionIcon="delete" open={this.state.openDeleteWarning}
-                    descriptionText={this.getString({id: "page.article.delete"}, {title: article.title})}
-                    warningText={this.getString({id: "page.article.delete_confirmation"})}
-                    onConfirm={this.removeArticle}
-                    onCancel={ () => {this.setState({openDeleteWarning: false}); }}/>
-                    : undefined
-            }
-        </Fragment>;
+        this.props.actions.setFabActions(actions);
+    }
+    private renderDeleteWarningModal = (article: Article): React.ReactElement<any> | undefined => {
+        return this.isAuthorOf(article) ?
+            <WarningModal
+                descriptionIcon="delete" open={this.state.openDeleteWarning}
+                descriptionText={this.getString({id: "page.article.delete"}, {title: article.title})}
+                warningText={this.getString({id: "page.article.delete_confirmation"})}
+                onConfirm={this.removeArticle}
+                onCancel={ () => {this.setState({openDeleteWarning: false}); }}/>
+                : undefined;
     }
     private renderMetaInfo = (article: Article): React.ReactElement<any> => {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);

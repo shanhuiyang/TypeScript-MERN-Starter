@@ -5,6 +5,7 @@ import redirectTask from "./redirectTask";
 import translations from "./translations";
 import commentState from "./comment";
 import userDictionary from "./userDictionary";
+import fabActions from "./fabActions";
 
 const reducer = combineReducers({
     userState,
@@ -12,7 +13,8 @@ const reducer = combineReducers({
     redirectTask,
     translations,
     commentState,
-    userDictionary
+    userDictionary,
+    fabActions
 });
 
 export default reducer;

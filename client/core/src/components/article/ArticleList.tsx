@@ -5,18 +5,17 @@ import Article from "../../models/Article";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
 import { Container, Segment, Header, Icon } from "semantic-ui-react";
-import ArticleActionCreator from "../../models/client/ArticleActionCreator";
+import ActionCreator from "../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import Loading from "./Loading";
 import GitHubLink from "../shared/GitHubLink";
-import MenuFab from "../shared/MenuFab";
 import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
-import FabActionProps from "../../models/client/FabActionProps";
+import FabAction from "../../models/client/FabAction";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
-    actions: ArticleActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {}
@@ -25,12 +24,25 @@ class ArticleList extends React.Component<Props, States> {
 
     render(): React.ReactElement<any> {
         return <Container text style={CONTAINER_STYLE}>
-            {this.renderFab()}
             {this.renderCreateArticleSection()}
             {this.renderArticles()}
         </Container>;
     }
 
+    componentDidMount() {
+        this.addFabActions();
+    }
+    componentDidUpdate(prevProps: Props) {
+        if ((prevProps.state.articleState.loading
+            && !this.props.state.articleState.loading) ||
+            (!prevProps.state.userState.currentUser
+            && this.props.state.userState.currentUser)) {
+            this.addFabActions();
+        }
+    }
+    componentWillUnmount() {
+        this.props.actions.setFabActions([]);
+    }
     private renderArticles = (): React.ReactElement<any> => {
         if (this.props.state.articleState.loading) {
             return <Loading />;
@@ -45,8 +57,8 @@ class ArticleList extends React.Component<Props, States> {
             </Fragment>;
         }
     }
-    private renderFab = (): React.ReactElement<any> => {
-        const actions: FabActionProps[] = [{
+    private addFabActions = (): void => {
+        const actions: FabAction[] = [{
             text: this.props.intl.formatMessage({id: "component.button.scroll_up"}),
             icon: "arrow up",
             onClick: () => { window.scrollTo(0, 0); },
@@ -59,7 +71,7 @@ class ArticleList extends React.Component<Props, States> {
                 onClick: () => { this.props.history.push(editUri); },
             });
         }
-        return <MenuFab fabActions={actions}/>;
+        this.props.actions.setFabActions(actions);
     }
     private renderCreateArticleSection = (): React.ReactElement<any> | undefined => {
         const articles: Article [] = this.props.state.articleState.data;

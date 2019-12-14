@@ -9,6 +9,7 @@ import ResponsiveDesktop from "./shared/ResponsiveDesktop";
 import ResponsiveMobile from "./shared/ResponsiveMobile";
 import { WRAPPER_VIEW_STYLE } from "../shared/styles";
 import { FormattedMessage } from "react-intl";
+import MenuFab from "./shared/MenuFab";
 
 interface Props {
     containerRef: RefObject<any>;
@@ -36,6 +37,7 @@ class NavBarLayout extends React.Component<Props, States> {
         return (<Fragment >
             {this.renderForDesktop()}
             {this.renderForMobile()}
+            <MenuFab fabActions={this.props.state.fabActions} />
         </Fragment>);
     }
 
