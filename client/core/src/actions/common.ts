@@ -3,9 +3,11 @@ import { AnyAction as Action } from "redux";
 import { getToast as toast } from "../shared/toast";
 import { INVALID_TOKEN_ERROR } from "../shared/constants";
 import EnUS from "../shared/translations/en-us";
+import FabAction from "../models/client/FabAction";
 
 export const RESET_REDIRECT: string = "RESET_REDIRECT";
 export const SET_LOCALE: string = "SET_LOCALE";
+export const SET_FAB_ACTIONS: string = "SET_FAB_ACTIONS";
 
 const actions: CommonActionCreator = {
     handleFetchError(type: string, error: Error): Action {
@@ -34,6 +36,12 @@ const actions: CommonActionCreator = {
         return {
             type: SET_LOCALE,
             locale: locale
+        };
+    },
+    setFabActions(fabActions: FabAction[]): Action {
+        return {
+            type: SET_FAB_ACTIONS,
+            fabActions: fabActions
         };
     }
 };

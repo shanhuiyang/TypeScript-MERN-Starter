@@ -70,7 +70,7 @@ const TRANSLATION: Translation = {
         "component.button.update": "Update",
         "component.button.delete": "Delete",
         "component.button.edit": "Edit",
-        "component.button.see_all": "See all",
+        "component.button.see_all": "Read all",
         "component.button.create": "Create",
         "component.button.scroll_up": "Scroll to top",
         "component.comment.title": "Comment",

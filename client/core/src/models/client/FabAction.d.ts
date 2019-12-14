@@ -1,4 +1,4 @@
-export default interface FabActionProps {
+export default interface FabAction {
     text: string;
     icon: any;
     onClick: (event?: any) => void;
