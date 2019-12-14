@@ -1,41 +1,26 @@
 import {
-    SharedKeyCredential,
-    TokenCredential,
-    StorageURL,
-    ServiceURL,
-    ContainerURL,
-    BlobURL,
-    BlockBlobURL,
-    Aborter,
-    generateAccountSASQueryParameters,
-    AccountSASPermissions,
+    StorageSharedKeyCredential,
+    BlobServiceClient,
     SASProtocol,
-    AccountSASResourceTypes,
-    AccountSASServices,
-    Pipeline,
-    Models,
     generateBlobSASQueryParameters,
     BlobSASPermissions,
-    IBlobSASSignatureValues
+    ContainerClient,
+    BlobSASSignatureValues
 } from "@azure/storage-blob";
-import { BlockBlobUploadResponse } from "@azure/storage-blob/typings/src/generated/src/models";
+import {
+    BlockBlobUploadResponse
+} from "@azure/storage-blob/typings/src/generated/src/models";
 import { STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY } from "../../util/secrets";
 import { UploadBlobResult } from "../storage.d";
 
 // Use SharedKeyCredential with storage account and account key
-const sharedKeyCredential = new SharedKeyCredential(STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY);
+const sharedKeyCredential: StorageSharedKeyCredential = new StorageSharedKeyCredential(
+    STORAGE_ACCOUNT,
+    STORAGE_ACCOUNT_KEY);
 
-// Use TokenCredential with OAuth token
-const tokenCredential = new TokenCredential("token");
-tokenCredential.token = "renewedToken"; // Renew the token by updating token field of token credential
-
-// Use sharedKeyCredential, tokenCredential or anonymousCredential to create a pipeline
-const pipeline: Pipeline = StorageURL.newPipeline(sharedKeyCredential);
-// List containers
-const serviceURL: ServiceURL = new ServiceURL(
-    // When using AnonymousCredential, following url should include a valid SAS or support public access
+const blobServiceClient: BlobServiceClient = new BlobServiceClient(
     `https://${STORAGE_ACCOUNT}.blob.core.windows.net`,
-    pipeline
+    sharedKeyCredential
 );
 
 export const uploadBlob = async (
@@ -45,28 +30,25 @@ export const uploadBlob = async (
         blobName: string): Promise<UploadBlobResult> => {
     // Create container if it is not existing
     let existing: boolean = false;
-    const containerURL: ContainerURL = ContainerURL.fromServiceURL(serviceURL, containerName);
-    const listContainersResponse: Models.ServiceListContainersSegmentResponse =
-        await serviceURL.listContainersSegment(Aborter.none, undefined, { prefix: containerName });
-    for (const container of listContainersResponse.containerItems) {
+    for await (const container of blobServiceClient.listContainers()) {
         if (containerName === container.name) {
             existing = true;
             break;
         }
     }
+    const containerClient: ContainerClient = blobServiceClient.getContainerClient(containerName);
     if (!existing) {
-        await containerURL.create(Aborter.none);
+        await containerClient.create();
     }
 
     // Upload blob to specified container
-    const blobURL: BlobURL = BlobURL.fromContainerURL(containerURL, blobName);
-    const blockBlobURL: BlockBlobURL = BlockBlobURL.fromBlobURL(blobURL);
-    return blockBlobURL
-        .upload(Aborter.none, () => stream, contentLength)
+    const blobClient = containerClient.getBlobClient(blobName);
+    const blockBlobClient = blobClient.getBlockBlobClient();
+    return blockBlobClient.upload(() => stream, contentLength)
         .then((value: BlockBlobUploadResponse) => {
             return new Promise<UploadBlobResult>((resolve: any, reject: any): any => {
                 resolve({
-                    blobUrl: blockBlobURL.url,
+                    blobUrl: blockBlobClient.url,
                     statusCode: value._response.status
                 } as UploadBlobResult);
             });
@@ -81,18 +63,21 @@ export const uploadBlob = async (
 export const generateSigningUrlParams = (containerName: string, blobName: string, neverExpire?: boolean): string => {
     const now = new Date();
     now.setMinutes(now.getMinutes() - 15); // Skip clock skew with server
-    const blobSASSignatureValues: IBlobSASSignatureValues = {
+    const blobSASSignatureValues: BlobSASSignatureValues = {
         containerName: containerName,
         blobName: blobName,
-        startTime: now,
-        permissions: BlobSASPermissions.parse("r").toString(), // Readonly
-        protocol: SASProtocol.HTTPS,
+        startsOn: now,
+        permissions: BlobSASPermissions.parse("r"), // Readonly
+        protocol: SASProtocol.Https,
     };
-    if (!neverExpire) {
-        const expiryTime = new Date();
+    const expiryTime = new Date();
+    if (neverExpire) {
+        // There is no option for never expire, so make it expire after we die
+        expiryTime.setFullYear(expiryTime.getFullYear() + 1000);
+    } else {
         expiryTime.setDate(expiryTime.getDate() + 1);
-        blobSASSignatureValues.expiryTime = expiryTime;
     }
+    blobSASSignatureValues.expiresOn = expiryTime;
     return generateBlobSASQueryParameters(
         blobSASSignatureValues,
         sharedKeyCredential
