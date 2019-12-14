@@ -25,7 +25,10 @@ const mongoUrl: string = MONGODB_URI;
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
-mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
+mongoose.connect(mongoUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(
     () => {
         console.log("  MongoDB is connected successfully.");
     },
