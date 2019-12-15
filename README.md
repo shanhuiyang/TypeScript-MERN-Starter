@@ -198,7 +198,7 @@ We build this project on following philosophies:
 
 We have already extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
 
-In next period of time (Before Feb 1st 2020), we will working on:
+In next period of time (Before Feb 1st 2020), we will work on:
 
 - Better documents.
 - Use types as many as possible.
@@ -211,11 +211,8 @@ In next period of time (Before Feb 1st 2020), we will working on:
   - User can add comments to articles.
   - Pagination.
 - Rich text editors. Using markdown as the exchanging text format.
-  - Emoji.
-  - @Someone.
   - Unsaved alert if users are going to close the page.
 - Notification
-  - Someone is @ed.
   - Comment received for article authors.
 - Improving the authentication.
   - Email verification for signing up.
