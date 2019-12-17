@@ -8,7 +8,7 @@ import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import ArticleEditor from "./ArticleEditor";
-import { FormattedMessage } from "react-intl"
+import { FormattedMessage } from "react-intl";
 import { isMobile } from "../dimension";
 
 interface Props {

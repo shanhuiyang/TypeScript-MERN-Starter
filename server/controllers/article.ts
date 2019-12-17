@@ -12,6 +12,7 @@ import * as random from "../util/random";
 import storage, { CONTAINER_ARTICLE } from "../repository/storage";
 import { UploadBlobResult } from "../repository/storage.d";
 import CommentCollection from "../models/Article/CommentCollection";
+import { DEFAULT_PAGE_SIZE } from "../../client/core/src/shared/constants";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
@@ -127,13 +128,20 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    ArticleCollection.find({}).exec((error: Error, articles: ArticleDocument[]) => {
+    const latestTime: Date = req.query.latest ? new Date(req.query.latest) : new Date(Date.now());
+    const pageSize: number = req.query.size ? req.query.size : DEFAULT_PAGE_SIZE;
+    ArticleCollection
+    .find({ createdAt: { $lt: latestTime} })
+    .sort({ createdAt: "desc" })
+    .limit(pageSize + 1) // Use 1 more requirement for indication of hasMore
+    .exec((error: Error, articles: ArticleDocument[]) => {
         if (error) {
             next(error);
         }
         const findAuthorInUsers = (article: Article): Promise<UserDocument> => {
             return UserCollection.findById(article.author).exec();
         };
+        const hasMore: boolean = articles.length === pageSize + 1;
         const promises: Promise<User>[] = articles.map(async (article: Article) => {
             const user: UserDocument = await findAuthorInUsers(article);
             return {
@@ -149,7 +157,11 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             authors.forEach((author: User): void => {
                 authorsDic[author._id] = author;
             });
-            return res.json({data: articles, authors: authorsDic} as GetArticlesResponse);
+            return res.json({
+                data: articles.slice(0, pageSize),
+                authors: authorsDic,
+                hasMore: hasMore
+            } as GetArticlesResponse);
         });
     });
 };

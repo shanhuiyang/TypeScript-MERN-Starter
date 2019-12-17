@@ -7,3 +7,5 @@ export const RESPONSE_CONTENT_TYPE = {
     TEXT: "text/plain",
     HTML: "text/html"
 };
+
+export const DEFAULT_PAGE_SIZE: number = 10;
