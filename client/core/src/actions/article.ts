@@ -12,6 +12,9 @@ export const SAVE_ARTICLE_FAILED: string = "SAVE_ARTICLE_FAILED";
 export const GET_ARTICLE_BEGIN: string = "GET_ARTICLE_BEGIN";
 export const GET_ARTICLE_SUCCESS: string = "GET_ARTICLE_SUCCESS";
 export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
+export const GET_MORE_ARTICLE_BEGIN: string = "GET_MORE_ARTICLE_BEGIN";
+export const GET_MORE_ARTICLE_SUCCESS: string = "GET_MORE_ARTICLE_SUCCESS";
+export const GET_MORE_ARTICLE_FAILED: string = "GET_MORE_ARTICLE_FAILED";
 export const INSERT_IMAGE_BEGIN: string = "INSERT_IMAGE_BEGIN";
 export const INSERT_IMAGE_SUCCESS: string = "INSERT_IMAGE_SUCCESS";
 export const INSERT_IMAGE_FAILED: string = "INSERT_IMAGE_FAILED";
@@ -19,7 +22,7 @@ export const RATE_ARTICLE_SUCCESS: string = "RATE_ARTICLE_SUCCESS";
 export const RATE_ARTICLE_FAILED: string = "RATE_ARTICLE_FAILED";
 
 const articleActionCreator: ArticleActionCreator = {
-    getAllArticles(): any {
+    getArticles(): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: GET_ARTICLE_BEGIN});
             fetch("/api/article", undefined, "GET")
@@ -28,7 +31,8 @@ const articleActionCreator: ArticleActionCreator = {
                     dispatch({
                         type: GET_ARTICLE_SUCCESS,
                         articles: json.data,
-                        authors: json.authors
+                        authors: json.authors,
+                        hasMore: json.hasMore
                     });
                 } else {
                     dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
@@ -36,6 +40,27 @@ const articleActionCreator: ArticleActionCreator = {
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, error));
+            });
+        };
+    },
+    getMoreArticles(earlierThan: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({type: GET_MORE_ARTICLE_BEGIN});
+            fetch(`/api/article?latest=${earlierThan}`, undefined, "GET")
+            .then((json: GetArticlesResponse) => {
+                if (json && json.data && json.authors) {
+                    dispatch({
+                        type: GET_MORE_ARTICLE_SUCCESS,
+                        articles: json.data,
+                        authors: json.authors,
+                        hasMore: json.hasMore
+                    });
+                } else {
+                    dispatch(actions.handleFetchError(GET_MORE_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
+                }
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(GET_MORE_ARTICLE_FAILED, error));
             });
         };
     },

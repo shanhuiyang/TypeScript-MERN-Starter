@@ -4,7 +4,7 @@ import connectPropsAndActions from "../../shared/connect";
 import Article from "../../models/Article";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
-import { Container, Segment, Header, Icon } from "semantic-ui-react";
+import { Container, Segment, Header, Icon, Button } from "semantic-ui-react";
 import ActionCreator from "../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
@@ -26,6 +26,7 @@ class ArticleList extends React.Component<Props, States> {
         return <Container text style={CONTAINER_STYLE}>
             {this.renderCreateArticleSection()}
             {this.renderArticles()}
+            {this.renderLoadMore()}
         </Container>;
     }
 
@@ -93,6 +94,31 @@ class ArticleList extends React.Component<Props, States> {
                 return <GitHubLink />;
             }
         }
+    }
+
+    private renderLoadMore = (): React.ReactElement<any> | undefined => {
+        if (this.props.state.articleState.hasMore) {
+            const articles: Article [] = this.props.state.articleState.data;
+            const loadingMore: boolean | undefined = this.props.state.articleState.loadingMore;
+            const createdAt: string | undefined = articles[articles.length - 1].createdAt;
+            if (!createdAt) {
+                return undefined;
+            }
+            return <Button fluid basic primary
+                onClick={() => { this.loadMore(createdAt); }}
+                loading={loadingMore}
+                disabled={loadingMore} >
+                <Button.Content>
+                    <FormattedMessage id="page.article.load_more" />
+                </Button.Content>
+            </Button>;
+        } else {
+            return undefined;
+        }
+    }
+
+    private loadMore = (createdAt: string): void => {
+        this.props.actions.getMoreArticles(createdAt);
     }
 }
 

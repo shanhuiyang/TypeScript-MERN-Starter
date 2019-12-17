@@ -32,6 +32,7 @@ const TRANSLATION: Translation = {
         "page.article.delete": "Delete Article: {title}",
         "page.article.delete_confirmation": "You cannot restore this article after delete. Are you sure to delete?",
         "page.article.empty": "No articles are added up to now.",
+        "page.article.load_more": "Load More",
         "page.insert_image.title": "Insert Image",
         "page.insert_image.fill_description": "Image Description",
         "page.insert_image.fill_link": "Image Link",
