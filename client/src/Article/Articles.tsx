@@ -19,12 +19,12 @@ class Articles extends React.Component<Props, States> {
     componentDidMount() {
         // get all articles
         if (!this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
+            this.props.actions.getArticles();
         }
     }
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
-            this.props.actions.getAllArticles();
+            this.props.actions.getArticles();
         }
     }
     render(): any {
