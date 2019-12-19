@@ -15,6 +15,9 @@ import { getToast as toast } from "../../shared/toast";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
 import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { isMobile } from "../dimension";
+import ArticleCache from "../../models/client/ArticleCache";
+import { NEW_ARTICLE_CACHE_ID } from "../../actions/article";
+import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -22,6 +25,7 @@ interface Props extends IntlProps {
     onSubmit: (title: string, content: string) => void;
     loading?: boolean;
     state: AppState;
+    actions: ArticleActionCreator;
 }
 
 interface States {
@@ -43,13 +47,11 @@ class ArticleEditor extends React.Component<Props, States> {
         };
     }
     componentDidMount() {
-        const self: ArticleEditor = this;
-        window.addEventListener("beforeunload", (e: BeforeUnloadEvent): any => {
-            if (self.state.editing) {
-                e.preventDefault();
-                e.returnValue = "";
-            }
-        });
+        window.addEventListener("beforeunload", this.closeAlert);
+        this.restoreFromCache();
+    }
+    componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.closeAlert);
     }
     render(): React.ReactElement<any> {
         if (this.props.article) {
@@ -136,8 +138,13 @@ class ArticleEditor extends React.Component<Props, States> {
         });
     }
     private onEditing = () => {
-        if (this.originalTitle === (this.titleRef.current && this.titleRef.current.value)
-            && this.originalContent === this.contentRef.current.getInstance().getMarkdown()) {
+        if (!this.contentRef.current || !this.titleRef.current) {
+            return;
+        }
+        const instanceTitle: string = this.titleRef.current.value;
+        const instanceContent: string = this.contentRef.current.getInstance().getMarkdown();
+        if (this.originalTitle === instanceTitle
+            && this.originalContent === instanceContent) {
             this.setState({
                 editing: false
             });
@@ -145,6 +152,32 @@ class ArticleEditor extends React.Component<Props, States> {
             this.setState({
                 editing: true
             });
+            const id: string = this.props.article ? this.props.article._id : NEW_ARTICLE_CACHE_ID;
+            this.props.actions.setCache(id, {title: instanceTitle, content: instanceContent});
+        }
+    }
+    private closeAlert = (e: BeforeUnloadEvent): any => {
+        const self: ArticleEditor = this;
+        if (self.state.editing) {
+            e.preventDefault();
+            e.returnValue = "";
+        }
+    }
+    private restoreFromCache = () => {
+        if (this.titleRef.current && this.contentRef.current) {
+            const cache: {[id: string]: ArticleCache} = this.props.state.articleState.cache;
+            if (this.props.article) {
+                const id: string = this.props.article._id;
+                if (cache[id]) {
+                    this.titleRef.current.value = cache[id].title;
+                    this.contentRef.current.getInstance().setMarkdown(cache[id].content);
+                }
+            } else {
+                if (cache[NEW_ARTICLE_CACHE_ID]) {
+                    this.titleRef.current.value = cache[NEW_ARTICLE_CACHE_ID].title;
+                    this.contentRef.current.getInstance().setMarkdown(cache[NEW_ARTICLE_CACHE_ID].content);
+                }
+            }
         }
     }
 }

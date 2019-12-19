@@ -1,15 +1,17 @@
 import { AnyAction as Action } from "redux";
 import ArticleState from "../models/client/ArticleState";
-import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTICLE_BEGIN, SAVE_ARTICLE_FAILED, GET_ARTICLE_FAILED, RATE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_BEGIN, GET_MORE_ARTICLE_FAILED } from "../actions/article";
+import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTICLE_BEGIN, SAVE_ARTICLE_FAILED, GET_ARTICLE_FAILED, RATE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_BEGIN, GET_MORE_ARTICLE_FAILED, SET_ARTICLE_CACHE, CLEAR_ARTICLE_CACHE } from "../actions/article";
 import Article from "../models/Article";
 import { UPDATE_PROFILE_SUCCESS } from "../actions/user";
+import ArticleCache from "../models/client/ArticleCache";
 
 const initialState: ArticleState = {
     loading: false,
     valid: false,
     data: [],
     loadingMore: false,
-    hasMore: false
+    hasMore: false,
+    cache: {}
 };
 
 const article = (state: ArticleState = initialState, action: Action): ArticleState => {
@@ -58,6 +60,16 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
                 }
             }
             return {...state, data: cloneData};
+        case SET_ARTICLE_CACHE: {
+            const cloneCache: {[id: string]: ArticleCache} = {...state.cache};
+            cloneCache[action.id] = action.cache;
+            return {...state, cache: cloneCache};
+        }
+        case CLEAR_ARTICLE_CACHE: {
+            const cloneCache: {[id: string]: ArticleCache} = {...state.cache};
+            delete cloneCache[action.id];
+            return {...state, cache: cloneCache};
+        }
         default:
             return state;
     }
