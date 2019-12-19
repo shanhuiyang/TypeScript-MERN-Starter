@@ -42,6 +42,15 @@ class ArticleEditor extends React.Component<Props, States> {
             editing: false
         };
     }
+    componentDidMount() {
+        const self: ArticleEditor = this;
+        window.addEventListener("beforeunload", (e: BeforeUnloadEvent): any => {
+            if (self.state.editing) {
+                e.preventDefault();
+                e.returnValue = "";
+            }
+        });
+    }
     render(): React.ReactElement<any> {
         if (this.props.article) {
             this.originalTitle = this.props.article.title;
