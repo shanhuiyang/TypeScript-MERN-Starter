@@ -1,5 +1,6 @@
 import { ActionCreatorsMapObject, AnyAction as Action } from "redux";
 import Article from "../Article";
+import ArticleCache from "./ArticleCache";
 
 export default interface ArticleActionCreator extends ActionCreatorsMapObject {
     getArticles(): any;
@@ -8,4 +9,6 @@ export default interface ArticleActionCreator extends ActionCreatorsMapObject {
     editArticle(article: Article): any;
     removeArticle(id: string): any;
     rateArticle(rating: number, id: string, user: string): any;
+    setCache(id: string, cache: ArticleCache): Action;
+    clearCache(id: string): Action;
 }
