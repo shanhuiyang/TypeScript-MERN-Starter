@@ -17,7 +17,7 @@ interface Props extends RouteComponentProps<any> {
 interface States {}
 
 class Me extends React.Component<Props, States> {
-    render(): any {
+    render(): React.ReactElement<any> {
         if (!this.props.state.userState.currentUser) {
             return <Fragment>
                 <Header noLeft />
@@ -37,7 +37,7 @@ class Me extends React.Component<Props, States> {
         }
     }
 
-    private renderBeforeLoggedIn = () => {
+    private renderBeforeLoggedIn = (): React.ReactElement<any> => {
         return <Content>
             <Link component={ListItem} icon to="/login">
                 <Left>
@@ -72,8 +72,8 @@ class Me extends React.Component<Props, States> {
         </Content>;
     }
 
-    private renderAfterLoggedIn = () => {
-        const user: UserModel = this.props.state.userState.currentUser;
+    private renderAfterLoggedIn = (): React.ReactElement<any> => {
+        const user: UserModel = this.props.state.userState.currentUser as UserModel;
         return <Content>
             <ListItem thumbnail last>
                 <Left>

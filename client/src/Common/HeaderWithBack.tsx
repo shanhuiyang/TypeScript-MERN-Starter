@@ -37,7 +37,7 @@ class HeaderWithBack extends React.Component<Props, States> {
                             <Text>
                                 <FormattedMessage id={this.props.rightTextId}/>
                             </Text> :
-                            <Icon name={this.props.rightIconName} />
+                            <Icon name={this.props.rightIconName as string} />
                         }
                     </Button>
                 </Right> :
