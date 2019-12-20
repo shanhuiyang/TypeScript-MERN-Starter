@@ -17,10 +17,10 @@ interface States {
 }
 class SignUp extends Component<Props, States> {
     message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
-    private email: string;
-    private password: string;
-    private confirmedPassword: string;
-    private name: string;
+    private email: string = "";
+    private password: string = "";
+    private confirmedPassword: string = "";
+    private name: string = "";
     constructor(props: Props) {
         super(props);
         this.message = this.props.intl.formatMessage;

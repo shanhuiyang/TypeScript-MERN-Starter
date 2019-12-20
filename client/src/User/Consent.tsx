@@ -15,7 +15,7 @@ interface Props extends RouteComponentProps<any> {
 interface States {}
 class Consent extends React.Component<Props, States> {
     params: any = {};
-    transactionId: string | null;
+    transactionId: string | undefined = undefined;
     constructor(props: Props) {
         super(props);
         // You cannot use URLSearchParams in ReactNative like in ReactJS

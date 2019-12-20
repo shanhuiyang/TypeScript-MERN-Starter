@@ -18,6 +18,9 @@ interface States {}
 class ArticleDetail extends React.Component<Props, States> {
     render(): any {
         const article: Article | undefined = this.props.location.state;
+        if (!article) {
+            return <Redirect to="/article" />;
+        }
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const articleAuthor: User = this.props.state.userDictionary[article.author];
         if (article) {

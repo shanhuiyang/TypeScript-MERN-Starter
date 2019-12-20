@@ -1,23 +1,24 @@
 {
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "jsx": "react-native",
-    "lib": ["dom", "esnext"],
-    "moduleResolution": "node",
-    "noEmit": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
-  },
-  "include": [
-      "App.tsx",
-      "src/**/*",
-      "core/src/actions/**/*",
-      "core/src/models/**/*",
-      "core/src/reducers/**/*",
-      "core/src/shared/**/*"
-  ],
-  "exclude": [
-      "core/src/**/__test__/**/*"
-  ]
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "allowJs": true,
+        "jsx": "react-native",
+        "lib": ["dom", "esnext"],
+        "moduleResolution": "node",
+        "noEmit": true,
+        "skipLibCheck": true,
+        "resolveJsonModule": true,
+        "strict": true
+    },
+    "include": [
+        "App.tsx",
+        "src/**/*",
+        "core/src/actions/**/*",
+        "core/src/models/**/*",
+        "core/src/reducers/**/*",
+        "core/src/shared/**/*"
+    ],
+    "exclude": [
+        "core/src/**/__test__/**/*"
+    ]
 }

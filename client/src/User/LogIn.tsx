@@ -14,9 +14,9 @@ interface Props extends RouteComponentProps<any> {
 
 interface States {}
 class LogIn extends Component<Props, States> {
-    private email: string;
-    private password: string;
-    render() {
+    private email: string = "";
+    private password: string = "";
+    render(): React.ReactElement<any> {
         if (!this.props.state.redirectTask.redirected) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {

@@ -13,8 +13,8 @@ interface Props extends IntlProps {
 interface States {}
 
 class ArticleEditor extends React.Component<Props, States> {
-    public title: string;
-    public content: string;
+    public title: string = "";
+    public content: string = "";
     render(): React.ReactElement<any> {
         let originalTitle: string = "";
         let originalContent: string = "";
