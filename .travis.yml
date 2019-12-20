@@ -9,8 +9,6 @@ services:
 cache:
     directories:
         - node_modules
-before_script:
-    - npm install -g expo-cli
 script:
     - yarn build
     - yarn test

@@ -1,9 +1,9 @@
-import { ActionCreatorsMapObject, AnyAction as Action } from "redux";
+import { AnyAction as Action } from "redux";
 import User from "../User";
 import Gender from "../Gender";
 import Preferences from "../Preferences";
 
-export default interface UserActionCreator extends ActionCreatorsMapObject {
+export default interface UserActionCreator {
     allowConsent(transactionId: string): any;
     denyConsent(): Action;
     authenticate(): any;

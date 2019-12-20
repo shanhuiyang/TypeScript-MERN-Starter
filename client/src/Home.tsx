@@ -1,12 +1,12 @@
 import React from "react";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import AppState from "../core/src/models/client/AppState";
-import ActionCreator from "../core/src/models/client/ActionCreator";
+import UserActionCreator from "../core/src/models/client/UserActionCreator";
 import connectPropsAndActions from "../core/src/shared/connect";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {}

@@ -12,7 +12,7 @@ import UserAvatar from "../user/UserAvatar";
 import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor, FormattedDate, FormattedTime } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import CommentTargetType from "../../models/CommentTargetType";
-import ActionCreator from "../../models/client/ActionCreator";
+import CommentActionCreator from "../../models/client/CommentActionCreator";
 import { byUpdatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
 import WarningModal from "../shared/WarningModal";
@@ -23,7 +23,7 @@ interface Props extends IntlProps {
     targetId: string;
     target: CommentTargetType;
     state: AppState;
-    actions: ActionCreator;
+    actions: CommentActionCreator;
 }
 interface States {
     showReplyFormForCommentId: string;

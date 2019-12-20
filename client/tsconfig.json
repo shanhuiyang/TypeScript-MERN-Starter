@@ -16,5 +16,8 @@
       "core/src/models/**/*",
       "core/src/reducers/**/*",
       "core/src/shared/**/*"
+  ],
+  "exclude": [
+      "core/src/**/__test__/**/*"
   ]
 }

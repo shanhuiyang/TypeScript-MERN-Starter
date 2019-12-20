@@ -1,6 +1,6 @@
 import React from "react";
 import AppState from "../../core/src/models/client/AppState";
-import UserActionCreator from "../../core/src/models/client/UserActionCreator";
+import ActionCreator from "../../core/src/models/client/ActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import { Redirect, RouteComponentProps } from "react-router-native";
 import { Container, Content, Text, Button, Spinner, Card, CardItem, Body } from "native-base";
@@ -9,7 +9,7 @@ import { FormattedMessage } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
-    actions: UserActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {}

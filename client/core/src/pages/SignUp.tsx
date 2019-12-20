@@ -2,7 +2,7 @@ import React, { RefObject, ChangeEvent } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/client/AppState";
 import { Redirect } from "react-router-dom";
-import ActionCreator from "../models/client/ActionCreator";
+import UserActionCreator from "../models/client/UserActionCreator";
 import Gender from "../models/Gender";
 import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
@@ -12,7 +12,7 @@ import { PrimitiveType } from "intl-messageformat";
 
 interface Props extends IntlProps {
     state: AppState;
-    actions: ActionCreator;
+    actions: UserActionCreator;
 }
 
 interface States {

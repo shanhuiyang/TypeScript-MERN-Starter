@@ -11,7 +11,7 @@ const mapStateToProps: MapStateToPropsParam<any, any, any> = (state: any): any =
 
 const mapDispatchToProps: MapDispatchToPropsParam<ActionCreator, any> = (dispatch: Dispatch<Action>): any => {
     return {
-        actions: bindActionCreators(actions, dispatch)
+        actions: bindActionCreators(actions as any, dispatch)
     };
 };
 

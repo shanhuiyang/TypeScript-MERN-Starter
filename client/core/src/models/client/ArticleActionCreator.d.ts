@@ -1,8 +1,8 @@
-import { ActionCreatorsMapObject, AnyAction as Action } from "redux";
+import { AnyAction as Action } from "redux";
 import Article from "../Article";
 import ArticleCache from "./ArticleCache";
 
-export default interface ArticleActionCreator extends ActionCreatorsMapObject {
+export default interface ArticleActionCreator {
     getArticles(): any;
     getMoreArticles(earlierThan: string): any;
     createArticle(title: string, content: string, author: string): any;
