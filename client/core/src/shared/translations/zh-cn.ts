@@ -33,6 +33,7 @@ const TRANSLATION: Translation = {
         "page.article.delete_confirmation": "删除后的文章不可恢复，您确定要删除吗？",
         "page.article.empty": "目前还没有任何文章。",
         "page.article.load_more": "加载更多",
+        "page.article.nothing_more": "没有更多了",
         "page.insert_image.title": "插入图片",
         "page.insert_image.fill_description": "图片描述",
         "page.insert_image.fill_link": "图片链接",

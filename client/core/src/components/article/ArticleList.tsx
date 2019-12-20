@@ -4,7 +4,7 @@ import connectPropsAndActions from "../../shared/connect";
 import Article from "../../models/Article";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
-import { Container, Segment, Header, Icon, Button } from "semantic-ui-react";
+import { Container, Segment, Header, Icon, Button, Divider } from "semantic-ui-react";
 import ActionCreator from "../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
@@ -97,8 +97,8 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     private renderLoadMore = (): React.ReactElement<any> | undefined => {
+        const articles: Article [] = this.props.state.articleState.data;
         if (this.props.state.articleState.hasMore) {
-            const articles: Article [] = this.props.state.articleState.data;
             const loadingMore: boolean | undefined = this.props.state.articleState.loadingMore;
             const createdAt: string | undefined = articles[articles.length - 1].createdAt;
             if (!createdAt) {
@@ -112,6 +112,12 @@ class ArticleList extends React.Component<Props, States> {
                     <FormattedMessage id="page.article.load_more" />
                 </Button.Content>
             </Button>;
+        } else if (articles.length > 0) {
+            return <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
+                <Divider horizontal style={{color: "#C0C0C0", width: "30%", alignSelf: "center"}}>
+                    <FormattedMessage id="page.article.nothing_more"/>
+                </Divider>
+            </div>;
         } else {
             return undefined;
         }
