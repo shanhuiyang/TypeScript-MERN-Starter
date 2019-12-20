@@ -1,7 +1,7 @@
 import React from "react";
 import ErrorPage from "./ErrorPage";
 import AppState from "../models/client/AppState";
-import UserActionCreator from "../models/client/UserActionCreator";
+import ActionCreator from "../models/client/ActionCreator";
 import connectPropsAndActions from "../shared/connect";
 import { Redirect } from "react-router-dom";
 import { Container, Header, Button } from "semantic-ui-react";
@@ -11,7 +11,7 @@ import { FormattedMessage } from "react-intl";
 interface Props {
     location: Location;
     state: AppState;
-    actions: UserActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {}

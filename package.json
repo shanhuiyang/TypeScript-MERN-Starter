@@ -13,7 +13,7 @@
     "install-client": "cd client/core && yarn && cd .. && yarn",
     "postinstall": "yarn install-client",
     "build-server": "yarn build-ts && yarn tslint",
-    "build": "cd client/core && yarn build && cd ../.. && yarn build-server",
+    "build": "cd client/core && yarn build && cd .. && yarn build && cd .. && yarn build-server",
     "start-client": "node start-client.js",
     "start-mobile": "cd client && expo install expo-font && cd .. && node start-mobile.js",
     "start": "yarn build-server && concurrently \"yarn serve\" \"yarn start-client\" \"yarn start-mobile\"",
