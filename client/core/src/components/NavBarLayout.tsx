@@ -71,8 +71,9 @@ class NavBarLayout extends React.Component<Props, States> {
     private renderForMobile = (): React.ReactElement<any> => {
         return <ResponsiveMobile>
             <Sticky context={this.props.containerRef}>
-                <Dimmer.Dimmable as={Menu} dimmed={this.state.sidebarVisible} blurring
+                <Dimmer.Dimmable as={Menu} dimmed={this.state.sidebarVisible}
                     borderless style={{border: 0, borderRadius: 0, zIndex: 999}}>
+                    {this.renderDimmer()}
                     <Menu.Item as={Button} onClick={this.showSideBar}>
                         <Icon name="sidebar" style={{marginRight: 10}}/>
                         <FormattedMessage id="app.name"/>
@@ -83,12 +84,20 @@ class NavBarLayout extends React.Component<Props, States> {
             {this.renderMenuForMobile()}
             <Sidebar.Pushable raised="true" style={WRAPPER_VIEW_STYLE} >
                 <Sidebar.Pusher dimmed={false} style={WRAPPER_VIEW_STYLE}>
-                    <Dimmer.Dimmable dimmed={this.state.sidebarVisible} blurring style={WRAPPER_VIEW_STYLE}>
+                    <Dimmer.Dimmable dimmed={this.state.sidebarVisible} style={WRAPPER_VIEW_STYLE}>
+                        {this.renderDimmer()}
                         {this.props.children}
                     </Dimmer.Dimmable>
                 </Sidebar.Pusher>
             </Sidebar.Pushable>
         </ResponsiveMobile>;
+    }
+
+    private renderDimmer = (): React.ReactElement<any> => {
+        return <Dimmer
+            active={this.state.sidebarVisible}
+            onClickOutside={this.hideSideBar}
+             style={{ opacity: 0.7 }}/>;
     }
 
     private renderMenuForMobile = (): React.ReactElement<any> => {
