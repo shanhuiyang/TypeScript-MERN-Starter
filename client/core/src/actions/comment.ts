@@ -1,5 +1,5 @@
 import CommentActionCreator from "../models/client/CommentActionCreator";
-import CommentTargetType from "../models/CommentTargetType";
+import PostType from "../models/PostType";
 import GetCommentsResponse from "../models/response/GetCommentsResponse.d";
 import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
@@ -22,7 +22,7 @@ export const RATE_COMMENT_SUCCESS: string = "RATE_COMMENT_SUCCESS";
 export const RATE_COMMENT_FAILED: string = "RATE_COMMENT_FAILED";
 
 const commentActionCreator: CommentActionCreator = {
-    getComments(targetType: CommentTargetType, targetId: string): any {
+    getComments(targetType: PostType, targetId: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: LOAD_COMMENTS_START});
             fetch(`/api/comment?targetType=${targetType}&targetId=${targetId}`, undefined, "GET")
@@ -42,7 +42,7 @@ const commentActionCreator: CommentActionCreator = {
             });
         };
     },
-    addComment(targetType: CommentTargetType, targetId: string, parent: string, content: string): any {
+    addComment(targetType: PostType, targetId: string, parent: string, content: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: ADD_COMMENT_START});
             fetch(`/api/comment/add?targetType=${targetType}&targetId=${targetId}${ parent ? "&parent=" + parent : "" }`,

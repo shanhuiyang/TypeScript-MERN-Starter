@@ -77,7 +77,7 @@ class SignUp extends React.Component<Props, States> {
                             <FormattedMessage id="user.gender"/>
                         </label>
                             {
-                                Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
+                                Object.values(Gender).map(this.renderGenderRadio)
                             }
                     </Form.Group>
                     <Button primary type="submit" onClick={ this.signUp } loading={loading} disabled={loading}>

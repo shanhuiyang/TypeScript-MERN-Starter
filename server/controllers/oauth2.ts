@@ -19,6 +19,10 @@ import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
 import _ from "lodash";
 import { getBlobNameFromUrl } from "../repository/utils";
+import AuthenticationResponse from "../../client/core/src/models/response/AuthenticationResponse";
+import * as NotificationStorage from "../models/Notification/NotificationStorage";
+import Notification from "../../client/core/src/models/Notification.d";
+import User from "../../client/core/src/models/User";
 
 // User authorization endpoint.
 //
@@ -159,7 +163,17 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
 };
 
 export const profile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    return res.json({user: req.user});
+    NotificationStorage.findByOwner(
+        (req.user as User)._id.toString(),
+        true,
+        (data: Notification[], subjects: {[id: string]: User}): void => {
+            res.json({
+                user: req.user,
+                notifications: data,
+                notificationSubjects: subjects
+            } as AuthenticationResponse);
+        }
+    );
 };
 
 export const updateProfile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {

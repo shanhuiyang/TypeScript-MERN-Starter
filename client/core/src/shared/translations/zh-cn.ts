@@ -20,6 +20,7 @@ const TRANSLATION: Translation = {
         "page.me.profile": "基本信息",
         "page.me.logout": "退出登录",
         "page.me.preferences": "个人设置",
+        "page.me.notifications": "通知",
         "page.consent.greeting": "{email}您好，",
         "page.consent.description": "{app_name}需要访问您的账号。",
         "page.consent.inquiry": "请问是否授权？",
@@ -33,11 +34,18 @@ const TRANSLATION: Translation = {
         "page.article.delete_confirmation": "删除后的文章不可恢复，您确定要删除吗？",
         "page.article.empty": "目前还没有任何文章。",
         "page.article.load_more": "加载更多",
-        "page.article.nothing_more": "没有更多了",
         "page.insert_image.title": "插入图片",
         "page.insert_image.fill_description": "图片描述",
         "page.insert_image.fill_link": "图片链接",
         "page.insert_image.upload": "本地上传",
+        "page.notification.event_comment": "回复了",
+        "page.notification.event_like": "点赞了",
+        "page.notification.event_unlike": "取消点赞",
+        "page.notification.object_article": "你的文章",
+        "page.notification.object_comment": "你的评论",
+        "page.notification.empty": "没有新的通知",
+        "page.notification.load_all": "查看所有已读通知",
+        "page.notification.set_as_read": "设为已读",
 
         // Models.
         // pattern: <model_name>.<model_property>.<model_property_values>
@@ -82,6 +90,7 @@ const TRANSLATION: Translation = {
         "component.comment.delete": "删除",
         "component.comment.delete_title": "删除评论",
         "component.comment.delete_confirmation": "删除后的评论不可恢复，您确定要删除吗？",
+        "component.footer.nothing_more": "没有更多了",
 
 
         // Toasts.
@@ -123,6 +132,7 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "抱歉，你不能删除一个有人回复过的评论",
         "toast.comment.delete_successfully": "删除成功",
         "toast.comment.delete_failed": "删除失败",
+        "toast.notification.not_found": "找不到这条通知"
     }
 };
 

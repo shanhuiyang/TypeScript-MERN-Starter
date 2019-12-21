@@ -2,12 +2,15 @@ import { AnyAction as Action } from "redux";
 import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR, UPDATE_PREFERENCES_SUCCESS } from "../actions/user";
 import UserState from "../models/client/UserState";
 import User from "../models/User";
+import { ACKNOWLEDGE_NOTIFICATION_SUCCESS, GET_NOTIFICATIONS_BEGIN, GET_NOTIFICATIONS_SUCCESS } from "../actions/notification";
+import Notification from "../models/Notification";
 
 const initialState: UserState = {
     loading: false,
     currentUser: undefined,
     uploadingAvatar: false,
-    uploadedAvatarUrl: undefined
+    uploadedAvatarUrl: undefined,
+    notifications: []
 };
 
 const userState = (state: UserState = initialState, action: Action): UserState => {
@@ -17,6 +20,12 @@ const userState = (state: UserState = initialState, action: Action): UserState =
         case CONSENT_REQUEST_SUCCESS:
         case AUTHENTICATE_SUCCESS:
         case LOGIN_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                currentUser: action.user,
+                notifications: action.notifications
+            };
         case UPDATE_PROFILE_SUCCESS:
             return {
                 ...state,
@@ -33,6 +42,7 @@ const userState = (state: UserState = initialState, action: Action): UserState =
                 }
             };
         case USER_REQUEST_START:
+        case GET_NOTIFICATIONS_BEGIN:
             return {...state, loading: true};
         case UPLOAD_AVATAR_START:
             return {...state, uploadingAvatar: true};
@@ -46,6 +56,16 @@ const userState = (state: UserState = initialState, action: Action): UserState =
             };
         case RESET_UPLOADED_AVATAR:
             return { ...state, uploadedAvatarUrl: undefined };
+        case ACKNOWLEDGE_NOTIFICATION_SUCCESS: {
+            const cloneNotifications = [...state.notifications];
+            const acknowledged: number = cloneNotifications.findIndex((value: Notification) => value._id === action.id);
+            if (acknowledged >= 0) {
+                cloneNotifications[acknowledged].acknowledged = true;
+            }
+            return {...state, notifications: cloneNotifications};
+        }
+        case GET_NOTIFICATIONS_SUCCESS:
+            return {...state, notifications: action.notifications, loading: false};
         default:
             return {...state, loading: false};
     }

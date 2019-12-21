@@ -1,23 +1,28 @@
 import { RequestHandler, Request, Response, NextFunction } from "express";
 import { validationErrorResponse } from "./utils";
 import { validationResult } from "express-validator";
-import CommentTargetType from "../../client/core/src/models/CommentTargetType";
+import PostType from "../../client/core/src/models/PostType";
 import ArticleCollection from "../models/Article/ArticleCollection";
 import ArticleDocument from "../models/Article/ArticleDocument";
-import CommentCollection from "../models/Article/CommentCollection";
-import CommentDocument from "../models/Article/CommentDocument";
+import CommentCollection from "../models/Comment/CommentCollection";
+import CommentDocument from "../models/Comment/CommentDocument";
 import Comment from "../../client/core/src/models/Comment.d";
 import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument.d";
 import User from "../../client/core/src/models/User.d";
 import GetCommentsResponse from "../../client/core/src/models/response/GetCommentsResponse";
+import NotificationDocument from "../models/Notification/NotificationDocument";
+import NotificationCollection from "../models/Notification/NotificationCollection";
+import InteractionType from "../../client/core/src/models/InteractionType";
+import { getCollectionByPostType } from "../models";
+import Post from "../../client/core/src/models/Post";
 
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {
         return invalid;
     }
-    if (req.query.targetType === CommentTargetType.ARTICLE) {
+    if (req.query.targetType === PostType.ARTICLE) {
         ArticleCollection
         .findById(req.query.targetId)
         .exec()
@@ -32,16 +37,16 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
                     return res.status(500).end();
                 }
                 const findAuthorInUsers = (comment: Comment): Promise<UserDocument> => {
-                    return UserCollection.findById(comment.user).exec();
+                    return UserCollection.findById(comment.author).exec();
                 };
                 const promises: Promise<User>[] = comments.map(async (comment: Comment) => {
-                    const user: UserDocument = await findAuthorInUsers(comment);
+                    const author: UserDocument = await findAuthorInUsers(comment);
                     return {
-                        email: user.email,
-                        name: user.name,
-                        avatarUrl: user.avatarUrl,
-                        gender: user.gender,
-                        _id: user._id.toString()
+                        email: author.email,
+                        name: author.name,
+                        avatarUrl: author.avatarUrl,
+                        gender: author.gender,
+                        _id: author._id.toString()
                     } as User;
                 });
                 Promise.all(promises).then((authors: User []) => {
@@ -65,12 +70,13 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
     if (invalid) {
         return invalid;
     }
+    const user: string = (req.user as User)._id.toString();
     const comment: CommentDocument = new CommentCollection({
         targetType: req.query.targetType,
         targetId: req.query.targetId,
         parent: req.query.parent ? req.query.parent : undefined,
         content: req.body.content,
-        user: (req.user as User)._id.toString(),
+        author: user,
         likes: []
     });
     comment.save()
@@ -79,15 +85,45 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
             CommentCollection
             .findById(req.query.parent)
             .exec()
-            .then((value: CommentDocument) => {
+            .then((parent: CommentDocument) => {
+                if (parent.author !== user) {
+                    const notification: NotificationDocument = new NotificationCollection({
+                        owner: parent.author,
+                        acknowledged: false,
+                        subject: user,
+                        event: InteractionType.COMMENT,
+                        objectType: PostType.COMMENT,
+                        object: req.query.parent,
+                        link: `/${req.query.targetType}/${req.query.targetId}`
+                    });
+                    notification.save();
+                }
                 return res.json(saved);
             })
-            .catch((error: Error) => {
-                // Unknown parent id.
-                return next(error);
-            });
+            .catch(
+                (error: Error) => {
+                    // Unknown parent id.
+                    return next(error);
+                }
+            );
         } else {
-            return res.json(saved);
+            getCollectionByPostType(req.query.targetType).findById(req.query.targetId)
+            .exec()
+            .then((value: any) => {
+                if ((value as Post).author != user) {
+                    const notification: NotificationDocument = new NotificationCollection({
+                        owner: (value as Post).author,
+                        acknowledged: false,
+                        subject: user,
+                        event: InteractionType.COMMENT,
+                        objectType: PostType.ARTICLE,
+                        object: req.query.targetId,
+                        link: `/${req.query.targetType}/${req.query.targetId}`
+                    });
+                    notification.save();
+                }
+                return res.json(saved);
+            });
         }
     })
     .catch((error: Error) => {
@@ -104,7 +140,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         if (!child) {
             CommentCollection.findByIdAndDelete(req.params.id)
             .exec().then((value: Comment) => {
-                if (value.user !== (req.user as User)._id.toString()) {
+                if (value.author !== (req.user as User)._id.toString()) {
                     return res.status(401).json({ message: "toast.user.attack_alert" });
                 }
                 return res.status(200).end();
@@ -115,7 +151,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 
-export const rate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+export const like: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {
         return invalid;
@@ -129,7 +165,7 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
             return res.status(404).json({ message: "toast.user.attack_alert" });
         }
         const user: User = req.user as User;
-        if (comment.user === user._id.toString()) {
+        if (comment.author === user._id.toString()) {
             return res.status(401).json({ message: "toast.user.attack_alert" });
         }
         const likes: string[] = comment.likes;
@@ -151,6 +187,17 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
                 if (!updated) {
                     return res.status(500).end();
                 }
+                const notification: NotificationDocument = new NotificationCollection({
+                    owner: updated.author,
+                    acknowledged: false,
+                    subject: user._id.toString(),
+                    event: Number.parseInt(req.query.rating) === 1 ?
+                        InteractionType.LIKE : InteractionType.UNLIKE,
+                    objectType: PostType.COMMENT,
+                    object: updated._id.toString(),
+                    link: `/${updated.targetType}/${updated.targetId}` // TODO: locate it to the comment position
+                });
+                notification.save();
                 return res.status(200).end();
             }
         );

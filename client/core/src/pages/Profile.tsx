@@ -119,7 +119,7 @@ class Profile extends React.Component<Props, States> {
                             <FormattedMessage id="user.gender"/>
                         </label>
                             {
-                                Object.values(Gender).map((value: string) => this.renderGenderRadio(value))
+                                Object.values(Gender).map(this.renderGenderRadio)
                             }
                     </Form.Group>
                     <ResponsiveFormField width={12}>

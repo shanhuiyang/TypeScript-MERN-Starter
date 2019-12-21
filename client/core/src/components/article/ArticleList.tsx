@@ -4,7 +4,7 @@ import connectPropsAndActions from "../../shared/connect";
 import Article from "../../models/Article";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { byCreatedAt } from "../../shared/date";
-import { Container, Segment, Header, Icon, Button, Divider } from "semantic-ui-react";
+import { Container, Segment, Header, Icon, Button } from "semantic-ui-react";
 import ActionCreator from "../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../shared/styles";
@@ -12,6 +12,7 @@ import Loading from "./Loading";
 import GitHubLink from "../shared/GitHubLink";
 import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
 import FabAction from "../../models/client/FabAction";
+import NothingMoreFooter from "../shared/NothingMoreFooter";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
@@ -104,7 +105,7 @@ class ArticleList extends React.Component<Props, States> {
             if (!createdAt) {
                 return undefined;
             }
-            return <Button fluid basic primary
+            return <Button fluid basic
                 onClick={() => { this.loadMore(createdAt); }}
                 loading={loadingMore}
                 disabled={loadingMore} >
@@ -113,11 +114,7 @@ class ArticleList extends React.Component<Props, States> {
                 </Button.Content>
             </Button>;
         } else if (articles.length > 0) {
-            return <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                <Divider horizontal style={{color: "#C0C0C0", width: "30%", alignSelf: "center"}}>
-                    <FormattedMessage id="page.article.nothing_more"/>
-                </Divider>
-            </div>;
+            return <NothingMoreFooter />;
         } else {
             return undefined;
         }

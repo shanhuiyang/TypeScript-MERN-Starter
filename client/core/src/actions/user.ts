@@ -10,6 +10,7 @@ import { getToast as toast } from "../shared/toast";
 import { getStorage as localStorage } from "../shared/storage";
 import { DEFAULT_PREFERENCES } from "../shared/preferences";
 import Preferences from "../models/Preferences";
+import AuthenticationResponse from "../models/response/AuthenticationResponse.d";
 
 export const USER_REQUEST_START: string = "USER_REQUEST_START";
 export const CONSENT_REQUEST_FAILED: string = "CONSENT_REQUEST_FAILED";
@@ -35,11 +36,13 @@ const userActionCreator: UserActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/authorize/decision", { transaction_id: transactionId }, "POST")
-            .then((json: any) => {
+            .then((json: AuthenticationResponse) => {
                 if (json.user && json.accessToken) {
                     dispatch({
                         type: CONSENT_REQUEST_SUCCESS,
-                        user: json.user
+                        user: json.user,
+                        notifications: [],
+                        notificationSubjects: {}
                     });
                     return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
                 } else {
@@ -71,11 +74,13 @@ const userActionCreator: UserActionCreator = {
                 dispatch({ type: USER_REQUEST_START});
                 return fetch("/oauth2/profile", undefined, "GET", true);
             })
-            .then((json: any) => {
+            .then((json: AuthenticationResponse) => {
                 if (json.user) {
                     dispatch({
                         type: AUTHENTICATE_SUCCESS,
-                        user: json.user
+                        user: json.user,
+                        notifications: json.notifications,
+                        notificationSubjects: json.notificationSubjects
                     });
                 } else {
                     return Promise.reject(new Error(INVALID_TOKEN_ERROR));
@@ -91,17 +96,21 @@ const userActionCreator: UserActionCreator = {
         return (dispatch: Dispatch<any>): any => {
             dispatch({ type: USER_REQUEST_START});
             return fetch("/oauth2/login", { email: email, password: password }, "POST")
-            .then((json: any) => {
-                if (json.user && json.accessToken) {
+            .then((json: AuthenticationResponse | RedirectTask) => {
+                const response = json as AuthenticationResponse;
+                const task = json as RedirectTask;
+                if (response.user && response.accessToken) {
                     dispatch({
                         type: LOGIN_SUCCESS,
-                        user: json.user
+                        user: response.user,
+                        notifications: response.notifications,
+                        notificationSubjects: response.notificationSubjects
                     });
-                    return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
-                } else if (!json.redirected && json.to) {
+                    return localStorage().setItem(ACCESS_TOKEN_KEY, response.accessToken);
+                } else if (!task.redirected && task.to) {
                     dispatch({
                         type: SIGN_UP_SUCCESS,
-                        redirectTask: json
+                        redirectTask: task
                     });
                 } else {
                     return Promise.reject(new Error("toast.user.general_error"));

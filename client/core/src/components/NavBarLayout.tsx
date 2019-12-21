@@ -3,13 +3,14 @@ import { NavLink, Link } from "react-router-dom";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/client/AppState";
 import UserActionCreator from "../models/client/UserActionCreator";
-import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon, Dimmer } from "semantic-ui-react";
+import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon, Dimmer, Label } from "semantic-ui-react";
 import User from "../models/User";
 import ResponsiveDesktop from "./shared/ResponsiveDesktop";
 import ResponsiveMobile from "./shared/ResponsiveMobile";
 import { WRAPPER_VIEW_STYLE } from "../shared/styles";
 import { FormattedMessage } from "react-intl";
 import MenuFab from "./shared/MenuFab";
+import Notification from "../models/Notification.d";
 
 interface Props {
     containerRef: RefObject<any>;
@@ -135,19 +136,41 @@ class NavBarLayout extends React.Component<Props, States> {
             return <Fragment />;
         }
         const trigger = (
-            <span>
+            <span style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
+                {
+                    this.getUnreadNotificationLength() > 0 ?
+                        <Label color="red" circular empty size="tiny" style={{alignSelf: "flex-start"}}/>
+                        : undefined
+                }
                 <Image avatar src={user.avatarUrl ? user.avatarUrl : "/images/avatar.png"} />
                 {user.name}
             </span>
         );
         return <Menu.Menu position="right">
-            <Dropdown trigger={trigger} pointing="top left" className="link item">
+            <Dropdown trigger={trigger}
+                pointing="top left"
+                className="link item">
                 <Dropdown.Menu>
                     <Dropdown.Item as={NavLink} to="/profile">
                         <FormattedMessage id="page.me.profile"/>
                     </Dropdown.Item>
                     <Dropdown.Item as={NavLink} to="/preferences">
                         <FormattedMessage id="page.me.preferences"/>
+                    </Dropdown.Item>
+                    <Dropdown.Item as={NavLink} to="/notifications"
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-between"}}>
+                        <FormattedMessage id="page.me.notifications"/>
+                        {
+                            this.getUnreadNotificationLength() > 0 ?
+                                <Label color="red" circular size="tiny" style={{marginLeft: 8}}>
+                                    {this.getUnreadNotificationLength()}
+                                </Label>
+                                : undefined
+                        }
                     </Dropdown.Item>
                     <Dropdown.Divider />
                     <Dropdown.Item onClick={this.props.actions.logout}>
@@ -171,6 +194,10 @@ class NavBarLayout extends React.Component<Props, States> {
                 <FormattedMessage id="page.me.sign_up"/>
             </Menu.Item>
         </Menu.Menu>;
+    }
+
+    private getUnreadNotificationLength = (): number => {
+        return this.props.state.userState.notifications.filter((value: Notification) => !value.acknowledged).length;
     }
 }
 
