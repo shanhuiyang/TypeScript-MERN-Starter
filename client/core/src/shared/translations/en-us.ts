@@ -20,6 +20,7 @@ const TRANSLATION: Translation = {
         "page.me.profile": "Profile",
         "page.me.logout": "Log out",
         "page.me.preferences": "Preferences",
+        "page.me.notifications": "Notifications",
         "page.avatar.title": "Adjust Your Profile Image",
         "page.avatar.rotate": "Rotate",
         "page.avatar.zoom": "Zoom",
@@ -33,11 +34,18 @@ const TRANSLATION: Translation = {
         "page.article.delete_confirmation": "You cannot restore this article after delete. Are you sure to delete?",
         "page.article.empty": "No articles are added up to now.",
         "page.article.load_more": "Load More",
-        "page.article.nothing_more": "No more articles",
         "page.insert_image.title": "Insert Image",
         "page.insert_image.fill_description": "Image Description",
         "page.insert_image.fill_link": "Image Link",
         "page.insert_image.upload": "Upload from Disk",
+        "page.notification.event_comment": "replied",
+        "page.notification.event_like": "liked",
+        "page.notification.event_unlike": "cancelled like on",
+        "page.notification.object_article": "your article",
+        "page.notification.object_comment": "your comment",
+        "page.notification.empty": "No new notification.",
+        "page.notification.load_all": "See all read notifications",
+        "page.notification.set_as_read": "Set as read",
 
         // Models.
         // pattern: <model_name>.<model_property>.<model_property_values>
@@ -82,6 +90,7 @@ const TRANSLATION: Translation = {
         "component.comment.delete": "Delete",
         "component.comment.delete_title": "Delete Comment",
         "component.comment.delete_confirmation": "You cannot restore this comment after delete. Are you sure to delete?",
+        "component.footer.nothing_more": "No more articles",
 
         // Toasts.
         // pattern: toast.<model>.<info>
@@ -122,6 +131,7 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "Sorry, you cannot delete a comment someone has replied to it.",
         "toast.comment.delete_successfully": "Delete successfully.",
         "toast.comment.delete_failed": "Delete failed.",
+        "toast.notification.not_found": "Cannot find this notification"
     }
 };
 

@@ -12,6 +12,7 @@ import Footer from "./components/Footer";
 import { WRAPPER_VIEW_STYLE } from "./shared/styles";
 import Preferences from "./pages/Preferences";
 import Articles from "./pages/Articles";
+import Notifications from "./pages/Notifications";
 interface Props {}
 
 interface States {}
@@ -40,8 +41,9 @@ export default class App extends React.Component<Props, States> {
                                 <Route path="/profile" render={ (props) => <Profile {...props} /> } />
                                 <Route path="/preferences" render={ (props) => <Preferences {...props} /> } />
                                 <Route path="/article" render={ (props) => <Articles {...props} /> } />
+                                <Route path="/notifications" render={ (props) => <Notifications {...props} /> } />
                                 <Route path="/about" component={About} />
-                                {/* add more routes here */}
+                                {/* add more routes here, the path should keep the same as PostType if necessary */}
                                 <Route render={ (props) => <ErrorPage {...props} error={notFoundError} /> } />
                             </Switch>
                         </main>

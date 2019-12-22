@@ -25,6 +25,7 @@ export default class Routes extends React.Component<Props, States> {
                 <Route path="/login" render={(props) => <LogIn {...props} />} />
                 <Route path="/signup" render={(props) => <SignUp {...props} />} />
                 <Route path="/consent" render={ (props) => <Consent {...props} /> } />
+                {/* add more routes here, the path should keep the same as PostType if necessary */}
             </Switch>
         </Container>;
     }

@@ -9,6 +9,7 @@ import { initStorage } from "../../shared/storage";
 import storageWrapper from "../../components/storage";
 import { getHostUrl } from "../../shared/fetch";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
+import AuthenticationResponse from "../../models/response/AuthenticationResponse";
 
 // Initialize local storage provider
 initStorage(storageWrapper);
@@ -45,13 +46,18 @@ describe("login", () => {
 
     it("return LOGIN_SUCCESS when login has been done", () => {
         fetchMock.postOnce(`${getHostUrl()}/oauth2/login`, {
-            body: { user: DUMMY_USER_1, accessToken: DUMMY_ACCESS_TOKEN },
+            body: {
+                user: DUMMY_USER_1,
+                accessToken: DUMMY_ACCESS_TOKEN,
+                notifications: [],
+                notificationSubjects: {}
+            } as AuthenticationResponse,
             headers: { "content-type": RESPONSE_CONTENT_TYPE.JSON }
         });
 
         const expectedActions = [
             { type: types.USER_REQUEST_START },
-            { type: types.LOGIN_SUCCESS, user: DUMMY_USER_1 }
+            { type: types.LOGIN_SUCCESS, user: DUMMY_USER_1, notifications: [], notificationSubjects: {}}
         ];
         const store = mockStore({
             loading: false,

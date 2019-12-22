@@ -17,6 +17,7 @@ import comment from "./routes/comment";
 // API keys and Passport configuration
 import "./config/passport-consumer";
 import avatar from "./routes/avatar";
+import notification from "./routes/notification";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -107,6 +108,7 @@ app.use("/oauth2", oauth2); // OAuth2 server routes
 app.use("/api/article", article); // Article related routes
 app.use("/api/avatar", avatar); // Avatar update related routes
 app.use("/api/comment", comment); // Comment related routes
+app.use("/api/notification", notification); // Comment related routes
 // Add more routes like "/api/***" here
 
 export default app;

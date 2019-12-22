@@ -35,9 +35,9 @@ article.route("/rate").get(
     passport.authenticate("bearer", { session: false }),
     [
         query("id", "toast.user.attack_alert").not().isEmpty(),
-        query("rating", "toast.user.attack_alert").not().isEmpty(),
+        query("rating", "toast.user.attack_alert").isIn(["0", "1"]),
     ],
-    controllers.rate
+    controllers.like
 );
 article.route("/insert/image").put(
     passport.authenticate("bearer", { session: false }),

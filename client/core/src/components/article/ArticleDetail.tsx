@@ -16,7 +16,7 @@ import UserLabel from "../user/UserLabel";
 import User from "../../models/User";
 import FabAction from "../../models/client/FabAction";
 import CommentSection from "../comment/CommentSection";
-import CommentTargetType from "../../models/CommentTargetType";
+import PostType from "../../models/PostType";
 import { getNameList } from "../../shared/string";
 import Loading from "./Loading";
 
@@ -43,7 +43,7 @@ class ArticleDetail extends React.Component<Props, States> {
     componentDidMount() {
         window.scrollTo(0, 0);
         if (this.articleId) {
-            this.props.actions.getComments(CommentTargetType.ARTICLE, this.articleId);
+            this.props.actions.getComments(PostType.ARTICLE, this.articleId);
             this.addFabActions();
         }
     }
@@ -60,7 +60,9 @@ class ArticleDetail extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         if (this.props.state.articleState.loading) {
-            return <Loading/>;
+            return <Container text style={CONTAINER_STYLE}>
+                <Loading/>
+            </Container>;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
@@ -168,7 +170,7 @@ class ArticleDetail extends React.Component<Props, States> {
                         <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
                     </Label>
                 }
-                <CommentSection targetId={article._id} target={CommentTargetType.ARTICLE} />
+                <CommentSection targetId={article._id} target={PostType.ARTICLE} />
             </Container>
         </Fragment>;
     }

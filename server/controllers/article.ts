@@ -11,8 +11,12 @@ import { validationErrorResponse } from "./utils";
 import * as random from "../util/random";
 import storage, { CONTAINER_ARTICLE } from "../repository/storage";
 import { UploadBlobResult } from "../repository/storage.d";
-import CommentCollection from "../models/Article/CommentCollection";
+import CommentCollection from "../models/Comment/CommentCollection";
 import { DEFAULT_PAGE_SIZE } from "../../client/core/src/shared/constants";
+import NotificationCollection from "../models/Notification/NotificationCollection";
+import NotificationDocument from "../models/Notification/NotificationDocument";
+import InteractionType from "../../client/core/src/models/InteractionType";
+import PostType from "../../client/core/src/models/PostType";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
@@ -67,7 +71,7 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         );
     });
 };
-export const rate: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+export const like: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {
         return invalid;
@@ -103,6 +107,17 @@ export const rate: RequestHandler = (req: Request, res: Response, next: NextFunc
                 if (!updated) {
                     return res.status(500).end();
                 }
+                const notification: NotificationDocument = new NotificationCollection({
+                    owner: article.author,
+                    acknowledged: false,
+                    subject: user._id.toString(),
+                    event: Number.parseInt(req.query.rating) === 1 ?
+                        InteractionType.LIKE : InteractionType.UNLIKE,
+                    objectType: PostType.ARTICLE,
+                    object: updated._id,
+                    link: `/article/${updated._id}`
+                });
+                notification.save();
                 return res.status(200).end();
             }
         );

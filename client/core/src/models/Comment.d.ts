@@ -1,14 +1,13 @@
-import { UnifiedModel } from "./UnifiedModel";
-import CommentTargetType from "./CommentTargetType";
+import Post from "./Post.d";
+import PostType from "./PostType";
 
 /**
  * Comment for article/photo/video. Currently it only can be article.
  */
-export default interface Comment extends UnifiedModel {
-    targetType: CommentTargetType;
+export default interface Comment extends Post {
+    targetType: PostType; // Article, this field could not be PostType.Comment
     targetId: string; // Article._id
-    parent: string; // Comment._id
+    parent: string; // Comment._id or undefined
     content: string;
-    user: string; // User._id
     likes: string[]; // array of User._id
 }

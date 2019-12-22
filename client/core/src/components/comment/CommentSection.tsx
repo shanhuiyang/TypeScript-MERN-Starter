@@ -11,7 +11,7 @@ import CommentClass from "../../models/Comment.d";
 import UserAvatar from "../user/UserAvatar";
 import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor, FormattedDate, FormattedTime } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-import CommentTargetType from "../../models/CommentTargetType";
+import PostType from "../../models/PostType";
 import CommentActionCreator from "../../models/client/CommentActionCreator";
 import { byUpdatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
@@ -21,7 +21,7 @@ import { getNameList } from "../../shared/string";
 const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
 interface Props extends IntlProps {
     targetId: string;
-    target: CommentTargetType;
+    target: PostType;
     state: AppState;
     actions: CommentActionCreator;
 }
@@ -39,10 +39,12 @@ class CommentSection extends React.Component<Props, States> {
         if (prevProps.state.commentState.updating === ADD_COMMENT_START
             && this.props.state.commentState.updating === ADD_COMMENT_SUCCESS) {
             // Reset
-            this.commentFormRef.current.value = "";
+            this.commentFormRef.current && (this.commentFormRef.current.value = "");
             this.replyCommentFormRef.current && (this.replyCommentFormRef.current.value = "");
             this.setState({
-                showReplyFormForCommentId: ""
+                showReplyFormForCommentId: this.props.targetId,
+                commentEditing: false,
+                replyCommentEditing: false
             });
         }
     }
@@ -51,7 +53,7 @@ class CommentSection extends React.Component<Props, States> {
         this.commentFormRef = createRef();
         this.replyCommentFormRef = createRef();
         this.state = {
-            showReplyFormForCommentId: "",
+            showReplyFormForCommentId: this.props.targetId,
             commentEditing: false,
             replyCommentEditing: false,
             openDeleteWarning: false
@@ -64,7 +66,11 @@ class CommentSection extends React.Component<Props, States> {
                 <FormattedMessage id={"component.comment.title"} />
                 {`(${this.props.state.commentState.data.length})`}
             </Header>
-            {this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef)}
+            {
+                this.props.targetId === this.state.showReplyFormForCommentId ?
+                this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef)
+                : undefined
+            }
             {
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
@@ -98,7 +104,7 @@ class CommentSection extends React.Component<Props, States> {
                 <textarea ref={ref} rows={3} style={{marginBottom: 4}}
                     onChange={(event: any) => { this.onTextChange(event, ref); }}
                     placeholder={ getString({id: "component.comment.placeholder"}) } />
-                <Button disabled={!editing}
+                <Button disabled={!editing} loading={this.props.state.commentState.updating === ADD_COMMENT_START}
                     content={ getString({id: "component.comment.submit"}) }
                     icon="edit" primary onClick={() => { this.onSubmitComment(id, ref); }} />
             </Form>
@@ -131,8 +137,8 @@ class CommentSection extends React.Component<Props, States> {
     };
     private renderComment = (comment: CommentClass, stackDepth: number = 0): React.ReactElement<any> => {
         const createDate: Date = comment.createdAt ? new Date(comment.createdAt) : new Date(0);
-        const author: User = this.props.state.userDictionary[comment.user];
-        return <Comment key={createDate.getMilliseconds()}>
+        const author: User = this.props.state.userDictionary[comment.author];
+        return <Comment key={comment._id}>
             <Comment.Avatar src={author.avatarUrl ? author.avatarUrl : "/images/avatar.png"} />
             <Comment.Content>
                 {/* There is a bug of style for <Comment /> in semantic-ui-react. Here we explicitly set the style */}
@@ -175,7 +181,7 @@ class CommentSection extends React.Component<Props, States> {
             }
             {
                 this.props.state.userState.currentUser
-                && this.props.state.userState.currentUser._id === comment.user ?
+                && this.props.state.userState.currentUser._id === comment.author ?
                 /* eslint-disable-next-line */
                 <Fragment>
                     <Comment.Action onClick={() => { this.deleteComment(comment._id); }}>
@@ -195,7 +201,7 @@ class CommentSection extends React.Component<Props, States> {
         console.log("onToggleReplyForm: " + id);
         if (this.state.showReplyFormForCommentId === id) {
             this.setState({
-                showReplyFormForCommentId: ""
+                showReplyFormForCommentId: this.props.targetId
             });
         } else {
             this.setState({
@@ -213,7 +219,7 @@ class CommentSection extends React.Component<Props, States> {
             !!user && comment.likes && (comment.likes.findIndex((value: string) => user._id === value) >= 0);
         return <label style={{color: "grey"}}>
             <Rating size="small" icon="heart" defaultRating={hasRated ? 1 : 0} maxRating={1}
-                disabled={!user || comment.user === user._id} onRate={
+                disabled={!user || comment.author === user._id} onRate={
                     (event: React.MouseEvent<HTMLDivElement>, data: RatingProps): void => {
                         if (!this.props.state.userState.currentUser) {
                             return;
