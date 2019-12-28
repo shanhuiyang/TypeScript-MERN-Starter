@@ -5,8 +5,6 @@ import commonActionCreator from "./common";
 import commentActionCreator from "./comment";
 import notificationActionCreator from "./notification";
 
-export const RESET_REDIRECT: string = "RESET_REDIRECT";
-
 const actions: ActionCreator = {
     ...userActionCreator,
     ...articleActionCreator,

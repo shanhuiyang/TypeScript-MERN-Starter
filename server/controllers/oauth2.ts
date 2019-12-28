@@ -23,6 +23,10 @@ import AuthenticationResponse from "../../client/core/src/models/response/Authen
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
+import { FLAG_ENABLE_ACTIVATION_CODE } from "../../client/core/src/shared/constants";
+import { getRandomInt } from "../util/random";
+import { sendEmail } from "../config/smtp-transporter";
+import { getFormattedString, getString } from "../translations";
 
 // User authorization endpoint.
 //
@@ -70,8 +74,24 @@ export const authorization: RequestHandler[] = [
             );
         }
     ),
-    function (req: MiddlewareRequest, res: Response) {
-      res.redirect(302, `/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+    function (req: MiddlewareRequest & Request, res: Response) {
+        if (FLAG_ENABLE_ACTIVATION_CODE) {
+            UserCollection.findOne({email: req.user.email}).exec().then((user: UserDocument) => {
+                if (user) {
+                    const locale: string = req.acceptsLanguages()
+                        ? req.acceptsLanguages()[0] : "en-us";
+                    const appName: string = getString("app.name", locale);
+                    const subject: string =
+                        getFormattedString("email.activation_code_subject", locale, { appName: appName });
+                    const content: string =
+                        getFormattedString(
+                            "email.activation_code_content", locale,
+                            { appName: appName, code: user.activationCode});
+                    sendEmail(req.user.email, subject, content);
+                }
+            });
+        }
+        res.redirect(302, `/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 
@@ -84,6 +104,19 @@ export const authorization: RequestHandler[] = [
 
 export const decision: RequestHandler[] = [
     login.ensureLoggedIn(),
+    (req: Request, res: Response, next: NextFunction) => {
+        if (FLAG_ENABLE_ACTIVATION_CODE) {
+            UserCollection.findById((req.user as User)._id).exec().then((user: UserDocument) => {
+                if (!user || ("" + user.activationCode) === req.body["activation_code"]) {
+                    next();
+                } else {
+                    res.status(409).json({ message: "toast.user.error_activation_code" });
+                }
+            });
+        } else {
+            next();
+        }
+    },
     server.decision()
 ];
 
@@ -107,7 +140,6 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
     if (invalid) {
         return invalid;
     }
-
     const user: UserDocument = new UserCollection({
         email: req.body.email,
         password: req.body.password,
@@ -115,7 +147,8 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         name: req.body.name,
         address: req.body.address,
         avatarUrl: req.body.avatarUrl,
-        preferences: req.body.preferences
+        preferences: req.body.preferences,
+        activationCode: getRandomInt(100000, 999999)
     });
     UserCollection.findOne({ email: _.toLower(req.body.email) }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }

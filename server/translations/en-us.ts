@@ -1,0 +1,18 @@
+import Translation from "../../client/core/src/models/Translation";
+import { default as fromClient } from "../../client/core/src/shared/translations/en-us";
+
+export const TRANSLATION: Translation = {
+    locale: "en-US",
+    messages: {
+        ...fromClient.messages,
+        "email.activation_code_subject": "Activation Code from {appName}",
+        "email.activation_code_content": `
+            Welcome to {appName}!
+
+            Thank you for signing up.
+            Your activation code is: {code}
+
+            Thanks!
+            {appName} Team`
+    }
+};
