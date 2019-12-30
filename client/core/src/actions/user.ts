@@ -32,10 +32,13 @@ export const UPLOAD_AVATAR_FAILED = "UPLOAD_AVATAR_FAILED";
 export const RESET_UPLOADED_AVATAR = "RESET_UPLOADED_AVATAR";
 
 const userActionCreator: UserActionCreator = {
-    allowConsent(transactionId: string): any {
+    allowConsent(transactionId: string, activationCode?: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
-            fetch("/oauth2/authorize/decision", { transaction_id: transactionId }, "POST")
+            fetch("/oauth2/authorize/decision", {
+                transaction_id: transactionId,
+                activation_code: activationCode
+            }, "POST")
             .then((json: AuthenticationResponse) => {
                 if (json.user && json.accessToken) {
                     dispatch({

@@ -4,7 +4,7 @@ import Gender from "../Gender";
 import Preferences from "../Preferences";
 
 export default interface UserActionCreator {
-    allowConsent(transactionId: string): any;
+    allowConsent(transactionId: string, activationCode?: string): any;
     denyConsent(): Action;
     authenticate(): any;
     login(email: string, password: string): any;

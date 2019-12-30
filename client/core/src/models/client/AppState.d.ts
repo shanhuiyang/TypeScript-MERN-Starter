@@ -2,7 +2,7 @@ import UserState from "./UserState.d";
 import ArticleState from "./ArticleState.d";
 import CommentState from "./CommentState.d";
 import RedirectTask from "./RedirectTask.d";
-import Translation from "./Translation.d";
+import Translation from "../Translation";
 import Comment from "../Comment.d";
 import User from "../User.d";
 import FabAction from "./FabAction";

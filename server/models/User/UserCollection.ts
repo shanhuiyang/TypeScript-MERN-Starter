@@ -14,7 +14,8 @@ export const userSchema: Schema = new mongoose.Schema({
     preferences: {
         type: Map,
         of: String
-    }
+    },
+    activationCode: Number
 }, { timestamps: true });
 
 /**

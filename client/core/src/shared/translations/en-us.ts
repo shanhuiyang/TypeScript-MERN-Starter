@@ -1,4 +1,4 @@
-import Translation from "../../models/client/Translation";
+import Translation from "../../models/Translation";
 
 const TRANSLATION: Translation = {
     locale: "en-US",
@@ -28,6 +28,7 @@ const TRANSLATION: Translation = {
         "page.consent.greeting": "Hi {email},",
         "page.consent.description": "{app_name} is requesting access to your account.",
         "page.consent.inquiry": "Do you approve?",
+        "page.consent.activation_code": "Please fill the code sent to your mailbox",
         "page.article.add": "Add Article",
         "page.article.edit": "Edit Article",
         "page.article.delete": "Delete Article: {title}",
@@ -60,6 +61,7 @@ const TRANSLATION: Translation = {
         "user.gender.other": "Other",
         "user.address": "Address",
         "user.website": "Web site",
+        "user.activation_code": "Activation Code",
         "preferences.editor_type": "Editor type",
         "preferences.editor_type.markdown": "Markdown",
         "preferences.editor_type.wysiwyg": "WYSIWYG",
@@ -104,6 +106,7 @@ const TRANSLATION: Translation = {
         "toast.user.upload_avatar_failed": "Upload avatar failed.",
         "toast.user.upload_exist_account": "Account with that email address already exists.",
         "toast.user.account_not_found": "Account cannot be found.",
+        "toast.user.error_activation_code": "Error OTP!",
         "toast.client.invalid": "Invalid client!",
         "toast.client.incorrect_url": "Incorrect redirectUri!",
         "toast.article.save_successfully": "Save your article successfully.",

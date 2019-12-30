@@ -9,3 +9,5 @@ export const RESPONSE_CONTENT_TYPE = {
 };
 
 export const DEFAULT_PAGE_SIZE: number = 10;
+
+export const FLAG_ENABLE_ACTIVATION_CODE: boolean = false;
