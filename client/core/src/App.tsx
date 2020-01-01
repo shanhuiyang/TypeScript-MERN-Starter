@@ -13,6 +13,8 @@ import { WRAPPER_VIEW_STYLE } from "./shared/styles";
 import Preferences from "./pages/Preferences";
 import Articles from "./pages/Articles";
 import Notifications from "./pages/Notifications";
+import Security from "./pages/Security";
+
 interface Props {}
 
 interface States {}
@@ -42,6 +44,7 @@ export default class App extends React.Component<Props, States> {
                                 <Route path="/preferences" render={ (props) => <Preferences {...props} /> } />
                                 <Route path="/article" render={ (props) => <Articles {...props} /> } />
                                 <Route path="/notifications" render={ (props) => <Notifications {...props} /> } />
+                                <Route path="/security" render={ (props) => <Security {...props} /> } />
                                 <Route path="/about" component={About} />
                                 {/* add more routes here, the path should keep the same as PostType if necessary */}
                                 <Route render={ (props) => <ErrorPage {...props} error={notFoundError} /> } />

@@ -1,5 +1,5 @@
 import { AnyAction as Action } from "redux";
-import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR, UPDATE_PREFERENCES_SUCCESS } from "../actions/user";
+import { AUTHENTICATE_SUCCESS, CONSENT_REQUEST_SUCCESS, LOGOUT, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS, USER_REQUEST_START, UPLOAD_AVATAR_START, UPLOAD_AVATAR_SUCCESS, UPLOAD_AVATAR_FAILED, RESET_UPLOADED_AVATAR, UPDATE_PREFERENCES_SUCCESS, UPDATE_PASSWORD_START } from "../actions/user";
 import UserState from "../models/client/UserState";
 import User from "../models/User";
 import { ACKNOWLEDGE_NOTIFICATION_SUCCESS, GET_NOTIFICATIONS_BEGIN, GET_NOTIFICATIONS_SUCCESS } from "../actions/notification";
@@ -43,6 +43,7 @@ const userState = (state: UserState = initialState, action: Action): UserState =
             };
         case USER_REQUEST_START:
         case GET_NOTIFICATIONS_BEGIN:
+        case UPDATE_PASSWORD_START:
             return {...state, loading: true};
         case UPLOAD_AVATAR_START:
             return {...state, uploadingAvatar: true};

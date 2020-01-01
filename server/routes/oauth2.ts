@@ -58,5 +58,18 @@ oauth2.route("/preferences")
         ],
         controllers.updatePreferences
     );
-
+oauth2.route("/password")
+    .post(
+        passport.authenticate("bearer", { session: false }),
+        [
+            check("password", "toast.user.password_too_short").isLength({ min: 6 }),
+            check("confirmPassword", "toast.user.confirm_password")
+                .exists()
+                .custom((value, { req }) => value === req.body.password),
+            check("oldPassword", "toast.user.password_not_change")
+                .exists()
+                .custom((value, { req }) => value !== req.body.password),
+        ],
+        controllers.updatePassword
+    );
 export default oauth2;

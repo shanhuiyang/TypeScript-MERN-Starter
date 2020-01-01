@@ -14,4 +14,5 @@ export default interface UserActionCreator {
     uploadAvatar(payload: Blob): any;
     resetAvatar(): Action;
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any;
+    updatePassword(oldPassword: string, password: string, confirmPassword: string): any;
 }

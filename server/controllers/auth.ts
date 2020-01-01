@@ -21,6 +21,7 @@ export const oauth2Callback: RequestHandler = (req: Request, res: Response, next
                 (user as User)._id.toString(),
                 true,
                 (data: Notification[], subjects: {[id: string]: User}): void => {
+                    (user as User).password = "######";
                     res.json({
                         user: user,
                         accessToken: info.accessToken,

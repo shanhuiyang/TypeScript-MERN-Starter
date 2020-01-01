@@ -173,6 +173,9 @@ class NavBarLayout extends React.Component<Props, States> {
                         }
                     </Dropdown.Item>
                     <Dropdown.Divider />
+                    <Dropdown.Item as={NavLink} to="/security">
+                        <FormattedMessage id="page.me.security"/>
+                    </Dropdown.Item>
                     <Dropdown.Item onClick={this.props.actions.logout}>
                         <FormattedMessage id="page.me.logout"/>
                     </Dropdown.Item>
