@@ -30,6 +30,9 @@ export const UPLOAD_AVATAR_START = "UPLOAD_AVATAR_START";
 export const UPLOAD_AVATAR_SUCCESS = "UPLOAD_AVATAR_SUCCESS";
 export const UPLOAD_AVATAR_FAILED = "UPLOAD_AVATAR_FAILED";
 export const RESET_UPLOADED_AVATAR = "RESET_UPLOADED_AVATAR";
+export const UPDATE_PASSWORD_START = "UPDATE_PASSWORD_START";
+export const UPDATE_PASSWORD_SUCCESS = "UPDATE_PASSWORD_SUCCESS";
+export const UPDATE_PASSWORD_FAILED = "UPDATE_PASSWORD_FAILED";
 
 const userActionCreator: UserActionCreator = {
     allowConsent(transactionId: string, activationCode?: string): any {
@@ -237,6 +240,25 @@ const userActionCreator: UserActionCreator = {
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));
+            });
+        };
+    },
+    updatePassword(oldPassword: string, password: string, confirmPassword: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: UPDATE_PASSWORD_START});
+            fetch("/oauth2/password", {
+                oldPassword,
+                password,
+                confirmPassword
+            }, "POST", true)
+            .then((json: any) => {
+                dispatch({
+                    type: UPDATE_PASSWORD_SUCCESS
+                });
+                toast().success("toast.user.update_successfully");
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(UPDATE_PASSWORD_FAILED, error));
             });
         };
     }

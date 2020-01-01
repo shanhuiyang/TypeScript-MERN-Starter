@@ -27,6 +27,7 @@ import { FLAG_ENABLE_ACTIVATION_CODE } from "../../client/core/src/shared/consta
 import { getRandomInt } from "../util/random";
 import { sendEmail } from "../config/smtp-transporter";
 import { getFormattedString, getString } from "../translations";
+import { WriteError } from "mongodb";
 
 // User authorization endpoint.
 //
@@ -110,7 +111,7 @@ export const decision: RequestHandler[] = [
                 if (!user || ("" + user.activationCode) === req.body["activation_code"]) {
                     next();
                 } else {
-                    res.status(409).json({ message: "toast.user.error_activation_code" });
+                    res.status(401).json({ message: "toast.user.error_activation_code" });
                 }
             });
         } else {
@@ -200,6 +201,7 @@ export const profile: RequestHandler = (req: Request, res: Response, next: NextF
         (req.user as User)._id.toString(),
         true,
         (data: Notification[], subjects: {[id: string]: User}): void => {
+            (req.user as User).password = "######";
             res.json({
                 user: req.user,
                 notifications: data,
@@ -250,4 +252,25 @@ export const updatePreferences: RequestHandler = (req: Request, res: Response, n
             res.json(user.preferences);
         });
     });
+};
+export const updatePassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+    (req.user as UserDocument).comparePassword(req.body.oldPassword, (err: Error, isMatch: boolean) => {
+        if (err || !isMatch) {
+            return res.status(401).json({ message: "toast.user.old_password_error" });
+        }
+    });
+    UserCollection.findById((req.user as User)._id).exec()
+    .then((user: UserDocument) => {
+        user.password = req.body.password;
+        user.save((err: WriteError) => {
+            if (err) {
+                return next(err);
+            }
+            res.status(200).end();
+        });
+    }).catch((error: any) => next(error));
 };
