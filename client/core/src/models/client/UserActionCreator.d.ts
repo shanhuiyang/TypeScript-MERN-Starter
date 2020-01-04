@@ -4,7 +4,7 @@ import Gender from "../Gender";
 import Preferences from "../Preferences";
 
 export default interface UserActionCreator {
-    allowConsent(transactionId: string, activationCode?: string): any;
+    allowConsent(transactionId: string, OTP?: string): any;
     denyConsent(): Action;
     authenticate(): any;
     login(email: string, password: string): any;
@@ -15,4 +15,6 @@ export default interface UserActionCreator {
     resetAvatar(): Action;
     signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any;
     updatePassword(oldPassword: string, password: string, confirmPassword: string): any;
+    resetPassword(email: string, OTP: string, password: string, confirmPassword: string): any;
+    sendOtp(email: string): any;
 }

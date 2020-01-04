@@ -23,11 +23,9 @@ import AuthenticationResponse from "../../client/core/src/models/response/Authen
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
-import { FLAG_ENABLE_ACTIVATION_CODE } from "../../client/core/src/shared/constants";
-import { getRandomInt } from "../util/random";
-import { sendEmail } from "../config/smtp-transporter";
-import { getFormattedString, getString } from "../translations";
+import { FLAG_ENABLE_ACTIVATION_CODE, FLAG_ENABLE_FORGET_PASSWORD } from "../../client/core/src/shared/constants";
 import { WriteError } from "mongodb";
+import { refreshOtpThenSendToUser } from "../models/User/UserStorage";
 
 // User authorization endpoint.
 //
@@ -76,23 +74,7 @@ export const authorization: RequestHandler[] = [
         }
     ),
     function (req: MiddlewareRequest & Request, res: Response) {
-        if (FLAG_ENABLE_ACTIVATION_CODE) {
-            UserCollection.findOne({email: req.user.email}).exec().then((user: UserDocument) => {
-                if (user) {
-                    const locale: string = req.acceptsLanguages()
-                        ? req.acceptsLanguages()[0] : "en-us";
-                    const appName: string = getString("app.name", locale);
-                    const subject: string =
-                        getFormattedString("email.activation_code_subject", locale, { appName: appName });
-                    const content: string =
-                        getFormattedString(
-                            "email.activation_code_content", locale,
-                            { appName: appName, code: user.activationCode});
-                    sendEmail(req.user.email, subject, content);
-                }
-            });
-        }
-        res.redirect(302, `/consent?email=${req.user.email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+        res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 
@@ -108,11 +90,7 @@ export const decision: RequestHandler[] = [
     (req: Request, res: Response, next: NextFunction) => {
         if (FLAG_ENABLE_ACTIVATION_CODE) {
             UserCollection.findById((req.user as User)._id).exec().then((user: UserDocument) => {
-                if (!user || ("" + user.activationCode) === req.body["activation_code"]) {
-                    next();
-                } else {
-                    res.status(401).json({ message: "toast.user.error_activation_code" });
-                }
+                verifyOtpInternal(res, next, user, req.body["OTP"], true);
             });
         } else {
             next();
@@ -148,8 +126,7 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         name: req.body.name,
         address: req.body.address,
         avatarUrl: req.body.avatarUrl,
-        preferences: req.body.preferences,
-        activationCode: getRandomInt(100000, 999999)
+        preferences: req.body.preferences
     });
     UserCollection.findOne({ email: _.toLower(req.body.email) }, (err: Error, existingUser: UserDocument) => {
         if (err) { return next(err); }
@@ -270,7 +247,98 @@ export const updatePassword: RequestHandler = (req: Request, res: Response, next
             if (err) {
                 return next(err);
             }
-            res.status(200).end();
+            res.sendStatus(200);
         });
     }).catch((error: any) => next(error));
+};
+export const resetPassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+    if (!FLAG_ENABLE_FORGET_PASSWORD) {
+        return res.sendStatus(404);
+    }
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+    UserCollection.findOne({email: req.body.email, OTP: req.body.OTP}).exec()
+    .then((user: UserDocument) => {
+        if (!user) {
+            return res.sendStatus(404);
+        }
+        user.password = req.body.password;
+        user.save((err: WriteError) => {
+            if (err) {
+                return next(err);
+            }
+            res.sendStatus(200);
+        });
+    }).catch((error: any) => next(error));
+};
+export const sendOtp: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+    UserCollection.findOne({email: req.query.email}).exec()
+    .then((user: UserDocument) => {
+        if (!user) {
+            return res.status(404).json({ message: "toast.user.account_not_found"});
+        }
+        const locale: string = req.acceptsLanguages()
+        ? req.acceptsLanguages()[0] : "en-us";
+        refreshOtpThenSendToUser(user.email, locale)
+        .then((value: any) => {
+            res.sendStatus(200);
+        }).catch((reason: any) => {
+            res.status(500).json({ message: "toast.user.otp_send_failed" });
+        });
+    });
+};
+
+export const verifyAccount: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
+    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+    if (invalid) {
+        return invalid;
+    }
+    UserCollection.findOne({email: req.query.email}).exec()
+    .then((user: UserDocument) => {
+        if (!user) {
+            return res.status(404).json({ message: "toast.user.email"});
+        }
+        return res.sendStatus(200);
+    });
+};
+
+export const verifyOtp: RequestHandler[] = [
+    (req: Request, res: Response, next: NextFunction): any => {
+        const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+        if (invalid) {
+            return invalid;
+        }
+        UserCollection.findOne({email: req.query.email}).exec()
+        .then((user: UserDocument) => {
+            if (!user) {
+                return res.status(404).json({ message: "toast.user.email"});
+            }
+            return verifyOtpInternal(res, next, user, req.query.OTP, false);
+        });
+    },
+    (req: Request, res: Response, next: NextFunction): any => {
+        res.sendStatus(200);
+    }
+];
+
+const verifyOtpInternal: any = (res: Response, next: NextFunction, user: UserDocument, OTP: string, reset: boolean): any => {
+    if (user && user.OTP && user.OTP.length == 8 && user.OTP === OTP) {
+        if (user.otpExpireTime.getTime() <= Date.now()) {
+            return res.status(401).json({ message: "toast.user.expired_OTP" });
+        } else {
+            if (reset) {
+                user.OTP = "";
+                user.save();
+            }
+            return next();
+        }
+    } else {
+        return res.status(401).json({ message: "toast.user.error_OTP" });
+    }
 };

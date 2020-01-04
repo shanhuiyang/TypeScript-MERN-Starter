@@ -5,12 +5,12 @@ export const TRANSLATION: Translation = {
     locale: "en-US",
     messages: {
         ...fromClient.messages,
-        "email.activation_code_subject": "Activation Code from {appName}",
-        "email.activation_code_content": `
+        "email.OTP_subject": "OTP from {appName}",
+        "email.OTP_content": `
             Welcome to {appName}!
 
             Thank you for signing up.
-            Your activation code is: {code}
+            Your OTP is: {code} (It will expire in 10 minutes.)
 
             Thanks!
             {appName} Team`

@@ -15,7 +15,6 @@ interface Props extends IntlProps {
     state: AppState;
     actions: ActionCreator;
 }
-
 interface States {}
 class Consent extends React.Component<Props, States> {
     params: URLSearchParams;
@@ -26,10 +25,14 @@ class Consent extends React.Component<Props, States> {
         this.codeRef = createRef();
         this.params = new URLSearchParams(this.props.location.search);
         this.transactionId = this.params.get("transactionID");
+        this.state = {
+            coolDown: 0
+        };
     }
     componentDidMount() {
         // This page is only redirected to
         this.props.actions.resetRedirectTask();
+        this.props.actions.sendOtp(this.params.get("email") as string);
     }
     render(): React.ReactElement<any> {
         if (!this.transactionId) {
@@ -73,12 +76,29 @@ class Consent extends React.Component<Props, States> {
         } else {
             return <Form>
                 <ResponsiveFormField>
-                    <FormattedMessage id="page.consent.activation_code" />
+                    <FormattedMessage id="page.consent.OTP" />
                 </ResponsiveFormField>
                 <ResponsiveFormField>
-                    <input placeholder={ this.props.intl.formatMessage({id: "user.activation_code"}) } ref={this.codeRef} />
+                    <input placeholder={ this.props.intl.formatMessage({id: "user.OTP"}) } ref={this.codeRef} />
                 </ResponsiveFormField>
-                <br />
+                <div style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    marginBottom: 10,
+                    fontSize: 12,
+                    color: "grey"
+                }}>
+                    <label>
+                        <FormattedMessage id="page.consent.OTP_not_received" />
+                    </label>
+                    <Button size="mini"
+                        disabled={this.props.state.userState.sendOtpCoolDown > 0}
+                        onClick={() => { this.props.actions.sendOtp(this.params.get("email") as string); }}>
+                        {this.props.state.userState.sendOtpCoolDown > 0 ? `(${this.props.state.userState.sendOtpCoolDown})` : ""}
+                        <FormattedMessage id="page.consent.OTP_resend" />
+                    </Button>
+                </div>
             </Form>;
         }
     }
@@ -88,7 +108,6 @@ class Consent extends React.Component<Props, States> {
             this.props.actions.allowConsent(this.transactionId, code);
         }
     }
-
     private deny = () => {
         this.props.actions.denyConsent();
     }

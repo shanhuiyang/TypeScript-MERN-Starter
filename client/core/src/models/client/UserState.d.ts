@@ -7,4 +7,5 @@ export default interface UserState {
     uploadingAvatar: boolean;
     uploadedAvatarUrl: string | undefined;
     notifications: Notification[];
+    sendOtpCoolDown: number;
 }
