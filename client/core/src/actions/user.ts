@@ -33,14 +33,22 @@ export const RESET_UPLOADED_AVATAR = "RESET_UPLOADED_AVATAR";
 export const UPDATE_PASSWORD_START = "UPDATE_PASSWORD_START";
 export const UPDATE_PASSWORD_SUCCESS = "UPDATE_PASSWORD_SUCCESS";
 export const UPDATE_PASSWORD_FAILED = "UPDATE_PASSWORD_FAILED";
+export const SEND_OTP_START = "SEND_OTP_START";
+export const SEND_OTP_SUCCESS = "SEND_OTP_SUCCESS";
+export const SEND_OTP_COOL_DOWN = "SEND_OTP_COOL_DOWN";
+export const SEND_OTP_FAILED = "SEND_OTP_FAILED";
+const redirectToLogin: RedirectTask = {
+    redirected: false,
+    to: "/login"
+};
 
 const userActionCreator: UserActionCreator = {
-    allowConsent(transactionId: string, activationCode?: string): any {
+    allowConsent(transactionId: string, OTP?: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
             fetch("/oauth2/authorize/decision", {
                 transaction_id: transactionId,
-                activation_code: activationCode
+                OTP: OTP
             }, "POST")
             .then((json: AuthenticationResponse) => {
                 if (json.user && json.accessToken) {
@@ -246,20 +254,59 @@ const userActionCreator: UserActionCreator = {
     updatePassword(oldPassword: string, password: string, confirmPassword: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: UPDATE_PASSWORD_START});
-            fetch("/oauth2/password", {
+            fetch("/oauth2/password/update", {
                 oldPassword,
                 password,
                 confirmPassword
             }, "POST", true)
             .then((json: any) => {
                 dispatch({
-                    type: UPDATE_PASSWORD_SUCCESS
+                    type: UPDATE_PASSWORD_SUCCESS,
+                    redirectTask: redirectToLogin
                 });
                 toast().success("toast.user.update_successfully");
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(UPDATE_PASSWORD_FAILED, error));
             });
+        };
+    },
+    resetPassword(email: string, OTP: string, password: string, confirmPassword: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: UPDATE_PASSWORD_START});
+            fetch("/oauth2/password/reset", {
+                email,
+                OTP,
+                password,
+                confirmPassword
+            }, "POST", false)
+            .then((json: any) => {
+                dispatch({
+                    type: UPDATE_PASSWORD_SUCCESS,
+                    redirectTask: redirectToLogin
+                });
+                toast().success("toast.user.update_successfully");
+            })
+            .catch((error: Error) => {
+                dispatch(actions.handleFetchError(UPDATE_PASSWORD_FAILED, error));
+            });
+        };
+    },
+    sendOtp(email: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            dispatch({ type: SEND_OTP_START});
+            fetch("/oauth2/sendotp?email=" + email, undefined, "GET")
+            .then((json: any) => {
+                dispatch({ type: SEND_OTP_SUCCESS});
+            }).catch((error: Error) => {
+                dispatch(actions.handleFetchError(SEND_OTP_FAILED, error));
+            });
+            const handle: any = setInterval(() => {
+                dispatch({
+                    type: SEND_OTP_COOL_DOWN,
+                    handle: handle
+                });
+            }, 1000);
         };
     }
 };

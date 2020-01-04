@@ -2,11 +2,11 @@
 // This file lists all routes of **authorization server**
 import express, { Router } from "express";
 import * as controllers from "../controllers/oauth2";
-import { check } from "express-validator";
+import { check, query } from "express-validator";
 import passport = require("passport");
 import Gender from "../../client/core/src/models/Gender";
 import EditorType from "../../client/core/src/models/EditorType";
-
+const MIN_PASSWORD_LENGTH: number = 6;
 const oauth2: Router = express.Router();
 oauth2.route("/token").post(controllers.token);
 oauth2.route("/authorize").get(controllers.authorization);
@@ -14,7 +14,7 @@ oauth2.route("/authorize/decision").post(controllers.decision);
 oauth2.route("/signup").post(
     [
         check("email", "toast.user.email").isEmail(),
-        check("password", "toast.user.password_too_short").isLength({ min: 6 }),
+        check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
         check("confirmPassword", "toast.user.confirm_password")
             .exists()
             .custom((value, { req }) => value === req.body.password),
@@ -58,11 +58,11 @@ oauth2.route("/preferences")
         ],
         controllers.updatePreferences
     );
-oauth2.route("/password")
+oauth2.route("/password/update")
     .post(
         passport.authenticate("bearer", { session: false }),
         [
-            check("password", "toast.user.password_too_short").isLength({ min: 6 }),
+            check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
             check("confirmPassword", "toast.user.confirm_password")
                 .exists()
                 .custom((value, { req }) => value === req.body.password),
@@ -71,5 +71,39 @@ oauth2.route("/password")
                 .custom((value, { req }) => value !== req.body.password),
         ],
         controllers.updatePassword
+    );
+oauth2.route("/password/reset")
+    .post(
+        [
+            check("email", "toast.user.email").isEmail(),
+            check("OTP", "toast.user.error_OTP").notEmpty(),
+            check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
+            check("confirmPassword", "toast.user.confirm_password")
+                .exists()
+                .custom((value, { req }) => value === req.body.password),
+        ],
+        controllers.resetPassword
+    );
+oauth2.route("/verifyaccount")
+    .get(
+        [
+            query("email", "toast.user.email").isEmail()
+        ],
+        controllers.verifyAccount
+    );
+oauth2.route("/sendotp")
+    .get(
+        [
+            query("email", "toast.user.email").isEmail()
+        ],
+        controllers.sendOtp
+    );
+oauth2.route("/verifyotp")
+    .get(
+        [
+            query("email", "toast.user.email").isEmail(),
+            query("OTP", "toast.user.error_OTP").notEmpty(),
+        ],
+        controllers.verifyOtp
     );
 export default oauth2;

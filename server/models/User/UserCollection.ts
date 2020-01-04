@@ -15,7 +15,8 @@ export const userSchema: Schema = new mongoose.Schema({
         type: Map,
         of: String
     },
-    activationCode: Number
+    OTP: String,
+    otpExpireTime: Date
 }, { timestamps: true });
 
 /**

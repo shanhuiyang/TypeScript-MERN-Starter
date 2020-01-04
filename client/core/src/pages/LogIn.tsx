@@ -1,18 +1,19 @@
 import React, { RefObject } from "react";
 import connectPropsAndActions from "../shared/connect";
 import AppState from "../models/client/AppState";
-import { Redirect } from "react-router-dom";
-import UserActionCreator from "../models/client/UserActionCreator";
+import { Redirect, Link, RouteComponentProps } from "react-router-dom";
+import ActionCreator from "../models/client/ActionCreator";
 import _ from "lodash";
 import { Form, Button, Icon, Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
+import { FLAG_ENABLE_FORGET_PASSWORD } from "../shared/constants";
 
-interface Props extends IntlProps {
+interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
-    actions: UserActionCreator;
+    actions: ActionCreator;
 }
 
 interface States {}
@@ -24,9 +25,13 @@ class LogIn extends React.Component<Props, States> {
         this.emailRef = React.createRef();
         this.passwordRef = React.createRef();
     }
+    componentDidMount() {
+        this.props.actions.resetRedirectTask();
+    }
     render(): React.ReactElement<any> {
         const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
-        if (!this.props.state.redirectTask.redirected) {
+        if (!this.props.state.redirectTask.redirected
+            && this.props.state.redirectTask.to !== this.props.match.url) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -47,10 +52,24 @@ class LogIn extends React.Component<Props, States> {
                         </label>
                         <input type="password" placeholder={ message({id: "user.password"}) } ref={this.passwordRef} />
                     </ResponsiveFormField>
-                    <Button primary type="submit" onClick={ this.login } loading={loading} disabled={loading}>
-                        <Icon name="check circle outline" />
-                        <FormattedMessage id="component.button.submit"/>
-                    </Button>
+                    <ResponsiveFormField style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBottom: 10}}>
+                        <Button primary type="submit" onClick={ this.login } loading={loading} disabled={loading}>
+                            <Icon name="check circle outline" />
+                            <FormattedMessage id="component.button.submit"/>
+                        </Button>
+                        {
+                            FLAG_ENABLE_FORGET_PASSWORD ?
+                            <Link to="/forgetpassword">
+                                <FormattedMessage id="page.me.forget_password"/>
+                            </Link>
+                            : undefined
+                        }
+                    </ResponsiveFormField>
                 </Form>
             </Container>);
         } else {
