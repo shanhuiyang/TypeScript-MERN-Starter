@@ -25,9 +25,6 @@ class Consent extends React.Component<Props, States> {
         this.codeRef = createRef();
         this.params = new URLSearchParams(this.props.location.search);
         this.transactionId = this.params.get("transactionID");
-        this.state = {
-            coolDown: 0
-        };
     }
     componentDidMount() {
         // This page is only redirected to
