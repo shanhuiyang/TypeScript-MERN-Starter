@@ -76,9 +76,12 @@ const userState = (state: UserState = initialState, action: Action): UserState =
                 sendOtpCoolDown: SEND_OTP_INTERVAL
             };
         case SEND_OTP_COOL_DOWN: {
-            if (state.sendOtpCoolDown === 0) {
+            if (state.sendOtpCoolDown <= 1) {
                 clearInterval(action.handle);
-                return state;
+                return {
+                    ...state,
+                    sendOtpCoolDown: 0
+                };
             } else {
                 return {
                     ...state,
