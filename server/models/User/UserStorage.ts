@@ -5,13 +5,14 @@ import { sendEmail } from "../../config/smtp-transporter";
 import { getUid } from "../../util/random";
 import { getExpireTime } from "../../util/time";
 import { FLAG_ENABLE_ACTIVATION_CODE } from "../../../client/core/src/shared/constants";
-
+export const OTP_LENGTH: number = 8;
+const OTP_EXPIRE_TIME: number = 10;
 export const refreshOtpThenSendToUser = (email: string, locale: string): Promise<any> => {
     if (FLAG_ENABLE_ACTIVATION_CODE) {
         return UserCollection.findOne({email: email}).exec().then((user: UserDocument) => {
             if (user) {
-                user.OTP = getUid(8);
-                user.otpExpireTime = getExpireTime(10);
+                user.OTP = getUid(OTP_LENGTH);
+                user.otpExpireTime = getExpireTime(OTP_EXPIRE_TIME);
                 return user.save().then((saved: UserDocument) => {
                     const appName: string = getString("app.name", locale);
                     const subject: string =

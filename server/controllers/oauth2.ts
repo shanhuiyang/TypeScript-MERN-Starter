@@ -25,7 +25,7 @@ import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
 import { FLAG_ENABLE_ACTIVATION_CODE, FLAG_ENABLE_FORGET_PASSWORD } from "../../client/core/src/shared/constants";
 import { WriteError } from "mongodb";
-import { refreshOtpThenSendToUser } from "../models/User/UserStorage";
+import { refreshOtpThenSendToUser, OTP_LENGTH } from "../models/User/UserStorage";
 
 // User authorization endpoint.
 //
@@ -328,7 +328,7 @@ export const verifyOtp: RequestHandler[] = [
 ];
 
 const verifyOtpInternal: any = (res: Response, next: NextFunction, user: UserDocument, OTP: string, reset: boolean): any => {
-    if (user && user.OTP && user.OTP.length == 8 && user.OTP === OTP) {
+    if (user && user.OTP && user.OTP.length == OTP_LENGTH && user.OTP === OTP) {
         if (user.otpExpireTime.getTime() <= Date.now()) {
             return res.status(401).json({ message: "toast.user.expired_OTP" });
         } else {
