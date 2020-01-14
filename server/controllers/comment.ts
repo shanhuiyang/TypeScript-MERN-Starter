@@ -55,6 +55,8 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
                         authorsDic[author._id] = author;
                     });
                     return res.json({data: comments, authors: authorsDic} as GetCommentsResponse);
+                }).catch((error: Error) => {
+                    return next(error);
                 });
             });
         })

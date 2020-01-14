@@ -14,16 +14,13 @@
 | Android                  | <img src="./images/demo-android-0.png" alt="Android Preview" width="200"/><img src="./images/demo-android-1.png" alt="Android Preview" width="200"/><img src="./images/demo-android-2.png" alt="Android Preview" width="200"/>   |
 | iOS                      | <img src="./images/demo-ios-0.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-1.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-2.png" alt="iOS Preview" width="200"/>   |
 
-This project is intended to build a community app for all platforms in TypeScript.
-
-**With this project you can build a web app including server, website, Android app and iOS app in one programming language.**
-
-**MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact & **R**eactNative, and **N**ode.js.
-This project implemented MERN in **TypeScript**.
+**This project built a blog app for all platforms in TypeScript.**
 
 TypeScript is a typed super set of JavaScript.
 If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding.
 You can check out its documentation [here](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
+
+**MERN** stands for **M**ongoDB, **E**xpress.js, **R**eact/**R**eactNative, and **N**ode.js.
 
 TypeScript has brought the following benefits to MERN:
 
@@ -34,10 +31,10 @@ TypeScript has brought the following benefits to MERN:
 Not only using TypeScript, but this project is also featured by:
 
 - **Real fullstack**, because you can build node **server**, Mongo DB, multimedia storage, **website** (for both desktop and mobile), **Android** app, and **iOS** app based on this project **in single programming language**.
-- **[RESTful-style](https://www.restapitutorial.com/lessons/whatisrest.html)**. Powered by an embedded [oauth2 server](https://github.com/jaredhanson/oauth2orize) and [passport.js](http://www.passportjs.org/), this project separate client and server clearly. Then the REST server can serve for both website and other clients simultaneously.
+- **[RESTful-style](https://www.restapitutorial.com/lessons/whatisrest.html)**. Powered by an embedded [oauth2 server](https://github.com/jaredhanson/oauth2orize) and [passport.js](http://www.passportjs.org/), this project separate client and server clearly. Then the REST server can serve for both website and mobile clients simultaneously.
 - **[React-router 4.0+](https://reacttraining.com/react-router/)**, with it you can easily define client routes and manage them.
 - **[Redux](https://redux.js.org/introduction)**, with it you can easily manage client states. Also **all clients shared the same state machine** implemented by Redux, we reduced a lot of effort when you develop for multi-clients.
-- **Almost ready** for a community app. We modeled `User` as well as `Article`. This is a **real starter** for who would like to build a community app using MERN.
+- **Almost ready** for a blog app. We modeled `User` as well as `Article`. This is a **real starter** for who would like to build a blog app or extend it to a community app using MERN.
 - The web client code is created from **[create-react-app](https://facebook.github.io/create-react-app/)**, so now you can get rid of annoying configurations for babel and webpack.
 - The Android/iOS client is created from **[Expo](https://expo.io)**, which is a tool encapsulated a lot of complexity when you develop on ReactNative.
 
@@ -65,7 +62,7 @@ Not only using TypeScript, but this project is also featured by:
     - [OAuth 2.0 protocol](#oauth-20-protocol)
     - [Resource server](#resource-server)
     - [Authorization server](#authorization-server)
-    - [Summary](#summary)
+    - [Summary of OAuth2 server](#summary-of-oauth2-server)
   - [Server routing & client routing](#server-routing-&-client-routing)
     - [React-router 4.0+](#react-router-40+)
     - [Performance perspective](#performance-perspective)
@@ -156,7 +153,7 @@ Briefly speaking, you should prepare for devices you would like to debug on.
 
 # Motivation
 
-Up to 2019, React is the most popular front-end framework.
+Up to 2020, React is the most popular front-end framework.
 For novice web developers, if they would like to build a full-stack project using Javascript, they can intuitively choose the combination of Node.js and React.
 
 Typescript is a success Javascript alternative which can keep the maintainability as the project grows.
@@ -567,7 +564,7 @@ In this project, there is no separated file like [client/core/public/css/main.cs
 We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has following advantages.
 
 1. React style. It's components match the mental model React has given us for composing UI great. Most of the time you are shaping your UI using props instead of classes or inline styles.
-2. It provides many useful components which are suitable to compose a community app. [Feed](https://react.semantic-ui.com/views/feed/), [Rating](https://react.semantic-ui.com/modules/rating/), and [Comment](https://react.semantic-ui.com/views/comment/) are fancy examples.
+2. It provides many useful components which are suitable to compose a blog app. [Feed](https://react.semantic-ui.com/views/feed/), [Rating](https://react.semantic-ui.com/modules/rating/), and [Comment](https://react.semantic-ui.com/views/comment/) are fancy examples.
 3. [Good support for react-router](https://react.semantic-ui.com/#augmentation).
 4. As its name hinted, using Semantic-UI React you can build your virtual DOM easy-to-read and compact.
 

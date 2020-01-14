@@ -32,6 +32,7 @@ class ArticleList extends React.Component<Props, States> {
     }
 
     componentDidMount() {
+        this.props.actions.resetRedirectTask();
         this.addFabActions();
     }
     componentDidUpdate(prevProps: Props) {

@@ -5,13 +5,13 @@ const TRANSLATION: Translation = {
     messages: {
         // App basic info
         "app.name": "Typescript MERN Starter",
-        "app.footer": "Copyright © 2019 Company, Inc. All Rights Reserved.",
+        "app.footer": "Copyright © 2020 Company, Inc. All Rights Reserved.",
         "app.connect_error": "Failed to fetch", // Do not change this phrase, it is used as keywords.
 
         // Pages.
         // pattern: page.<page_name>.<section>
         "page.home": "Home",
-        "page.about": "About",
+        "page.about": "About ",
         "page.about.introduction": "This project is intended to build a RESTful web app for all platforms in TypeScript. With this project you can build a web app including server, website, Android app and iOS app in one programming language.",
         "page.about.learn_more": "Learn More",
         "page.me": "Me",

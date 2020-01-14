@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import connectPropsAndActions from "../../shared/connect";
 import AppState from "../../models/client/AppState";
-import { match, RouteComponentProps } from "react-router-dom";
+import { match, RouteComponentProps, Redirect } from "react-router-dom";
 import ActionCreator from "../../models/client/ActionCreator";
 import Article from "../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
@@ -59,6 +59,9 @@ class ArticleDetail extends React.Component<Props, States> {
         this.props.actions.setFabActions([]);
     }
     render(): React.ReactElement<any> {
+        if (!this.props.state.redirectTask.redirected) {
+            return <Redirect to={this.props.state.redirectTask.to} />;
+        }
         if (this.props.state.articleState.loading) {
             return <Container text style={CONTAINER_STYLE}>
                 <Loading/>
@@ -143,7 +146,6 @@ class ArticleDetail extends React.Component<Props, States> {
     }
     private renderMetaInfo = (article: Article): React.ReactElement<any> => {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const updateDate: Date = article.updatedAt ? new Date(article.updatedAt) : new Date(0);
         const likersPopUpContent: string = getNameList(article.likes, this.props.state.userDictionary);
         const labelStyle: any = {
             color: "grey",
@@ -162,14 +164,6 @@ class ArticleDetail extends React.Component<Props, States> {
                     <FormattedMessage id="article.created_at" />
                     <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
                 </Label>
-                {
-                    article.createdAt === article.updatedAt ?
-                    undefined :
-                    <Label style={labelStyle}>
-                        <FormattedMessage id="article.updated_at" />
-                        <FormattedDate value={updateDate} />{" "}<FormattedTime value={updateDate} />
-                    </Label>
-                }
                 <CommentSection targetId={article._id} target={PostType.ARTICLE} />
             </Container>
         </Fragment>;
@@ -196,7 +190,7 @@ class ArticleDetail extends React.Component<Props, States> {
         </Container>;
     }
     private removeArticle = (): void => {
-            this.props.actions.removeArticle(this.articleId);
+        this.props.actions.removeArticle(this.articleId);
     }
 }
 
