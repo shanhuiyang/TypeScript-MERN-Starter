@@ -10,6 +10,9 @@ import ArticleCache from "../models/client/ArticleCache";
 export const SAVE_ARTICLE_BEGIN: string = "SAVE_ARTICLE_BEGIN";
 export const SAVE_ARTICLE_SUCCESS: string = "SAVE_ARTICLE_SUCCESS";
 export const SAVE_ARTICLE_FAILED: string = "SAVE_ARTICLE_FAILED";
+export const REMOVE_ARTICLE_BEGIN: string = "REMOVE_ARTICLE_BEGIN";
+export const REMOVE_ARTICLE_SUCCESS: string = "REMOVE_ARTICLE_SUCCESS";
+export const REMOVE_ARTICLE_FAILED: string = "REMOVE_ARTICLE_FAILED";
 export const GET_ARTICLE_BEGIN: string = "GET_ARTICLE_BEGIN";
 export const GET_ARTICLE_SUCCESS: string = "GET_ARTICLE_SUCCESS";
 export const GET_ARTICLE_FAILED: string = "GET_ARTICLE_FAILED";
@@ -96,14 +99,20 @@ const articleActionCreator: ArticleActionCreator = {
     },
     removeArticle(id: string): any {
         return (dispatch: Dispatch<any>): void => {
-            dispatch({type: SAVE_ARTICLE_BEGIN});
+            dispatch({type: REMOVE_ARTICLE_BEGIN});
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
                 toast().success("toast.article.delete_successfully");
-                dispatch({ type: SAVE_ARTICLE_SUCCESS });
+                dispatch({
+                    type: REMOVE_ARTICLE_SUCCESS,
+                    redirectTask: {
+                        redirected: false,
+                        to: "/article"
+                    }
+                });
             })
             .catch((error: Error) => {
-                dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
+                dispatch(actions.handleFetchError(REMOVE_ARTICLE_FAILED, error));
             });
         };
     },

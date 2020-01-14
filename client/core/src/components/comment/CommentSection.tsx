@@ -13,7 +13,7 @@ import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, Messa
 import { PrimitiveType } from "intl-messageformat";
 import PostType from "../../models/PostType";
 import CommentActionCreator from "../../models/client/CommentActionCreator";
-import { byUpdatedAt } from "../../shared/date";
+import { byCreatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
 import WarningModal from "../shared/WarningModal";
 import { getNameList } from "../../shared/string";
@@ -74,7 +74,7 @@ class CommentSection extends React.Component<Props, States> {
             {
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
-                    .sort(byUpdatedAt).reverse().map((value: CommentClass) => this.renderComment(value))
+                    .sort(byCreatedAt).reverse().map((value: CommentClass) => this.renderComment(value))
             }
             <WarningModal
                 descriptionIcon="delete" open={this.state.openDeleteWarning}
@@ -160,7 +160,7 @@ class CommentSection extends React.Component<Props, States> {
                 {/* Recursively render the children */
                     this.props.state.commentState.data
                         .filter((value: CommentClass, index: number) => (value.parent === comment._id))
-                        .sort(byUpdatedAt).reverse()
+                        .sort(byCreatedAt).reverse()
                         .map((value: CommentClass) => this.renderComment(value, stackDepth + 1))
                 }
             </Comment.Group>

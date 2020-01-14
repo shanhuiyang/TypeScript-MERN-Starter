@@ -5,7 +5,7 @@ const TRANSLATION: Translation = {
     messages: {
         // App basic info
         "app.name": "Typescript MERN Starter",
-        "app.footer": "Copyright © 2019 公司版权所有",
+        "app.footer": "Copyright © 2020 公司版权所有",
         "app.connect_error": "无法连接服务器",
 
         // Pages.

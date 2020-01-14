@@ -1,6 +1,6 @@
 import { AnyAction as Action } from "redux";
 import ArticleState from "../models/client/ArticleState";
-import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTICLE_BEGIN, SAVE_ARTICLE_FAILED, GET_ARTICLE_FAILED, RATE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_BEGIN, GET_MORE_ARTICLE_FAILED, SET_ARTICLE_CACHE, CLEAR_ARTICLE_CACHE } from "../actions/article";
+import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTICLE_BEGIN, SAVE_ARTICLE_FAILED, GET_ARTICLE_FAILED, RATE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_SUCCESS, GET_MORE_ARTICLE_BEGIN, GET_MORE_ARTICLE_FAILED, SET_ARTICLE_CACHE, CLEAR_ARTICLE_CACHE, REMOVE_ARTICLE_BEGIN, REMOVE_ARTICLE_SUCCESS, REMOVE_ARTICLE_FAILED } from "../actions/article";
 import Article from "../models/Article";
 import { UPDATE_PROFILE_SUCCESS } from "../actions/user";
 import ArticleCache from "../models/client/ArticleCache";
@@ -18,6 +18,7 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
     switch (action.type) {
         case GET_ARTICLE_BEGIN:
         case SAVE_ARTICLE_BEGIN:
+        case REMOVE_ARTICLE_BEGIN:
             return {...state, loading: true};
         case GET_ARTICLE_SUCCESS:
             return {
@@ -37,9 +38,11 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
                 hasMore: action.hasMore
             };
         case SAVE_ARTICLE_SUCCESS:
+        case REMOVE_ARTICLE_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
             return {...state, valid: false, loading: false};
         case GET_ARTICLE_FAILED:
+        case REMOVE_ARTICLE_FAILED:
         case SAVE_ARTICLE_FAILED:
             return {...state, loading: false};
         case GET_MORE_ARTICLE_FAILED:
