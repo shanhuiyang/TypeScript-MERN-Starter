@@ -1,14 +1,16 @@
 // Need manually add Intl polyfill for react-native app
 import "intl";
+import { Platform } from "react-native";
 
-// See https://github.com/expo/expo/issues/6536 for the following issue.
-(Intl as any).__disableRegExpRestore();
+if (Platform.OS === "android") {
+    // See https://github.com/expo/expo/issues/6536 for this issue.
+    (Intl as any).__disableRegExpRestore();
+}
 
 import "intl/locale-data/jsonp/en";
 import "intl/locale-data/jsonp/zh";
 
 import React from "react";
-import { Platform } from "react-native";
 import { Root } from "native-base";
 import { NativeRouter } from "react-router-native";
 import { AppLoading } from "expo";
