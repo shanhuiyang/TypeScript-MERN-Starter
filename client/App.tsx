@@ -1,11 +1,14 @@
 // Need manually add Intl polyfill for react-native app
 import "intl";
+
+// See https://github.com/expo/expo/issues/6536 for the following issue.
 (Intl as any).__disableRegExpRestore();
 
 import "intl/locale-data/jsonp/en";
 import "intl/locale-data/jsonp/zh";
 
 import React from "react";
+import { Platform } from "react-native";
 import { Root } from "native-base";
 import { NativeRouter } from "react-router-native";
 import { AppLoading } from "expo";
@@ -21,7 +24,6 @@ import { AsyncStorage } from "react-native";
 import { setHostUrl } from "./core/src/shared/fetch";
 import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
 import * as Localization from "expo-localization";
-
 import { SET_LOCALE } from "./core/src/actions/common";
 
 interface Props {}
@@ -30,7 +32,16 @@ interface States {
 }
 
 if (__DEV__) {
-    setHostUrl(HOST_URL_DEV);
+    // Android Emulator cannot access http://locahost on the same server
+    // But we can inject http://10.0.2.2 for such requirement
+    let hostUrl: string = HOST_URL_DEV;
+    const localHostUrl: string = "localhost";
+    if (hostUrl.match(localHostUrl) && Platform.OS === "android") {
+        hostUrl = hostUrl.replace(localHostUrl, "10.0.2.2");
+        setHostUrl(hostUrl);
+    } else {
+        setHostUrl(HOST_URL_DEV);
+    }
 } else {
     setHostUrl(HOST_URL_PROD);
 }

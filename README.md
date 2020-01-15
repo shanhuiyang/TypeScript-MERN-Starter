@@ -14,7 +14,7 @@
 | Android                  | <img src="./images/demo-android-0.png" alt="Android Preview" width="200"/><img src="./images/demo-android-1.png" alt="Android Preview" width="200"/><img src="./images/demo-android-2.png" alt="Android Preview" width="200"/>   |
 | iOS                      | <img src="./images/demo-ios-0.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-1.png" alt="iOS Preview" width="200"/><img src="./images/demo-ios-2.png" alt="iOS Preview" width="200"/>   |
 
-**This project built a blog app for all platforms in TypeScript.**
+**This project built a real blog app for all platforms in TypeScript.**
 
 TypeScript is a typed super set of JavaScript.
 If you are new to TypeScript it is highly recommended to become familiar with it first before proceeding.
@@ -138,18 +138,39 @@ mongod
 yarn start
 ```
 
-Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the template being served and rendered locally!
+Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the blog page being served and rendered locally!
 
 ## Start the mobile apps
 
-First of all, you need to get the IP address (either global IP or LAN IP) of your development server. Then modify the constant `HOST_NAME_DEV` in [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts) with the IP address you got.
-
-Then `yarn start` will also start the react-native project using expo-cli.
+The command `yarn start` will also start the react-native project using expo-cli.
 So you can navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
 From that page you can easily start your app for both Android and iOS by clicking corresponding buttons.
 
 For more detail of prerequisite please refer to [Installation](https://docs.expo.io/versions/v34.0.0/introduction/installation/) of Expo document.
+
 Briefly speaking, you should prepare for devices you would like to debug on.
+
+[TODO] Elaborate this part.
+
+## Optional: Test your app on other device in the same LAN
+
+By default the request url connect client and service are `http://localhost`, i.e. you can only test client and service in the same server/PC/Mac.
+
+To test your app in LAN, you can do following before enter command `yarn start`.
+
+1. Get the IP address (either global IP or LAN IP) of your development server. 
+2. Modify the constant `HOST_NAME_DEV` in [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts) with the IP address you got.
+
+## Optional: Test with OTP sending
+
+This project implement the auth service, as well as account verification by sending OTP to user's registered email account.
+
+By default the account verification is turned off since SMTP transporter is not configured with account and password.
+
+To test this part of functionality, you can:
+
+1. add your email account and password to [server/config/smtp-transporter.ts](server/config/smtp-transporter.ts).
+2. change the flag to `true` in [client/core/src/shared/constants.ts](client/core/src/shared/constants.ts).
 
 # Motivation
 
@@ -624,8 +645,10 @@ You can also integrate [React DevTools](https://github.com/facebook/react-devtoo
 
 After you run the command `yarn start` or `yarn debug`, you can visit [http://localhost:19002](http://localhost:19002) using Chrome. This is the home page of Expo debugging tool.
 
-For detail of how to debugging **please refer to [Expo debugging document](https://docs.expo.io/versions/v35.0.0/workflow/debugging/)**.
+For detail of how to debugging **please refer to [Expo debugging document](https://docs.expo.io/versions/v36.0.0/workflow/debugging/)**.
 Briefly speaking you will have similar experience as debugging on website client, they are both using Chrome.
+
+[TODO] This part will be elaborated.
 
 ## Debugging server
 
@@ -976,8 +999,10 @@ You can follow the steps below to adapt the app you just deployed on Azure to a 
 
 ## Deploy the mobile apps
 
-Please refer to [Expo publishing documents](https://docs.expo.io/versions/v35.0.0/workflow/publishing/) for detail steps.
+Please refer to [Expo publishing documents](https://docs.expo.io/versions/v36.0.0/workflow/publishing/) for detail steps.
 Expo managed the deployment process sophisticatedly for you.
+
+[TODO] This part will be elaborated.
 
 ## Summary of deployment
 
