@@ -1,3 +1,10 @@
+// Need manually add Intl polyfill for react-native app
+import "intl";
+(Intl as any).__disableRegExpRestore();
+
+import "intl/locale-data/jsonp/en";
+import "intl/locale-data/jsonp/zh";
+
 import React from "react";
 import { Root } from "native-base";
 import { NativeRouter } from "react-router-native";
@@ -15,10 +22,6 @@ import { setHostUrl } from "./core/src/shared/fetch";
 import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
 import * as Localization from "expo-localization";
 
-// You should manually add Intl polyfill for react-native app
-import "intl";
-import "intl/locale-data/jsonp/en";
-import "intl/locale-data/jsonp/zh";
 import { SET_LOCALE } from "./core/src/actions/common";
 
 interface Props {}
