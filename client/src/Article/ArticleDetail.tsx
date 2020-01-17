@@ -6,7 +6,7 @@ import AppState from "../../core/src/models/client/AppState";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
-import { getAvatarSource } from "../utils/avatarUrl";
+import { getAvatarSource } from "../utils/image";
 import { FormattedDate, FormattedTime } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {

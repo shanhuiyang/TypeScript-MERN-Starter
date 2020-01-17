@@ -74,7 +74,7 @@ export const authorization: RequestHandler[] = [
         }
     ),
     function (req: MiddlewareRequest & Request, res: Response) {
-        res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${req.oauth2.client.name}&transactionID=${req.oauth2.transactionID}`);
+        res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${(req.oauth2.client as Client).name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
 

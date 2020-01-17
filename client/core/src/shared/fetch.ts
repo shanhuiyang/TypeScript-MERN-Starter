@@ -10,14 +10,15 @@ export type Method = "GET" | "POST" | "PUT";
 
 const TEST_FOR_LOADING: boolean = false;
 
-let HOST_URL: string = "http://localhost:3000";
+let hostUrl: string;
 
+// Must call setHostUrl for each client at their start up
 export const setHostUrl = (host: string): void => {
-    HOST_URL = host;
+    hostUrl = host;
 };
 
 export const getHostUrl = (): string => {
-    return HOST_URL;
+    return hostUrl;
 };
 
 const _fetch = async (url: string, body: any, method: Method, withToken?: boolean): Promise<any> => {
@@ -60,11 +61,9 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
         contentType = contentType.toLowerCase();
         if (contentType.startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
             return response.text();
-        }
-        else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
+        } else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
             return response.json();
-        }
-        else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.url) {
+        } else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.url) {
             // Drop the html because we use client routing instead of server routing
             let targetTo: string = response.url;
             if (targetTo.startsWith(getHostUrl())) {

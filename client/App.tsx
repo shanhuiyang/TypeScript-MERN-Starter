@@ -4,11 +4,30 @@ import { Platform } from "react-native";
 
 if (Platform.OS === "android") {
     // See https://github.com/expo/expo/issues/6536 for this issue.
-    (Intl as any).__disableRegExpRestore();
+    if (typeof (Intl as any).__disableRegExpRestore === "function") {
+        (Intl as any).__disableRegExpRestore();
+    }
 }
-
 import "intl/locale-data/jsonp/en";
 import "intl/locale-data/jsonp/zh";
+
+import { setHostUrl } from "./core/src/shared/fetch";
+import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
+
+if (__DEV__) {
+    // Android Emulator cannot access http://localhost on the same server
+    // But we can inject http://10.0.2.2 for such requirement
+    let hostUrl: string = HOST_URL_DEV;
+    const localHostUrl: string = "localhost";
+    if (hostUrl.match(localHostUrl) && Platform.OS === "android") {
+        hostUrl = hostUrl.replace(localHostUrl, ANDROID_LOCAL_HOST_URL);
+        setHostUrl(hostUrl);
+    } else {
+        setHostUrl(HOST_URL_DEV);
+    }
+} else {
+    setHostUrl(HOST_URL_PROD);
+}
 
 import React from "react";
 import { Root } from "native-base";
@@ -23,29 +42,14 @@ import { initToast } from "./core/src/shared/toast";
 import ToastWrapper from "./src/Common/ToastWrapper";
 import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
-import { setHostUrl } from "./core/src/shared/fetch";
-import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
 import * as Localization from "expo-localization";
 import { SET_LOCALE } from "./core/src/actions/common";
+
+import { ANDROID_LOCAL_HOST_URL } from "./core/src/shared/constants";
 
 interface Props {}
 interface States {
     isReady: boolean;
-}
-
-if (__DEV__) {
-    // Android Emulator cannot access http://locahost on the same server
-    // But we can inject http://10.0.2.2 for such requirement
-    let hostUrl: string = HOST_URL_DEV;
-    const localHostUrl: string = "localhost";
-    if (hostUrl.match(localHostUrl) && Platform.OS === "android") {
-        hostUrl = hostUrl.replace(localHostUrl, "10.0.2.2");
-        setHostUrl(hostUrl);
-    } else {
-        setHostUrl(HOST_URL_DEV);
-    }
-} else {
-    setHostUrl(HOST_URL_PROD);
 }
 
 // initialize locale from system language

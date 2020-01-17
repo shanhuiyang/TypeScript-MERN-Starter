@@ -5,8 +5,12 @@ import AuthenticationResponse from "../../client/core/src/models/response/Authen
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User.d";
+
+export const oauth2: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
+    passport.authenticate("oauth2")(req, res, next);
+};
 export const oauth2Callback: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
-    passport.authenticate("oauth2", (error: Error, user: UserDocument | boolean, info: any) => {
+    const authResultHandler = (error: Error, user: UserDocument | boolean, info: any) => {
         if (error) {
             return next(error);
         }
@@ -31,5 +35,6 @@ export const oauth2Callback: RequestHandler = (req: Request, res: Response, next
                 }
             );
         });
-    })(req, res, next);
+    };
+    passport.authenticate("oauth2", authResultHandler)(req, res, next);
 };
