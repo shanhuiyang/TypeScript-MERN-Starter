@@ -29,7 +29,9 @@ class Consent extends React.Component<Props, States> {
     componentDidMount() {
         // This page is only redirected to
         this.props.actions.resetRedirectTask();
-        this.props.actions.sendOtp(this.params.get("email") as string);
+        if (FLAG_ENABLE_ACTIVATION_CODE) {
+            this.props.actions.sendOtp(this.params.get("email") as string);
+        }
     }
     render(): React.ReactElement<any> {
         if (!this.transactionId) {

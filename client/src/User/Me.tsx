@@ -6,7 +6,7 @@ import UserActionCreator from "../../core/src/models/client/UserActionCreator";
 import AppState from "../../core/src/models/client/AppState";
 import UserModel from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
-import { getAvatarSource } from "../utils/avatarUrl";
+import { getAvatarSource } from "../utils/image";
 import { FormattedMessage } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {

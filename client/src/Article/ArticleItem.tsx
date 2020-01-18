@@ -6,7 +6,7 @@ import ArticleActionCreator from "../../core/src/models/client/ArticleActionCrea
 import User from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
-import { getAvatarSource } from "../utils/avatarUrl";
+import { getAvatarSource } from "../utils/image";
 import { FormattedDate, FormattedTime } from "react-intl";
 
 interface Props extends RouteComponentProps<any> {

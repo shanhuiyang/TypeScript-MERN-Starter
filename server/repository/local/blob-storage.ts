@@ -1,7 +1,6 @@
 import { UploadBlobResult } from "../storage.d";
 import fs from "fs";
 import path from "path";
-import { HOST_URL } from "../../util/secrets";
 
 const STORAGE_ROOT_DIR: string = "storage";
 const STORAGE_ROOT_PATH: string = `${path.dirname(require.main.filename)}/../../client/core/public/${STORAGE_ROOT_DIR}`;
@@ -14,7 +13,7 @@ export const uploadBlob = (
     contentLength: number,
     containerName: string,
     blobName: string): Promise<UploadBlobResult> => {
-    const blobURL = `${HOST_URL}/${STORAGE_ROOT_DIR}/${containerName}/${blobName}`;
+    const blobURL = `/${STORAGE_ROOT_DIR}/${containerName}/${blobName}`;
     const targetDir = `${STORAGE_ROOT_PATH}/${containerName}`;
     const targetPath = `${targetDir}/${blobName}`;
     return new Promise<UploadBlobResult>((resolve: any, reject: any): any => {

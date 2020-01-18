@@ -209,8 +209,9 @@ We almost totally imported this project to **TypeScript-MERN-Starter**.
 
 We build this project on following philosophies:
 
-1. **Beginner friendly**. You can start the app without any complex configuration for build and runtime. In this document we are trying our best to illustrate how each modules of this app are bound.
-2. **Easy to extend**. There is no complex configurations in it, so that you can also focus on your business logic. We chose well-documented 3rd party packages to use, so that you can extend this app easily by following the working patterns of these packages.
+1. **Beginner friendly**. You can start the app without any complex configuration for build and runtime.
+2. **Easy to extend**. You can always focus on your business logic. We chose well-documented 3rd party packages to use, so that you can extend this app easily by following the working patterns of these packages.
+3. **Share the code as much as possible**. For example, usually we prefer the 3rd party package who can be used both in React and ReactNative, such as ReactRouter, ReactIntl, etc. In contrast, we gave up to use ReactNavigation, expo-localization which can only used in ReactNative.
 
 ## Work items
 

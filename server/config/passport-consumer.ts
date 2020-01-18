@@ -4,16 +4,18 @@ import passport from "passport";
 import { VerifyCallback } from "passport-oauth2";
 import OAuth2Strategy from "./oauth2orize-strategy";
 import _ from "lodash";
+import Client from "../models/OAuth/Client";
 import Clients from "../models/OAuth/ClientCollection";
 import User from "../../client/core/src/models/User";
-import { HOST_URL } from "../util/secrets";
 
-passport.use("oauth2", new OAuth2Strategy({
-        authorizationURL: `${HOST_URL}/oauth2/authorize`,
-        tokenURL: `${HOST_URL}/oauth2/token`,
-        clientID: Clients[0].id,
-        clientSecret: Clients[0].secret,
-        callbackURL: Clients[0].redirectUri
+const client: Client = Clients[0];
+passport.use("oauth2", new OAuth2Strategy(
+    {
+        authorizationURL: `${client.hostUrl}/oauth2/authorize`,
+        tokenURL: `${client.hostUrl}/oauth2/token`,
+        clientID: client.id,
+        clientSecret: client.secret,
+        callbackURL: client.redirectUri
     },
     (accessToken: string, refreshToken: string, user: User, verified: VerifyCallback) => {
         console.log("[OAuth2Strategy] applied, accessToken: " + accessToken + " and user: " + JSON.stringify(user));
