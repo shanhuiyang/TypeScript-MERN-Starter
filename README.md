@@ -38,7 +38,7 @@ Not only using TypeScript, but this project is also featured by:
 - The web client code is created from **[create-react-app](https://facebook.github.io/create-react-app/)**, so now you can get rid of annoying configurations for babel and webpack.
 - The Android/iOS client is created from **[Expo](https://expo.io)**, which is a tool encapsulated a lot of complexity when you develop on ReactNative.
 
-# Table of Content
+## Table of Content
 
 - [Quick start](#quick-start)
   - [Before Start](#before-start)
@@ -96,9 +96,9 @@ Not only using TypeScript, but this project is also featured by:
   - [Deploy the mobile apps](#deploy-the-mobile-apps)
   - [Summary of deployment](#summary-of-deployment)
 
-# Quick start
+## Quick start
 
-## Before Start
+### Before Start
 
 To build and run this app locally you will need a few things:
 
@@ -109,20 +109,20 @@ To build and run this app locally you will need a few things:
 - Install [Yarn](https://yarnpkg.com/)
 - Install [Expo Cli](https://expo.io/tools#cli)
 
-## Clone the repository
+### Clone the repository
 
 ```bash
 git clone https://github.com/shanhuiyang/TypeScript-MERN-Starter.git <project_name>
 ```
 
-## Install dependencies
+### Install dependencies
 
 ```bash
 cd <project_name>
 yarn
 ```
 
-## Start your mongoDB server
+### Start your mongoDB server
 
 (you'll probably have to start another command prompt)
 
@@ -130,9 +130,9 @@ yarn
 mongod
 ```
 
-> **Note!** If you are working on Windows, you can run MongoDB as service, then your MongoDB will always be running even after you restart your computer.
+> **Note!** While you just installed MongoDB (for both on OSX or Windows), it may remind you that you can run MongoDB **as service**, then your MongoDB will always be running even after you restart your computer.
 
-## Build and run the project
+### Build and run the project
 
 ```bash
 yarn start
@@ -140,7 +140,7 @@ yarn start
 
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the blog page being served and rendered locally!
 
-## Start the mobile apps
+### Start the mobile apps
 
 The command `yarn start` will also start the react-native project using expo-cli.
 So you can navigate to [http://localhost:19002](http://localhost:19002) and you will see the Expo DevTool page.
@@ -148,11 +148,13 @@ From that page you can easily start your app for both Android and iOS by clickin
 
 For more detail of prerequisite please refer to [Installation](https://docs.expo.io/versions/v34.0.0/introduction/installation/) of Expo document.
 
-Briefly speaking, you should prepare for devices you would like to debug on.
+Briefly speaking, you should prepare for devices you would like to debug on, either emulator/simulator or physical devices.
 
 [TODO] Elaborate this part.
 
-## Optional: Test your app on other device in the same LAN
+> **Note!** Currently you cannot test Android app on emulator without configure the host url manually. This is because in Android emulator you cannot access `http://localhost` which hosted on the same server/PC/Mac. You can test your app in the same LAN, see next section for detail.
+
+### Optional: Test your app on other device in the same LAN
 
 By default the request url connect client and service are `http://localhost`, i.e. you can only test client and service in the same server/PC/Mac.
 
@@ -161,7 +163,7 @@ To test your app in LAN, you can do following before enter command `yarn start`.
 1. Get the IP address (either global IP or LAN IP) of your development server. 
 2. Modify the constant `HOST_NAME_DEV` in [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts) with the IP address you got.
 
-## Optional: Test with OTP sending
+### Optional: Test with OTP sending
 
 This project implement the auth service, as well as account verification by sending OTP to user's registered email account.
 
@@ -172,7 +174,7 @@ To test this part of functionality, you can:
 1. add your email account and password to [server/config/smtp-transporter.ts](server/config/smtp-transporter.ts).
 2. change the flag to `true` in [client/core/src/shared/constants.ts](client/core/src/shared/constants.ts).
 
-# Motivation
+## Motivation
 
 Up to 2020, React is the most popular front-end framework.
 For novice web developers, if they would like to build a full-stack project using Javascript, they can intuitively choose the combination of Node.js and React.
@@ -188,7 +190,7 @@ What if we mixed these 3 projects together?
 How could Typescript shows its advantage if we use it across client & server?
 So this project is intended to explore the capability of Typescript in that circumstance.
 
-## Prior Art
+### Prior Art
 
 [mern-starter](https://github.com/Hashnode/mern-starter) is a famous project which combine React and Node.js in a single project.
 However, it is deprecated after April, 2019.
@@ -205,7 +207,7 @@ However, as you can see in **TypeScript-MERN-Starter**, the architecture has bee
 [oauth2api](https://github.com/PatrickHeneise/oauth2api) is a good example on how to implement OAuth2 strategy in an Node.js app.
 We almost totally imported this project to **TypeScript-MERN-Starter**.
 
-## Philosophy
+### Philosophy
 
 We build this project on following philosophies:
 
@@ -213,7 +215,7 @@ We build this project on following philosophies:
 2. **Easy to extend**. You can always focus on your business logic. We chose well-documented 3rd party packages to use, so that you can extend this app easily by following the working patterns of these packages.
 3. **Share the code as much as possible**. For example, usually we prefer the 3rd party package who can be used both in React and ReactNative, such as ReactRouter, ReactIntl, etc. In contrast, we gave up to use ReactNavigation, expo-localization which can only used in ReactNative.
 
-## Work items
+### Work items
 
 We have already extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
 
@@ -240,7 +242,7 @@ In next period of time (Before Feb 1st 2020), we will work on:
 - User-friend time display.
 - Incoming issues.
 
-# Project structure
+## Project structure
 
 In this part, we will not only summarize the folder structure, but also introduce how each of the project gradients works.
 
@@ -252,7 +254,7 @@ Therefore, we fused server, website (for both desktop and mobile), and Android &
 
 Please note that we did not invent any framework, what we did is taking the advantages of many popular frameworks from React ecosystem, and organize it logically.
 
-## Dependencies
+### Dependencies
 
 Here is a index for **documents** what the project depends on:
 
@@ -272,7 +274,7 @@ Here is a index for **documents** what the project depends on:
 - [Semantic-UI React](https://react.semantic-ui.com/)
 - [Typescript](https://www.typescriptlang.org/docs/home.html)
 
-## Folder structure
+### Folder structure
 
 | Folder Path              | Description                                                                                                                                  |
 | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -325,7 +327,7 @@ Here is a index for **documents** what the project depends on:
 | tslint.json              | Config settings for TSLint code style checking for **server** side only.                                                                     |
 | yarn.lock                | Yarn stores exactly which versions of each dependency were installed. Generated after you run `yarn` or `yarn install`.              |
 
-## Create React App
+### Create React App
 
 The client folder includes a complete React app which was initialized by [Create React App](https://facebook.github.io/create-react-app/).
 Create React App is a great tool for beginner since it is:
@@ -333,7 +335,7 @@ Create React App is a great tool for beginner since it is:
 1. **Less to Learn**. You don't need to learn and configure many build tools. Instant reloads help you focus on development. When it's time to deploy, your bundles are optimized automatically.
 2. **Only One Dependency**. Your app only needs one build dependency. Under the hood, it uses Webpack, Babel, ESLint, and **tsc (Typescript compiler)** to power on your app. Then you can get rid of the complicated configurations for them.
 
-### Serve static assets of client and index.html in production
+#### Serve static assets of client and index.html in production
 
 In production build environment, `react-scripts`, the tool for use with `Create React App` will compile all of your (Typescript) source code and resources into bundles and assets in [client/core/build](client/core/build) folder.
 
@@ -343,7 +345,7 @@ That is to say, our server routes all REST APIs, and leave all other possible ro
 Server will never make up the client app, it will not decide how would the client should look like.
 This is **the first key point to make the RESTful architecture possible**.
 
-### Proxy API requests in development
+#### Proxy API requests in development
 
 However, in development environment, things become totally different.
 When you run the command `yarn start` in client folder, `react-scripts` will boot a local debug server for you.
@@ -367,7 +369,7 @@ We can summarize how we applied this strategy as below:
 3. All client requests are going to the port 3000, i.e. the serviceWorker.
 4. In the file [client/core/src/setupProxy.js](client/core/src/setupProxy.js), we configure that uri starts with `/api`, `/auth`, and `/oauth` should be proxied to port 3001., i.e. the Node.js server will handle these requests forwarded by the serviceWorker.
 
-## Unified Modeling
+### Unified Modeling
 
 A big advantage of Node.js is that it can be used as a single programming language for both front and back end.
 However, since JavaScript is a loosely typed or a dynamic language, variables in JavaScript are not directly associated with any particular value type, and any variable can be assigned (and re-assigned) values of all types.
@@ -433,7 +435,7 @@ There is a known library named [typegoose](https://github.com/szokodiakos/typego
 However since it defines the model using class extended from a `Typegoose` class which contains much more required fields than we want, we cannot use that type definition in client side.
 We are looking forward its evolving so that we can resolve this issue in future.
 
-## Embedded OAuth2 server
+### Embedded OAuth2 server
 
 To protect REST API against unauthorized request, we used [Passport](http://www.passportjs.org/docs/) in this project.
 Passport is an authentication middleware for Express.
@@ -460,7 +462,7 @@ passport.authenticate("bearer", { session: false }),
 
 Let's take a look at what we did in this project to make life easier.
 
-### OAuth 2.0 protocol
+#### OAuth 2.0 protocol
 
 OAuth 2.0 (formally specified by [RFC 6749](https://tools.ietf.org/html/rfc6749)) provides an authorization framework which allows users to authorize access to third-party applications.
 When authorized, the application is issued a token to use as an authentication credential.
@@ -488,7 +490,7 @@ We implemented other 3 roles in Typescript.
 The client React app takes the role of **client**.
 The Node.js server takes the role of **resource server** and **authorization server**.
 
-### Resource server
+#### Resource server
 
 As a **resource server**, the Node.js server owns articles written by user.
 Also it can ask **authorization server** to authenticate the request send by **client**.
@@ -504,7 +506,7 @@ If **authorization server** says this is authorized request, **resource server**
 
 > **Note!** In our DB the collection named `User` is owned by **authorization server** exclusively. In the callback controller of **resource server** the user account is not saved into the/an `User` collection. If you would like to import a 3rd party token provider such as Facebook, you need to create a collection like `User` in MongoDB, which is owned by the **resource server**. Then the callback controller should store user info into that `User` collection. Also the added `User` collection will not contain password or other credential info of account.
 
-### Authorization server
+#### Authorization server
 
 As an **authorization server**, the Node.js server owns user accounts and profiles.
 It can respond authorization requests coming from **resource server**, i.e. verify the access token, then send back an corresponding `User` object to the **resource server** if the token is valid.
@@ -516,7 +518,7 @@ It can respond authorization requests coming from **resource server**, i.e. veri
 | server/routes/oauth2.ts            | Defines routes start with `/oauth2`, these routes configures **authorization server** on how to handle authorize, login, sign up, and profile updating, etc. |
 | server/controller/oauth2.ts        | Defines route handlers on how to handle authorize, login, sign up, and profile updating, etc. It works with the OAuth2Server defined in [server/config/oauth2orize-server.ts](server/config/oauth2orize-server.ts), and executes DB operations in `User` collection. |
 
-### Summary of OAuth2 server
+#### Summary of OAuth2 server
 
 For developers who would like to use the authorizing mechanism in this project, he/she just need to know how to protect his/her REST API.
 This authorizing mechanism is **the second key point to make the RESTful architecture possible**.
@@ -528,7 +530,7 @@ For developers who would like to go deeper, we can summarize for them that:
 3. If one would like to import 3rd party token provider or **authorization server**, he/she should make changes in the **resource server** part.
 4. You can improve the OAuth2 **authorization server** implementation by adding *expiration time* or *scope* in the `AccessToken` collection. Also necessary code changes should be made in **authorization server** part.
 
-## Server routing & client routing
+### Server routing & client routing
 
 In section [Create React App](##create-react-app) we have mentioned how the Node.js server serves React app and REST APIs.
 Briefly speaking, the Node.js server complete this task in a very simple way.
@@ -536,7 +538,7 @@ Briefly speaking, the Node.js server complete this task in a very simple way.
 1. If the url of request starts with `/api`, `/auth`, or `/oauth2`, handle it using its own route handlers.
 2. For all other request url, return the [client/core/build/static/index.html](client/core/build/static/index.html).
 
-### React-router 4.0+
+#### React-router 4.0+
 
 The client powered by [react-router 4.0+](https://reacttraining.com/react-router/) handles all routes except those were handled by Node.js server.
 In the file [client/core/src/App.tsx](client/core/src/App.tsx), react-router 4.0+ shows how this works can be done elegantly.
@@ -571,7 +573,7 @@ export default class App extends React.Component<Props, States> {
 If none of the `<Route>`s matched, `<ErrorPage error={notFoundError}>` will be rendered.
 Please refer to the [document](https://reacttraining.com/react-router/core/guides/quick-start) for more usages of react-router 4.0+.
 
-### Performance perspective
+#### Performance perspective
 
 This RESTful architecture brings significant performance improvement from several aspects:
 
@@ -580,7 +582,7 @@ This RESTful architecture brings significant performance improvement from severa
 3. Since the file [client/core/build/static/index.html](client/core/build/static/index.html) would not change unless you re-deploy you app, it's easily be cached among Internet.
 4. The React app handles navigation locally, users feel no latency when they navigate back and forth in the browser.
 
-## Styling
+### Styling
 
 In this project, there is no separated file like [client/core/public/css/main.css](client/core/public/css/main.css).
 We are using [Semantic-UI React](https://react.semantic-ui.com/) because it has following advantages.
@@ -595,14 +597,14 @@ Please refer to [official document](https://reactjs.org/docs/faq-styling.html) f
 
 For the ReactNative project, we are using [NativeBase](https://docs.nativebase.io/) as a UI library, which takes similar role as Semantic-UI for React project.
 
-# How to debug
+## How to debug
 
 In this project, you can debug your server and client **at the same time**.
 You can debug the server in VS Code, meanwhile you can debug the client in [Chrome](https://www.google.com/chrome/).
 
 > **Note!** If you are going to debug your app in local area networks (LAN), please change the `HOST_NAME_DEV` in file [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts) from `localhost` to your host IP, e.g. `192.168.1.13`. **Debugging your app on mobile devices** usually requires debugging in LAN.
 
-## Available scripts
+### Available scripts
 
 We use [Yarn](https://yarnpkg.com/) as the package manager of this project.
 You can use `npm` if you prefer.
@@ -628,7 +630,7 @@ You can run following commands using `yarn <command>`.
 | `serve-debug`             | Runs the app with the --inspect flag.                                |
 | `watch-debug`             | The same as `watch` but includes the --inspect flag so you can attach a debugger.                   |
 
-## Debugging website client
+### Debugging website client
 
 After you run the command `yarn start` or `yarn debug`, you can visit [http://localhost:3000](http://localhost:3000) using Chrome.
 Hit `F12` to open the debug mode of Chrome.
@@ -642,7 +644,7 @@ From the [official document](https://developers.google.com/web/tools/chrome-devt
 
 You can also integrate [React DevTools](https://github.com/facebook/react-devtools) to boost your debug experience.
 
-## Debugging mobile client
+### Debugging mobile client
 
 After you run the command `yarn start` or `yarn debug`, you can visit [http://localhost:19002](http://localhost:19002) using Chrome. This is the home page of Expo debugging tool.
 
@@ -651,7 +653,7 @@ Briefly speaking you will have similar experience as debugging on website client
 
 [TODO] This part will be elaborated.
 
-## Debugging server
+### Debugging server
 
 Debugging is one of the places where VS Code really shines over other editors. Node.js debugging in VS Code is easy to setup and even easier to use.
 This project comes pre-configured with everything you need to get started.
@@ -682,11 +684,11 @@ With this file in place, you can hit `F5` to attach a debugger.
 You will probably have multiple node processes running, so you need to find the one that shows `node dist/server/server.js`.
 Now you can set your breakpoints and wait for them be hit.
 
-## Debugging tests
+### Debugging tests
 
 Please refer to [Tests](#tests) section.
 
-# Tests
+## Tests
 
 You can run all of the tests in project using `yarn test`, or run tests for client only using `yarn test-client`.
 
@@ -694,29 +696,29 @@ Also you can easily debug all of the client tests in debug window of VSCode, sin
 
 We will add more tests and grow the code coverage in near future.
 
-# Deploying the app
+## Deploying the app
 
 There are many ways to deploy an Node app, and in general, nothing about the deployment process changes because you're using TypeScript.
 In this section, let's show you how to deploy this project to Azure App Service.
 
-## Prerequisite
+### Prerequisite
 
 - [**Azure account**](https://azure.microsoft.com/en-us/free/) - If you don't have one, you can sign up for free.
 The Azure free tier gives you plenty of resources to play around with including up to 10 App Service instances, which is what we will be using.
 - [**Docker Desktop**](https://www.docker.com/products/docker-desktop) - Usually you need to sign in or sign up on [Docker hub](https://hub.docker.com/) first.
 
-## Create production MongoDB (Option 1: Azure CosmosDB)
+### Create production MongoDB (Option 1: Azure CosmosDB)
 
 In this step, you create a MongoDB database in Azure. When your app is deployed to Azure, it uses this cloud database.
 For MongoDB, we use Azure Cosmos DB. Cosmos DB supports MongoDB client connections.
 
-### Open Azure Cloud Shell
+#### Open Azure Cloud Shell
 
 1. Sign in [Azure Portal](https://portal.azure.com) using your account.
 2. Open [Azure cloud shell button](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-nodejs-mongodb-app#open-azure-cloud-shell) on the menu in the upper-right corner of the portal.
 3. Then if you are prompted that **You have no storage mounted**, just click **Create Storage**.
 
-### Create a resource group
+#### Create a resource group
 
 In the opened shell enter following command.
 Change the location according to your preference.
@@ -734,7 +736,7 @@ With following property in it.
 }
 ```
 
-### Create a Cosmos DB account
+#### Create a Cosmos DB account
 
 In the following command, substitute a unique Cosmos DB name for the `<cosmosdb_name>` placeholder.
 This name is used as the part of the Cosmos DB endpoint, [https://<cosmosdb_name>.documents.azure.com/](https://<cosmosdb_name>.documents.azure.com/), so the name needs to be unique across all Cosmos DB accounts in Azure.
@@ -761,7 +763,7 @@ When the Cosmos DB account is created several minutes later, the Azure CLI shows
 }
 ```
 
-### Retrieve the database key
+#### Retrieve the database key
 
 To connect to the Cosmos DB database, you need the database key.
 In the Cloud Shell, use following command to retrieve the primary key.
@@ -783,7 +785,7 @@ The Azure CLI shows information similar to the following example:
 
 Copy the value of `primaryMasterKey`. You need this information in the next step.
 
-### Configure the connection string in your Node.js application
+#### Configure the connection string in your Node.js application
 
 In your Typescript MERN project open file [.env.production](.env.production).
 Replace the two `<cosmosdb_name>` placeholders with your Cosmos DB database name, and replace the `<primary_master_key>` placeholder with the key you copied in the previous step.
@@ -794,7 +796,7 @@ MONGODB_URI=mongodb://<cosmosdb_name>:<primary_master_key>@<cosmosdb_name>.docum
 
 The `ssl=true` option is required because Cosmos DB requires SSL. Save your changes.
 
-## Create production MongoDB (Option 2: MongoDB Atlas)
+### Create production MongoDB (Option 2: MongoDB Atlas)
 
 [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) provides free tier cluster for up to 512MB storage. It is more suitable for startup or prototype projects comparing to Azure CosmosDB.
 
@@ -819,7 +821,7 @@ mongodb://<cluster_user_name>:<password>@cluster0-shard-00-00-pyou0.azure.mongod
 
 Remember to replace the placeholders in above connection string example.
 
-## Create a production blob storage
+### Create a production blob storage
 
 Blob storage is used to store multi-medias.
 Now we support Azure blob storage in this project.
@@ -832,7 +834,7 @@ Then you can paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file 
 
 > **Note!** In development environment, the project store the files in disk instead of cloud storage. Before you can test the cloud storage in development environment, you need to modify [server\repository\storage.ts](server\repository\storage.ts), and paste your `STORAGE_ACCOUNT` and `STORAGE_ACCOUNT_KEY` in the file [.env.development](.env.development).
 
-## Test the application in production mode
+### Test the application in production mode
 
 In file [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts), change the `HOST_NAME_PROD` to the `http://localhost`.
 Meanwhile change the `HOST_PORT_PROD` from 80 to 3000 because your local 80 port may have been blocked.
@@ -841,12 +843,12 @@ Open your local terminal.
 Switch the local node env from `development` to `production` by entering following commands.
 
 ```bash
-# bash
+## bash
 export NODE_ENV=production
 ```
 
 ```powershell
-# powershell
+## powershell
 $env:NODE_ENV = "production"
 ```
 
@@ -871,7 +873,7 @@ You can verify the data in your Azure portal's **Azure Cosmos DB account** page 
 
 In the terminal, stop Node.js by typing _Ctrl+C_.
 
-## Build app into a Docker image
+### Build app into a Docker image
 
 Firstly, we will [deploy the production app to Docker image](https://docs.docker.com/get-started/part2/) because of its great flexibility.
 Nowadays almost every cloud service support deploying web app using Docker image.
@@ -879,12 +881,12 @@ Therefore once we have a well constructed Docker image then we can easily deploy
 In next section we will deploy the Docker image generated in this section to [Azure app service](https://docs.microsoft.com/en-us/azure/app-service/containers/quickstart-docker-go).
 Let's generate the Docker image locally in this section.
 
-### Configure environment variables for production
+#### Configure environment variables for production
 
 In file [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts), change the `HOST_NAME_PROD` to the target app url.
 Meanwhile change the `HOST_PORT_PROD` from 3000 back to 80.
 
-### Build app into a local Docker image
+#### Build app into a local Docker image
 
 We are ready to build the app.
 Make sure you are still at the root directory in your repository, which includes a `Dockerfile`
@@ -909,7 +911,7 @@ REPOSITORY            TAG               IMAGE ID
 <your_app_name>       latest            326387cea398
 ```
 
-### Push Docker image to Docker hub
+#### Push Docker image to Docker hub
 
 If you don’t have a Docker account, sign up for one at [hub.docker.com](hub.docker.com).
 Make note of <your_username>.
@@ -936,7 +938,7 @@ docker push <your_username>/<your_app_name>:azure
 Once complete, the results of this upload are publicly available.
 If you log in to Docker Hub, you see the new image there, with its pull command.
 
-## Create an Azure app service using Docker image
+### Create an Azure app service using Docker image
 
 Traditionally, we can deploy a node.js app using git repository on Azure app service.
 That is to say, you can push your git repository to the Azure app service, then it will start your app by running `npm run start`.
@@ -944,7 +946,7 @@ In practice this is not a easy-to-use approach since you have very limited abili
 
 Using Docker image you can get rid of many annoying environment issues, and will easily migrate your app to other cloud platforms in future.
 
-### Add an Azure app service in Azure portal
+#### Add an Azure app service in Azure portal
 
 Open Azure portal, click the quick link of *App Services*.
 Then click the _+Add_ button.
@@ -975,7 +977,7 @@ Finally you are ready to create your app service with Docker image.
 Click ***Review and Create***.
 Then click ***Create*** after the portal navigate you to the next page.
 
-### Verify your Azure app service
+#### Verify your Azure app service
 
 After click *create* for the Azure app service, you will get the finish notification.
 
@@ -987,7 +989,7 @@ After the app is ready, please note that the browser has marked your site trustf
 
 **Congratulation!** You have deployed a real working web app!
 
-## Map custom domain and bind SSL certificate
+### Map custom domain and bind SSL certificate
 
 Usually the web address [https://<your_app_name>.azurewebsites.net](https://<your_app_name>.azurewebsites.net) cannot fulfil your requirement for a real product, since you would like to give your customer a more concise and noticeable url.
 You can follow the steps below to adapt the app you just deployed on Azure to a desired domain name.
@@ -998,14 +1000,14 @@ You can follow the steps below to adapt the app you just deployed on Azure to a 
 4. Follow the tutorial of [map custom domain](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain).
 5. Follow the tutorial of [bind SSL certificate](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-ssl). Please note that bind a valid SSL certificate is must-do for Typescript-MERN-starter projects. 
 
-## Deploy the mobile apps
+### Deploy the mobile apps
 
 Please refer to [Expo publishing documents](https://docs.expo.io/versions/v36.0.0/workflow/publishing/) for detail steps.
 Expo managed the deployment process sophisticatedly for you.
 
 [TODO] This part will be elaborated.
 
-## Summary of deployment
+### Summary of deployment
 
 From this part we can see that deploy a Typescript-MERN-starter project to Azure is very easy.
 What you have to be worry about is just to configure the environment variables correctly.
