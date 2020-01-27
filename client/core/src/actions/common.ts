@@ -4,6 +4,7 @@ import { getToast as toast } from "../shared/toast";
 import { INVALID_TOKEN_ERROR } from "../shared/constants";
 import EnUS from "../shared/translations/en-us";
 import FabAction from "../models/client/FabAction";
+import moment from "moment";
 
 export const RESET_REDIRECT: string = "RESET_REDIRECT";
 export const SET_LOCALE: string = "SET_LOCALE";
@@ -33,6 +34,7 @@ const actions: CommonActionCreator = {
         };
     },
     setLocale(locale: string): Action {
+        moment.locale(locale);
         return {
             type: SET_LOCALE,
             locale: locale

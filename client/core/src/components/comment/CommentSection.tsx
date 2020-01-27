@@ -9,7 +9,7 @@ import AppState from "../../models/client/AppState";
 import User from "../../models/User.d";
 import CommentClass from "../../models/Comment.d";
 import UserAvatar from "../user/UserAvatar";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor, FormattedDate, FormattedTime } from "react-intl";
+import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import PostType from "../../models/PostType";
 import CommentActionCreator from "../../models/client/CommentActionCreator";
@@ -17,6 +17,7 @@ import { byCreatedAt } from "../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../actions/comment";
 import WarningModal from "../shared/WarningModal";
 import { getNameList } from "../../shared/string";
+import moment from "moment";
 
 const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
 interface Props extends IntlProps {
@@ -147,7 +148,7 @@ class CommentSection extends React.Component<Props, States> {
                         {author.name}
                     </Comment.Author>
                     <Comment.Metadata>
-                        <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
+                        {moment(createDate).fromNow()}
                     </Comment.Metadata>
                 </div>
                 <Comment.Text>

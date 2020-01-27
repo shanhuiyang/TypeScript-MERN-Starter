@@ -7,7 +7,7 @@ import User from "../../core/src/models/User";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import AppState from "../../core/src/models/client/AppState";
 import { getAvatarSource } from "../utils/image";
-import { FormattedDate, FormattedTime } from "react-intl";
+import moment from "moment";
 
 interface Props extends RouteComponentProps<any> {
     value: Article;
@@ -35,8 +35,7 @@ class ArticleItem extends React.Component<Props, States> {
             </Body>
             <Right>
                 <Text note>
-                    <FormattedDate value={createDate} />
-                    <FormattedTime value={createDate} />
+                    {moment(createDate).fromNow()}
                 </Text>
             </Right>
         </Link>;
