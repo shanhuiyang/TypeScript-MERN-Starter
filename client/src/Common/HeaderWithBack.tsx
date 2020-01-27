@@ -16,13 +16,15 @@ interface States {}
 
 class HeaderWithBack extends React.Component<Props, States> {
     render() {
-        return <Header >
-            <Left>
+        const HEADER_MARGIN_HORIZONTAL: number = 10;
+        // Customize the Header style to make sure the title has enough space to show
+        return <Header style={{display: "flex", flexDirection: "row"}}>
+            <Left style={{flex: 0, marginHorizontal: HEADER_MARGIN_HORIZONTAL}}>
                 <Button transparent onPress={this.props.history.goBack}>
                     <Icon name="arrow-back" />
                 </Button>
             </Left>
-            <Body>
+            <Body style={{flex: 1}}>
                 <Title>
                     {
                         this.props.titleId ? <FormattedMessage id={this.props.titleId} /> :
@@ -32,7 +34,7 @@ class HeaderWithBack extends React.Component<Props, States> {
             </Body>
             {
                 this.props.rightTextId || this.props.rightIconName ?
-                <Right>
+                <Right style={{flex: 0, marginHorizontal: HEADER_MARGIN_HORIZONTAL}}>
                     <Button transparent onPress={this.props.rightAction}>
                         {
                             this.props.rightTextId ?
@@ -43,7 +45,7 @@ class HeaderWithBack extends React.Component<Props, States> {
                         }
                     </Button>
                 </Right> :
-                <Right>{/* nothing but counterbalance */}</Right>
+                <Right style={{flex: 0}}>{/* nothing but counterbalance */}</Right>
             }
         </Header>;
     }
