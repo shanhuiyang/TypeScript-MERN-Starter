@@ -44,6 +44,8 @@ import { initStorage } from "./core/src/shared/storage";
 import { AsyncStorage } from "react-native";
 import * as Localization from "expo-localization";
 import { SET_LOCALE } from "./core/src/actions/common";
+import moment from "moment";
+import "moment/locale/zh-cn";
 
 import { ANDROID_LOCAL_HOST_URL } from "./core/src/shared/constants";
 
@@ -57,6 +59,7 @@ store.dispatch({
     type: SET_LOCALE,
     locale: Localization.locale
 });
+moment.locale(Localization.locale);
 // initialize toast provider using Toast from NativeBase
 initToast(new ToastWrapper(store));
 // initialize local storage provider

@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-native";
 import { FormattedMessage } from "react-intl";
 interface Props extends RouteComponentProps<any> {
     titleId?: string; // It could be a message id of translation or raw text.
+    title?: string;
     rightTextId?: string; // It could be a message id of translation or raw text.
     rightIconName?: string;
     rightAction?: () => void;
@@ -24,7 +25,8 @@ class HeaderWithBack extends React.Component<Props, States> {
             <Body>
                 <Title>
                     {
-                        this.props.titleId ? <FormattedMessage id={this.props.titleId} /> : undefined
+                        this.props.titleId ? <FormattedMessage id={this.props.titleId} /> :
+                            this.props.title ? this.props.title : undefined
                     }
                 </Title>
             </Body>

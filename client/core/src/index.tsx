@@ -13,6 +13,8 @@ import storageWrapper from "./components/storage";
 import { SET_LOCALE } from "./actions/common";
 import ToastWrapper from "./components/ToastWrapper";
 import "./css/no-iframe.css";
+import moment from "moment";
+import "moment/locale/zh-cn";
 
 // Add necessary configurations here before rendering
 
@@ -24,6 +26,7 @@ store.dispatch({
     type: SET_LOCALE,
     locale: navigator.language
 });
+moment.locale(navigator.language);
 
 // Initialize toast provider
 initToast(new ToastWrapper(store));

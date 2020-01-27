@@ -5,10 +5,11 @@ import { Segment, Item, Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
-import { FormattedMessage, FormattedDate, FormattedTime } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { Viewer } from "@toast-ui/react-editor";
 import { getArticleAbstract } from "../../shared/string";
 import UserLabel from "../user/UserLabel";
+import moment from "moment";
 
 interface Props {
     article: Article;
@@ -36,7 +37,7 @@ class ArticleItem extends React.Component<Props, States> {
                         flexDirection: "row",
                         justifyContent: "space-between"}}>
                         <div style={{color: "grey"}}>
-                            <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
+                            {moment(createDate).fromNow()}
                         </div>
                         {this.renderSeeAllButton(article)}
                     </Item.Extra>

@@ -8,7 +8,7 @@ import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header, Label, Rating, RatingProps, Popup } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import "react-tiny-fab/dist/styles.css";
-import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage, FormattedTime, FormattedDate } from "react-intl";
+import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
@@ -19,6 +19,7 @@ import CommentSection from "../comment/CommentSection";
 import PostType from "../../models/PostType";
 import { getNameList } from "../../shared/string";
 import Loading from "./Loading";
+import moment from "moment";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -162,7 +163,7 @@ class ArticleDetail extends React.Component<Props, States> {
                 <UserLabel user={this.props.state.userDictionary[article.author]} />
                 <Label style={labelStyle}>
                     <FormattedMessage id="article.created_at" />
-                    <FormattedDate value={createDate} />{" "}<FormattedTime value={createDate} />
+                    {moment(createDate).fromNow()}
                 </Label>
                 <CommentSection targetId={article._id} target={PostType.ARTICLE} />
             </Container>

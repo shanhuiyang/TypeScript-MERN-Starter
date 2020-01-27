@@ -7,7 +7,7 @@ import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { getAvatarSource } from "../utils/image";
-import { FormattedDate, FormattedTime } from "react-intl";
+import moment from "moment";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
@@ -25,20 +25,16 @@ class ArticleDetail extends React.Component<Props, States> {
         const articleAuthor: User = this.props.state.userDictionary[article.author];
         if (article) {
             return <Fragment>
-                <HeaderWithBack/>
+                <HeaderWithBack title={article.title} />
                 <Content>
                     <Card transparent>
-                        <CardItem header>
-                            <Text>{article.title}</Text>
-                        </CardItem>
                         <CardItem>
                             <Left>
                                 <Thumbnail small source={ getAvatarSource(articleAuthor.avatarUrl) } />
                                 <Body>
                                     <Text>{articleAuthor.name}</Text>
                                     <Text note>
-                                        <FormattedDate value={createDate} />
-                                        <FormattedTime value={createDate} />
+                                        {moment(createDate).fromNow()}
                                     </Text>
                                 </Body>
                             </Left>
