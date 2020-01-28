@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { StyleSheet } from "react-native";
 import { Text, Body, Content, Left, Card, CardItem, Thumbnail, View, Fab, Icon } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
@@ -7,13 +8,20 @@ import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { getAvatarSource } from "../utils/image";
+import Markdown from "react-native-markdown-display";
+import { MARKDOWN_STYLES } from "./styles/markdown";
 import moment from "moment";
+import { getHostUrl } from "../../core/src/shared/fetch";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
 }
 
 interface States {}
+
+const MARKDOWN_IMAGE_EXP: RegExp = /!\[(.*)\]\(\/(.*)\)/g;
+
+const styles = StyleSheet.create(MARKDOWN_STYLES as any);
 
 class ArticleDetail extends React.Component<Props, States> {
     render(): any {
@@ -23,6 +31,8 @@ class ArticleDetail extends React.Component<Props, States> {
         }
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const articleAuthor: User = this.props.state.userDictionary[article.author];
+        let content: string = article.content;
+        content = content.replace(MARKDOWN_IMAGE_EXP, `\n![$1](${getHostUrl()}/$2)\n`);
         if (article) {
             return <Fragment>
                 <HeaderWithBack title={article.title} />
@@ -41,9 +51,9 @@ class ArticleDetail extends React.Component<Props, States> {
                         </CardItem>
                         <CardItem>
                             <Body>
-                                <Text>
-                                    {article.content}
-                                </Text>
+                                <Markdown style={styles}>
+                                    {content}
+                                </Markdown>
                             </Body>
                         </CardItem>
                     </Card>

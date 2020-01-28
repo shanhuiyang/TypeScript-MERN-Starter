@@ -58,7 +58,7 @@ class ArticleItem extends React.Component<Props, States> {
                     <Text numberOfLines={3}>{getArticleAbstract(article.content, MINIMUM_ARTICLE_LENGTH)}</Text>
                 </View>
                 <View style={{marginVertical: 4}}>
-                    <Text  style={{color: "grey"}}>
+                    <Text style={{color: "grey"}}>
                         {moment(createDate).fromNow()}
                     </Text>
                 </View>
