@@ -2,12 +2,13 @@ import express, { Router } from "express";
 import * as controllers from "../controllers/article";
 import { check, query } from "express-validator";
 import passport from "passport";
+import { MINIMUM_ARTICLE_LENGTH } from "../../client/core/src/shared/constants";
 
 const updateArticleValidations = [
     check("title", "toast.article.title_empty").not().isEmpty(),
     check("content", "toast.article.content_empty").not().isEmpty(),
     check("title", "toast.article.title_too_long").isLength({ max: 100 }),
-    check("content", "toast.article.content_too_short").isLength({ min: 100 }),
+    check("content", "toast.article.content_too_short").isLength({ min: MINIMUM_ARTICLE_LENGTH }),
 ];
 
 const article: Router = express.Router();

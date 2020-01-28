@@ -219,7 +219,7 @@ We build this project on following philosophies:
 
 We have already extended this project from MERN to MER**R**N, where the additional R stands for [ReactNative](https://facebook.github.io/react-native/).
 
-In next period of time (Before Feb 1st 2020), we will work on:
+In next period of time (Before end of Feb 2020), we will work on:
 
 - Better documents.
 - Use types as many as possible.
@@ -228,7 +228,7 @@ In next period of time (Before Feb 1st 2020), we will work on:
 - ~~Better error alert.~~
 - Tests. The core of client (such as actions, reducers), and server (such as routes, controllers) should be well covered by unit tests.
 - Better article UX.
-  - Using the list-detail structure.
+  - ~~Using the list-detail structure.~~
   - User can add comments to articles.
   - Pagination.
 - Rich text editors. Using markdown as the exchanging text format.
@@ -239,7 +239,7 @@ In next period of time (Before Feb 1st 2020), we will work on:
   - Email verification for signing up.
   - Password modification.
   - Forget password.
-- User-friend time display.
+- ~~User-friend time display.~~
 - Incoming issues.
 
 ## Project structure

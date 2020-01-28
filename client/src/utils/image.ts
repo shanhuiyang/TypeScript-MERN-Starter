@@ -14,7 +14,7 @@ export const amendImageUrl = (url: string): string => {
     } else if (url.startsWith("/")) {
         return `${getHostUrl()}${url}`;
     } else {
-        throw new Error("Invalid url to amend, it must start with 'http' or '/'");
+        return "";
     }
 };
 

@@ -18,6 +18,7 @@ import { isMobile } from "../dimension";
 import ArticleCache from "../../models/client/ArticleCache";
 import { NEW_ARTICLE_CACHE_ID } from "../../actions/article";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
+import { MINIMUM_ARTICLE_LENGTH } from "../../shared/constants";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -84,7 +85,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={this.originalContent}
-                        placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
+                        placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
                         previewStyle={isMobile() ? "tab" : "vertical"}
                         height="54vh"
                         initialEditType={editorType}
