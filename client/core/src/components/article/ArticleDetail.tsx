@@ -30,6 +30,7 @@ interface Props extends IntlProps, RouteComponentProps<any> {
 interface States {
     openDeleteWarning: boolean;
 }
+
 class ArticleDetail extends React.Component<Props, States> {
     private articleId: string = "";
     private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
@@ -81,7 +82,6 @@ class ArticleDetail extends React.Component<Props, States> {
         if (!article) {
             return <ErrorPage error={notFoundError} />;
         }
-        // TODO: handle loading
         return (
             <Fragment>
                 <div style={{paddingTop: 20}} >
