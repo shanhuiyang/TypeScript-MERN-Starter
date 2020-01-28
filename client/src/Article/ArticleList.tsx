@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { match, Route, RouteComponentProps } from "react-router-native";
 import ArticleItem from "./ArticleItem";
-import { Header, Title, Body, Content, List, Fab, View, Icon } from "native-base";
+import { Header, Title, Body, Content, List, Fab, View, Icon, ListItem } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
 import AppState from "../../core/src/models/client/AppState";
 import connectPropsAndActions from "../../core/src/shared/connect";
@@ -22,8 +22,8 @@ class ArticleList extends React.Component<Props, States> {
                     <Title><FormattedMessage id="app.name"/></Title>
                 </Body>
             </Header>
-            <Content>
-                <List>
+            <Content style={{backgroundColor: "#F0F0F0"}}>
+                <List >
                     {
                         this.props.state.articleState.data.map(
                             (value: Article) => (<ArticleItem value={value} key={value._id} />)

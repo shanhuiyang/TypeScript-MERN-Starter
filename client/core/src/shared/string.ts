@@ -1,16 +1,26 @@
 import User from "../models/User";
 
+const markDownImage: RegExp = /!\[.*\]\((.*)\)/;
+
 /**
- * Extract the content by first n lines as abstract
- * TODO: if there is a picture in the article, then we can make sure it is included in the abstract
+ * Extract the content by first n characters, excluding images
  * @param text: the content
- * @param n: the line number
+ * @param n: length of abstract
  */
 export const getArticleAbstract = (text: string, n: number): string => {
     if (!text || n <= 0) {
         return "";
     } else {
-        return text.split("\n", n).join("\n");
+        return text.replace(markDownImage, "").substr(0, n);
+    }
+};
+
+export const getArticleCoverImage = (text: string): string => {
+    if (!text) {
+        return "";
+    } else {
+        const matched: RegExpMatchArray | null = text.match(markDownImage);
+        return matched && matched.length >= 2 ? matched[1] : "";
     }
 };
 

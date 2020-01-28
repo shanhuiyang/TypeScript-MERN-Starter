@@ -7,9 +7,11 @@ import AppState from "../../models/client/AppState";
 import connectPropsAndActions from "../../shared/connect";
 import { FormattedMessage } from "react-intl";
 import { Viewer } from "@toast-ui/react-editor";
-import { getArticleAbstract } from "../../shared/string";
+import { getArticleAbstract, getArticleCoverImage } from "../../shared/string";
 import UserLabel from "../user/UserLabel";
+import { Image } from "semantic-ui-react";
 import moment from "moment";
+import { MINIMUM_ARTICLE_LENGTH } from "../../shared/constants";
 
 interface Props {
     article: Article;
@@ -23,7 +25,8 @@ class ArticleItem extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const { article } = this.props;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const previewContent: string = getArticleAbstract(article.content, 5);
+        const previewContent: string = getArticleAbstract(article.content, MINIMUM_ARTICLE_LENGTH);
+        const coverSrc: string = getArticleCoverImage(article.content);
         return <Segment key={createDate.getMilliseconds()}>
             <Item>
                 <Item.Content>
@@ -31,7 +34,11 @@ class ArticleItem extends React.Component<Props, States> {
                     <Item.Meta>
                         <UserLabel user={this.props.state.userDictionary[article.author]} />
                     </Item.Meta>
-                    <Viewer style={{fontSize: 20}} initialValue={previewContent} />
+                    {
+                        coverSrc ? <Image style={{paddingTop: 10}} src={coverSrc} />
+                        : undefined
+                    }
+                    <Viewer style={{fontSize: 20, height: 3}} initialValue={previewContent + "..."} />
                     <Item.Extra style={{
                         display: "flex",
                         flexDirection: "row",

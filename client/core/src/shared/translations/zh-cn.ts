@@ -78,7 +78,7 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "所见即所得",
         "article.title": "标题",
         "article.content": "正文",
-        "article.content_placeholder": "不少于100字",
+        "article.content_placeholder": "不少于{minimum_length}字",
         "article.created_at": "创建于",
         "article.updated_at": "最后更新于",
 
@@ -130,7 +130,7 @@ const TRANSLATION: Translation = {
         "toast.article.title_empty": "标题不能为空",
         "toast.article.content_empty": "正文不能为空",
         "toast.article.title_too_long": "标题不能长于100字",
-        "toast.article.content_too_short": "正文不能短于100字",
+        "toast.article.content_too_short": "正文不能短于150字",
         "toast.article.invalid_author": "你并非本文的作者！",
         "toast.article.not_found": "不存在的文章！",
         "toast.article.insert_image_failed": "图片插入失败",

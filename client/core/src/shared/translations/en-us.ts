@@ -78,7 +78,7 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "WYSIWYG",
         "article.title": "Title",
         "article.content": "Content",
-        "article.content_placeholder": "no less than 100 characters",
+        "article.content_placeholder": "no less than {minimum_length} characters",
         "article.created_at": "Created at ",
         "article.updated_at": "Last updated at ",
 
@@ -129,7 +129,7 @@ const TRANSLATION: Translation = {
         "toast.article.title_empty": "Title could not be empty.",
         "toast.article.content_empty": "Content could not be empty.",
         "toast.article.title_too_long": "Title could not be longer than 100 characters.",
-        "toast.article.content_too_short": "Content could not be shorter than 100 characters.",
+        "toast.article.content_too_short": "Content could not be shorter than 150 characters.",
         "toast.article.invalid_author": "You are not the author!",
         "toast.article.not_found": "Article not found!",
         "toast.article.insert_image_failed": "Failed to insert the image",

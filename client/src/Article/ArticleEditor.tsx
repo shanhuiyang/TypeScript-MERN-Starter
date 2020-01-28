@@ -2,6 +2,7 @@ import Article from "../../core/src/models/Article";
 import React, { Fragment } from "react";
 import { Item, Content, Input, Textarea, View, Spinner, Button, Text } from "native-base";
 import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
+import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -34,7 +35,7 @@ class ArticleEditor extends React.Component<Props, States> {
                     </Item>
                     <Item regular>
                         <Textarea rowSpan={20} bordered={false} underline={false}
-                            placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"})}
+                            placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
                             defaultValue={originalContent}
                             onChangeText={(input: string) => { this.content = input; }} style={{padding: 12}}/>
                     </Item>
