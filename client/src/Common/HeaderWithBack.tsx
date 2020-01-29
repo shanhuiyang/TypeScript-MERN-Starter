@@ -3,6 +3,8 @@ import React from "react";
 import { Header, Left, Button, Icon, Title, Body, Right, Text } from "native-base";
 import { RouteComponentProps, withRouter } from "react-router-native";
 import { FormattedMessage } from "react-intl";
+import { Platform } from "react-native";
+
 interface Props extends RouteComponentProps<any> {
     titleId?: string; // It could be a message id of translation or raw text.
     title?: string;
@@ -13,18 +15,19 @@ interface Props extends RouteComponentProps<any> {
 
 interface States {}
 
-
 class HeaderWithBack extends React.Component<Props, States> {
     render() {
-        const HEADER_MARGIN_HORIZONTAL: number = 10;
+        const HEADER_MARGIN: number = 10;
+        const HEADER_MARGIN_RIGHT: number = Platform.OS === "android" ? HEADER_MARGIN : 0;
+        const HEADER_MARGIN_LEFT: number = Platform.OS === "android" ? 0 : HEADER_MARGIN;
         // Customize the Header style to make sure the title has enough space to show
         return <Header style={{display: "flex", flexDirection: "row"}}>
-            <Left style={{flex: 0, marginHorizontal: HEADER_MARGIN_HORIZONTAL}}>
+            <Left style={{flex: 0, marginRight: HEADER_MARGIN_RIGHT, marginLeft: HEADER_MARGIN_LEFT}}>
                 <Button transparent onPress={this.props.history.goBack}>
                     <Icon name="arrow-back" />
                 </Button>
             </Left>
-            <Body style={{flex: 1}}>
+            <Body style={{flex: 1, marginRight: HEADER_MARGIN}}>
                 <Title>
                     {
                         this.props.titleId ? <FormattedMessage id={this.props.titleId} /> :
@@ -34,7 +37,7 @@ class HeaderWithBack extends React.Component<Props, States> {
             </Body>
             {
                 this.props.rightTextId || this.props.rightIconName ?
-                <Right style={{flex: 0, marginHorizontal: HEADER_MARGIN_HORIZONTAL}}>
+                <Right style={{flex: 0, marginLeft: HEADER_MARGIN_LEFT}}>
                     <Button transparent onPress={this.props.rightAction}>
                         {
                             this.props.rightTextId ?
