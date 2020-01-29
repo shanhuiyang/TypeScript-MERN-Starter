@@ -6,7 +6,7 @@ import { Platform } from "react-native";
 // this is converted to a stylesheet internally at run time with StyleSheet.create(
 export const MARKDOWN_STYLES = {
     root: {
-        fontSize: 18,
+        fontSize: 16,
     },
     codeBlock: {
         borderWidth: 1,
@@ -31,19 +31,26 @@ export const MARKDOWN_STYLES = {
     },
     heading: {},
     heading1: {
-        fontSize: 32,
-        fontWeight: "bold"
+        fontSize: 26,
+        fontWeight: "bold",
+        borderBottomWidth: 1,
+        borderColor: "#000000",
+        marginTop: 2,
     },
     heading2: {
-        fontSize: 28,
-        fontWeight: "bold"
+        fontSize: 22,
+        fontWeight: "bold",
+        borderBottomWidth: 1,
+        borderColor: "#000000",
+        marginTop: 2,
     },
     heading3: {
-        fontSize: 22,
-        fontWeight: "bold"
+        fontSize: 18,
+        fontWeight: "bold",
+        marginTop: 2,
     },
     heading4: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: "bold"
     },
     heading5: {
@@ -74,8 +81,8 @@ export const MARKDOWN_STYLES = {
         justifyContent: "flex-start",
     },
     listUnorderedItemIcon: {
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 6,
+        marginRight: 6,
         ...Platform.select({
             android: {
                 marginTop: 5,
@@ -89,13 +96,13 @@ export const MARKDOWN_STYLES = {
         }),
         ...Platform.select({
             ios: {
-                lineHeight: 36,
+                lineHeight: 25,
             },
             android: {
-                lineHeight: 30,
+                lineHeight: 21,
             },
             default: {
-                lineHeight: 36,
+                lineHeight: 26,
             },
         }),
     },
@@ -104,8 +111,8 @@ export const MARKDOWN_STYLES = {
         flexDirection: "row",
     },
     listOrderedItemIcon: {
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 6,
+        marginRight: 6,
         ...Platform.select({
             android: {
                 marginTop: 4,
@@ -116,19 +123,19 @@ export const MARKDOWN_STYLES = {
         }),
         ...Platform.select({
             ios: {
-                lineHeight: 36,
+                lineHeight: 27,
             },
             android: {
-                lineHeight: 30,
+                lineHeight: 23,
             },
             default: {
-                lineHeight: 36,
+                lineHeight: 28,
             },
         }),
     },
     paragraph: {
-        marginTop: 10,
-        marginBottom: 10,
+        marginTop: 4,
+        marginBottom: 4,
         flexWrap: "wrap",
         flexDirection: "row",
         alignItems: "flex-start",

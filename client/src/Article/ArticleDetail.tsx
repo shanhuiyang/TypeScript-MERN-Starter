@@ -9,9 +9,9 @@ import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { getAvatarSource } from "../utils/image";
 import Markdown from "react-native-markdown-display";
-import { MARKDOWN_STYLES } from "./styles/markdown";
 import moment from "moment";
 import { getHostUrl } from "../../core/src/shared/fetch";
+import { MARKDOWN_STYLES } from "./styles/markdown";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
