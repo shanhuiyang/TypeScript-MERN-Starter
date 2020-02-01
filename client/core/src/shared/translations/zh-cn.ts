@@ -40,6 +40,7 @@ const TRANSLATION: Translation = {
         "page.avatar.inquiry": "确定使用这张照片吗？",
         "page.article.add": "新建文章",
         "page.article.edit": "编辑文章",
+        "page.article.preview": "预览",
         "page.article.delete": "删除文章：{title}",
         "page.article.delete_confirmation": "删除后的文章不可恢复，你确定要删除吗？",
         "page.article.empty": "目前还没有任何文章。",

@@ -37,7 +37,7 @@ class HeaderWithBack extends React.Component<Props, States> {
             </Body>
             {
                 this.props.rightTextId || this.props.rightIconName ?
-                <Right style={{flex: 0, marginLeft: HEADER_MARGIN_LEFT}}>
+                <Right style={{flex: 0}}>
                     <Button transparent onPress={this.props.rightAction}>
                         {
                             this.props.rightTextId ?

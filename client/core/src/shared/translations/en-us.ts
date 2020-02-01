@@ -40,6 +40,7 @@ const TRANSLATION: Translation = {
         "page.consent.OTP_resend": "Resend",
         "page.article.add": "Add Article",
         "page.article.edit": "Edit Article",
+        "page.article.preview": "Preview",
         "page.article.delete": "Delete Article: {title}",
         "page.article.delete_confirmation": "You cannot restore this article after delete. Are you sure to delete?",
         "page.article.empty": "No articles are added up to now.",

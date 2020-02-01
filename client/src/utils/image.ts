@@ -18,3 +18,8 @@ export const amendImageUrl = (url: string): string => {
     }
 };
 
+const MARKDOWN_IMAGE_EXP: RegExp = /!\[(.*)\]\(\/(.*)\)/g;
+
+export const amendAllImageInContent = (content: string): string => {
+    return content.replace(MARKDOWN_IMAGE_EXP, `\n![$1](${getHostUrl()}/$2)\n`);
+};
