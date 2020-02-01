@@ -7,6 +7,18 @@ import { Platform } from "react-native";
 export const MARKDOWN_STYLES = {
     root: {
         fontSize: 16,
+        letterSpacing: 0.7,
+        ...Platform.select({
+            ios: {
+                lineHeight: 23,
+            },
+            android: {
+                lineHeight: 22,
+            },
+            default: {
+                lineHeight: 21,
+            },
+        }),
     },
     codeBlock: {
         borderWidth: 1,
@@ -96,13 +108,7 @@ export const MARKDOWN_STYLES = {
         }),
         ...Platform.select({
             ios: {
-                lineHeight: 25,
-            },
-            android: {
-                lineHeight: 21,
-            },
-            default: {
-                lineHeight: 26,
+                lineHeight: 27,
             },
         }),
     },
@@ -123,13 +129,7 @@ export const MARKDOWN_STYLES = {
         }),
         ...Platform.select({
             ios: {
-                lineHeight: 27,
-            },
-            android: {
-                lineHeight: 23,
-            },
-            default: {
-                lineHeight: 28,
+                lineHeight: 30,
             },
         }),
     },
