@@ -19,7 +19,6 @@ interface States {
 }
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
-    private content: string;
     constructor(props: Props) {
         super(props);
         this.state = {
@@ -57,6 +56,7 @@ class EditArticle extends React.Component<Props, States> {
             } else /* if (this.state.mode === "preview") */ {
                 return <Fragment>
                     <HeaderWithBack
+                        disableBackButton={true}
                         titleId="page.article.preview"
                         rightIconName="eye-off"
                         rightAction={ () => { this.setState({mode: "edit"}); }}/>

@@ -2,30 +2,53 @@ import Article from "../../core/src/models/Article";
 import React, { Fragment } from "react";
 import { Content, View, Spinner, Button, Text } from "native-base";
 import { TextInput } from "react-native";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
+import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor } from "react-intl";
 import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
+import { PrimitiveType } from "intl-messageformat";
+import { NEW_ARTICLE_CACHE_ID } from "../../core/src/actions/article";
+import connectPropsAndActions from "../../core/src/shared/connect";
+import AppState from "../../core/src/models/client/AppState";
+import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
+import ArticleCache from "../../core/src/models/client/ArticleCache";
 
 interface Props extends IntlProps {
     article?: Article;
     submitTextId: string;
     onSubmit: (title: string, content: string) => void;
     loading?: boolean;
+    state: AppState;
+    actions: ArticleActionCreator;
 }
 
-interface States {}
+interface States {
+    editing: boolean;
+    title: string;
+    content: string;
+}
 
 class ArticleEditor extends React.Component<Props, States> {
-    public title: string = "";
-    public content: string = "";
-    render(): React.ReactElement<any> {
-        let originalTitle: string = "";
-        let originalContent: string = "";
+
+    private originalTitle: string = "";
+    private originalContent: string = "";
+    private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
+
+    constructor(props: Props) {
+        super(props);
+        this.getString = this.props.intl.formatMessage;
         if (this.props.article) {
-            originalTitle = this.props.article.title;
-            originalContent = this.props.article.content;
-            this.title = originalTitle;
-            this.content = originalContent;
+            this.originalTitle = this.props.article.title;
+            this.originalContent = this.props.article.content;
         }
+        this.state = {
+            editing: false,
+            title: this.originalTitle,
+            content: this.originalContent,
+        };
+    }
+    componentDidMount() {
+        this.restoreFromCache();
+    }
+    render(): React.ReactElement<any> {
         return (
             <Fragment>
                 <Content padder
@@ -34,11 +57,15 @@ class ArticleEditor extends React.Component<Props, States> {
                         flexDirection: "column"
                         }}>
                     <View style={{marginBottom: 12, flex: 0, padding: 8}}>
-                        <TextInput style={{ fontSize: 22 }}
+                        <TextInput
+                            style={{ fontSize: 22 }}
                             maxLength={100}
-                            placeholder={this.props.intl.formatMessage({id: "article.title"})}
-                            defaultValue={originalTitle}
-                            onChangeText={(input: string) => { this.title = input; }} />
+                            placeholder={this.getString({id: "article.title"})}
+                            value={this.state.title}
+                            onChangeText={(input: string) => {
+                                this.onEditing(input, undefined);
+                                this.setState({title: input});
+                            }} />
                     </View>
                     <View style={{
                         flex: 1,
@@ -46,12 +73,16 @@ class ArticleEditor extends React.Component<Props, States> {
                         flexDirection: "column",
                         alignItems: "flex-start"
                     }}>
-                        <TextInput multiline={true}
+                        <TextInput
+                            multiline={true}
                             autoFocus={true}
                             textAlignVertical="top"
-                            placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
-                            defaultValue={originalContent}
-                            onChangeText={(input: string) => { this.content = input; }}
+                            placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                            value={this.state.content}
+                            onChangeText={(input: string) => {
+                                this.onEditing(undefined, input);
+                                this.setState({content: input});
+                            }}
                             style={{
                                 fontSize: 18,
                                 flex: 1,
@@ -63,7 +94,7 @@ class ArticleEditor extends React.Component<Props, States> {
                 <View style={{flex: 0, paddingTop: 10}}>
                     {
                         this.props.loading ? <Spinner /> :
-                        <Button full onPress={ () => { this.props.onSubmit(this.title, this.content); } } >
+                        <Button full onPress={this.onSubmit} >
                             <Text style={{color: "white"}}>
                                 <FormattedMessage id={this.props.submitTextId}/>
                             </Text>
@@ -73,6 +104,65 @@ class ArticleEditor extends React.Component<Props, States> {
             </Fragment>
         );
     }
+    private onSubmit = (): void => {
+        this.props.onSubmit(this.state.title, this.state.content);
+    }
+    private onEditing = (title?: string, content?: string) => {
+        const instanceTitle: string = title ? title : this.state.title;
+        const instanceContent: string = content ? content : this.state.content;
+        const id: string = this.props.article ? this.props.article._id : NEW_ARTICLE_CACHE_ID;
+        if (this.originalTitle === instanceTitle
+            && this.originalContent === instanceContent) {
+            this.setState({
+                editing: false
+            });
+            this.props.actions.removeEditCache(id);
+        } else {
+            this.setState({
+                editing: true
+            });
+            this.props.actions.setEditCache(id, {title: instanceTitle, content: instanceContent});
+        }
+    }
+    private restoreFromCache = () => {
+        const cache: {[id: string]: ArticleCache} = this.props.state.articleState.editCache;
+        let title: string = "";
+        let content: string = "";
+        if (this.props.article) {
+            const id: string = this.props.article._id;
+            if (cache[id]) {
+                title = cache[id].title;
+                content = cache[id].content;
+            }
+        } else {
+            if (cache[NEW_ARTICLE_CACHE_ID]) {
+                title = cache[NEW_ARTICLE_CACHE_ID].title;
+                content = cache[NEW_ARTICLE_CACHE_ID].content;
+            }
+        }
+        if (title || content) {
+            this.setState({
+                title: title,
+                content: content
+            });
+        }
+    }
+    private clearEditing = () => {
+        if (this.state.editing) {
+            if (this.props.article) {
+                this.props.actions.removeEditCache(this.props.article._id);
+            } else {
+                this.props.actions.removeEditCache(NEW_ARTICLE_CACHE_ID);
+            }
+            this.setState({
+                title: this.originalTitle,
+                content: this.originalContent
+            });
+        }
+        this.setState({
+            editing: false
+        });
+    }
 }
 
-export default injectIntl(ArticleEditor);
+export default injectIntl(connectPropsAndActions(ArticleEditor));

@@ -2,7 +2,7 @@ import Article from "../../models/Article";
 import { Form, Button, FormGroup } from "semantic-ui-react";
 import { RefObject } from "react";
 import React from "react";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
 import "codemirror/lib/codemirror.css";
 import "tui-editor/dist/tui-editor.min.css";
 import "tui-editor/dist/tui-editor-contents.min.css";
@@ -19,6 +19,8 @@ import ArticleCache from "../../models/client/ArticleCache";
 import { NEW_ARTICLE_CACHE_ID } from "../../actions/article";
 import ArticleActionCreator from "../../models/client/ArticleActionCreator";
 import { MINIMUM_ARTICLE_LENGTH } from "../../shared/constants";
+import { PrimitiveType } from "intl-messageformat";
+import WarningModal from "../shared/WarningModal";
 
 interface Props extends IntlProps {
     article?: Article;
@@ -31,6 +33,7 @@ interface Props extends IntlProps {
 
 interface States {
     editing: boolean;
+    openClearEditWarning: boolean;
 }
 
 class ArticleEditor extends React.Component<Props, States> {
@@ -39,20 +42,19 @@ class ArticleEditor extends React.Component<Props, States> {
 
     private originalTitle: string = "";
     private originalContent: string = "";
+    private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     constructor(props: Props) {
         super(props);
         this.titleRef = React.createRef();
         this.contentRef = React.createRef();
+        this.getString = this.props.intl.formatMessage;
         this.state = {
-            editing: false
+            editing: false,
+            openClearEditWarning: false
         };
     }
     componentDidMount() {
-        window.addEventListener("beforeunload", this.closeAlert);
         this.restoreFromCache();
-    }
-    componentWillUnmount() {
-        window.removeEventListener("beforeunload", this.closeAlert);
     }
     render(): React.ReactElement<any> {
         if (this.props.article) {
@@ -85,7 +87,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={this.originalContent}
-                        placeholder={this.props.intl.formatMessage({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                        placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
                         previewStyle={isMobile() ? "tab" : "vertical"}
                         height="54vh"
                         initialEditType={editorType}
@@ -115,7 +117,13 @@ class ArticleEditor extends React.Component<Props, States> {
                         disabled={this.props.loading || !this.state.editing}>
                         <FormattedMessage id={this.props.submitTextId} />
                     </Form.Field>
+                    <Form.Field control={Button} onClick={() => this.setState({openClearEditWarning: true})}
+                        loading={this.props.loading}
+                        disabled={this.props.loading || !this.state.editing}>
+                        <FormattedMessage id="component.button.clear_edit" />
+                    </Form.Field>
                 </FormGroup>
+                {this.renderClearEditWarningModal()}
             </Form>
         );
     }
@@ -144,29 +152,23 @@ class ArticleEditor extends React.Component<Props, States> {
         }
         const instanceTitle: string = this.titleRef.current.value;
         const instanceContent: string = this.contentRef.current.getInstance().getMarkdown();
+        const id: string = this.props.article ? this.props.article._id : NEW_ARTICLE_CACHE_ID;
         if (this.originalTitle === instanceTitle
             && this.originalContent === instanceContent) {
             this.setState({
                 editing: false
             });
+            this.props.actions.removeEditCache(id);
         } else {
             this.setState({
                 editing: true
             });
-            const id: string = this.props.article ? this.props.article._id : NEW_ARTICLE_CACHE_ID;
-            this.props.actions.setCache(id, {title: instanceTitle, content: instanceContent});
-        }
-    }
-    private closeAlert = (e: BeforeUnloadEvent): any => {
-        const self: ArticleEditor = this;
-        if (self.state.editing) {
-            e.preventDefault();
-            e.returnValue = "";
+            this.props.actions.setEditCache(id, {title: instanceTitle, content: instanceContent});
         }
     }
     private restoreFromCache = () => {
         if (this.titleRef.current && this.contentRef.current) {
-            const cache: {[id: string]: ArticleCache} = this.props.state.articleState.cache;
+            const cache: {[id: string]: ArticleCache} = this.props.state.articleState.editCache;
             if (this.props.article) {
                 const id: string = this.props.article._id;
                 if (cache[id]) {
@@ -180,6 +182,29 @@ class ArticleEditor extends React.Component<Props, States> {
                 }
             }
         }
+    }
+    private clearEditing = () => {
+        if (this.titleRef.current && this.contentRef.current) {
+            if (this.props.article) {
+                this.props.actions.removeEditCache(this.props.article._id);
+            } else {
+                this.props.actions.removeEditCache(NEW_ARTICLE_CACHE_ID);
+            }
+            this.titleRef.current.value = this.originalTitle;
+            this.contentRef.current.getInstance().setMarkdown(this.originalContent);
+        }
+        this.setState({
+            editing: false,
+            openClearEditWarning: false
+        });
+    }
+    private renderClearEditWarningModal = (): React.ReactElement<any> | undefined => {
+        return <WarningModal
+                descriptionIcon="close" open={this.state.openClearEditWarning}
+                descriptionText={this.getString({id: "page.article.clear_edit"})}
+                warningText={this.getString({id: "page.article.clear_edit_confirmation"})}
+                onConfirm={this.clearEditing}
+                onCancel={ () => {this.setState({openClearEditWarning: false}); }}/>;
     }
 }
 

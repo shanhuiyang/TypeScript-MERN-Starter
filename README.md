@@ -232,7 +232,7 @@ In next period of time (Before end of Feb 2020), we will work on:
   - User can add comments to articles.
   - Pagination.
 - Rich text editors. Using markdown as the exchanging text format.
-  - Unsaved alert if users are going to close the page.
+  - ~~Unsaved alert if users are going to close the page.~~
 - Notification
   - Comment received for article authors.
 - Improving the authentication.

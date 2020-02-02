@@ -6,6 +6,7 @@ import Article from "../models/Article";
 import GetArticlesResponse from "../models/response/GetArticlesResponse.d";
 import { getToast as toast } from "../shared/toast";
 import ArticleCache from "../models/client/ArticleCache";
+import { getStorage as localStorage } from "../shared/storage";
 
 export const SAVE_ARTICLE_BEGIN: string = "SAVE_ARTICLE_BEGIN";
 export const SAVE_ARTICLE_SUCCESS: string = "SAVE_ARTICLE_SUCCESS";
@@ -24,9 +25,11 @@ export const INSERT_IMAGE_SUCCESS: string = "INSERT_IMAGE_SUCCESS";
 export const INSERT_IMAGE_FAILED: string = "INSERT_IMAGE_FAILED";
 export const RATE_ARTICLE_SUCCESS: string = "RATE_ARTICLE_SUCCESS";
 export const RATE_ARTICLE_FAILED: string = "RATE_ARTICLE_FAILED";
-export const SET_ARTICLE_CACHE: string = "SET_ARTICLE_CACHE";
-export const CLEAR_ARTICLE_CACHE: string = "CLEAR_ARTICLE_CACHE";
+export const SET_EDIT_ARTICLE_CACHE: string = "SET_EDIT_ARTICLE_CACHE";
+export const REMOVE_EDIT_ARTICLE_CACHE: string = "REMOVE_EDIT_ARTICLE_CACHE";
+export const IGNORE_CACHE_RESTORE: string = "IGNORE_CACHE_RESTORE";
 export const NEW_ARTICLE_CACHE_ID: string = "NEW_ARTICLE_CACHE_ID";
+export const ARTICLE_EDIT_CACHE_KEY_PREFIX: string = "articleEdit/";
 
 const articleActionCreator: ArticleActionCreator = {
     getArticles(): any {
@@ -76,6 +79,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
             .then((json: any) => {
+                articleActionCreator.removeEditCache(NEW_ARTICLE_CACHE_ID);
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             })
@@ -89,6 +93,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
             .then((json: any) => {
+                articleActionCreator.removeEditCache(article._id);
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             })
@@ -103,6 +108,7 @@ const articleActionCreator: ArticleActionCreator = {
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
                 toast().success("toast.article.delete_successfully");
+                articleActionCreator.removeEditCache(id);
                 dispatch({
                     type: REMOVE_ARTICLE_SUCCESS,
                     redirectTask: {
@@ -132,17 +138,53 @@ const articleActionCreator: ArticleActionCreator = {
             });
         };
     },
-    setCache(id: string, cache: ArticleCache): Action {
+    setEditCache(id: string, cache: ArticleCache): Action {
+        localStorage().setItem(ARTICLE_EDIT_CACHE_KEY_PREFIX + id, JSON.stringify(cache));
         return {
-            type: SET_ARTICLE_CACHE,
+            type: SET_EDIT_ARTICLE_CACHE,
             id: id,
             cache: cache
         };
     },
-    clearCache(id: string): Action {
+    removeEditCache(id: string): Action {
+        localStorage().removeItem(ARTICLE_EDIT_CACHE_KEY_PREFIX + id);
         return {
-            type: CLEAR_ARTICLE_CACHE,
+            type: REMOVE_EDIT_ARTICLE_CACHE,
             id: id
+        };
+    },
+    restoreEditCache(): any {
+        return (dispatch: Dispatch<any>): void => {
+            localStorage().getAllKeys().then((keys: string[]) => {
+                keys.forEach(key => {
+                    if (!key || !key.startsWith(ARTICLE_EDIT_CACHE_KEY_PREFIX)) {
+                        return dispatch({
+                            type: IGNORE_CACHE_RESTORE
+                        });
+                    }
+                    localStorage().getItem(key).then((value: string | null) => {
+                        if (!key || !key.startsWith(ARTICLE_EDIT_CACHE_KEY_PREFIX) || !value) {
+                            return dispatch({
+                                type: IGNORE_CACHE_RESTORE
+                            });
+                        }
+                        const id: string = key.slice(ARTICLE_EDIT_CACHE_KEY_PREFIX.length);
+                        dispatch({
+                            type: SET_EDIT_ARTICLE_CACHE,
+                            id: id,
+                            cache: JSON.parse(value) as ArticleCache
+                        });
+                    }).catch((reason: any) => {
+                        dispatch({
+                            type: IGNORE_CACHE_RESTORE
+                        });
+                    });
+                });
+            }).catch((reason: any) => {
+                dispatch({
+                    type: IGNORE_CACHE_RESTORE
+                });
+            });
         };
     }
 };
