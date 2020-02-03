@@ -5,6 +5,7 @@ import { Redirect, match, RouteComponentProps } from "react-router-native";
 import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
 import Article from "../../core/src/models/Article";
 import ArticleEditor from "./ArticleEditor";
+import ArticlePreviewer from "./ArticlePreviewer";
 import HeaderWithBack from "../Common/HeaderWithBack";
 
 interface Props extends RouteComponentProps<any> {
@@ -13,9 +14,17 @@ interface Props extends RouteComponentProps<any> {
     actions: ArticleActionCreator;
 }
 
-interface States {}
+interface States {
+    mode: "edit" | "preview";
+}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            mode: "edit"
+        };
+    }
     render(): React.ReactElement<any> {
         if (!this.props.state.articleState.valid) {
             return <Redirect to="/article" />;
@@ -32,10 +41,32 @@ class EditArticle extends React.Component<Props, States> {
         }
         if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articleState.loading;
-            return <Fragment>
-                <HeaderWithBack titleId="page.article.edit" rightTextId="component.button.delete" rightAction={this.removeArticle}/>
-                <ArticleEditor article={article} onSubmit={this.editArticle} submitTextId="component.button.update" loading={loading}/>
-            </Fragment>;
+            if (this.state.mode === "edit") {
+                return <Fragment>
+                    <HeaderWithBack
+                        titleId="page.article.edit"
+                        rightIconName="eye"
+                        rightAction={ () => { this.setState({mode: "preview"}); }}/>
+                    <ArticleEditor
+                        article={article}
+                        onSubmit={this.editArticle}
+                        submitTextId="component.button.update"
+                        loading={loading}/>
+                </Fragment>;
+            } else /* if (this.state.mode === "preview") */ {
+                return <Fragment>
+                    <HeaderWithBack
+                        disableBackButton={true}
+                        titleId="page.article.preview"
+                        rightIconName="eye-off"
+                        rightAction={ () => { this.setState({mode: "edit"}); }}/>
+                    <ArticlePreviewer
+                        article={article}
+                        onSubmit={this.editArticle}
+                        submitTextId="component.button.update"
+                        loading={loading}/>
+                </Fragment>;
+            }
         } else {
             return <Redirect to="/article" />;
         }
@@ -50,10 +81,6 @@ class EditArticle extends React.Component<Props, States> {
                 _id: this.articleId
             } as Article);
         }
-    }
-
-    private removeArticle = (): void => {
-        this.props.actions.removeArticle(this.articleId);
     }
 }
 

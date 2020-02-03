@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import { Text, Body, Content, Left, Card, CardItem, Thumbnail, View, Fab, Icon } from "native-base";
 import { RouteComponentProps, Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
@@ -7,24 +7,34 @@ import AppState from "../../core/src/models/client/AppState";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
-import { getAvatarSource } from "../utils/image";
+import { getAvatarSource, amendAllImageInContent } from "../utils/image";
 import Markdown from "react-native-markdown-display";
 import moment from "moment";
 import { getHostUrl } from "../../core/src/shared/fetch";
 import { MARKDOWN_STYLES } from "./styles/markdown";
+import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
+import { MessageDescriptor, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import { PrimitiveType } from "intl-messageformat";
 
-interface Props extends RouteComponentProps<any> {
+interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
+    actions: ArticleActionCreator;
 }
 
 interface States {}
 
-const MARKDOWN_IMAGE_EXP: RegExp = /!\[(.*)\]\(\/(.*)\)/g;
-
 const styles = StyleSheet.create(MARKDOWN_STYLES as any);
 
 class ArticleDetail extends React.Component<Props, States> {
+    private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
+    constructor(props: Props) {
+        super(props);
+        this.getString = this.props.intl.formatMessage;
+    }
     render(): any {
+        if (!this.props.state.redirectTask.redirected) {
+            return <Redirect to={this.props.state.redirectTask.to} />;
+        }
         const article: Article | undefined = this.props.location.state;
         if (!article) {
             return <Redirect to="/article" />;
@@ -32,10 +42,14 @@ class ArticleDetail extends React.Component<Props, States> {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
         const articleAuthor: User = this.props.state.userDictionary[article.author];
         let content: string = article.content;
-        content = content.replace(MARKDOWN_IMAGE_EXP, `\n![$1](${getHostUrl()}/$2)\n`);
+        content = amendAllImageInContent(content);
         if (article) {
             return <Fragment>
-                <HeaderWithBack title={article.title} />
+                {
+                    this.isAuthorOfThisArticle(article) ?
+                    <HeaderWithBack title={article.title} rightIconName="trash" rightAction={() => this.showDeleteAlert(article)}/>
+                    : <HeaderWithBack title={article.title} />
+                }
                 <Content>
                     <Card transparent>
                         <CardItem>
@@ -59,7 +73,6 @@ class ArticleDetail extends React.Component<Props, States> {
                     </Card>
                 </Content>
                 {this.renderEditButton(article)}
-                {/* No Footer in detail page */}
             </Fragment>;
         } else {
             return <Redirect to="/error" />;
@@ -67,7 +80,7 @@ class ArticleDetail extends React.Component<Props, States> {
     }
 
     private renderEditButton = (article: Article): any => {
-        if (article && this.props.state.userState.currentUser && this.props.state.userState.currentUser._id === article.author) {
+        if (this.isAuthorOfThisArticle(article)) {
             return <View style={{flex: 0}}>
                 <Fab active={true} direction="up" style={{ backgroundColor: "darkturquoise" }}
                     position="bottomRight" onPress={() => {
@@ -82,6 +95,26 @@ class ArticleDetail extends React.Component<Props, States> {
             return undefined;
         }
     }
+    private isAuthorOfThisArticle = (article: Article): boolean => {
+        return !!(article && this.props.state.userState.currentUser && this.props.state.userState.currentUser._id === article.author);
+    }
+    private showDeleteAlert = (article: Article): void => {
+        Alert.alert(
+            this.getString({id: "page.article.delete"}, {title: article.title}),
+            this.getString({id: "page.article.delete_confirmation"}),
+            [
+                {
+                    text: this.getString({id: "component.button.cancel"}),
+                    onPress: () => {},
+                    style: "cancel",
+                },
+                {text: this.getString({id: "component.button.confirm"}), onPress: () => this.removeArticle(article)},
+            ],
+            {cancelable: false});
+    }
+    private removeArticle = (article: Article): void => {
+        this.props.actions.removeArticle(article._id);
+    }
 }
 
-export default connectPropsAndActions(ArticleDetail);
+export default injectIntl(connectPropsAndActions(ArticleDetail));

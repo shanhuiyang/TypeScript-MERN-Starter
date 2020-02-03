@@ -27,6 +27,10 @@ class Articles extends React.Component<Props, States> {
         if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
             this.props.actions.getArticles();
         }
+
+        if ((!prevProps.state.userState.currentUser && this.props.state.userState.currentUser)) {
+            this.props.actions.restoreEditCache();
+        }
     }
     render(): any {
         const match: match<any> = this.props.match;

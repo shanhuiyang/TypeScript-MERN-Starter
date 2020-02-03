@@ -11,6 +11,7 @@ interface Props extends RouteComponentProps<any> {
     rightTextId?: string; // It could be a message id of translation or raw text.
     rightIconName?: string;
     rightAction?: () => void;
+    disableBackButton?: boolean;
 }
 
 interface States {}
@@ -23,9 +24,12 @@ class HeaderWithBack extends React.Component<Props, States> {
         // Customize the Header style to make sure the title has enough space to show
         return <Header style={{display: "flex", flexDirection: "row"}}>
             <Left style={{flex: 0, marginRight: HEADER_MARGIN_RIGHT, marginLeft: HEADER_MARGIN_LEFT}}>
-                <Button transparent onPress={this.props.history.goBack}>
-                    <Icon name="arrow-back" />
-                </Button>
+                {
+                    this.props.disableBackButton ? undefined :
+                    <Button transparent onPress={this.props.history.goBack}>
+                        <Icon name="arrow-back" />
+                    </Button>
+                }
             </Left>
             <Body style={{flex: 1, marginRight: HEADER_MARGIN}}>
                 <Title>
@@ -37,7 +41,7 @@ class HeaderWithBack extends React.Component<Props, States> {
             </Body>
             {
                 this.props.rightTextId || this.props.rightIconName ?
-                <Right style={{flex: 0, marginLeft: HEADER_MARGIN_LEFT}}>
+                <Right style={{flex: 0}}>
                     <Button transparent onPress={this.props.rightAction}>
                         {
                             this.props.rightTextId ?

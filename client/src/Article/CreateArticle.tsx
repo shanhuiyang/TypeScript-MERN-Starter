@@ -5,24 +5,53 @@ import AppState from "../../core/src/models/client/AppState";
 import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
 import connectPropsAndActions from "../../core/src/shared/connect";
 import ArticleEditor from "./ArticleEditor";
+import ArticlePreviewer from "./ArticlePreviewer";
 
 interface Props extends RouteComponentProps<any> {
     state: AppState;
     actions: ArticleActionCreator;
 }
 
-interface States {}
+interface States {
+    mode: "edit" | "preview";
+}
 
 class CreateArticle extends React.Component<Props, States> {
+    constructor(props: Props) {
+        super(props);
+        this.state = {
+            mode: "edit"
+        };
+    }
     render(): any {
         if (!this.props.state.articleState.valid) {
             return <Redirect to="/article" />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.articleState.loading;
-            return <Fragment>
-                <HeaderWithBack titleId="page.article.add" />
-                <ArticleEditor onSubmit={this.createArticle} submitTextId="component.button.submit" loading={loading}/>
-            </Fragment>;
+            if (this.state.mode === "edit") {
+                return <Fragment>
+                    <HeaderWithBack
+                        titleId="page.article.add"
+                        rightIconName="eye"
+                        rightAction={ () => { this.setState({mode: "preview"}); }}/>
+                    <ArticleEditor
+                        onSubmit={this.createArticle}
+                        submitTextId="component.button.submit"
+                        loading={loading}/>
+                </Fragment>;
+            } else /* if (this.state.mode === "preview") */ {
+                return <Fragment>
+                    <HeaderWithBack
+                        disableBackButton={true}
+                        titleId="page.article.preview"
+                        rightIconName="eye-off"
+                        rightAction={ () => { this.setState({mode: "edit"}); }}/>
+                    <ArticlePreviewer
+                        onSubmit={this.createArticle}
+                        submitTextId="component.button.submit"
+                        loading={loading}/>
+                </Fragment>;
+            }
         } else {
             return <Redirect to="/article" />;
         }

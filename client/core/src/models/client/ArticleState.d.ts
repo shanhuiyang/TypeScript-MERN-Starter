@@ -7,5 +7,5 @@ export default interface ArticleState {
     data: Article[]; // All loaded articles
     loadingMore: boolean;
     hasMore: boolean;
-    cache: {[id: string]: ArticleCache};
+    editCache: {[id: string]: ArticleCache};
 }
