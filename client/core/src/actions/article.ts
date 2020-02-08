@@ -31,6 +31,14 @@ export const IGNORE_CACHE_RESTORE: string = "IGNORE_CACHE_RESTORE";
 export const NEW_ARTICLE_CACHE_ID: string = "NEW_ARTICLE_CACHE_ID";
 export const ARTICLE_EDIT_CACHE_KEY_PREFIX: string = "articleEdit/";
 
+const removeEditCacheExec = (id: string, dispatch: Dispatch<any>): void => {
+    localStorage().removeItem(ARTICLE_EDIT_CACHE_KEY_PREFIX + id);
+    dispatch({
+        type: REMOVE_EDIT_ARTICLE_CACHE,
+        id: id
+    });
+};
+
 const articleActionCreator: ArticleActionCreator = {
     getArticles(): any {
         return (dispatch: Dispatch<any>): void => {
@@ -79,7 +87,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
             .then((json: any) => {
-                articleActionCreator.removeEditCache(NEW_ARTICLE_CACHE_ID);
+                removeEditCacheExec(NEW_ARTICLE_CACHE_ID, dispatch);
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             })
@@ -93,7 +101,7 @@ const articleActionCreator: ArticleActionCreator = {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
             .then((json: any) => {
-                articleActionCreator.removeEditCache(article._id);
+                removeEditCacheExec(article._id, dispatch);
                 toast().success("toast.article.save_successfully");
                 dispatch({ type: SAVE_ARTICLE_SUCCESS });
             })
@@ -108,7 +116,7 @@ const articleActionCreator: ArticleActionCreator = {
             fetch(`/api/article/remove/${id}`, undefined, "GET", /*withToken*/ true)
             .then((json: any) => {
                 toast().success("toast.article.delete_successfully");
-                articleActionCreator.removeEditCache(id);
+                removeEditCacheExec(id, dispatch);
                 dispatch({
                     type: REMOVE_ARTICLE_SUCCESS,
                     redirectTask: {
@@ -146,11 +154,9 @@ const articleActionCreator: ArticleActionCreator = {
             cache: cache
         };
     },
-    removeEditCache(id: string): Action {
-        localStorage().removeItem(ARTICLE_EDIT_CACHE_KEY_PREFIX + id);
-        return {
-            type: REMOVE_EDIT_ARTICLE_CACHE,
-            id: id
+    removeEditCache(id: string): any {
+        return (dispatch: Dispatch<any>): void => {
+            removeEditCacheExec(id, dispatch);
         };
     },
     restoreEditCache(): any {
