@@ -252,6 +252,10 @@ Briefly speak, we nested 3 projects in the repo, to get the biggest reusability 
 
 Therefore, we fused server, website (for both desktop and mobile), and Android & iOS projects together in this repo.
 
+The basic working flow of the app could be illustrated in the following diagram.
+
+![Data flow](./images/data-flow.png)
+
 Please note that we did not invent any framework, what we did is taking the advantages of many popular frameworks from React ecosystem, and organize it logically.
 
 ### Dependencies
