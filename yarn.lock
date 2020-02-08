@@ -267,10 +267,10 @@
   resolved "https://registry.yarnpkg.com/@types/async/-/async-3.0.3.tgz#ea3694128c757580e4f9328cd941b81d9c3e9bf6"
   integrity sha512-FrIcC67Zpko1jO8K4d30C41/KVhAABbMbaSxccvXacxPcKbDBav+8WoFzv72BA2zJvyX4T9PFz0we1hcNymgGA==
 
-"@types/bcrypt-nodejs@^0.0.30":
-  version "0.0.30"
-  resolved "https://registry.yarnpkg.com/@types/bcrypt-nodejs/-/bcrypt-nodejs-0.0.30.tgz#4cdd96b49293b3932122e4b7e29543e35e6bae58"
-  integrity sha1-TN2WtJKTs5MhIuS34pVD415rrlg=
+"@types/bcrypt-nodejs@^0.0.31":
+  version "0.0.31"
+  resolved "https://registry.yarnpkg.com/@types/bcrypt-nodejs/-/bcrypt-nodejs-0.0.31.tgz#c2912b47e66242f2d0d2c43cdd62918c8f990dac"
+  integrity sha512-0J4tuZnKpVyHc5EIKTeIUIo6yBSjt7F004mifvqGPAQsETho7iHubjyBD8p1YENNWNYb1vfPhgjCsRH8zy84XQ==
 
 "@types/bluebird@^3.5.20":
   version "3.5.29"
@@ -352,10 +352,10 @@
   dependencies:
     dotenv "*"
 
-"@types/errorhandler@^0.0.32":
-  version "0.0.32"
-  resolved "https://registry.yarnpkg.com/@types/errorhandler/-/errorhandler-0.0.32.tgz#387eca73957b481254baddc15d1d40f7fe7153c6"
-  integrity sha512-wC9CfwPMIzklPd5lEYC8HnQdlMC1PswlohWmEDMWlw+E/rMYuz5eSqKBc72Earb29KptKJrRl77qVRJzrZndww==
+"@types/errorhandler@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@types/errorhandler/-/errorhandler-1.5.0.tgz#2e6be2e419e505130c6342d11b3981867db6de2b"
+  integrity sha512-g5jrn2aofEn7O2OW/T+PlmGUUD/AtrX7DI87zrxz6rK5XIyvQf3FbPJrwgYaVjVOaCyvEkx9yxLd/XlEA43OcA==
   dependencies:
     "@types/express" "*"
 
