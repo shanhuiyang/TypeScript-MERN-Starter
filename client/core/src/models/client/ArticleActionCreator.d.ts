@@ -10,6 +10,6 @@ export default interface ArticleActionCreator {
     removeArticle(id: string): any;
     rateArticle(rating: number, id: string, user: string): any;
     setEditCache(id: string, cache: ArticleCache): Action;
-    removeEditCache(id: string): Action;
+    removeEditCache(id: string): any;
     restoreEditCache(): any;
 }
