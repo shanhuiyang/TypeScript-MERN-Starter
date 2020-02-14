@@ -6,7 +6,7 @@ import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE } from "../../shared/constants"
 import User from "../../models/User";
 import Gender from "../../models/Gender";
 import { initStorage } from "../../shared/storage";
-import storageWrapper from "../../components/storage";
+import storageWrapper from "../../website/components/storage";
 import { getHostUrl } from "../../shared/fetch";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
 import AuthenticationResponse from "../../models/response/AuthenticationResponse";
