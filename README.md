@@ -264,6 +264,8 @@ Please note that we did not invent any framework, what we did is taking the adva
 
 ### Dependencies
 
+![Dependencies](./images/dependencies.png)
+
 Here is a index for **documents** what the project depends on:
 
 - [Create React App](https://create-react-app.dev/docs/getting-started)
