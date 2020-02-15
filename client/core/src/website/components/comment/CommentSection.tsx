@@ -25,6 +25,7 @@ interface Props extends IntlProps {
     target: PostType;
     state: AppState;
     actions: CommentActionCreator;
+    maxThreadStackDepth?: number;
 }
 interface States {
     showReplyFormForCommentId: string;
@@ -173,7 +174,7 @@ class CommentSection extends React.Component<Props, States> {
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
                 this.props.state.userState.currentUser
-                && stackDepth < MAXIMUM_THREAD_STACK_DEPTH ?
+                && stackDepth < (this.props.maxThreadStackDepth ? this.props.maxThreadStackDepth : MAXIMUM_THREAD_STACK_DEPTH) ?
                 /* eslint-disable-next-line */
                 <Comment.Action onClick={() => {this.onToggleReplyForm(comment._id); }}>
                     <FormattedMessage id="component.comment.reply"/>
