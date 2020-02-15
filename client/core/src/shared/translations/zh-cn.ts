@@ -28,6 +28,7 @@ const TRANSLATION: Translation = {
         "page.me.reset_password_step_2": "验证邮箱",
         "page.me.reset_password_step_3": "重置密码",
         "page.me.notifications": "通知",
+        "page.threads": "论坛",
         "page.consent.greeting": "{email}你好，",
         "page.consent.description": "{app_name}需要访问你的账号。",
         "page.consent.inquiry": "请问是否授权？",

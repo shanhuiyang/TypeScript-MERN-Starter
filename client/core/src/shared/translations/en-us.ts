@@ -28,6 +28,7 @@ const TRANSLATION: Translation = {
         "page.me.reset_password_step_2": "Verify Email",
         "page.me.reset_password_step_3": "Reset Password",
         "page.me.notifications": "Notifications",
+        "page.threads": "Forum",
         "page.avatar.title": "Adjust Your Profile Image",
         "page.avatar.rotate": "Rotate",
         "page.avatar.zoom": "Zoom",
