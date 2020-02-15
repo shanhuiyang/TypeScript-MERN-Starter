@@ -9,7 +9,7 @@ import { CONTAINER_STYLE } from "../../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-import { FLAG_ENABLE_FORGET_PASSWORD } from "../../shared/constants";
+import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../shared/constants";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     state: AppState;
@@ -63,7 +63,7 @@ class LogIn extends React.Component<Props, States> {
                             <FormattedMessage id="component.button.submit"/>
                         </Button>
                         {
-                            FLAG_ENABLE_FORGET_PASSWORD ?
+                            FLAG_ENABLE_OTP_FOR_VERIFICATION ?
                             <Link to="/forgetpassword">
                                 <FormattedMessage id="page.me.forget_password"/>
                             </Link>

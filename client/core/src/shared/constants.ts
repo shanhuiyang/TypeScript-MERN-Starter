@@ -15,5 +15,4 @@ export const MINIMUM_ARTICLE_LENGTH: number = 150;
 export const ANDROID_LOCAL_HOST_URL: string = "10.0.2.2";
 
 // Add feature flags here
-export const FLAG_ENABLE_ACTIVATION_CODE: boolean = false; // prerequisite: enable sending OTP thru email
-export const FLAG_ENABLE_FORGET_PASSWORD: boolean = false; // prerequisite: enable sending OTP thru email
+export const FLAG_ENABLE_OTP_FOR_VERIFICATION: boolean = false; // prerequisite: enable sending OTP thru email

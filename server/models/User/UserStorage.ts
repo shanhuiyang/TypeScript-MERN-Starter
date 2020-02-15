@@ -4,12 +4,12 @@ import { getString, getFormattedString } from "../../translations";
 import { sendEmail } from "../../config/smtp-transporter";
 import { getUid } from "../../util/random";
 import { getExpireTime } from "../../util/time";
-import { FLAG_ENABLE_ACTIVATION_CODE } from "../../../client/core/src/shared/constants";
+import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../../client/core/src/shared/constants";
 export const OTP_LENGTH: number = 8;
 const OTP_EXPIRE_TIME: number = 10;
 export const refreshOtpThenSendToUser = (email: string, locale: string): Promise<any> => {
-    if (FLAG_ENABLE_ACTIVATION_CODE) {
-        return UserCollection.findOne({email: email}).exec().then((user: UserDocument) => {
+    if (FLAG_ENABLE_OTP_FOR_VERIFICATION) {
+        return UserCollection.findOne({email: email}).exec().then((user: UserDocument | null) => {
             if (user) {
                 user.OTP = getUid(OTP_LENGTH);
                 user.otpExpireTime = getExpireTime(OTP_EXPIRE_TIME);
@@ -23,7 +23,11 @@ export const refreshOtpThenSendToUser = (email: string, locale: string): Promise
                             { appName: appName, code: saved.OTP});
                     return sendEmail(email, subject, content);
                 });
+            } else {
+                return Promise.reject(new Error("Cannot find the user."));
             }
         });
+    } else {
+        return Promise.reject(new Error("OTP sending is not enabled!"));
     }
 };

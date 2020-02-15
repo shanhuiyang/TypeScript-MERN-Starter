@@ -153,24 +153,30 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
         if (error) {
             next(error);
         }
-        const findAuthorInUsers = (article: Article): Promise<UserDocument> => {
+        const findAuthorInUsers = (article: Article): Promise<UserDocument | null> => {
             return UserCollection.findById(article.author).exec();
         };
         const hasMore: boolean = articles.length === pageSize + 1;
-        const promises: Promise<User>[] = articles.map(async (article: Article) => {
-            const user: UserDocument = await findAuthorInUsers(article);
-            return {
-                email: user.email,
-                name: user.name,
-                avatarUrl: user.avatarUrl,
-                gender: user.gender,
-                _id: user._id.toString()
-            } as User;
+        const promises: Promise<User | undefined>[] = articles.map(async (article: Article) => {
+            const user: UserDocument | null = await findAuthorInUsers(article);
+            if (!user) {
+                return undefined;
+            } else {
+                return {
+                    email: user.email,
+                    name: user.name,
+                    avatarUrl: user.avatarUrl,
+                    gender: user.gender,
+                    _id: user._id.toString()
+                } as User;
+            }
         });
-        Promise.all(promises).then((authors: User []) => {
+        Promise.all(promises).then((authors: (User | undefined) []) => {
             const authorsDic: {[id: string]: User} = {};
-            authors.forEach((author: User): void => {
-                authorsDic[author._id] = author;
+            authors.forEach((author: User | undefined): void => {
+                if (author) {
+                    authorsDic[author._id] = author;
+                }
             });
             return res.json({
                 data: articles.slice(0, pageSize),
@@ -182,11 +188,26 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
 };
 export const insertImage: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const user: User = req.user as User;
-    const ext: string = checkImageType(req.headers["content-type"]);
+    const contentType: string | undefined = req.headers["content-type"];
+    if (!contentType) {
+        return res.status(400).end();
+    }
+    const contentLengthString: string | undefined = req.headers["content-length"];
+    if (!contentLengthString) {
+        return res.status(411).end();
+    }
+    const contentLength: number = parseInt(contentLengthString);
+    if (contentLength <= 0) {
+        return res.status(411).end();
+    }
+    const ext: string = checkImageType(contentType);
+    if (!ext) {
+        return res.status(415).end();
+    }
     const blobName: string  = `${user._id}_article_${random.getUid(8)}.${ext}`;
     storage.uploadBlob(
         req,
-        parseInt(req.headers["content-length"]),
+        contentLength,
         CONTAINER_ARTICLE,
         blobName
     ).then(

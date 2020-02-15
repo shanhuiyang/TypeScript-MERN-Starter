@@ -3,8 +3,11 @@ import fs from "fs";
 import path from "path";
 
 const STORAGE_ROOT_DIR: string = "storage";
-const STORAGE_ROOT_PATH: string = `${path.dirname(require.main.filename)}/../../client/core/public/${STORAGE_ROOT_DIR}`;
-if (!fs.existsSync(STORAGE_ROOT_PATH)) {
+const STORAGE_ROOT_PATH: string | undefined = require.main && `${path.dirname(require.main.filename)}/../../client/core/public/${STORAGE_ROOT_DIR}`;
+
+if (!STORAGE_ROOT_PATH) {
+    console.error("Local file storage initialize failed!");
+} else if (!fs.existsSync(STORAGE_ROOT_PATH)) {
     fs.mkdirSync(STORAGE_ROOT_PATH);
 }
 

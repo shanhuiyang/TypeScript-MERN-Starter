@@ -21,25 +21,31 @@ export const findByOwner = (
         if (error) {
             completeCallback([], {});
         }
-        const findSubjectInUsers = (notification: Notification): Promise<UserDocument> => {
+        const findSubjectInUsers = (notification: Notification): Promise<UserDocument | null> => {
             return UserCollection.findById(notification.subject).exec();
         };
-        const promises: Promise<User>[] = notifications.map(
+        const promises: Promise<User | undefined>[] = notifications.map(
             async (notification: Notification) => {
-                const user: UserDocument = await findSubjectInUsers(notification);
-                return {
-                    email: user.email,
-                    name: user.name,
-                    avatarUrl: user.avatarUrl,
-                    gender: user.gender,
-                    _id: user._id.toString()
-                } as User;
+                const user: UserDocument | null = await findSubjectInUsers(notification);
+                if (user) {
+                    return {
+                        email: user.email,
+                        name: user.name,
+                        avatarUrl: user.avatarUrl,
+                        gender: user.gender,
+                        _id: user._id.toString()
+                    } as User;
+                } else {
+                    return undefined;
+                }
             }
         );
-        Promise.all(promises).then((subjects: User []) => {
+        Promise.all(promises).then((subjects: (User | undefined) []) => {
             const subjectsDic: {[id: string]: User} = {};
-            subjects.forEach((subject: User): void => {
-                subjectsDic[subject._id] = subject;
+            subjects.forEach((subject: User | undefined): void => {
+                if (subject) {
+                    subjectsDic[subject._id] = subject;
+                }
             });
             completeCallback(notifications, subjectsDic);
         });
