@@ -57,9 +57,9 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
  * to the `Authorization` header). While this approach is not recommended by
  * the specification, in practice it is quite common.
  */
-function verifyClient(clientId: string, clientSecret: string, done: (error: Error, user?: any) => void) {
+function verifyClient(clientId: string, clientSecret: string, done: (error: Error | undefined, user?: any) => void) {
     console.log("[ClientPasswordStrategy] applied, clientId: " + clientId + " and clientSecret: " + clientSecret);
-    const client: Client = ClientCollection.find((value: Client) => value.id === clientId);
+    const client: Client | undefined = ClientCollection.find((value: Client) => value.id === clientId);
     if (!client || client.secret !== clientSecret) {
         return done(undefined, false);
     }
@@ -79,7 +79,7 @@ passport.use(new ClientPasswordStrategy(verifyClient));
  * the authorizing user.
  */
 passport.use(new BearerStrategy(
-    (accessToken: string, done: (error: Error, user?: any, options?: IVerifyOptions | string) => void) => {
+    (accessToken: string, done: (error: Error | undefined, user?: any, options?: IVerifyOptions | string) => void) => {
         console.log("[BearerStrategy] applied, accessToken: " + accessToken);
         AccessTokenCollection.findOne({token: accessToken}, (error: Error, token: AccessToken): void => {
             if (error) return done(error);
@@ -90,16 +90,16 @@ passport.use(new BearerStrategy(
                     if (!user) return done(undefined, false);
                     // To keep this example simple, restricted scopes are not implemented,
                     // and this is just for illustrative purposes.
-                    done(undefined, user, { scope: "all", message: undefined });
+                    done(undefined, user, { scope: "all", message: "success" });
                 });
             } else {
                 // The request came from a client only since userId is null,
                 // therefore the client is passed back instead of a user.
-                const client: Client = ClientCollection.find((value: Client) => value.id === token.clientId);
+                const client: Client | undefined = ClientCollection.find((value: Client) => value.id === token.clientId);
                 if (!client) return done(undefined, false);
                 // To keep this example simple, restricted scopes are not implemented,
                 // and this is just for illustrative purposes.
-                done(undefined, client, { scope:  "all", message: undefined});
+                done(undefined, client, { scope:  "all", message: "success" });
             }
         });
     }

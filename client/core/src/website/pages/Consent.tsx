@@ -7,7 +7,7 @@ import { Redirect } from "react-router-dom";
 import { Container, Header, Button, Form } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
-import { FLAG_ENABLE_ACTIVATION_CODE } from "../../shared/constants";
+import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../shared/constants";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 
 interface Props extends IntlProps {
@@ -29,7 +29,7 @@ class Consent extends React.Component<Props, States> {
     componentDidMount() {
         // This page is only redirected to
         this.props.actions.resetRedirectTask();
-        if (FLAG_ENABLE_ACTIVATION_CODE) {
+        if (FLAG_ENABLE_OTP_FOR_VERIFICATION) {
             this.props.actions.sendOtp(this.params.get("email") as string);
         }
     }
@@ -70,7 +70,7 @@ class Consent extends React.Component<Props, States> {
         }
     }
     private renderActivationCodeForm = (): React.ReactElement<any> | undefined => {
-        if (!FLAG_ENABLE_ACTIVATION_CODE) {
+        if (!FLAG_ENABLE_OTP_FOR_VERIFICATION) {
             return undefined;
         } else {
             return <Form>

@@ -12,7 +12,7 @@ interface Props {
 export default function UserLabel(props: Props) {
     if (props.user) {
         let labelColor: any;
-        switch(props.user.gender) {
+        switch (props.user.gender) {
             case Gender.FEMALE:
                 labelColor = "pink";
                 break;

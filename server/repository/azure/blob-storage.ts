@@ -15,8 +15,8 @@ import { UploadBlobResult } from "../storage.d";
 
 // Use SharedKeyCredential with storage account and account key
 const sharedKeyCredential: StorageSharedKeyCredential = new StorageSharedKeyCredential(
-    STORAGE_ACCOUNT,
-    STORAGE_ACCOUNT_KEY);
+    STORAGE_ACCOUNT as string,
+    STORAGE_ACCOUNT_KEY as string);
 
 const blobServiceClient: BlobServiceClient = new BlobServiceClient(
     `https://${STORAGE_ACCOUNT}.blob.core.windows.net`,

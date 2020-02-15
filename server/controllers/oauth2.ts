@@ -23,7 +23,7 @@ import AuthenticationResponse from "../../client/core/src/models/response/Authen
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
-import { FLAG_ENABLE_ACTIVATION_CODE, FLAG_ENABLE_FORGET_PASSWORD } from "../../client/core/src/shared/constants";
+import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../client/core/src/shared/constants";
 import { WriteError } from "mongodb";
 import { refreshOtpThenSendToUser, OTP_LENGTH } from "../models/User/UserStorage";
 
@@ -47,16 +47,17 @@ export const authorization: RequestHandler[] = [
     server.authorization(
         (clientId: string, redirectUri: string, done: (err: Error | null, client?: any, redirectURI?: string) => void) => {
             // Validate the client
-            const client: Client = ClientCollection.find(
+            const client: Client | undefined = ClientCollection.find(
                 (value: Client) => clientId === value.id
             );
             if (!client) {
-                done(new Error("toast.client.invalid"));
+                return done(new Error("toast.client.invalid"));
             }
             if (client.redirectUri !== redirectUri) {
-                done(new Error("toast.client.incorrect_url"));
+                return done(new Error("toast.client.incorrect_url"));
             }
-            return done(undefined, client, redirectUri);
+            // tslint:disable-next-line:no-null-keyword
+            return done(null, client, redirectUri);
         },
         (client: Client, user: UserDocument, scope: string[], type: string, areq: any,
             done: (err: Error | null, allow: boolean, info: any, locals: any) => void): void => {
@@ -65,15 +66,20 @@ export const authorization: RequestHandler[] = [
                 (error: Error, accessToken: AccessToken): void => {
                     if (accessToken) {
                         // Auto-approve
-                        done(undefined, true, user, undefined);
+                        // tslint:disable-next-line: no-null-keyword
+                        done(null, true, user, undefined);
                     } else {
-                        done(undefined, false, user, undefined);
+                        // tslint:disable-next-line:no-null-keyword
+                        done(null, false, user, undefined);
                     }
                 }
             );
         }
     ),
     function (req: MiddlewareRequest & Request, res: Response) {
+        if (!req.oauth2) {
+            return res.status(500).end();
+        }
         res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${(req.oauth2.client as Client).name}&transactionID=${req.oauth2.transactionID}`);
     }
 ];
@@ -88,8 +94,8 @@ export const authorization: RequestHandler[] = [
 export const decision: RequestHandler[] = [
     login.ensureLoggedIn(),
     (req: Request, res: Response, next: NextFunction) => {
-        if (FLAG_ENABLE_ACTIVATION_CODE) {
-            UserCollection.findById((req.user as User)._id).exec().then((user: UserDocument) => {
+        if (FLAG_ENABLE_OTP_FOR_VERIFICATION) {
+            UserCollection.findById((req.user as User)._id).exec().then((user: UserDocument | null) => {
                 verifyOtpInternal(res, next, user, req.body["OTP"], true);
             });
         } else {
@@ -241,7 +247,10 @@ export const updatePassword: RequestHandler = (req: Request, res: Response, next
         }
     });
     UserCollection.findById((req.user as User)._id).exec()
-    .then((user: UserDocument) => {
+    .then((user: UserDocument | null) => {
+        if (!user) {
+            return res.status(500).end();
+        }
         user.password = req.body.password;
         user.save((err: WriteError) => {
             if (err) {
@@ -252,7 +261,7 @@ export const updatePassword: RequestHandler = (req: Request, res: Response, next
     }).catch((error: any) => next(error));
 };
 export const resetPassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
-    if (!FLAG_ENABLE_FORGET_PASSWORD) {
+    if (!FLAG_ENABLE_OTP_FOR_VERIFICATION) {
         return res.sendStatus(404);
     }
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
@@ -260,7 +269,7 @@ export const resetPassword: RequestHandler = (req: Request, res: Response, next:
         return invalid;
     }
     UserCollection.findOne({email: req.body.email, OTP: req.body.OTP}).exec()
-    .then((user: UserDocument) => {
+    .then((user: UserDocument | null) => {
         if (!user) {
             return res.sendStatus(404);
         }
@@ -279,7 +288,7 @@ export const sendOtp: RequestHandler = (req: Request, res: Response, next: NextF
         return invalid;
     }
     UserCollection.findOne({email: req.query.email}).exec()
-    .then((user: UserDocument) => {
+    .then((user: UserDocument | null) => {
         if (!user) {
             return res.status(404).json({ message: "toast.user.account_not_found"});
         }
@@ -300,7 +309,7 @@ export const verifyAccount: RequestHandler = (req: Request, res: Response, next:
         return invalid;
     }
     UserCollection.findOne({email: req.query.email}).exec()
-    .then((user: UserDocument) => {
+    .then((user: UserDocument | null) => {
         if (!user) {
             return res.status(404).json({ message: "toast.user.email"});
         }
@@ -315,7 +324,7 @@ export const verifyOtp: RequestHandler[] = [
             return invalid;
         }
         UserCollection.findOne({email: req.query.email}).exec()
-        .then((user: UserDocument) => {
+        .then((user: UserDocument | null) => {
             if (!user) {
                 return res.status(404).json({ message: "toast.user.email"});
             }
@@ -329,7 +338,7 @@ export const verifyOtp: RequestHandler[] = [
 
 const verifyOtpInternal: any = (res: Response, next: NextFunction, user: UserDocument, OTP: string, reset: boolean): any => {
     if (user && user.OTP && user.OTP.length == OTP_LENGTH && user.OTP === OTP) {
-        if (user.otpExpireTime.getTime() <= Date.now()) {
+        if (!user.otpExpireTime || user.otpExpireTime.getTime() <= Date.now()) {
             return res.status(401).json({ message: "toast.user.expired_OTP" });
         } else {
             if (reset) {

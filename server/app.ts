@@ -21,7 +21,7 @@ import notification from "./routes/notification";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
-const mongoUrl: string = MONGODB_URI;
+const mongoUrl: string = MONGODB_URI as string;
 (<any>mongoose).Promise = bluebird;
 mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
@@ -33,7 +33,7 @@ mongoose.connect(mongoUrl, {
     () => {
         console.log("  MongoDB is connected successfully.");
     },
-).catch(err => {
+).catch((err: any) => {
     console.error("  MongoDB connection error. Please make sure MongoDB is running. " + err);
     process.exit();
 });
@@ -48,7 +48,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session({
     resave: true,
     saveUninitialized: true,
-    secret: SESSION_SECRET,
+    secret: SESSION_SECRET as string,
     store: new MongoStore({
         url: mongoUrl,
         autoReconnect: true

@@ -7,9 +7,17 @@ import User from "../../client/core/src/models/User";
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     const user: User = req.user as User;
     const blobName: string  = `${user._id}_${random.getUid(8)}.png`;
+    const contentLengthString: string | undefined = req.headers["content-length"];
+    if (!contentLengthString) {
+        return res.status(411).end();
+    }
+    const contentLength: number = parseInt(contentLengthString);
+    if (contentLength <= 0) {
+        return res.status(411).end();
+    }
     storage.uploadBlob(
         req,
-        parseInt(req.headers["content-length"]),
+        contentLength,
         CONTAINER_AVATAR,
         blobName
     ).then(

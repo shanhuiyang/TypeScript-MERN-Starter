@@ -26,7 +26,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
         ArticleCollection
         .findById(req.query.targetId)
         .exec()
-        .then((article: ArticleDocument) => {
+        .then((article: ArticleDocument | null) => {
             if (!article) {
                 return res.status(404).json({ message: "toast.article.not_found" });
             }
@@ -36,23 +36,29 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
                 if (error || !comments) {
                     return res.status(500).end();
                 }
-                const findAuthorInUsers = (comment: Comment): Promise<UserDocument> => {
+                const findAuthorInUsers = (comment: Comment): Promise<UserDocument | null> => {
                     return UserCollection.findById(comment.author).exec();
                 };
-                const promises: Promise<User>[] = comments.map(async (comment: Comment) => {
-                    const author: UserDocument = await findAuthorInUsers(comment);
-                    return {
-                        email: author.email,
-                        name: author.name,
-                        avatarUrl: author.avatarUrl,
-                        gender: author.gender,
-                        _id: author._id.toString()
-                    } as User;
+                const promises: Promise<User | undefined>[] = comments.map(async (comment: Comment) => {
+                    const author: UserDocument | null = await findAuthorInUsers(comment);
+                    if (author) {
+                        return {
+                            email: author.email,
+                            name: author.name,
+                            avatarUrl: author.avatarUrl,
+                            gender: author.gender,
+                            _id: author._id.toString()
+                        } as User;
+                    } else {
+                        return undefined;
+                    }
                 });
-                Promise.all(promises).then((authors: User []) => {
+                Promise.all(promises).then((authors: (User | undefined) []) => {
                     const authorsDic: {[id: string]: User} = {};
-                    authors.forEach((author: User): void => {
-                        authorsDic[author._id] = author;
+                    authors.forEach((author: User | undefined): void => {
+                        if (author) {
+                            authorsDic[author._id] = author;
+                        }
                     });
                     return res.json({data: comments, authors: authorsDic} as GetCommentsResponse);
                 }).catch((error: Error) => {
@@ -87,8 +93,8 @@ export const add: RequestHandler = (req: Request, res: Response, next: NextFunct
             CommentCollection
             .findById(req.query.parent)
             .exec()
-            .then((parent: CommentDocument) => {
-                if (parent.author !== user) {
+            .then((parent: CommentDocument | null) => {
+                if (parent && parent.author !== user) {
                     const notification: NotificationDocument = new NotificationCollection({
                         owner: parent.author,
                         acknowledged: false,
@@ -138,11 +144,11 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         return invalid;
     }
     CommentCollection.findOne({parent: req.params.id})
-    .exec().then((child: Comment) => {
+    .exec().then((child: Comment | null) => {
         if (!child) {
             CommentCollection.findByIdAndDelete(req.params.id)
-            .exec().then((value: Comment) => {
-                if (value.author !== (req.user as User)._id.toString()) {
+            .exec().then((value: Comment | null) => {
+                if (value && value.author !== (req.user as User)._id.toString()) {
                     return res.status(401).json({ message: "toast.user.attack_alert" });
                 }
                 return res.status(200).end();

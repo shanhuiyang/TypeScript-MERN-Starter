@@ -35,7 +35,8 @@ const issueToken = (clientId: string, userId: string, done: (err: Error | null, 
         if (error) {
             return done(error, undefined);
         }
-        return done(undefined, accessToken.token);
+        // tslint:disable-next-line:no-null-keyword
+        return done(null, accessToken.token);
     });
 };
 
@@ -53,11 +54,13 @@ const issueToken = (clientId: string, userId: string, done: (err: Error | null, 
 // the client by ID from the database.
 
 server.serializeClient(
-    (client: Client, done: SerializeClientDoneFunction) => done(undefined, client.id)
+    // tslint:disable-next-line:no-null-keyword
+    (client: Client, done: SerializeClientDoneFunction) => done(null, client.id)
 );
 
 server.deserializeClient((id: string, done: DeserializeClientDoneFunction) => {
-    done(undefined, ClientCollection.find((client: Client) => client.id === id));
+    // tslint:disable-next-line:no-null-keyword
+    done(null, ClientCollection.find((client: Client) => client.id === id));
 });
 
 // Register supported grant types.
@@ -89,7 +92,8 @@ server.grant(oauth2orize.grant.code(
             if (error) {
                 return issued(error, undefined);
             }
-            return issued(undefined, authCode.code);
+            // tslint:disable-next-line:no-null-keyword
+            return issued(null, authCode.code);
         });
     })
 );
@@ -122,10 +126,12 @@ server.exchange(oauth2orize.exchange.code(
                 return done(error);
             }
             if (client.id !== authCode.clientId) {
-                return done(undefined, false);
+                // tslint:disable-next-line:no-null-keyword
+                return done(null, false);
             }
             if (redirectUri !== authCode.redirectUri) {
-                return done(undefined, false);
+                // tslint:disable-next-line:no-null-keyword
+                return done(null, false);
             }
             // Everything validated, return the token
             issueToken(client.id, authCode.userId, done);
@@ -142,24 +148,27 @@ server.exchange(oauth2orize.exchange.password(
     (client: Client, email: string, password: string, scope: string[], done: ExchangeDoneFunction) => {
         console.log("[oauth2orize.exchange.password]");
         // Validate the client
-        const foundClient: Client = ClientCollection.find(
+        const foundClient: Client | undefined = ClientCollection.find(
             (value: Client) => client.id === value.id
         );
         if (!foundClient || foundClient.secret !== client.secret) {
-            return done(undefined, false);
+            // tslint:disable-next-line:no-null-keyword
+            return done(null, false);
         }
         // Validate the user
         UserCollection.findOne({ email: email.toLowerCase() }, (err: Error, user: UserDocument): void => {
             if (err) { return done(err); }
             if (!user) {
-                return done(undefined, false);
+                // tslint:disable-next-line:no-null-keyword
+                return done(null, false);
             }
             user.comparePassword(password, (err: Error, isMatch: boolean) => {
                 if (err) {
                     return done(err);
                 }
                 if (!isMatch) {
-                    return done(undefined, false);
+                    // tslint:disable-next-line:no-null-keyword
+                    return done(null, false);
                 }
                 // Everything validated, return the token
                 issueToken(client.id, user.id, done);
@@ -178,14 +187,15 @@ server.exchange(oauth2orize.exchange.clientCredentials(
     (client: Client, scope: string[], done: ExchangeDoneFunction) => {
         console.log("[oauth2orize.exchange.clientCredentials]");
         // Validate the client
-        const foundClient: Client = ClientCollection.find(
+        const foundClient: Client | undefined = ClientCollection.find(
             (value: Client) => client.id === value.id
         );
         if (!foundClient || foundClient.secret !== client.secret) {
-            return done(undefined, false);
+            // tslint:disable-next-line:no-null-keyword
+            return done(null, false);
         }
         // Everything validated, return the token
-        issueToken(client.id, undefined, done);
+        issueToken(client.id, "", done);
     })
 );
 
