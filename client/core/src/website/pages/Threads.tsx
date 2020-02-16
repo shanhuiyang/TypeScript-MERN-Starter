@@ -1,19 +1,27 @@
-import React from "react";
-import { Header, Container } from "semantic-ui-react";
-import { CONTAINER_STYLE } from "../../shared/styles";
-import { FormattedMessage } from "react-intl";
-import GitHubLink from "../components/shared/GitHubLink";
-interface Props {}
+import React, { Fragment } from "react";
+// eslint-disable-next-line
+import { Route, RouteComponentProps, Switch, match } from "react-router";
+import ThreadList from "../components/thread/ThreadList";
+import AppState from "../../models/client/AppState";
+import ActionCreator from "../../models/client/ActionCreator";
+import connectPropsAndActions from "../../shared/connect";
+import CreateThread from "../components/thread/CreateThread";
+interface Props extends RouteComponentProps<any> {
+    state: AppState;
+    actions: ActionCreator;
+}
 
 interface States {}
-export default class Threads extends React.Component<Props, States> {
+class Threads extends React.Component<Props, States> {
     render() {
-        return <Container text style={CONTAINER_STYLE}>
-            <Header>
-                <FormattedMessage id="page.about"/><FormattedMessage id="app.name"/>
-            </Header>
-            <div><FormattedMessage id="page.about.introduction"/></div>
-            <GitHubLink />
-        </Container>;
+        const match: match<any> = this.props.match;
+        return <Fragment>
+            <Switch>
+                <Route exact path={match.url} render={(props) => <ThreadList {...props} />} />
+                <Route path={`${match.url}/create`} render={(props) => <CreateThread {...props}/>} />
+            </Switch>
+        </Fragment>;
     }
 }
+
+export default connectPropsAndActions(Threads);

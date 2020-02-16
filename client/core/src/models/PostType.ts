@@ -4,7 +4,8 @@
  */
 enum PostType {
     ARTICLE = "article",
-    COMMENT = "comment"
+    COMMENT = "comment",
+    THREAD = "thread"
 }
 
 export default PostType;
