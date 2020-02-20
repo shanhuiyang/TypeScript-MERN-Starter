@@ -82,7 +82,7 @@ const articleActionCreator: ArticleActionCreator = {
             });
         };
     },
-    createArticle(title: string, content: string, author: string): any {
+    addArticle(title: string, content: string, author: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)

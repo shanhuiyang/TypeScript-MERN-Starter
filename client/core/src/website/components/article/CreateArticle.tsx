@@ -41,7 +41,7 @@ class CreateArticle extends React.Component<Props, States> {
 
     private createArticle = (title: string, content: string): void => {
         if (this.props.state.userState.currentUser) {
-            this.props.actions.createArticle(title, content, this.props.state.userState.currentUser._id);
+            this.props.actions.addArticle(title, content, this.props.state.userState.currentUser._id);
         }
     }
 }

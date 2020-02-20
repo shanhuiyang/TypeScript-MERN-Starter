@@ -135,7 +135,7 @@ class ArticleEditor extends React.Component<Props, States> {
     }
 
     private onInsertImage = (blob: File, callback: (url: string, altText: string) => void): void => {
-        fetch("/api/article/insert/image", blob, "PUT", true)
+        fetch("/api/image/upload/article", blob, "PUT", true)
         .then((json: any) => {
             if (json && json.url) {
                 callback(json.url, blob.name);

@@ -12,3 +12,4 @@ export default storage;
 
 export const CONTAINER_AVATAR: string = "avatar";
 export const CONTAINER_ARTICLE: string = "article";
+export const CONTAINER_THREAD: string = "thread";

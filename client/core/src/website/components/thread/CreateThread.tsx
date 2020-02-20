@@ -3,12 +3,13 @@ import connectPropsAndActions from "../../../shared/connect";
 import AppState from "../../../models/client/AppState";
 import { Redirect } from "react-router-dom";
 import ThreadActionCreator from "../../../models/client/ThreadActionCreator";
-import { Container, Header, Form, FormGroup, Button } from "semantic-ui-react";
+import { Container, Header, Form, FormGroup, Button, Icon } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import { FormattedMessage, MessageDescriptor, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
 import { isMobile } from "../dimension";
 import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { PrimitiveType } from "intl-messageformat";
+import InsertImageDialog from "../shared/InsertImageDialog";
 
 interface Props extends IntlProps {
     state: AppState;
@@ -17,6 +18,8 @@ interface Props extends IntlProps {
 
 interface States {
     editing: boolean;
+    mode: "edit" | "preview";
+    openUploadImageDialog: boolean;
 }
 class CreateThread extends React.Component<Props, States> {
     private titleRef: RefObject<HTMLInputElement>;
@@ -28,7 +31,9 @@ class CreateThread extends React.Component<Props, States> {
         this.contentRef = React.createRef();
         this.getString = this.props.intl.formatMessage;
         this.state = {
-            editing: false
+            editing: false,
+            mode: "edit",
+            openUploadImageDialog: false
         };
     }
     render(): React.ReactElement<any> {
@@ -44,30 +49,33 @@ class CreateThread extends React.Component<Props, States> {
                         <FormattedMessage id="page.thread.add" />
                     </Header>
                     <Form>
-                    <ResponsiveFormField>
-                        <label>
-                            <FormattedMessage id="article.title" />
-                        </label>
-                        <input ref={this.titleRef} autoFocus={true}
-                            defaultValue={""}
-                            onChange={this.onEditing}/>
-                    </ResponsiveFormField>
-                    <Form.Field>
-                        <label>
-                            <FormattedMessage id="article.content" />
-                        </label>
-                        <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
-                            onChange={this.onEditing}
-                            placeholder={ this.getString({id: "page.thread.placeholder"}) } />
-                    </Form.Field>
-                    <FormGroup inline>
-                        <Form.Field control={Button} onClick={this.onSubmit} primary
-                            loading={loading}
-                            disabled={loading || !this.state.editing}>
-                            <FormattedMessage id="component.button.submit" />
+                        <ResponsiveFormField>
+                            <label>
+                                <FormattedMessage id="article.title" />
+                            </label>
+                            <input ref={this.titleRef} autoFocus={true}
+                                defaultValue={""}
+                                onChange={this.onEditing}/>
+                        </ResponsiveFormField>
+                        <Form.Field>
+                            <label>
+                                <FormattedMessage id="article.content" />
+                            </label>
+                            {
+                                this.renderControlBar()
+                            }
+                            <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
+                                onChange={this.onEditing}
+                                placeholder={ this.getString({id: "page.thread.placeholder"}) } />
                         </Form.Field>
-                    </FormGroup>
-                </Form>
+                        <FormGroup inline>
+                            <Form.Field control={Button} onClick={this.onSubmit} primary
+                                loading={loading}
+                                disabled={loading || !this.state.editing}>
+                                <FormattedMessage id="component.button.submit" />
+                            </Form.Field>
+                        </FormGroup>
+                    </Form>
                 </Container>
             );
         } else {
@@ -75,15 +83,49 @@ class CreateThread extends React.Component<Props, States> {
         }
     }
 
+    private renderControlBar = (): React.ReactElement<any> => {
+        return <div style={{ marginTop: 10, marginBottom: 4 }}>
+            <Button.Group basic>
+                <Button icon>
+                    <Icon name="eye" />
+                    {" "}
+                    <FormattedMessage id="component.button.preview"/>
+                </Button>
+            </Button.Group>
+            {" "}
+            <Button.Group basic>
+                <Button icon>
+                    <Icon name="bold" />
+                </Button>
+                <Button icon>
+                    <Icon name="italic" />
+                </Button>
+                <Button icon>
+                    <Icon name="underline" />
+                </Button>
+            </Button.Group>
+            {" "}
+            <Button.Group basic>
+                <Button icon onClick={() => { this.setState({openUploadImageDialog: true}); }}>
+                    <Icon name="file image outline" />
+                </Button>
+                <InsertImageDialog
+                    open={this.state.openUploadImageDialog}
+                    onCancel={() => { this.setState({openUploadImageDialog: false}); }}
+                    onConfirm={() => {}}
+                />
+                <Button icon>
+                    <Icon name="smile outline" />
+                </Button>
+            </Button.Group>
+        </div>;
+    }
+
     private onSubmit = (): void => {
         const title: any = this.titleRef.current && this.titleRef.current.value;
         const content: any = this.contentRef.current && this.contentRef.current.value;
-        this.createThread(title, content);
-    }
-
-    private createThread = (title: string, content: string): void => {
         if (this.props.state.userState.currentUser) {
-            this.props.actions.createThread(title, content, this.props.state.userState.currentUser._id);
+            this.props.actions.addThread(title, content, this.props.state.userState.currentUser._id);
         }
     }
 

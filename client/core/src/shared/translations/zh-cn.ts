@@ -100,6 +100,7 @@ const TRANSLATION: Translation = {
         "component.button.update": "更新",
         "component.button.delete": "删除",
         "component.button.edit": "编辑",
+        "component.button.preview": "预览",
         "component.button.see_all": "查看全文",
         "component.button.create": "创建",
         "component.button.next": "下一步",
@@ -133,12 +134,12 @@ const TRANSLATION: Translation = {
         "toast.user.old_password_error": "旧的密码不对",
         "toast.client.invalid": "非法客户端！",
         "toast.client.incorrect_url": "客户端redirectUri错误！",
+        "toast.post.title_empty": "标题不能为空",
+        "toast.post.content_empty": "正文不能为空",
+        "toast.post.title_too_long": "标题不能长于100字",
+        "toast.post.content_too_short": "正文不能短于150字",
         "toast.article.save_successfully": "成功保存你的文章",
         "toast.article.delete_successfully": "成功删除你的文章",
-        "toast.article.title_empty": "标题不能为空",
-        "toast.article.content_empty": "正文不能为空",
-        "toast.article.title_too_long": "标题不能长于100字",
-        "toast.article.content_too_short": "正文不能短于150字",
         "toast.article.invalid_author": "你并非本文的作者！",
         "toast.article.not_found": "不存在的文章！",
         "toast.article.insert_image_failed": "图片插入失败",
@@ -159,7 +160,11 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "抱歉，你不能删除一个有人回复过的评论",
         "toast.comment.delete_successfully": "删除成功",
         "toast.comment.delete_failed": "删除失败",
-        "toast.notification.not_found": "找不到这条通知"
+        "toast.notification.not_found": "找不到这条通知",
+        "toast.thread.add_successfully": "你的帖子发表成功",
+        "toast.thread.add_failed": "你的帖子发表失败",
+        "toast.thread.delete_successfully": "你的帖子已删除",
+        "toast.thread.delete_failed": "你的帖子删除失败"
     }
 };
 

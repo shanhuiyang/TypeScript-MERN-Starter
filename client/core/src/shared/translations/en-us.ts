@@ -100,6 +100,7 @@ const TRANSLATION: Translation = {
         "component.button.update": "Update",
         "component.button.delete": "Delete",
         "component.button.edit": "Edit",
+        "component.button.preview": "Preview",
         "component.button.see_all": "Read all",
         "component.button.create": "Create",
         "component.button.next": "next",
@@ -132,12 +133,12 @@ const TRANSLATION: Translation = {
         "toast.user.old_password_error": "Old password is incorrect.",
         "toast.client.invalid": "Invalid client!",
         "toast.client.incorrect_url": "Incorrect redirectUri!",
+        "toast.post.title_empty": "Title could not be empty.",
+        "toast.post.content_empty": "Content could not be empty.",
+        "toast.post.title_too_long": "Title could not be longer than 100 characters.",
+        "toast.post.content_too_short": "Content could not be shorter than 150 characters.",
         "toast.article.save_successfully": "Save your article successfully.",
         "toast.article.delete_successfully": "Delete your article successfully.",
-        "toast.article.title_empty": "Title could not be empty.",
-        "toast.article.content_empty": "Content could not be empty.",
-        "toast.article.title_too_long": "Title could not be longer than 100 characters.",
-        "toast.article.content_too_short": "Content could not be shorter than 150 characters.",
         "toast.article.invalid_author": "You are not the author!",
         "toast.article.not_found": "Article not found!",
         "toast.article.insert_image_failed": "Failed to insert the image",
@@ -158,7 +159,11 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "Sorry, you cannot delete a comment someone has replied to it.",
         "toast.comment.delete_successfully": "Delete successfully.",
         "toast.comment.delete_failed": "Delete failed.",
-        "toast.notification.not_found": "Cannot find this notification"
+        "toast.notification.not_found": "Cannot find this notification",
+        "toast.thread.add_successfully": "Your thread created.",
+        "toast.thread.add_failed": "Your thread cannot be created.",
+        "toast.thread.delete_successfully": "Your thread has been deleted",
+        "toast.thread.delete_failed": "Your thread cannot be deleted."
     }
 };
 

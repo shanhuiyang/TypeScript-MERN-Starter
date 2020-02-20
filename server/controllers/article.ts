@@ -8,9 +8,6 @@ import UserCollection from "../models/User/UserCollection";
 import UserDocument from "../models/User/UserDocument.d";
 import { validationResult } from "express-validator";
 import { validationErrorResponse } from "./utils";
-import * as random from "../util/random";
-import storage, { CONTAINER_ARTICLE } from "../repository/storage";
-import { UploadBlobResult } from "../repository/storage.d";
 import CommentCollection from "../models/Comment/CommentCollection";
 import { DEFAULT_PAGE_SIZE } from "../../client/core/src/shared/constants";
 import NotificationCollection from "../models/Notification/NotificationCollection";
@@ -19,26 +16,25 @@ import InteractionType from "../../client/core/src/models/InteractionType";
 import PostType from "../../client/core/src/models/PostType";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    ArticleCollection.findById(req.params.id).exec((error: Error, article: ArticleDocument) => {
-        if (error) {
-            return next(error);
-        }
+    ArticleCollection
+    .findById(req.params.id)
+    .exec()
+    .then((article: ArticleDocument | null) => {
         if (!article) {
-            return res.status(404).json({ message: "toast.article.not_found" });
+            return Promise.reject(res.status(404).json({ message: "toast.article.not_found" }));
         }
         const user: User = req.user as User;
         if (article.author !== user._id.toString()) {
-            return res.status(401).json({ message: "toast.user.attack_alert" });
+            return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
-        ArticleCollection.findByIdAndRemove(req.params.id).exec(
-            (error: Error, removed: Article) => {
-                if (error) {
-                    return next(error);
-                }
-                CommentCollection.remove({targetId: req.params.id}).exec();
-                return res.status(200).end();
-            }
-        );
+        return ArticleCollection.findByIdAndRemove(req.params.id).exec();
+    })
+    .then((removed: Article | null) => {
+        CommentCollection.remove({targetId: req.params.id}).exec();
+        return res.status(200).end();
+    })
+    .catch((error: Response) => {
+        return error;
     });
 };
 
@@ -48,27 +44,29 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         return invalid;
     }
 
-    ArticleCollection.findById(req.body._id).exec((error: Error, article: ArticleDocument) => {
-        if (error) {
-            return next(error);
-        }
+    ArticleCollection
+    .findById(req.body._id)
+    .exec()
+    .then((article: ArticleDocument | null) => {
         if (!article) {
-            return res.status(404).json({ message: "toast.article.not_found" });
+            return Promise.reject(res.status(404).json({ message: "toast.article.not_found" }));
         }
         const user: User = req.user as User;
         if (article.author !== user._id.toString()) {
-            return res.status(401).json({ message: "toast.user.attack_alert" });
+            return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
-        ArticleCollection.findByIdAndUpdate(
-            req.body._id, {content: req.body.content, title: req.body.title}
-        ).exec(
-            (error: Error, updated: Article) => {
-                if (error) {
-                    return next(error);
-                }
-                return res.status(200).end();
-            }
-        );
+        return ArticleCollection
+            .findByIdAndUpdate(req.body._id, {content: req.body.content, title: req.body.title})
+            .exec();
+    })
+    .then((updated: Article | null) => {
+        if (!updated) {
+            return Promise.reject(res.status(404).json({ message: "toast.article.not_found" }));
+        }
+        return res.status(200).end();
+    })
+    .catch((error: Response) => {
+        return error;
     });
 };
 export const like: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -185,54 +183,4 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             } as GetArticlesResponse);
         });
     });
-};
-export const insertImage: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    const user: User = req.user as User;
-    const contentType: string | undefined = req.headers["content-type"];
-    if (!contentType) {
-        return res.status(400).end();
-    }
-    const contentLengthString: string | undefined = req.headers["content-length"];
-    if (!contentLengthString) {
-        return res.status(411).end();
-    }
-    const contentLength: number = parseInt(contentLengthString);
-    if (contentLength <= 0) {
-        return res.status(411).end();
-    }
-    const ext: string = checkImageType(contentType);
-    if (!ext) {
-        return res.status(415).end();
-    }
-    const blobName: string  = `${user._id}_article_${random.getUid(8)}.${ext}`;
-    storage.uploadBlob(
-        req,
-        contentLength,
-        CONTAINER_ARTICLE,
-        blobName
-    ).then(
-        (value: UploadBlobResult) => {
-            if (value.statusCode >= 200 && value.statusCode < 300) {
-                const sasToken: string = storage.generateSigningUrlParams(CONTAINER_ARTICLE, blobName, true);
-                return res.status(value.statusCode).json({ url: `${value.blobUrl}?${sasToken}` });
-            } else {
-                return res.status(value.statusCode).end();
-            }
-        }
-    ).catch(
-        (reason: any) => {
-            console.error(JSON.stringify(reason));
-            return res.status(500).json(reason);
-        }
-    );
-};
-const checkImageType = (contentType: string): string => {
-    switch (contentType) {
-        case "image/png":
-            return "png";
-        case "image/jpeg":
-            return "jpg";
-        default:
-            return "";
-    }
 };

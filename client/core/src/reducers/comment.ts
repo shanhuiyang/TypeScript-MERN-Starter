@@ -1,5 +1,5 @@
 import { AnyAction as Action } from "redux";
-import { LOAD_COMMENTS_START, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILED, ADD_COMMENT_START, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILED, DELETE_COMMENT_SUCCESS, RATE_COMMENT_SUCCESS } from "../actions/comment";
+import { LOAD_COMMENTS_START, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILED, ADD_COMMENT_START, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILED, REMOVE_COMMENT_SUCCESS, RATE_COMMENT_SUCCESS } from "../actions/comment";
 import CommentState from "../models/client/CommentState";
 import Comment from "../models/Comment";
 
@@ -42,7 +42,7 @@ const comments = (state: CommentState = initialState, action: Action): CommentSt
         }
         case ADD_COMMENT_FAILED:
             return {...state, updating: ADD_COMMENT_FAILED};
-        case DELETE_COMMENT_SUCCESS: {
+        case REMOVE_COMMENT_SUCCESS: {
             const cloneData: Comment[] = [...state.data];
             const toRemove: number = cloneData.findIndex((value: Comment) => value._id === action.id);
             cloneData.splice(toRemove, 1);

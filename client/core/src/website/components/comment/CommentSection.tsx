@@ -83,7 +83,7 @@ class CommentSection extends React.Component<Props, States> {
                 descriptionText={getString({id: "component.comment.delete_title"})}
                 warningText={getString({id: "component.comment.delete_confirmation"})}
                 onConfirm={() => {
-                    this.props.actions.deleteComment(this.toDeleteId);
+                    this.props.actions.removeComment(this.toDeleteId);
                     this.setState({openDeleteWarning: false});
                 }}
                 onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
