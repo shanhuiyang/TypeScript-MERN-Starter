@@ -34,7 +34,7 @@ const commentActionCreator: CommentActionCreator = {
                         authors: json.authors,
                     });
                 } else {
-                    dispatch(actions.handleFetchError(LOAD_COMMENTS_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {
@@ -56,7 +56,7 @@ const commentActionCreator: CommentActionCreator = {
                         comment: json
                     });
                 } else {
-                    return dispatch(actions.handleFetchError(ADD_COMMENT_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {

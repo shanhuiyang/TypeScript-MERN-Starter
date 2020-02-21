@@ -5,7 +5,7 @@ export const articleSchema: Schema = new mongoose.Schema({
     title: String,
     content: String,
     likes: [String], // array of User._id
-    commentCounts: Number,
+    commentsCount: Number,
     lastCommentedAt: String,
     lastCommentedUser: String,
     removedEternally: Boolean,

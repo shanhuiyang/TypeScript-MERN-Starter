@@ -69,7 +69,7 @@ class CreateThread extends React.Component<Props, States> {
                                 placeholder={ this.getString({id: "page.thread.placeholder"}) } />
                         </Form.Field>
                         <FormGroup inline>
-                            <Form.Field control={Button} onClick={this.onSubmit} primary
+                            <Form.Field control={Button} onClick={() => { this.onSubmit(); }} primary
                                 loading={loading}
                                 disabled={loading || !this.state.editing}>
                                 <FormattedMessage id="component.button.submit" />
@@ -107,7 +107,7 @@ class CreateThread extends React.Component<Props, States> {
             {" "}
             <Button.Group basic>
                 <Button icon onClick={() => { this.setState({openUploadImageDialog: true}); }}>
-                    <Icon name="file image outline" />
+                    <Icon name="file image" />
                 </Button>
                 <InsertImageDialog
                     open={this.state.openUploadImageDialog}
@@ -115,7 +115,7 @@ class CreateThread extends React.Component<Props, States> {
                     onConfirm={() => {}}
                 />
                 <Button icon>
-                    <Icon name="smile outline" />
+                    <Icon name="smile" />
                 </Button>
             </Button.Group>
         </div>;

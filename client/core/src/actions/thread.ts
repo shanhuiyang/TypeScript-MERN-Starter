@@ -32,10 +32,11 @@ const threadActionCreator: ThreadActionCreator = {
                         type: GET_THREADS_SUCCESS,
                         threads: json.data,
                         authors: json.authors,
+                        pageIndex: pageIndex,
                         totalCount: json.totalCount
                     });
                 } else {
-                    dispatch(actions.handleFetchError(GET_THREADS_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {
@@ -55,7 +56,7 @@ const threadActionCreator: ThreadActionCreator = {
                         thread: json
                     });
                 } else {
-                    return dispatch(actions.handleFetchError(ADD_THREAD_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "Broken data." });
                 }
             })
             .catch((error: Error) => {

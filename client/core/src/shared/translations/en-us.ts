@@ -32,6 +32,7 @@ const TRANSLATION: Translation = {
         "page.thread.add": "Add thread",
         "page.thread.empty": "No threads are added up to now.",
         "page.thread.placeholder": "Anything you would like to post...",
+        "page.thread.removed": ">>> The original thread has been removed <<<",
         "page.avatar.title": "Adjust Your Profile Image",
         "page.avatar.rotate": "Rotate",
         "page.avatar.zoom": "Zoom",
@@ -86,8 +87,9 @@ const TRANSLATION: Translation = {
         "article.title": "Title",
         "article.content": "Content",
         "article.content_placeholder": "no less than {minimum_length} characters",
-        "article.created_at": "Created at ",
-        "article.updated_at": "Last updated at ",
+        "post.created_at": "Created at ",
+        "post.updated_at": "Last updated at ",
+        "post.replied_at": "Last replied at ",
 
         // Components.
         // pattern: component.<component_name>.<action>

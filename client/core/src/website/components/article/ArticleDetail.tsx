@@ -162,7 +162,7 @@ class ArticleDetail extends React.Component<Props, States> {
                     position="top center" />
                 <UserLabel user={this.props.state.userDictionary[article.author]} />
                 <Label style={labelStyle}>
-                    <FormattedMessage id="article.created_at" />
+                    <FormattedMessage id="post.created_at" />
                     {moment(createDate).fromNow()}
                 </Label>
                 <CommentSection targetId={article._id} target={PostType.ARTICLE} />

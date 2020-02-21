@@ -13,20 +13,30 @@ export default class Loading extends React.Component<Props, States> {
                         <Placeholder.Line />
                         <Placeholder.Line />
                     </Placeholder.Header>
-                    <Placeholder.Paragraph>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
+                    </Placeholder.Header>
+                    <Placeholder.Header image>
                         <Placeholder.Line />
                         <Placeholder.Line />
-                    </Placeholder.Paragraph>
+                    </Placeholder.Header>
                 </Placeholder>
             </Segment>
         );

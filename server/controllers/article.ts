@@ -55,9 +55,7 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         if (article.author !== user._id.toString()) {
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
-        return ArticleCollection
-            .findByIdAndUpdate(req.body._id, {content: req.body.content, title: req.body.title})
-            .exec();
+        return ArticleCollection.findByIdAndUpdate(req.body._id, {content: req.body.content, title: req.body.title}).exec();
     })
     .then((updated: Article | null) => {
         if (!updated) {
@@ -75,16 +73,17 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         return invalid;
     }
 
-    ArticleCollection.findById(req.query.id).exec((error: Error, article: ArticleDocument) => {
-        if (error) {
-            return next(error);
-        }
+    const user: User = req.user as User;
+
+    ArticleCollection
+    .findById(req.query.id)
+    .exec()
+    .then((article: ArticleDocument | null) => {
         if (!article) {
-            return res.status(404).json({ message: "toast.article.not_found" });
+            return Promise.reject(res.status(404).json({ message: "toast.article.not_found" }));
         }
-        const user: User = req.user as User;
         if (article.author === user._id.toString()) {
-            return res.status(401).json({ message: "toast.user.attack_alert" });
+            return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
         const likes: string[] = article.likes;
         if (Number.parseInt(req.query.rating) === 1) {
@@ -93,32 +92,31 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove, 1);
         } else {
-            return res.status(400).end();
+            return Promise.reject(res.status(400).end());
         }
-        ArticleCollection.findByIdAndUpdate(
-            req.query.id, {likes: likes}
-        ).exec(
-            (error: Error, updated: Article) => {
-                if (error) {
-                    return next(error);
-                }
-                if (!updated) {
-                    return res.status(500).end();
-                }
-                const notification: NotificationDocument = new NotificationCollection({
-                    owner: article.author,
-                    acknowledged: false,
-                    subject: user._id.toString(),
-                    event: Number.parseInt(req.query.rating) === 1 ?
-                        InteractionType.LIKE : InteractionType.UNLIKE,
-                    objectType: PostType.ARTICLE,
-                    object: updated._id,
-                    link: `/article/${updated._id}`
-                });
-                notification.save();
-                return res.status(200).end();
-            }
-        );
+        return ArticleCollection.findByIdAndUpdate(req.query.id, {likes: likes}).exec();
+    })
+    .then((updated: Article | null) => {
+        if (!updated) {
+            return Promise.reject(res.status(500).end());
+        }
+        const notification: NotificationDocument = new NotificationCollection({
+            owner: updated.author,
+            acknowledged: false,
+            subject: user._id.toString(),
+            event: Number.parseInt(req.query.rating) === 1 ?
+                InteractionType.LIKE : InteractionType.UNLIKE,
+            objectType: PostType.ARTICLE,
+            object: updated._id,
+            link: `/article/${updated._id}`
+        });
+        return notification.save();
+    })
+    .then(() => {
+        return res.status(200).end();
+    })
+    .catch((error: Response) => {
+        return error;
     });
 };
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -133,54 +131,54 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
         content: req.body.content,
     });
 
-    article.save((error: any) => {
-        if (error) {
-            return next(error);
-        }
-        return res.status(200).send();
+    article
+    .save()
+    .then((saved: Article) => {
+        return res.status(200).json(saved);
+    })
+    .catch((error: Response) => {
+        return error;
     });
 };
-export const read: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
+export const read: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     const latestTime: Date = req.query.latest ? new Date(req.query.latest) : new Date(Date.now());
     const pageSize: number = req.query.size ? req.query.size : DEFAULT_PAGE_SIZE;
-    ArticleCollection
-    .find({ createdAt: { $lt: latestTime} })
-    .sort({ createdAt: "desc" })
-    .limit(pageSize + 1) // Use 1 more requirement for indication of hasMore
-    .exec((error: Error, articles: ArticleDocument[]) => {
-        if (error) {
-            next(error);
+
+    const findAuthorInUsers = (article: Article): Promise<UserDocument | null> => {
+        return UserCollection.findById(article.author).exec();
+    };
+
+    const articles: ArticleDocument[] = await ArticleCollection
+        .find({ createdAt: { $lt: latestTime} })
+        .sort({ createdAt: "desc" })
+        .limit(pageSize + 1) // Use 1 more requirement for indication of hasMore
+        .exec();
+    const hasMore: boolean = articles.length === pageSize + 1;
+    const promises: Promise<User | undefined>[] = articles.map(async (article: Article) => {
+        const user: UserDocument | null = await findAuthorInUsers(article);
+        if (!user) {
+            return undefined;
+        } else {
+            return {
+                email: user.email,
+                name: user.name,
+                avatarUrl: user.avatarUrl,
+                gender: user.gender,
+                _id: user._id.toString()
+            } as User;
         }
-        const findAuthorInUsers = (article: Article): Promise<UserDocument | null> => {
-            return UserCollection.findById(article.author).exec();
-        };
-        const hasMore: boolean = articles.length === pageSize + 1;
-        const promises: Promise<User | undefined>[] = articles.map(async (article: Article) => {
-            const user: UserDocument | null = await findAuthorInUsers(article);
-            if (!user) {
-                return undefined;
-            } else {
-                return {
-                    email: user.email,
-                    name: user.name,
-                    avatarUrl: user.avatarUrl,
-                    gender: user.gender,
-                    _id: user._id.toString()
-                } as User;
-            }
-        });
-        Promise.all(promises).then((authors: (User | undefined) []) => {
-            const authorsDic: {[id: string]: User} = {};
-            authors.forEach((author: User | undefined): void => {
-                if (author) {
-                    authorsDic[author._id] = author;
-                }
-            });
-            return res.json({
-                data: articles.slice(0, pageSize),
-                authors: authorsDic,
-                hasMore: hasMore
-            } as GetArticlesResponse);
-        });
     });
+
+    const authors: (User | undefined) [] = await Promise.all(promises);
+    const authorsDic: {[id: string]: User} = {};
+    authors.forEach((author: User | undefined): void => {
+        if (author) {
+            authorsDic[author._id] = author;
+        }
+    });
+    return res.json({
+        data: articles.slice(0, pageSize),
+        authors: authorsDic,
+        hasMore: hasMore
+    } as GetArticlesResponse);
 };

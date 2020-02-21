@@ -32,6 +32,7 @@ const TRANSLATION: Translation = {
         "page.thread.add": "发新帖",
         "page.thread.empty": "目前还没有任何帖子。",
         "page.thread.placeholder": "输入任何内容…",
+        "page.thread.removed": ">>> 原帖已删除 <<<",
         "page.consent.greeting": "{email}你好，",
         "page.consent.description": "{app_name}需要访问你的账号。",
         "page.consent.inquiry": "请问是否授权？",
@@ -86,8 +87,9 @@ const TRANSLATION: Translation = {
         "article.title": "标题",
         "article.content": "正文",
         "article.content_placeholder": "不少于{minimum_length}字",
-        "article.created_at": "创建于",
-        "article.updated_at": "最后更新于",
+        "post.created_at": "创建于",
+        "post.updated_at": "最后更新于",
+        "post.replied_at": "最后回复于",
 
         // Components.
         // pattern: component.<component_name>.<action>
