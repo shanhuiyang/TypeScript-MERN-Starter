@@ -7,6 +7,7 @@ import ActionCreator from "../../models/client/ActionCreator";
 import connectPropsAndActions from "../../shared/connect";
 import CreateThread from "../components/thread/CreateThread";
 import { DEFAULT_PAGE_SIZE } from "../../shared/constants";
+import ThreadDetail from "../components/thread/ThreadDetail";
 interface Props extends RouteComponentProps<any> {
     state: AppState;
     actions: ActionCreator;
@@ -31,7 +32,7 @@ class Threads extends React.Component<Props, States> {
                 <Switch>
                     <Route exact path={match.url} render={(props) => <ThreadList {...props} />} />
                     <Route path={`${match.url}/create`} render={(props) => <CreateThread {...props}/>} />
-                    <Route path={`${match.url}/:threadId`} render={(props) => <div />} />
+                    <Route path={`${match.url}/:threadId`} render={(props) => <ThreadDetail {...props}/>} />
                 </Switch>
             </Fragment>;
         } else {

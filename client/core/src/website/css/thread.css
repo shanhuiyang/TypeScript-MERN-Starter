@@ -8,7 +8,7 @@
 }
 .title-text:hover {
     display: flex;
-    color: rgba(0, 0, 0, 0.99);
+    color: rgba(0, 0, 0, 1);
 }
 .description-text {
     font-size: 0.8em;

@@ -91,7 +91,7 @@ class ArticleDetail extends React.Component<Props, States> {
                         </Header>
                     </Container>
                     <Container text style={CONTAINER_STYLE}>
-                        <Viewer style={{fontSize: 20}} initialValue={article.content} />
+                        <Viewer initialValue={article.content} />
                     </Container>
                     { this.renderMetaInfo(article) }
                 </div>
@@ -169,6 +169,7 @@ class ArticleDetail extends React.Component<Props, States> {
                     targetId={article._id}
                     target={PostType.ARTICLE}
                     threaded={true}
+                    withHeader={true}
                     maxThreadStackDepth={1}
                     replyFormPosition="top"
                     commentsOrder="latest" />

@@ -52,14 +52,6 @@ class ThreadList extends React.Component<Props, States> {
     componentDidMount() {
         this.props.actions.resetRedirectTask();
     }
-    componentDidUpdate(prevProps: Props) {
-        if ((prevProps.state.threadState.loading
-            && !this.props.state.threadState.loading) ||
-            (!prevProps.state.userState.currentUser
-            && this.props.state.userState.currentUser)) {
-            // todo
-        }
-    }
     private renderThreads = (): React.ReactElement<any> => {
         if (this.props.state.threadState.loading
             && this.props.state.threadState.data

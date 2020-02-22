@@ -3,7 +3,7 @@
  * In future, this section can be used to show comments below photo, video, etc
  */
 import React, { RefObject, createRef, Fragment } from "react";
-import { Comment, Form, Button, Header, RatingProps, Rating, Popup } from "semantic-ui-react";
+import { Comment, Form, Button, Header, RatingProps, Rating, Popup, Divider } from "semantic-ui-react";
 import connectPropsAndActions from "../../../shared/connect";
 import AppState from "../../../models/client/AppState";
 import User from "../../../models/User";
@@ -27,7 +27,9 @@ interface Props extends IntlProps {
     maxThreadStackDepth: number;
     commentsOrder: "latest" | "oldest";
     replyFormPosition: "top" | "bottom";
-    threaded?: boolean;
+    threaded: boolean;
+    divided?: boolean;
+    withHeader?: boolean;
 }
 interface States {
     showReplyFormForCommentId: string;
@@ -66,10 +68,14 @@ class CommentSection extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         return <Comment.Group threaded={this.props.threaded}>
-            <Header as="h3" dividing>
-                <FormattedMessage id={"component.comment.title"} />
-                {`(${this.props.state.commentState.data.length})`}
-            </Header>
+            {
+                this.props.withHeader ?
+                <Header as="h3" dividing>
+                    <FormattedMessage id={"component.comment.title"} />
+                    {`(${this.props.state.commentState.data.length})`}
+                </Header>
+                : undefined
+            }
             {
                 this.props.replyFormPosition === "top" ?
                 this.renderPrimaryReplyForm()
@@ -156,6 +162,9 @@ class CommentSection extends React.Component<Props, States> {
         const createDate: Date = comment.createdAt ? new Date(comment.createdAt) : new Date(0);
         const author: User = this.props.state.userDictionary[comment.author];
         return <Comment key={comment._id}>
+            {
+                this.props.divided ? <Divider /> : undefined
+            }
             <Comment.Avatar src={author.avatarUrl ? author.avatarUrl : "/images/avatar.png"} />
             <Comment.Content>
                 {/* There is a bug of style for <Comment /> in semantic-ui-react. Here we explicitly set the style */}

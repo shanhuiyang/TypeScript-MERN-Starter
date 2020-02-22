@@ -38,7 +38,7 @@ class ArticleItem extends React.Component<Props, States> {
                         coverSrc ? <Image style={{paddingTop: 10}} src={coverSrc} />
                         : undefined
                     }
-                    <Viewer style={{fontSize: 20, height: 3}} initialValue={previewContent + "..."} />
+                    <Viewer style={{height: 3}} initialValue={previewContent + "..."} />
                     <Item.Extra style={{
                         display: "flex",
                         flexDirection: "row",
