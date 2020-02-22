@@ -62,7 +62,7 @@ class NavBarLayout extends React.Component<Props, States> {
                 <img src="/favicon.png" alt="logo" style={{marginRight: 10}}/>
                 <FormattedMessage id="app.name"/>
             </Menu.Item>
-            <Menu.Item as={NavLink} to="/threads" >
+            <Menu.Item as={NavLink} to="/thread" >
                 <FormattedMessage id="page.threads"/>
             </Menu.Item>
             <Menu.Item as={NavLink} to="/about" >
@@ -115,7 +115,7 @@ class NavBarLayout extends React.Component<Props, States> {
                 <Icon name="home" />
                 <FormattedMessage id="page.home"/>
             </Menu.Item>
-            <Menu.Item as={NavLink} to="/threads" onClick={this.hideSideBar}>
+            <Menu.Item as={NavLink} to="/thread" onClick={this.hideSideBar}>
                 <Icon name="building" />
                 <FormattedMessage id="page.threads"/>
             </Menu.Item>

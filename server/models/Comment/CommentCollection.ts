@@ -7,6 +7,9 @@ export const commentSchema: Schema = new mongoose.Schema({
     parent: String, // Article._id or Comment._id
     content: String,
     likes: [String], // array of User._id
+    commentsCount: Number,
+    lastCommentedAt: String,
+    lastCommentedBy: String,
 }, { timestamps: true });
 
 const CommentCollection: Model<CommentDocument> = mongoose.model("Comment", commentSchema);

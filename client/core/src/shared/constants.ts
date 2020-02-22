@@ -8,7 +8,7 @@ export const RESPONSE_CONTENT_TYPE = {
     HTML: "text/html"
 };
 
-export const DEFAULT_PAGE_SIZE: number = 10;
+export const DEFAULT_PAGE_SIZE: number = 9;
 
 export const MINIMUM_ARTICLE_LENGTH: number = 150;
 

@@ -13,19 +13,21 @@ import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, Messa
 import { PrimitiveType } from "intl-messageformat";
 import PostType from "../../../models/PostType";
 import CommentActionCreator from "../../../models/client/CommentActionCreator";
-import { byCreatedAt } from "../../../shared/date";
+import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
 import { getNameList } from "../../../shared/string";
 import moment from "moment";
 
-const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
 interface Props extends IntlProps {
     targetId: string;
     target: PostType;
     state: AppState;
     actions: CommentActionCreator;
-    maxThreadStackDepth?: number;
+    maxThreadStackDepth: number;
+    commentsOrder: "latest" | "oldest";
+    replyFormPosition: "top" | "bottom";
+    threaded?: boolean;
 }
 interface States {
     showReplyFormForCommentId: string;
@@ -63,20 +65,21 @@ class CommentSection extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         const getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
-        return <Comment.Group threaded>
+        return <Comment.Group threaded={this.props.threaded}>
             <Header as="h3" dividing>
                 <FormattedMessage id={"component.comment.title"} />
                 {`(${this.props.state.commentState.data.length})`}
             </Header>
             {
-                this.props.targetId === this.state.showReplyFormForCommentId ?
-                this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef)
+                this.props.replyFormPosition === "top" ?
+                this.renderPrimaryReplyForm()
                 : undefined
             }
             {
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
-                    .sort(byCreatedAt).reverse().map((value: CommentClass) => this.renderComment(value))
+                    .sort(this.props.commentsOrder === "latest" ? byCommentedAtLatestFirst : byCommentedAtOldestFirst)
+                    .map((value: CommentClass) => this.renderComment(value))
             }
             <WarningModal
                 descriptionIcon="delete" open={this.state.openDeleteWarning}
@@ -87,7 +90,19 @@ class CommentSection extends React.Component<Props, States> {
                     this.setState({openDeleteWarning: false});
                 }}
                 onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
+            {
+                this.props.replyFormPosition === "bottom" ?
+                this.renderPrimaryReplyForm()
+                : undefined
+            }
         </Comment.Group>;
+    }
+    private renderPrimaryReplyForm = (): React.ReactElement<any> | undefined => {
+        if (this.props.targetId === this.state.showReplyFormForCommentId) {
+            return this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef);
+        } else {
+            return undefined;
+        }
     }
     private renderReplyForm = (editing: boolean, id: string, ref: RefObject<any>): React.ReactElement<any> | undefined => {
         if (!this.props.state.userState.currentUser) {
@@ -157,13 +172,22 @@ class CommentSection extends React.Component<Props, States> {
                 </Comment.Text>
                 {this.renderActions(comment, stackDepth)}
             </Comment.Content>
-            <Comment.Group threaded>
-                {this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)}
+            <Comment.Group threaded={this.props.threaded}>
+                {
+                    this.props.replyFormPosition === "top" ?
+                    this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)
+                    : undefined
+                }
                 {/* Recursively render the children */
                     this.props.state.commentState.data
                         .filter((value: CommentClass, index: number) => (value.parent === comment._id))
-                        .sort(byCreatedAt).reverse()
+                        .sort(this.props.commentsOrder === "latest" ? byCommentedAtLatestFirst : byCommentedAtOldestFirst)
                         .map((value: CommentClass) => this.renderComment(value, stackDepth + 1))
+                }
+                {
+                    this.props.replyFormPosition === "bottom" ?
+                    this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)
+                    : undefined
                 }
             </Comment.Group>
         </Comment>;
@@ -174,7 +198,7 @@ class CommentSection extends React.Component<Props, States> {
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
                 this.props.state.userState.currentUser
-                && stackDepth < (this.props.maxThreadStackDepth ? this.props.maxThreadStackDepth : MAXIMUM_THREAD_STACK_DEPTH) ?
+                && stackDepth < this.props.maxThreadStackDepth ?
                 /* eslint-disable-next-line */
                 <Comment.Action onClick={() => {this.onToggleReplyForm(comment._id); }}>
                     <FormattedMessage id="component.comment.reply"/>

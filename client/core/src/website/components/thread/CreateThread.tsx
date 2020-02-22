@@ -37,8 +37,8 @@ class CreateThread extends React.Component<Props, States> {
         };
     }
     render(): React.ReactElement<any> {
-        if (false/*!this.props.state.threadState.valid*/) {
-            return <Redirect to="/threads" />;
+        if (!this.props.state.threadState.valid) {
+            return <Redirect to="/thread" />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean | undefined = this.props.state.threadState.loading;
             const containerStyle: any = isMobile() ? CONTAINER_STYLE :

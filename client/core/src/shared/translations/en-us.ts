@@ -90,6 +90,7 @@ const TRANSLATION: Translation = {
         "post.created_at": "Created at ",
         "post.updated_at": "Last updated at ",
         "post.replied_at": "Last replied at ",
+        "post.no_reply_yet": "No reply yet",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -137,7 +138,7 @@ const TRANSLATION: Translation = {
         "toast.client.incorrect_url": "Incorrect redirectUri!",
         "toast.post.title_empty": "Title could not be empty.",
         "toast.post.content_empty": "Content could not be empty.",
-        "toast.post.title_too_long": "Title could not be longer than 100 characters.",
+        "toast.post.title_too_long": "Title could not be longer than 50 characters.",
         "toast.post.content_too_short": "Content could not be shorter than 150 characters.",
         "toast.article.save_successfully": "Save your article successfully.",
         "toast.article.delete_successfully": "Delete your article successfully.",
@@ -161,6 +162,7 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "Sorry, you cannot delete a comment someone has replied to it.",
         "toast.comment.delete_successfully": "Delete successfully.",
         "toast.comment.delete_failed": "Delete failed.",
+        "toast.comment.not_found": "Cannot find this comment.",
         "toast.notification.not_found": "Cannot find this notification",
         "toast.thread.add_successfully": "Your thread created.",
         "toast.thread.add_failed": "Your thread cannot be created.",

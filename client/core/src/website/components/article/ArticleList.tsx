@@ -3,7 +3,7 @@ import AppState from "../../../models/client/AppState";
 import connectPropsAndActions from "../../../shared/connect";
 import Article from "../../../models/Article";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { byCreatedAt } from "../../../shared/date";
+import { byCreatedAtLatestFirst } from "../../../shared/date";
 import { Container, Segment, Header, Icon, Button } from "semantic-ui-react";
 import ActionCreator from "../../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
@@ -53,7 +53,7 @@ class ArticleList extends React.Component<Props, States> {
             return <Fragment>
             {
                 this.props.state.articleState.data
-                .sort(byCreatedAt).map(
+                .sort(byCreatedAtLatestFirst).map(
                     (article: Article) => <ArticleItem key={article._id} article={article} />
                 )
             }

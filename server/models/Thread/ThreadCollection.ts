@@ -7,7 +7,7 @@ export const articleSchema: Schema = new mongoose.Schema({
     likes: [String], // array of User._id
     commentsCount: Number,
     lastCommentedAt: String,
-    lastCommentedUser: String,
+    lastCommentedBy: String,
     removedEternally: Boolean,
 }, { timestamps: true });
 

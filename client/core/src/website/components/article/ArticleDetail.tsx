@@ -165,7 +165,13 @@ class ArticleDetail extends React.Component<Props, States> {
                     <FormattedMessage id="post.created_at" />
                     {moment(createDate).fromNow()}
                 </Label>
-                <CommentSection targetId={article._id} target={PostType.ARTICLE} />
+                <CommentSection
+                    targetId={article._id}
+                    target={PostType.ARTICLE}
+                    threaded={true}
+                    maxThreadStackDepth={1}
+                    replyFormPosition="top"
+                    commentsOrder="latest" />
             </Container>
         </Fragment>;
     }

@@ -7,7 +7,7 @@ import { MINIMUM_ARTICLE_LENGTH } from "../../client/core/src/shared/constants";
 const updateArticleValidations = [
     check("title", "toast.post.title_empty").not().isEmpty(),
     check("content", "toast.post.content_empty").not().isEmpty(),
-    check("title", "toast.post.title_too_long").isLength({ max: 100 }),
+    check("title", "toast.post.title_too_long").isLength({ max: 50 }),
     check("content", "toast.post.content_too_short").isLength({ min: MINIMUM_ARTICLE_LENGTH }),
 ];
 

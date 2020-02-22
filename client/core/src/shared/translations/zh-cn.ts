@@ -90,6 +90,7 @@ const TRANSLATION: Translation = {
         "post.created_at": "创建于",
         "post.updated_at": "最后更新于",
         "post.replied_at": "最后回复于",
+        "post.no_reply_yet": "暂无回复",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -138,7 +139,7 @@ const TRANSLATION: Translation = {
         "toast.client.incorrect_url": "客户端redirectUri错误！",
         "toast.post.title_empty": "标题不能为空",
         "toast.post.content_empty": "正文不能为空",
-        "toast.post.title_too_long": "标题不能长于100字",
+        "toast.post.title_too_long": "标题不能长于50字",
         "toast.post.content_too_short": "正文不能短于150字",
         "toast.article.save_successfully": "成功保存你的文章",
         "toast.article.delete_successfully": "成功删除你的文章",
@@ -162,6 +163,7 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "抱歉，你不能删除一个有人回复过的评论",
         "toast.comment.delete_successfully": "删除成功",
         "toast.comment.delete_failed": "删除失败",
+        "toast.comment.not_found": "找不到该条评论",
         "toast.notification.not_found": "找不到这条通知",
         "toast.thread.add_successfully": "你的帖子发表成功",
         "toast.thread.add_failed": "你的帖子发表失败",

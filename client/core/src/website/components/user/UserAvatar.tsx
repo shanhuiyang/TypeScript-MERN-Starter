@@ -8,10 +8,15 @@ import User from "../../../models/User";
 
 interface Props {
     user: User;
+    style?: any;
 }
 interface States {}
 export default class UserAvatar extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
-        return <Image size="mini" rounded src={this.props.user.avatarUrl ? this.props.user.avatarUrl : "/images/avatar.png"} />;
+        return <Image
+            size="mini"
+            rounded
+            style={this.props.style}
+            src={this.props.user.avatarUrl ? this.props.user.avatarUrl : "/images/avatar.png"} />;
     }
 }

@@ -98,7 +98,11 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     const thread: ThreadDocument = new ThreadCollection({
         author: req.body.author,
         title: req.body.title,
-        content: req.body.content
+        content: req.body.content,
+        likes: [],
+        commentsCount: 0,
+        lastCommentedAt: new Date(Date.now()).toISOString(),
+        lastCommentedBy: ""
     });
 
     thread
@@ -117,7 +121,12 @@ export const read: RequestHandler = async (req: Request, res: Response, next: Ne
         return res.status(400).end();
     }
     const count: number = await ThreadCollection.find().count().exec();
-    const threads: ThreadDocument[] = await ThreadCollection.find().skip(pageSize * pageIndex).limit(pageSize).exec();
+    const threads: ThreadDocument[] = await ThreadCollection
+        .find()
+        .sort({ lastCommentedAt: "desc" })
+        .skip(pageSize * pageIndex)
+        .limit(pageSize)
+        .exec();
     const findAuthorInUsers = (thread: Thread): Promise<UserDocument | null> => {
         return UserCollection.findById(thread.author).exec();
     };

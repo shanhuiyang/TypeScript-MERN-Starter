@@ -129,6 +129,10 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
         author: req.body.author,
         title: req.body.title,
         content: req.body.content,
+        likes: [],
+        commentsCount: 0,
+        lastCommentedAt: new Date(Date.now()).toISOString(),
+        lastCommentedBy: ""
     });
 
     article

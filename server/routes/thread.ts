@@ -6,7 +6,7 @@ import passport from "passport";
 const addThreadValidations = [
     check("title", "toast.post.title_empty").not().isEmpty(),
     check("content", "toast.post.content_empty").not().isEmpty(),
-    check("title", "toast.post.title_too_long").isLength({ max: 100 }),
+    check("title", "toast.post.title_too_long").isLength({ max: 50 }),
 ];
 
 const thread: Router = express.Router();

@@ -41,7 +41,7 @@ export default class App extends React.Component<Props, States> {
                                 <Route path="/profile" render={ (props) => <Profile {...props} /> } />
                                 <Route path="/preferences" render={ (props) => <Preferences {...props} /> } />
                                 <Route path="/article" render={ (props) => <Articles {...props} /> } />
-                                <Route path="/threads" render={ (props) => <Threads {...props} /> } />
+                                <Route path="/thread" render={ (props) => <Threads {...props} /> } />
                                 <Route path="/notifications" render={ (props) => <Notifications {...props} /> } />
                                 <Route path="/security" render={ (props) => <Security {...props} /> } />
                                 <Route path="/forgetpassword" render={ (props) => <ForgetPassword {...props} /> } />
