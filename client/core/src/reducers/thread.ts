@@ -1,8 +1,9 @@
 import ThreadState from "../models/client/ThreadState";
 import { AnyAction as Action } from "redux";
 import { GET_THREADS_START, REMOVE_THREAD_START, REMOVE_THREAD_SUCCESS, REMOVE_THREAD_FAILED, RATE_THREAD_SUCCESS, GET_THREADS_SUCCESS, GET_THREADS_FAILED, ADD_THREAD_START, ADD_THREAD_SUCCESS, ADD_THREAD_FAILED } from "../actions/thread";
-import { UPDATE_PROFILE_SUCCESS } from "../actions/user";
+import { UPDATE_PROFILE_SUCCESS, LOGOUT } from "../actions/user";
 import Thread from "../models/Thread";
+import { ADD_COMMENT_SUCCESS } from "../actions/comment";
 
 const initialState: ThreadState = {
     loading: false,
@@ -14,6 +15,8 @@ const initialState: ThreadState = {
 
 const thread = (state: ThreadState = initialState, action: Action): ThreadState => {
     switch (action.type) {
+        case LOGOUT:
+            return initialState;
         case GET_THREADS_START:
         case REMOVE_THREAD_START:
         case ADD_THREAD_START:
@@ -30,6 +33,7 @@ const thread = (state: ThreadState = initialState, action: Action): ThreadState 
         case REMOVE_THREAD_SUCCESS:
         case ADD_THREAD_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
+        case ADD_COMMENT_SUCCESS:
             return {...state, valid: false, loading: false};
         case GET_THREADS_FAILED:
         case REMOVE_THREAD_FAILED:

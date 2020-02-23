@@ -4,6 +4,7 @@ import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTI
 import Article from "../models/Article";
 import { UPDATE_PROFILE_SUCCESS } from "../actions/user";
 import ArticleCache from "../models/client/ArticleCache";
+import { ADD_COMMENT_SUCCESS } from "../actions/comment";
 
 const initialState: ArticleState = {
     loading: false,
@@ -40,6 +41,7 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
         case SAVE_ARTICLE_SUCCESS:
         case REMOVE_ARTICLE_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
+        case ADD_COMMENT_SUCCESS:
             return {...state, valid: false, loading: false};
         case GET_ARTICLE_FAILED:
         case REMOVE_ARTICLE_FAILED:

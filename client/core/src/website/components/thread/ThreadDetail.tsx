@@ -5,9 +5,9 @@ import { match, RouteComponentProps, Redirect } from "react-router-dom";
 import ActionCreator from "../../../models/client/ActionCreator";
 import Thread from "../../../models/Thread";
 import ErrorPage from "../../pages/ErrorPage";
-import { Container, Comment, Header } from "semantic-ui-react";
+import { Container, Comment, Header, Popup, Rating, RatingProps } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../../shared/styles";
-import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
@@ -16,6 +16,7 @@ import PostType from "../../../models/PostType";
 import { getNameList } from "../../../shared/string";
 import Loading from "./Loading";
 import moment from "moment";
+import User from "../../../models/User";
 
 interface Props extends IntlProps, RouteComponentProps<any> {
     match: match<any>;
@@ -88,18 +89,12 @@ class ThreadDetail extends React.Component<Props, States> {
                 descriptionIcon="delete" open={this.state.openDeleteWarning}
                 descriptionText={this.getString({id: "page.thread.delete"}, {title: thread.title})}
                 warningText={this.getString({id: "page.thread.delete_confirmation"})}
-                onConfirm={this.removeThread}
+                onConfirm={ () => {this.props.actions.removeThread(this.threadId); }}
                 onCancel={ () => {this.setState({openDeleteWarning: false}); }}/>
                 : undefined;
     }
     private renderThread = (thread: Thread): React.ReactElement<any> => {
         const createDate: Date = thread.createdAt ? new Date(thread.createdAt) : new Date(0);
-        // const likersPopUpContent: string = getNameList(thread.likes, this.props.state.userDictionary);
-        // const labelStyle: any = {
-        //     color: "grey",
-        //     marginTop: 2,
-        //     marginBottom: 2
-        // };
         const author = this.props.state.userDictionary[thread.author];
         return <Fragment>
             <Container text>
@@ -117,12 +112,16 @@ class ThreadDetail extends React.Component<Props, States> {
                                 </Comment.Metadata>
                             </div>
                             <Comment.Text style={{marginTop: 8, marginBottom: 8}}>
-                                <Header as="h3">{thread.title}</Header>
+                                <Header as="h3">
+                                    {thread.removedEternally ? <FormattedMessage id="page.thread.removed" /> : thread.title}
+                                </Header>
                             </Comment.Text>
                             <Comment.Text>
-                                <Viewer initialValue={thread.content} />
+                                <Viewer initialValue={thread.removedEternally ? "" : thread.content} />
                             </Comment.Text>
-                            {/* delete/like action, etc*/}
+                            {
+                                thread.removedEternally ? undefined : this.renderActions(thread)
+                            }
                         </Comment.Content>
                     </Comment>
                 </Comment.Group>
@@ -137,8 +136,48 @@ class ThreadDetail extends React.Component<Props, States> {
             </Container>
         </Fragment>;
     }
+    private renderActions = (thread: Thread): any => {
+        const likersPopUpContent: string = getNameList(thread.likes, this.props.state.userDictionary);
+        return <Comment.Actions>
+            {
+                this.props.state.userState.currentUser
+                && this.props.state.userState.currentUser._id === thread.author ?
+                /* eslint-disable-next-line */
+                <Fragment>
+                    <Comment.Action onClick={() => { this.removeThread(); }}>
+                        <FormattedMessage id="component.comment.delete"/>
+                    </Comment.Action>
+                </Fragment>
+                : undefined
+            }
+            <Popup
+                trigger={this.renderRating(thread)}
+                disabled={!likersPopUpContent}
+                content={likersPopUpContent}
+                position="bottom center" />
+        </Comment.Actions>;
+    }
+    private renderRating = (thread: Thread): any => {
+        const user: User | undefined = this.props.state.userState.currentUser;
+        const hasRated: boolean =
+            !!user && thread.likes && (thread.likes.findIndex((value: string) => user._id === value) >= 0);
+        return <label style={{color: "grey"}}>
+            <Rating size="small" icon="heart" defaultRating={hasRated ? 1 : 0} maxRating={1}
+                disabled={!user || thread.author === user._id} onRate={
+                    (event: React.MouseEvent<HTMLDivElement>, data: RatingProps): void => {
+                        if (!this.props.state.userState.currentUser) {
+                            return;
+                        }
+                        this.props.actions.rateThread(
+                            data.rating as number,
+                            thread._id,
+                            user && user._id);
+                    }}/>
+            { thread.likes ? thread.likes.length : 0 }
+        </label>;
+    }
     private removeThread = (): void => {
-        this.props.actions.removeThread(this.threadId);
+        this.setState({openDeleteWarning: true});
     }
 }
 

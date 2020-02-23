@@ -25,7 +25,6 @@ interface States {}
 const MARGIN_VERTICAL: number = 10;
 
 class ThreadList extends React.Component<Props, States> {
-
     render(): React.ReactElement<any> {
         if (this.props.state.userState.currentUser) {
             return <Fragment>
@@ -48,7 +47,6 @@ class ThreadList extends React.Component<Props, States> {
             return <Redirect to="/login" />;
         }
     }
-
     componentDidMount() {
         this.props.actions.resetRedirectTask();
     }
@@ -114,7 +112,8 @@ class ThreadList extends React.Component<Props, States> {
                 display: "flex",
                 flex: "none",
                 flexDirection: "column",
-                alignItems: "flex-end"
+                alignItems: "flex-end",
+                justifyContent: "space-between"
             }}>
                 <div className="description-text">
                     <label style={{marginRight: 8}}>

@@ -12,6 +12,8 @@ import NotificationCollection from "../models/Notification/NotificationCollectio
 import NotificationDocument from "../models/Notification/NotificationDocument";
 import InteractionType from "../../client/core/src/models/InteractionType";
 import PostType from "../../client/core/src/models/PostType";
+import CommentCollection from "../models/Comment/CommentCollection";
+import CommentDocument from "../models/Comment/CommentDocument";
 
 export const remove: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
     ThreadCollection
@@ -25,9 +27,16 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         if (thread.author !== user._id.toString()) {
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
-        return ThreadCollection.findByIdAndUpdate(req.params.id, {title: "", content: "", removedEternally: true}).exec();
+        return CommentCollection.find({parent: req.params.id}).exec();
     })
-    .then((updated: Thread | null) => {
+    .then((comments: CommentDocument[]) => {
+        if (comments && comments.length > 0) {
+            return ThreadCollection.findByIdAndDelete(req.params.id).exec();
+        } else {
+            return ThreadCollection.findByIdAndUpdate(req.params.id, {title: "", content: "", removedEternally: true}).exec();
+        }
+    })
+    .then((updated: ThreadDocument | null) => {
         if (!updated) {
             return Promise.reject(res.status(500).end());
         }

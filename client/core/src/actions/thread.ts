@@ -89,7 +89,10 @@ const threadActionCreator: ThreadActionCreator = {
                 toast().success("toast.thread.delete_successfully");
                 dispatch({
                     type: REMOVE_THREAD_SUCCESS,
-                    id: id
+                    redirectTask: {
+                        redirected: false,
+                        to: "/thread"
+                    }
                 });
             })
             .catch((error: Error) => {

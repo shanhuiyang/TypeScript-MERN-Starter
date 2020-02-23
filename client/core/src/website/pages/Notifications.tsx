@@ -93,6 +93,9 @@ class Notifications extends React.Component<Props, States> {
             case PostType.ARTICLE:
                 objectMessageId = "page.notification.object_article";
                 break;
+            case PostType.THREAD:
+                objectMessageId = "page.notification.object_thread";
+                break;
             case PostType.COMMENT:
                 objectMessageId = "page.notification.object_comment";
                 break;
