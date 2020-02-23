@@ -1,18 +1,11 @@
 import React, { Fragment } from "react";
-import connectPropsAndActions from "../../core/src/shared/connect";
-import AppState from "../../core/src/models/client/AppState";
-import { Redirect, match, RouteComponentProps } from "react-router-native";
-import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
+import connectAllProps from "../../core/src/shared/connect";
+import { Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
 import ArticleEditor from "./ArticleEditor";
 import ArticlePreviewer from "./ArticlePreviewer";
 import HeaderWithBack from "../Common/HeaderWithBack";
-
-interface Props extends RouteComponentProps<any> {
-    match: match<any>;
-    state: AppState;
-    actions: ArticleActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
 
 interface States {
     mode: "edit" | "preview";
@@ -84,4 +77,4 @@ class EditArticle extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(EditArticle);
+export default connectAllProps(EditArticle);

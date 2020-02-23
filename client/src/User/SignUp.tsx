@@ -1,16 +1,12 @@
 import React, { Component } from "react";
 import { Container, Header, Content, Form, Item, Input, Label, Left, Button, Icon, Text, Title, Body, Right, Picker, Spinner } from "native-base";
-import { RouteComponentProps, Redirect } from "react-router-native";
+import { Redirect } from "react-router-native";
 import Gender from "../../core/src/models/Gender";
-import AppState from "../../core/src/models/client/AppState";
-import UserActionCreator from "../../core/src/models/client/UserActionCreator";
-import connectPropsAndActions from "../../core/src/shared/connect";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import connectAllProps from "../../core/src/shared/connect";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-interface Props extends RouteComponentProps<any>, IntlProps {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
+import { pendingRedirect } from "../../core/src/shared/redirect";
 
 interface States {
     selectedGender: Gender;
@@ -30,7 +26,7 @@ class SignUp extends Component<Props, States> {
     }
     render() {
         const loading: boolean = this.props.state.userState.loading;
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             return (<Container>
@@ -122,4 +118,4 @@ class SignUp extends Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(SignUp));
+export default connectAllProps(SignUp);

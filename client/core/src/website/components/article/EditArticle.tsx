@@ -1,8 +1,6 @@
 import React from "react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
-import { Redirect, match } from "react-router-dom";
-import ArticleActionCreator from "../../../models/client/ArticleActionCreator";
+import connectAllProps from "../../../shared/connect";
+import { Redirect } from "react-router-dom";
 import Article from "../../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header } from "semantic-ui-react";
@@ -10,19 +8,15 @@ import { CONTAINER_STYLE } from "../../../shared/styles";
 import ArticleEditor from "./ArticleEditor";
 import { FormattedMessage } from "react-intl";
 import { isMobile } from "../dimension";
-
-interface Props {
-    match: match<any>;
-    state: AppState;
-    actions: ArticleActionCreator;
-}
+import { pendingRedirect } from "../../../shared/redirect";
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
 
 interface States {}
 class EditArticle extends React.Component<Props, States> {
     private articleId: string = "";
     render(): React.ReactElement<any> {
-        if (!this.props.state.articleState.valid) {
-            return <Redirect to="/article" />;
+        if (pendingRedirect(this.props)) {
+            return <Redirect to={this.props.state.redirectTask.to} />;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
@@ -69,4 +63,4 @@ class EditArticle extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(EditArticle);
+export default connectAllProps(EditArticle);

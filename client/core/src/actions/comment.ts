@@ -5,6 +5,7 @@ import { Dispatch } from "redux";
 import fetch from "../shared/fetch";
 import actions from "./common";
 import { getToast as toast } from "../shared/toast";
+import Comment from "../models/Comment.d";
 
 export const LOAD_COMMENTS_START: string = "LOAD_COMMENTS_START";
 export const LOAD_COMMENTS_SUCCESS: string = "LOAD_COMMENTS_SUCCESS";
@@ -48,12 +49,13 @@ const commentActionCreator: CommentActionCreator = {
             fetch(`/api/comment/add?targetType=${targetType}&targetId=${targetId}${ parent ? "&parent=" + parent : "" }`,
                 { content },
                 "POST", true)
-            .then((json: Comment) => {
-                if (json) {
+            .then((added: Comment) => {
+                if (added) {
                     toast().success("toast.comment.add_successfully");
                     dispatch({
                         type: ADD_COMMENT_SUCCESS,
-                        comment: json
+                        targetType: targetType,
+                        comment: added
                     });
                 } else {
                     return Promise.reject({ name: "500 Internal Server Error", message: "" });
@@ -81,7 +83,7 @@ const commentActionCreator: CommentActionCreator = {
             });
         };
     },
-    removeComment(id: string): any {
+    removeComment(targetType: PostType, id: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: REMOVE_COMMENT_START});
             fetch(`/api/comment/remove/${id}`, undefined, "GET", true)
@@ -89,6 +91,7 @@ const commentActionCreator: CommentActionCreator = {
                 toast().success("toast.comment.delete_successfully");
                 dispatch({
                     type: REMOVE_COMMENT_SUCCESS,
+                    targetType: targetType,
                     id: id
                 });
             })

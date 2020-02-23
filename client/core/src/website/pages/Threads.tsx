@@ -1,17 +1,12 @@
 import React, { Fragment } from "react";
 // eslint-disable-next-line
-import { Route, RouteComponentProps, Switch, match, Redirect } from "react-router";
+import { Route, Switch, match, Redirect } from "react-router";
 import ThreadList from "../components/thread/ThreadList";
-import AppState from "../../models/client/AppState";
-import ActionCreator from "../../models/client/ActionCreator";
-import connectPropsAndActions from "../../shared/connect";
+import connectAllProps from "../../shared/connect";
 import CreateThread from "../components/thread/CreateThread";
 import { DEFAULT_PAGE_SIZE } from "../../shared/constants";
 import ThreadDetail from "../components/thread/ThreadDetail";
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
 interface States {}
 class Threads extends React.Component<Props, States> {
@@ -41,4 +36,4 @@ class Threads extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Threads);
+export default connectAllProps(Threads);

@@ -1,16 +1,10 @@
 import React from "react";
-import AppState from "../../core/src/models/client/AppState";
-import ActionCreator from "../../core/src/models/client/ActionCreator";
-import connectPropsAndActions from "../../core/src/shared/connect";
+import connectAllProps from "../../core/src/shared/connect";
 import { Redirect, RouteComponentProps } from "react-router-native";
 import { Container, Content, Text, Button, Spinner, Card, CardItem, Body } from "native-base";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { FormattedMessage } from "react-intl";
-
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
 
 interface States {}
 class Consent extends React.Component<Props, States> {
@@ -96,4 +90,4 @@ class Consent extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Consent);
+export default connectAllProps(Consent);

@@ -61,7 +61,7 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         if (!updated) {
             return Promise.reject(res.status(404).json({ message: "toast.article.not_found" }));
         }
-        return res.status(200).end();
+        return res.status(200).json(updated);
     })
     .catch((error: Response) => {
         return error;

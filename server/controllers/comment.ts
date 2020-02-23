@@ -170,11 +170,19 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         if (!deleted) {
             return Promise.reject(res.status(404).json({message: "toast.comment.not_found"}));
         }
-        return getCollectionByPostType(deleted.targetType)
-            .findByIdAndUpdate(deleted.targetId, {
-                $inc: { commentsCount: -1 }
-            })
-            .exec();
+        if (deleted.parent) { // indirect comment
+            return CommentCollection
+                .findByIdAndUpdate(deleted.parent, {
+                    $inc: { commentsCount: -1 }
+                })
+                .exec();
+        } else { // direct comment
+            return getCollectionByPostType(deleted.targetType)
+                .findByIdAndUpdate(deleted.targetId, {
+                    $inc: { commentsCount: -1 }
+                })
+                .exec();
+        }
     })
     .then(() => {
         return res.status(200).end();

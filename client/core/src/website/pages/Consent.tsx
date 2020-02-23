@@ -1,20 +1,14 @@
 import React, { RefObject, createRef } from "react";
 import ErrorPage from "./ErrorPage";
-import AppState from "../../models/client/AppState";
-import ActionCreator from "../../models/client/ActionCreator";
-import connectPropsAndActions from "../../shared/connect";
+import connectAllProps from "../../shared/connect";
 import { Redirect } from "react-router-dom";
 import { Container, Header, Button, Form } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../shared/constants";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
-interface Props extends IntlProps {
-    location: Location;
-    state: AppState;
-    actions: ActionCreator;
-}
 interface States {}
 class Consent extends React.Component<Props, States> {
     params: URLSearchParams;
@@ -112,4 +106,4 @@ class Consent extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(Consent));
+export default connectAllProps(Consent);

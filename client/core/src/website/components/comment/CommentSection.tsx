@@ -3,27 +3,26 @@
  * In future, this section can be used to show comments below photo, video, etc
  */
 import React, { RefObject, createRef, Fragment } from "react";
-import { Comment, Form, Button, Header, RatingProps, Rating, Popup, Divider } from "semantic-ui-react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
+import { Comment, Form, Button, Header, RatingProps, Rating, Popup, Divider, Container } from "semantic-ui-react";
+import connectAllProps from "../../../shared/connect";
 import User from "../../../models/User";
 import CommentClass from "../../../models/Comment";
 import UserAvatar from "../user/UserAvatar";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import PostType from "../../../models/PostType";
-import CommentActionCreator from "../../../models/client/CommentActionCreator";
 import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
 import { getNameList } from "../../../shared/string";
 import moment from "moment";
+import { CONTAINER_STYLE } from "../../../shared/styles";
+import Loading from "./Loading";
+import { ComponentProps } from "../../../shared/ComponentProps";
 
-interface Props extends IntlProps {
+interface Props extends ComponentProps {
     targetId: string;
     target: PostType;
-    state: AppState;
-    actions: CommentActionCreator;
     maxThreadStackDepth: number;
     commentsOrder: "latest" | "oldest";
     replyFormPosition: "top" | "bottom";
@@ -82,6 +81,11 @@ class CommentSection extends React.Component<Props, States> {
                 : undefined
             }
             {
+                this.props.state.commentState.loading ?
+                <Container text style={CONTAINER_STYLE}>
+                    <Loading/>
+                </Container>
+                :
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
                     .sort(this.props.commentsOrder === "latest" ? byCommentedAtLatestFirst : byCommentedAtOldestFirst)
@@ -92,7 +96,7 @@ class CommentSection extends React.Component<Props, States> {
                 descriptionText={getString({id: "component.comment.delete_title"})}
                 warningText={getString({id: "component.comment.delete_confirmation"})}
                 onConfirm={() => {
-                    this.props.actions.removeComment(this.toDeleteId);
+                    this.props.actions.removeComment(this.props.target, this.toDeleteId);
                     this.setState({openDeleteWarning: false});
                 }}
                 onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
@@ -269,4 +273,4 @@ class CommentSection extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(CommentSection));
+export default connectAllProps(CommentSection);

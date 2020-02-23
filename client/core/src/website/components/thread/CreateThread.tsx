@@ -1,21 +1,14 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
+import connectAllProps from "../../../shared/connect";
 import { Redirect } from "react-router-dom";
-import ThreadActionCreator from "../../../models/client/ThreadActionCreator";
 import { Container, Header, Form, FormGroup, Button, Icon } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../../shared/styles";
-import { FormattedMessage, MessageDescriptor, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { isMobile } from "../dimension";
 import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { PrimitiveType } from "intl-messageformat";
 import InsertImageDialog from "../shared/InsertImageDialog";
-
-interface Props extends IntlProps {
-    state: AppState;
-    actions: ThreadActionCreator;
-}
-
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
 interface States {
     editing: boolean;
     mode: "edit" | "preview";
@@ -143,4 +136,4 @@ class CreateThread extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(CreateThread));
+export default connectAllProps(CreateThread);

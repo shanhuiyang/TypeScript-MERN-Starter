@@ -1,18 +1,12 @@
 import React, { Fragment } from "react";
 import { Text, Header, Content, Body, ListItem, Left, Button, Icon, Right, Separator, Thumbnail } from "native-base";
 import TabNavigator from "../Nav/TabNavigator";
-import { Link, RouteComponentProps } from "react-router-native";
-import UserActionCreator from "../../core/src/models/client/UserActionCreator";
-import AppState from "../../core/src/models/client/AppState";
+import { Link } from "react-router-native";
 import UserModel from "../../core/src/models/User";
-import connectPropsAndActions from "../../core/src/shared/connect";
+import connectAllProps from "../../core/src/shared/connect";
 import { getAvatarSource } from "../utils/image";
 import { FormattedMessage } from "react-intl";
-
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
 
 interface States {}
 
@@ -107,4 +101,4 @@ class Me extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Me);
+export default connectAllProps(Me);

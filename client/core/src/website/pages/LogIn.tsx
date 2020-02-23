@@ -1,20 +1,15 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
-import { Redirect, Link, RouteComponentProps } from "react-router-dom";
-import ActionCreator from "../../models/client/ActionCreator";
+import connectAllProps from "../../shared/connect";
+import { Redirect, Link } from "react-router-dom";
 import _ from "lodash";
 import { Form, Button, Icon, Container, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../shared/constants";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
+import { pendingRedirect } from "../../shared/redirect";
 
 interface States {}
 class LogIn extends React.Component<Props, States> {
@@ -30,8 +25,7 @@ class LogIn extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
-        if (!this.props.state.redirectTask.redirected
-            && this.props.state.redirectTask.to !== this.props.match.url) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -88,4 +82,4 @@ class LogIn extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(LogIn));
+export default connectAllProps(LogIn);

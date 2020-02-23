@@ -1,23 +1,19 @@
 import React, { Component } from "react";
 import { Container, Content, Form, Item, Input, Label, Button, Text, Spinner } from "native-base";
-import { RouteComponentProps, Redirect } from "react-router-native";
-import AppState from "../../core/src/models/client/AppState";
-import UserActionCreator from "../../core/src/models/client/UserActionCreator";
+import { Redirect } from "react-router-native";
 import _ from "lodash";
-import connectPropsAndActions from "../../core/src/shared/connect";
+import connectAllProps from "../../core/src/shared/connect";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { FormattedMessage } from "react-intl";
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
+import { pendingRedirect } from "../../core/src/shared/redirect";
 
 interface States {}
 class LogIn extends Component<Props, States> {
     private email: string = "";
     private password: string = "";
     render(): React.ReactElement<any> {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -63,4 +59,4 @@ class LogIn extends Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(LogIn);
+export default connectAllProps(LogIn);

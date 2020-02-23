@@ -86,13 +86,17 @@ const articleActionCreator: ArticleActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
-            .then((json: Article) => {
-                if (json) {
+            .then((added: Article) => {
+                if (added) {
                     removeEditCacheExec(NEW_ARTICLE_CACHE_ID, dispatch);
                     toast().success("toast.article.save_successfully");
                     dispatch({
                         type: SAVE_ARTICLE_SUCCESS,
-                        article: json
+                        article: added,
+                        redirectTask: {
+                            redirected: false,
+                            to: `/article/${added._id}`
+                        }
                     });
                 } else {
                     return Promise.reject({ name: "500 Internal Server Error", message: "Broken data." });
@@ -107,10 +111,17 @@ const articleActionCreator: ArticleActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
-            .then((json: any) => {
+            .then((updated: Article) => {
                 removeEditCacheExec(article._id, dispatch);
                 toast().success("toast.article.save_successfully");
-                dispatch({ type: SAVE_ARTICLE_SUCCESS });
+                dispatch({
+                    type: SAVE_ARTICLE_SUCCESS,
+                    article: updated,
+                    redirectTask: {
+                        redirected: false,
+                        to: `/article/${updated._id}`
+                    }
+                });
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));

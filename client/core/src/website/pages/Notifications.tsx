@@ -2,9 +2,7 @@ import React from "react";
 import { Container, Message, Button } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import { FormattedMessage } from "react-intl";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
-import ActionCreator from "../../models/client/ActionCreator";
+import connectAllProps from "../../shared/connect";
 import Notification from "../../models/Notification";
 import UserAvatar from "../components/user/UserAvatar";
 import User from "../../models/User";
@@ -13,11 +11,8 @@ import { Link } from "react-router-dom";
 import PostType from "../../models/PostType";
 import NothingMoreFooter from "../components/shared/NothingMoreFooter";
 import { isMobile } from "../components/dimension";
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
-interface Props {
-    state: AppState;
-    actions: ActionCreator;
-}
 interface States {
     loadedAll: boolean;
 }
@@ -137,4 +132,4 @@ class Notifications extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Notifications);
+export default connectAllProps(Notifications);

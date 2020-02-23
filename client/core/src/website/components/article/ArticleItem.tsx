@@ -1,10 +1,8 @@
 import Article from "../../../models/Article";
-import ArticleActionCreator from "../../../models/client/ArticleActionCreator";
 import React from "react";
 import { Segment, Item, Button, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
-import AppState from "../../../models/client/AppState";
-import connectPropsAndActions from "../../../shared/connect";
+import connectAllProps from "../../../shared/connect";
 import { FormattedMessage } from "react-intl";
 import { Viewer } from "@toast-ui/react-editor";
 import { getArticleAbstract, getArticleCoverImage } from "../../../shared/string";
@@ -12,11 +10,10 @@ import UserLabel from "../user/UserLabel";
 import { Image } from "semantic-ui-react";
 import moment from "moment";
 import { MINIMUM_ARTICLE_LENGTH } from "../../../shared/constants";
+import { ComponentProps } from "../../../shared/ComponentProps";
 
-interface Props {
+interface Props extends ComponentProps {
     article: Article;
-    state: AppState;
-    actions: ArticleActionCreator;
 }
 
 interface States {}
@@ -61,4 +58,4 @@ class ArticleItem extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(ArticleItem);
+export default connectAllProps(ArticleItem);

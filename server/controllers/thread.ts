@@ -27,13 +27,13 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         if (thread.author !== user._id.toString()) {
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
-        return CommentCollection.find({parent: req.params.id}).exec();
+        return CommentCollection.find({targetId: req.params.id}).exec();
     })
     .then((comments: CommentDocument[]) => {
         if (comments && comments.length > 0) {
-            return ThreadCollection.findByIdAndDelete(req.params.id).exec();
-        } else {
             return ThreadCollection.findByIdAndUpdate(req.params.id, {title: "", content: "", removedEternally: true}).exec();
+        } else {
+            return ThreadCollection.findByIdAndDelete(req.params.id).exec();
         }
     })
     .then((updated: ThreadDocument | null) => {

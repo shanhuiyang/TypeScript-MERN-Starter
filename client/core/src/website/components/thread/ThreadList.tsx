@@ -1,24 +1,18 @@
 import React, { Fragment } from "react";
-import AppState from "../../../models/client/AppState";
-import connectPropsAndActions from "../../../shared/connect";
+import connectAllProps from "../../../shared/connect";
 import Thread from "../../../models/Thread";
-import { RouteComponentProps, withRouter, Redirect, Link } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import { byCommentedAtLatestFirst } from "../../../shared/date";
 import { Container, List, Button, Pagination, Segment, Header, Icon } from "semantic-ui-react";
-import ActionCreator from "../../../models/client/ActionCreator";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import Loading from "./Loading";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import User from "../../../models/User";
 import UserAvatar from "../user/UserAvatar";
 import moment from "moment";
 import "../../css/thread.css";
 import { DEFAULT_PAGE_SIZE } from "../../../shared/constants";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
 
 interface States {}
 
@@ -169,4 +163,4 @@ class ThreadList extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(withRouter(connectPropsAndActions(ThreadList)));
+export default connectAllProps(ThreadList);

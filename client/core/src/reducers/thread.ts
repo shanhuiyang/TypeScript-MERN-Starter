@@ -3,7 +3,8 @@ import { AnyAction as Action } from "redux";
 import { GET_THREADS_START, REMOVE_THREAD_START, REMOVE_THREAD_SUCCESS, REMOVE_THREAD_FAILED, RATE_THREAD_SUCCESS, GET_THREADS_SUCCESS, GET_THREADS_FAILED, ADD_THREAD_START, ADD_THREAD_SUCCESS, ADD_THREAD_FAILED } from "../actions/thread";
 import { UPDATE_PROFILE_SUCCESS, LOGOUT } from "../actions/user";
 import Thread from "../models/Thread";
-import { ADD_COMMENT_SUCCESS } from "../actions/comment";
+import { ADD_COMMENT_SUCCESS, REMOVE_COMMENT_SUCCESS } from "../actions/comment";
+import PostType from "../models/PostType";
 
 const initialState: ThreadState = {
     loading: false,
@@ -33,8 +34,14 @@ const thread = (state: ThreadState = initialState, action: Action): ThreadState 
         case REMOVE_THREAD_SUCCESS:
         case ADD_THREAD_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
-        case ADD_COMMENT_SUCCESS:
             return {...state, valid: false, loading: false};
+        case ADD_COMMENT_SUCCESS:
+        case REMOVE_COMMENT_SUCCESS:
+            if (action.targetType === PostType.THREAD) {
+                return {...state, valid: false, loading: false};
+            } else {
+                return state;
+            }
         case GET_THREADS_FAILED:
         case REMOVE_THREAD_FAILED:
         case ADD_THREAD_FAILED:

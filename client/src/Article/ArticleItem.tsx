@@ -1,21 +1,18 @@
 import React from "react";
 import { ListItem, Thumbnail, Text, View } from "native-base";
 import { Image } from "react-native";
-import { Link, RouteComponentProps, withRouter } from "react-router-native";
+import { Link } from "react-router-native";
 import Article from "../../core/src/models/Article";
-import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
 import User from "../../core/src/models/User";
-import connectPropsAndActions from "../../core/src/shared/connect";
-import AppState from "../../core/src/models/client/AppState";
+import connectAllProps from "../../core/src/shared/connect";
 import { getAvatarSource, amendImageUrl } from "../utils/image";
 import moment from "moment";
 import { getArticleAbstract, getArticleCoverImage } from "../../core/src/shared/string";
 import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
+import { ComponentProps } from "../../core/src/shared/ComponentProps";
 
-interface Props extends RouteComponentProps<any> {
+interface Props extends ComponentProps {
     value: Article;
-    state: AppState;
-    actions: ArticleActionCreator;
 }
 
 interface States {}
@@ -73,4 +70,4 @@ class ArticleItem extends React.Component<Props, States> {
     }
 }
 
-export default withRouter(connectPropsAndActions(ArticleItem));
+export default connectAllProps(ArticleItem);

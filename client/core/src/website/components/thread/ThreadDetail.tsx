@@ -1,28 +1,20 @@
 import React, { Fragment } from "react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
-import { match, RouteComponentProps, Redirect } from "react-router-dom";
-import ActionCreator from "../../../models/client/ActionCreator";
+import connectAllProps from "../../../shared/connect";
+import { Redirect } from "react-router-dom";
 import Thread from "../../../models/Thread";
 import ErrorPage from "../../pages/ErrorPage";
 import { Container, Comment, Header, Popup, Rating, RatingProps } from "semantic-ui-react";
-import { CONTAINER_STYLE } from "../../../shared/styles";
-import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
+import { MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
 import CommentSection from "../comment/CommentSection";
 import PostType from "../../../models/PostType";
 import { getNameList } from "../../../shared/string";
-import Loading from "./Loading";
 import moment from "moment";
 import User from "../../../models/User";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    match: match<any>;
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
+import { pendingRedirect } from "../../../shared/redirect";
 
 interface States {
     openDeleteWarning: boolean;
@@ -40,19 +32,13 @@ class ThreadDetail extends React.Component<Props, States> {
         };
     }
     componentDidMount() {
-        window.scrollTo(0, 0);
         if (this.threadId) {
             this.props.actions.getComments(PostType.THREAD, this.threadId);
         }
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
-        }
-        if (this.props.state.threadState.loading) {
-            return <Container text style={CONTAINER_STYLE}>
-                <Loading/>
-            </Container>;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
@@ -181,4 +167,4 @@ class ThreadDetail extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ThreadDetail));
+export default connectAllProps(ThreadDetail);

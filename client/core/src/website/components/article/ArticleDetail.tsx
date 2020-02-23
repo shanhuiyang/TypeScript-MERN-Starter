@@ -1,14 +1,13 @@
 import React, { Fragment } from "react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
-import { match, RouteComponentProps, Redirect } from "react-router-dom";
-import ActionCreator from "../../../models/client/ActionCreator";
+import connectAllProps from "../../../shared/connect";
+import { Redirect } from "react-router-dom";
+import { pendingRedirect } from "../../../shared/redirect";
 import Article from "../../../models/Article";
 import ErrorPage from "../../pages/ErrorPage";
 import { Container, Header, Label, Rating, RatingProps, Popup } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import "react-tiny-fab/dist/styles.css";
-import { injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor, FormattedMessage } from "react-intl";
+import { MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
@@ -18,14 +17,8 @@ import FabAction from "../../../models/client/FabAction";
 import CommentSection from "../comment/CommentSection";
 import PostType from "../../../models/PostType";
 import { getNameList } from "../../../shared/string";
-import Loading from "./Loading";
 import moment from "moment";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    match: match<any>;
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
 
 interface States {
     openDeleteWarning: boolean;
@@ -43,11 +36,11 @@ class ArticleDetail extends React.Component<Props, States> {
         };
     }
     componentDidMount() {
-        window.scrollTo(0, 0);
         if (this.articleId) {
             this.props.actions.getComments(PostType.ARTICLE, this.articleId);
             this.addFabActions();
         }
+        this.props.actions.resetRedirectTask();
     }
     componentDidUpdate(prevProps: Props) {
         if ((prevProps.state.articleState.loading
@@ -61,13 +54,8 @@ class ArticleDetail extends React.Component<Props, States> {
         this.props.actions.setFabActions([]);
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
-        }
-        if (this.props.state.articleState.loading) {
-            return <Container text style={CONTAINER_STYLE}>
-                <Loading/>
-            </Container>;
         }
         const notFoundError: Error = {
             name: "404 Not Found",
@@ -202,4 +190,4 @@ class ArticleDetail extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ArticleDetail));
+export default connectAllProps(ArticleDetail);
