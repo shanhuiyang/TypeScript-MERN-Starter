@@ -12,6 +12,8 @@ import PostType from "../../models/PostType";
 import NothingMoreFooter from "../components/shared/NothingMoreFooter";
 import { isMobile } from "../components/dimension";
 import { ComponentProps as Props } from "../../shared/ComponentProps";
+import Article from "../../models/Article";
+import Thread from "../../models/Thread";
 
 interface States {
     loadedAll: boolean;
@@ -84,12 +86,25 @@ class Notifications extends React.Component<Props, States> {
     }
     private getObjectMessage = (notification: Notification): React.ReactElement<any> => {
         let objectMessageId: string;
+        let title: string = "";
         switch (notification.objectType) {
             case PostType.ARTICLE:
                 objectMessageId = "page.notification.object_article";
+                const article: Article | undefined = this.props.state.articleState.data.find(
+                    (value: Article): boolean => notification.object === value._id
+                );
+                if (article) {
+                    title = article.title;
+                }
                 break;
             case PostType.THREAD:
                 objectMessageId = "page.notification.object_thread";
+                const thread: Thread | undefined = this.props.state.threadState.data.find(
+                    (value: Thread): boolean => notification.object === value._id
+                );
+                if (thread) {
+                    title = thread.title;
+                }
                 break;
             case PostType.COMMENT:
                 objectMessageId = "page.notification.object_comment";
@@ -100,6 +115,7 @@ class Notifications extends React.Component<Props, States> {
         return <Link to={notification.link} style={{marginLeft: 4}}
             onClick={() => { this.props.actions.acknowledgeNotification(notification._id); }}>
             <FormattedMessage id={objectMessageId} />
+            {title ? `: ${title}` : undefined }
         </Link>;
     }
     private renderLoadAll = (): React.ReactElement<any> | undefined => {

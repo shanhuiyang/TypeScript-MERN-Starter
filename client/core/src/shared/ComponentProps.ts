@@ -1,5 +1,5 @@
 /**
- * Defines the common props for each component
+ * Defines the common props for each component, can be used in both website app and mobile app
  */
 import { WrappedComponentProps as IntlProps } from "react-intl";
 import AppState from "../models/client/AppState";

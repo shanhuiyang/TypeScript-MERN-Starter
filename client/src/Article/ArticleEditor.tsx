@@ -3,7 +3,7 @@ import React, { Fragment } from "react";
 import { Content, View, Spinner, Button, Text } from "native-base";
 import { TextInput } from "react-native";
 import { FormattedMessage, MessageDescriptor } from "react-intl";
-import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
+import { ARTICLE_CONTENT_MIN_LENGTH } from "../../core/src/shared/constants";
 import { PrimitiveType } from "intl-messageformat";
 import { NEW_ARTICLE_CACHE_ID } from "../../core/src/actions/article";
 import connectAllProps from "../../core/src/shared/connect";
@@ -74,7 +74,7 @@ class ArticleEditor extends React.Component<Props, States> {
                             multiline={true}
                             autoFocus={true}
                             textAlignVertical="top"
-                            placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                            placeholder={this.getString({id: "article.content_placeholder"})}
                             value={this.state.content}
                             onChangeText={(input: string) => {
                                 this.onEditing(undefined, input);

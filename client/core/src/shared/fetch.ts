@@ -8,7 +8,7 @@ if (typeof fetch === "undefined") {
 
 export type Method = "GET" | "POST" | "PUT";
 
-const TEST_FOR_LOADING: boolean = true;
+const TEST_FOR_LOADING: boolean = false;
 
 let hostUrl: string;
 

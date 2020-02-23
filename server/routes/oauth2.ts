@@ -6,7 +6,7 @@ import { check, query } from "express-validator";
 import passport = require("passport");
 import Gender from "../../client/core/src/models/Gender";
 import EditorType from "../../client/core/src/models/EditorType";
-const MIN_PASSWORD_LENGTH: number = 6;
+import { PASSWORD_MIN_LENGTH } from "../../client/core/src/shared/constants";
 const oauth2: Router = express.Router();
 oauth2.route("/token").post(controllers.token);
 oauth2.route("/authorize").get(controllers.authorization);
@@ -14,7 +14,7 @@ oauth2.route("/authorize/decision").post(controllers.decision);
 oauth2.route("/signup").post(
     [
         check("email", "toast.user.email").isEmail(),
-        check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
+        check("password", "toast.user.password_too_short").isLength({ min: PASSWORD_MIN_LENGTH }),
         check("confirmPassword", "toast.user.confirm_password")
             .exists()
             .custom((value, { req }) => value === req.body.password),
@@ -62,7 +62,7 @@ oauth2.route("/password/update")
     .post(
         passport.authenticate("bearer", { session: false }),
         [
-            check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
+            check("password", "toast.user.password_too_short").isLength({ min: PASSWORD_MIN_LENGTH }),
             check("confirmPassword", "toast.user.confirm_password")
                 .exists()
                 .custom((value, { req }) => value === req.body.password),
@@ -77,7 +77,7 @@ oauth2.route("/password/reset")
         [
             check("email", "toast.user.email").isEmail(),
             check("OTP", "toast.user.error_OTP").notEmpty(),
-            check("password", "toast.user.password_too_short").isLength({ min: MIN_PASSWORD_LENGTH }),
+            check("password", "toast.user.password_too_short").isLength({ min: PASSWORD_MIN_LENGTH }),
             check("confirmPassword", "toast.user.confirm_password")
                 .exists()
                 .custom((value, { req }) => value === req.body.password),

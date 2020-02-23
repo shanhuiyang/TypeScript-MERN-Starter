@@ -16,7 +16,7 @@ import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { isMobile } from "../dimension";
 import ArticleCache from "../../../models/client/ArticleCache";
 import { NEW_ARTICLE_CACHE_ID } from "../../../actions/article";
-import { MINIMUM_ARTICLE_LENGTH } from "../../../shared/constants";
+import { ARTICLE_CONTENT_MIN_LENGTH } from "../../../shared/constants";
 import { PrimitiveType } from "intl-messageformat";
 import WarningModal from "../shared/WarningModal";
 import { ComponentProps } from "../../../shared/ComponentProps";
@@ -84,7 +84,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={this.originalContent}
-                        placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                        placeholder={this.getString({id: "article.content_placeholder"})}
                         previewStyle={isMobile() ? "tab" : "vertical"}
                         height="54vh"
                         initialEditType={editorType}

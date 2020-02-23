@@ -1,4 +1,5 @@
 import Translation from "../../models/Translation";
+import { ARTICLE_TITLE_MAX_LENGTH, ARTICLE_CONTENT_MIN_LENGTH, ARTICLE_CONTENT_MAX_LENGTH, THREAD_CONTENT_MAX_LENGTH, THREAD_TITLE_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants";
 
 const TRANSLATION: Translation = {
     locale: "en-US",
@@ -89,7 +90,7 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "WYSIWYG",
         "article.title": "Title",
         "article.content": "Content",
-        "article.content_placeholder": "no less than {minimum_length} characters",
+        "article.content_placeholder": `no less than ${ARTICLE_CONTENT_MIN_LENGTH} characters`,
         "post.created_at": "Created at ",
         "post.updated_at": "Last updated at ",
         "post.replied_at": "Last replied at ",
@@ -141,8 +142,11 @@ const TRANSLATION: Translation = {
         "toast.client.incorrect_url": "Incorrect redirectUri!",
         "toast.post.title_empty": "Title could not be empty.",
         "toast.post.content_empty": "Content could not be empty.",
-        "toast.post.title_too_long": "Title could not be longer than 50 characters.",
-        "toast.post.content_too_short": "Content could not be shorter than 150 characters.",
+        "toast.thread.title_too_long": `Title could not be longer than ${THREAD_TITLE_MAX_LENGTH} characters.`,
+        "toast.thread.content_too_long": `Thread could not be longer than ${THREAD_CONTENT_MAX_LENGTH} characters.`,
+        "toast.article.title_too_long": `Title could not be longer than ${ARTICLE_TITLE_MAX_LENGTH} characters.`,
+        "toast.article.content_too_short": `Article could not be shorter than ${ARTICLE_CONTENT_MIN_LENGTH} characters.`,
+        "toast.article.content_too_long": `Article could not be longer than ${ARTICLE_CONTENT_MAX_LENGTH} characters.`,
         "toast.article.save_successfully": "Save your article successfully.",
         "toast.article.delete_successfully": "Delete your article successfully.",
         "toast.article.invalid_author": "You are not the author!",
@@ -152,7 +156,7 @@ const TRANSLATION: Translation = {
         "toast.user.email": "Invalid email.",
         "toast.user.email_not_found": "This email is not found.",
         "toast.user.password_error": "Password is incorrect.",
-        "toast.user.password_too_short": "Password should be longer than or equal to 6 characters.",
+        "toast.user.password_too_short": `Password should be longer than or equal to ${PASSWORD_MIN_LENGTH} characters.`,
         "toast.user.password_empty": "Password could not be empty.",
         "toast.user.confirm_password": "confirmed password field must have the same value as the password field",
         "toast.user.name": "Name could not be empty.",

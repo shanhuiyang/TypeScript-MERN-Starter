@@ -1,4 +1,5 @@
 import Translation from "../../models/Translation";
+import { THREAD_TITLE_MAX_LENGTH, THREAD_CONTENT_MAX_LENGTH, ARTICLE_TITLE_MAX_LENGTH, ARTICLE_CONTENT_MIN_LENGTH, ARTICLE_CONTENT_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants";
 
 const TRANSLATION: Translation = {
     locale: "zh-CN",
@@ -89,7 +90,7 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "所见即所得",
         "article.title": "标题",
         "article.content": "正文",
-        "article.content_placeholder": "不少于{minimum_length}字",
+        "article.content_placeholder": `不少于${ARTICLE_CONTENT_MIN_LENGTH}字`,
         "post.created_at": "创建于",
         "post.updated_at": "最后更新于",
         "post.replied_at": "最后回复于",
@@ -142,8 +143,11 @@ const TRANSLATION: Translation = {
         "toast.client.incorrect_url": "客户端redirectUri错误！",
         "toast.post.title_empty": "标题不能为空",
         "toast.post.content_empty": "正文不能为空",
-        "toast.post.title_too_long": "标题不能长于50字",
-        "toast.post.content_too_short": "正文不能短于150字",
+        "toast.thread.title_too_long": `帖子标题不能长于${THREAD_TITLE_MAX_LENGTH}字`,
+        "toast.thread.content_too_long": `帖子正文不能长于${THREAD_CONTENT_MAX_LENGTH}字`,
+        "toast.article.title_too_long": `文章标题不能长于${ARTICLE_TITLE_MAX_LENGTH}字`,
+        "toast.article.content_too_short": `文章正文不能短于${ARTICLE_CONTENT_MIN_LENGTH}字`,
+        "toast.article.content_too_long": `文章正文不能长于${ARTICLE_CONTENT_MAX_LENGTH}字`,
         "toast.article.save_successfully": "成功保存你的文章",
         "toast.article.delete_successfully": "成功删除你的文章",
         "toast.article.invalid_author": "你并非本文的作者！",
@@ -153,7 +157,7 @@ const TRANSLATION: Translation = {
         "toast.user.email": "这不是一个合法的邮箱",
         "toast.user.email_not_found": "找不到该邮箱",
         "toast.user.password_error": "密码错误",
-        "toast.user.password_too_short": "密码不能短于6个字符",
+        "toast.user.password_too_short": `密码不能短于${PASSWORD_MIN_LENGTH}个字符`,
         "toast.user.password_empty": "密码不能为空",
         "toast.user.confirm_password": "密码不一致",
         "toast.user.name": "名字不能为空",

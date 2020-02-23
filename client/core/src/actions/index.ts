@@ -13,7 +13,6 @@ const actions: ActionCreator = {
     ...commonActionCreator,
     ...notificationActionCreator,
     ...threadActionCreator
-
 };
 
 export default actions;

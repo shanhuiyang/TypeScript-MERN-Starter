@@ -9,7 +9,7 @@ import { getArticleAbstract, getArticleCoverImage } from "../../../shared/string
 import UserLabel from "../user/UserLabel";
 import { Image } from "semantic-ui-react";
 import moment from "moment";
-import { MINIMUM_ARTICLE_LENGTH } from "../../../shared/constants";
+import { ARTICLE_CONTENT_MIN_LENGTH } from "../../../shared/constants";
 import { ComponentProps } from "../../../shared/ComponentProps";
 
 interface Props extends ComponentProps {
@@ -22,7 +22,7 @@ class ArticleItem extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         const { article } = this.props;
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const previewContent: string = getArticleAbstract(article.content, MINIMUM_ARTICLE_LENGTH);
+        const previewContent: string = getArticleAbstract(article.content, ARTICLE_CONTENT_MIN_LENGTH);
         const coverSrc: string = getArticleCoverImage(article.content);
         return <Segment key={createDate.getMilliseconds()}>
             <Item>

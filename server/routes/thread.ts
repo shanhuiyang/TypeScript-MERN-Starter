@@ -2,11 +2,13 @@ import express, { Router } from "express";
 import * as controllers from "../controllers/thread";
 import { check, query } from "express-validator";
 import passport from "passport";
+import { THREAD_TITLE_MAX_LENGTH, THREAD_CONTENT_MAX_LENGTH } from "../../client/core/src/shared/constants";
 
 const addThreadValidations = [
     check("title", "toast.post.title_empty").not().isEmpty(),
     check("content", "toast.post.content_empty").not().isEmpty(),
-    check("title", "toast.post.title_too_long").isLength({ max: 50 }),
+    check("title", "toast.thread.title_too_long").isLength({ max: THREAD_TITLE_MAX_LENGTH }),
+    check("content", "toast.thread.content_too_long").isLength({ max: THREAD_CONTENT_MAX_LENGTH }),
 ];
 
 const thread: Router = express.Router();

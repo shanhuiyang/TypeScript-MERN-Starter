@@ -8,7 +8,7 @@ import connectAllProps from "../../core/src/shared/connect";
 import { getAvatarSource, amendImageUrl } from "../utils/image";
 import moment from "moment";
 import { getArticleAbstract, getArticleCoverImage } from "../../core/src/shared/string";
-import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
+import { ARTICLE_CONTENT_MIN_LENGTH } from "../../core/src/shared/constants";
 import { ComponentProps } from "../../core/src/shared/ComponentProps";
 
 interface Props extends ComponentProps {
@@ -52,7 +52,7 @@ class ArticleItem extends React.Component<Props, States> {
                     <Text style={{color: "#010101"}}>{articleAuthor.name}</Text>
                 </View>
                 <View style={{marginVertical: 4}}>
-                    <Text numberOfLines={3}>{getArticleAbstract(article.content, MINIMUM_ARTICLE_LENGTH)}</Text>
+                    <Text numberOfLines={3}>{getArticleAbstract(article.content, ARTICLE_CONTENT_MIN_LENGTH)}</Text>
                 </View>
                 <View style={{marginVertical: 4}}>
                     <Text style={{color: "grey"}}>
