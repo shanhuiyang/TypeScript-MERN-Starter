@@ -1,7 +1,5 @@
 import React, { RefObject, ChangeEvent } from "react";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
-import UserActionCreator from "../../models/client/UserActionCreator";
+import connectAllProps from "../../shared/connect";
 import Gender from "../../models/Gender";
 import { Redirect } from "react-router";
 import { Container, Form, Button, Icon, Radio, Image, Placeholder, Header } from "semantic-ui-react";
@@ -10,13 +8,9 @@ import ResponsiveFormField from "../components/shared/ResponsiveFormField";
 import User from "../../models/User";
 import AvatarCropDialog from "../components/user/AvatarCropDialog";
 import FileSelectButton from "../components/shared/FileSelectButton";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-
-interface Props extends IntlProps {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
 interface States {
     selectedGender: Gender;
@@ -225,4 +219,4 @@ class Profile extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(Profile));
+export default connectAllProps(Profile);

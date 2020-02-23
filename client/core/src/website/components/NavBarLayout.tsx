@@ -1,8 +1,6 @@
 import React, { RefObject, Fragment } from "react";
 import { NavLink, Link } from "react-router-dom";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
-import UserActionCreator from "../../models/client/UserActionCreator";
+import connectAllProps from "../../shared/connect";
 import { Menu, Sticky, Dropdown, Image, Button, Sidebar, Icon, Dimmer, Label } from "semantic-ui-react";
 import User from "../../models/User";
 import ResponsiveDesktop from "./shared/ResponsiveDesktop";
@@ -11,11 +9,10 @@ import { WRAPPER_VIEW_STYLE } from "../../shared/styles";
 import { FormattedMessage } from "react-intl";
 import MenuFab from "./shared/MenuFab";
 import Notification from "../../models/Notification";
+import { ComponentProps } from "../../shared/ComponentProps";
 
-interface Props {
+interface Props extends ComponentProps {
     containerRef: RefObject<any>;
-    state: AppState;
-    actions: UserActionCreator;
 }
 interface States {
     sidebarVisible: boolean;
@@ -204,4 +201,4 @@ class NavBarLayout extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(NavBarLayout);
+export default connectAllProps(NavBarLayout);

@@ -2,22 +2,19 @@ import Article from "../../core/src/models/Article";
 import React, { Fragment } from "react";
 import { Content, View, Spinner, Button, Text } from "native-base";
 import { TextInput } from "react-native";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor } from "react-intl";
-import { MINIMUM_ARTICLE_LENGTH } from "../../core/src/shared/constants";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
+import { ARTICLE_CONTENT_MIN_LENGTH } from "../../core/src/shared/constants";
 import { PrimitiveType } from "intl-messageformat";
 import { NEW_ARTICLE_CACHE_ID } from "../../core/src/actions/article";
-import connectPropsAndActions from "../../core/src/shared/connect";
-import AppState from "../../core/src/models/client/AppState";
-import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
+import connectAllProps from "../../core/src/shared/connect";
 import ArticleCache from "../../core/src/models/client/ArticleCache";
+import { ComponentProps } from "../../core/src/shared/ComponentProps";
 
-interface Props extends IntlProps {
+interface Props extends ComponentProps {
     article?: Article;
     submitTextId: string;
     onSubmit: (title: string, content: string) => void;
     loading?: boolean;
-    state: AppState;
-    actions: ArticleActionCreator;
 }
 
 interface States {
@@ -77,7 +74,7 @@ class ArticleEditor extends React.Component<Props, States> {
                             multiline={true}
                             autoFocus={true}
                             textAlignVertical="top"
-                            placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                            placeholder={this.getString({id: "article.content_placeholder"})}
                             value={this.state.content}
                             onChangeText={(input: string) => {
                                 this.onEditing(undefined, input);
@@ -165,4 +162,4 @@ class ArticleEditor extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ArticleEditor));
+export default connectAllProps(ArticleEditor);

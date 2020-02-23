@@ -29,13 +29,14 @@ export const acknowledge: RequestHandler = (req: Request, res: Response, next: N
         if (notification.owner !== user._id.toString()) {
             return res.status(401).json({ message: "toast.user.attack_alert" });
         }
-        NotificationCollection.findByIdAndUpdate(req.params.id, {acknowledged: true}).exec(
-            (error: Error, updated: Notification) => {
-                if (error) {
-                    return next(error);
-                }
-                return res.status(200).end();
-            }
-        );
+        NotificationCollection
+        .findByIdAndUpdate(req.params.id, {acknowledged: true})
+        .exec()
+        .then(() => {
+            return res.status(200).end();
+        })
+        .catch((error: Error) => {
+            return next(error);
+        });
     });
 };

@@ -53,7 +53,7 @@ const articleActionCreator: ArticleActionCreator = {
                         hasMore: json.hasMore
                     });
                 } else {
-                    dispatch(actions.handleFetchError(GET_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {
@@ -74,7 +74,7 @@ const articleActionCreator: ArticleActionCreator = {
                         hasMore: json.hasMore
                     });
                 } else {
-                    dispatch(actions.handleFetchError(GET_MORE_ARTICLE_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {
@@ -82,14 +82,25 @@ const articleActionCreator: ArticleActionCreator = {
             });
         };
     },
-    createArticle(title: string, content: string, author: string): any {
+    addArticle(title: string, content: string, author: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
-            .then((json: any) => {
-                removeEditCacheExec(NEW_ARTICLE_CACHE_ID, dispatch);
-                toast().success("toast.article.save_successfully");
-                dispatch({ type: SAVE_ARTICLE_SUCCESS });
+            .then((added: Article) => {
+                if (added) {
+                    removeEditCacheExec(NEW_ARTICLE_CACHE_ID, dispatch);
+                    toast().success("toast.article.save_successfully");
+                    dispatch({
+                        type: SAVE_ARTICLE_SUCCESS,
+                        article: added,
+                        redirectTask: {
+                            redirected: false,
+                            to: `/article/${added._id}`
+                        }
+                    });
+                } else {
+                    return Promise.reject({ name: "500 Internal Server Error", message: "Broken data." });
+                }
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -100,10 +111,17 @@ const articleActionCreator: ArticleActionCreator = {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
             fetch("/api/article/edit", article, "POST", /*withToken*/ true)
-            .then((json: any) => {
+            .then((updated: Article) => {
                 removeEditCacheExec(article._id, dispatch);
                 toast().success("toast.article.save_successfully");
-                dispatch({ type: SAVE_ARTICLE_SUCCESS });
+                dispatch({
+                    type: SAVE_ARTICLE_SUCCESS,
+                    article: updated,
+                    redirectTask: {
+                        redirected: false,
+                        to: `/article/${updated._id}`
+                    }
+                });
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SAVE_ARTICLE_FAILED, error));
@@ -161,7 +179,9 @@ const articleActionCreator: ArticleActionCreator = {
     },
     restoreEditCache(): any {
         return (dispatch: Dispatch<any>): void => {
-            localStorage().getAllKeys().then((keys: string[]) => {
+            localStorage()
+            .getAllKeys()
+            .then((keys: string[]) => {
                 keys.forEach(key => {
                     if (!key || !key.startsWith(ARTICLE_EDIT_CACHE_KEY_PREFIX)) {
                         return dispatch({
@@ -181,9 +201,7 @@ const articleActionCreator: ArticleActionCreator = {
                             cache: JSON.parse(value) as ArticleCache
                         });
                     }).catch((reason: any) => {
-                        dispatch({
-                            type: IGNORE_CACHE_RESTORE
-                        });
+                        return Promise.reject();
                     });
                 });
             }).catch((reason: any) => {

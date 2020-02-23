@@ -1,20 +1,14 @@
 import React, { ChangeEvent } from "react";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
-import UserActionCreator from "../../models/client/UserActionCreator";
+import connectAllProps from "../../shared/connect";
 import EditorType from "../../models/EditorType";
 import { Redirect } from "react-router";
 import { Container, Form, Button, Icon, Radio, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import User from "../../models/User";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { DEFAULT_PREFERENCES } from "../../shared/preferences";
-
-interface Props extends IntlProps {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
 interface States {
     selectedEditorType: EditorType;
@@ -105,4 +99,4 @@ class Preferences extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(Preferences));
+export default connectAllProps(Preferences);

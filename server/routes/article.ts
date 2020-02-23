@@ -2,13 +2,14 @@ import express, { Router } from "express";
 import * as controllers from "../controllers/article";
 import { check, query } from "express-validator";
 import passport from "passport";
-import { MINIMUM_ARTICLE_LENGTH } from "../../client/core/src/shared/constants";
+import { ARTICLE_CONTENT_MIN_LENGTH, ARTICLE_TITLE_MAX_LENGTH, ARTICLE_CONTENT_MAX_LENGTH } from "../../client/core/src/shared/constants";
 
 const updateArticleValidations = [
-    check("title", "toast.article.title_empty").not().isEmpty(),
-    check("content", "toast.article.content_empty").not().isEmpty(),
-    check("title", "toast.article.title_too_long").isLength({ max: 100 }),
-    check("content", "toast.article.content_too_short").isLength({ min: MINIMUM_ARTICLE_LENGTH }),
+    check("title", "toast.post.title_empty").not().isEmpty(),
+    check("content", "toast.post.content_empty").not().isEmpty(),
+    check("title", "toast.article.title_too_long").isLength({ max: ARTICLE_TITLE_MAX_LENGTH }),
+    check("content", "toast.article.content_too_short").isLength({ min: ARTICLE_CONTENT_MIN_LENGTH }),
+    check("content", "toast.article.content_too_long").isLength({ max: ARTICLE_CONTENT_MAX_LENGTH }),
 ];
 
 const article: Router = express.Router();
@@ -39,10 +40,6 @@ article.route("/rate").get(
         query("rating", "toast.user.attack_alert").isIn(["0", "1"]),
     ],
     controllers.like
-);
-article.route("/insert/image").put(
-    passport.authenticate("bearer", { session: false }),
-    controllers.insertImage
 );
 
 export default article;

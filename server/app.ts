@@ -13,11 +13,13 @@ import oauth2 from "./routes/oauth2";
 import auth from "./routes/auth";
 import article from "./routes/article";
 import comment from "./routes/comment";
+import image from "./routes/image";
 
 // API keys and Passport configuration
 import "./config/passport-consumer";
 import avatar from "./routes/avatar";
 import notification from "./routes/notification";
+import thread from "./routes/thread";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -108,7 +110,9 @@ app.use("/oauth2", oauth2); // OAuth2 server routes
 app.use("/api/article", article); // Article related routes
 app.use("/api/avatar", avatar); // Avatar update related routes
 app.use("/api/comment", comment); // Comment related routes
-app.use("/api/notification", notification); // Comment related routes
+app.use("/api/notification", notification); // Notification related routes
+app.use("/api/image", image);
+app.use("/api/thread", thread);
 // Add more routes like "/api/***" here
 
 export default app;

@@ -5,6 +5,9 @@ export const articleSchema: Schema = new mongoose.Schema({
     title: String,
     content: String,
     likes: [String], // array of User._id
+    commentsCount: Number,
+    lastCommentedAt: String,
+    lastCommentedBy: String,
 }, { timestamps: true });
 
 const ArticleCollection: Model<ArticleDocument> = mongoose.model("Article", articleSchema);

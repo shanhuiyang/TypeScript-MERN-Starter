@@ -1,16 +1,16 @@
 /**
- * This component is not in used because tui.editor cannot customize the insert image dialog.
- * We will try to use it in future for better UX.
+ * This component used to show a dialog that users can upload images from their disk
  */
 import React from "react";
 import { MessageDescriptor, FormattedMessage, injectIntl, WrappedComponentProps as IntlProps  } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { Modal, Form } from "semantic-ui-react";
-import FileSelectButton from "../shared/FileSelectButton";
+import FileSelectButton from "./FileSelectButton";
 
 interface Props extends IntlProps {
     open: boolean;
     onCancel: () => void;
+    onConfirm: () => void;
 }
 
 interface States {}
@@ -52,6 +52,7 @@ class InsertImageDialog extends React.Component<Props, States> {
     }
 
     private save = (): void => {
+        // TODO
     }
 }
 

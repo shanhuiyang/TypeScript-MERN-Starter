@@ -1,28 +1,20 @@
 import React, { Fragment } from "react";
-import AppState from "../../../models/client/AppState";
-import connectPropsAndActions from "../../../shared/connect";
+import connectAllProps from "../../../shared/connect";
 import Article from "../../../models/Article";
-import { RouteComponentProps, withRouter } from "react-router-dom";
-import { byCreatedAt } from "../../../shared/date";
+import { byCreatedAtLatestFirst } from "../../../shared/date";
 import { Container, Segment, Header, Icon, Button } from "semantic-ui-react";
-import ActionCreator from "../../../models/client/ActionCreator";
 import ArticleItem from "./ArticleItem";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import Loading from "./Loading";
 import GitHubLink from "../shared/GitHubLink";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import FabAction from "../../../models/client/FabAction";
 import NothingMoreFooter from "../shared/NothingMoreFooter";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../../shared/ComponentProps";
 
 interface States {}
 
 class ArticleList extends React.Component<Props, States> {
-
     render(): React.ReactElement<any> {
         return <Container text style={CONTAINER_STYLE}>
             {this.renderCreateArticleSection()}
@@ -30,7 +22,6 @@ class ArticleList extends React.Component<Props, States> {
             {this.renderLoadMore()}
         </Container>;
     }
-
     componentDidMount() {
         this.props.actions.resetRedirectTask();
         this.addFabActions();
@@ -53,7 +44,7 @@ class ArticleList extends React.Component<Props, States> {
             return <Fragment>
             {
                 this.props.state.articleState.data
-                .sort(byCreatedAt).map(
+                .sort(byCreatedAtLatestFirst).map(
                     (article: Article) => <ArticleItem key={article._id} article={article} />
                 )
             }
@@ -126,4 +117,4 @@ class ArticleList extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(withRouter(connectPropsAndActions(ArticleList)));
+export default connectAllProps(ArticleList);

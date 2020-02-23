@@ -4,6 +4,8 @@ import { GET_ARTICLE_SUCCESS, SAVE_ARTICLE_SUCCESS, GET_ARTICLE_BEGIN, SAVE_ARTI
 import Article from "../models/Article";
 import { UPDATE_PROFILE_SUCCESS } from "../actions/user";
 import ArticleCache from "../models/client/ArticleCache";
+import { ADD_COMMENT_SUCCESS, REMOVE_COMMENT_SUCCESS } from "../actions/comment";
+import PostType from "../models/PostType";
 
 const initialState: ArticleState = {
     loading: false,
@@ -38,9 +40,18 @@ const article = (state: ArticleState = initialState, action: Action): ArticleSta
                 hasMore: action.hasMore
             };
         case SAVE_ARTICLE_SUCCESS:
+            // merge the added/updated article instantly, without waiting for the article list fetching
+            return {...state, valid: false, loading: false, data: [...state.data, action.article]};
         case REMOVE_ARTICLE_SUCCESS:
         case UPDATE_PROFILE_SUCCESS:
             return {...state, valid: false, loading: false};
+        case ADD_COMMENT_SUCCESS:
+        case REMOVE_COMMENT_SUCCESS:
+            if (action.targetType === PostType.ARTICLE) {
+                return {...state, valid: false, loading: false};
+            } else {
+                return state;
+            }
         case GET_ARTICLE_FAILED:
         case REMOVE_ARTICLE_FAILED:
         case SAVE_ARTICLE_FAILED:

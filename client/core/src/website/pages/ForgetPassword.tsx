@@ -1,20 +1,15 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
+import connectAllProps from "../../shared/connect";
 import { Redirect } from "react-router-dom";
-import ActionCreator from "../../models/client/ActionCreator";
 import { Container, Form, Button, Icon, Header, Step } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { toast } from "react-toastify";
 import fetch from "../../shared/fetch";
-
-interface Props extends IntlProps {
-    state: AppState;
-    actions: ActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
+import { pendingRedirect } from "../../shared/redirect";
 
 interface States {
     step: number;
@@ -40,7 +35,7 @@ class ForgetPassword extends React.Component<Props, States> {
         };
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (!this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -198,4 +193,4 @@ class ForgetPassword extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ForgetPassword));
+export default connectAllProps(ForgetPassword);

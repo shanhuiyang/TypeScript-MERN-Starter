@@ -1,18 +1,13 @@
 import React, { RefObject } from "react";
-import connectPropsAndActions from "../../shared/connect";
-import AppState from "../../models/client/AppState";
+import connectAllProps from "../../shared/connect";
 import { Redirect } from "react-router-dom";
-import UserActionCreator from "../../models/client/UserActionCreator";
 import { Container, Form, Button, Icon, Header } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../shared/styles";
 import ResponsiveFormField from "../components/shared/ResponsiveFormField";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-
-interface Props extends IntlProps {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { ComponentProps as Props } from "../../shared/ComponentProps";
+import { pendingRedirect } from "../../shared/redirect";
 
 interface States {}
 
@@ -29,7 +24,7 @@ class Security extends React.Component<Props, States> {
         this.confirmPasswordRef = React.createRef();
     }
     render(): React.ReactElement<any> {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         } else if (this.props.state.userState.currentUser) {
             const loading: boolean = this.props.state.userState.loading;
@@ -74,4 +69,4 @@ class Security extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(Security));
+export default connectAllProps(Security);

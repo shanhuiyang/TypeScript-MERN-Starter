@@ -1,25 +1,19 @@
 import React, { Fragment } from "react";
 import { StyleSheet, Alert } from "react-native";
 import { Text, Body, Content, Left, Card, CardItem, Thumbnail, View, Fab, Icon } from "native-base";
-import { RouteComponentProps, Redirect } from "react-router-native";
+import { Redirect } from "react-router-native";
 import Article from "../../core/src/models/Article";
-import AppState from "../../core/src/models/client/AppState";
-import connectPropsAndActions from "../../core/src/shared/connect";
+import connectAllProps from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
 import { getAvatarSource, amendAllImageInContent } from "../utils/image";
 import Markdown from "react-native-markdown-display";
 import moment from "moment";
-import { getHostUrl } from "../../core/src/shared/fetch";
 import { MARKDOWN_STYLES } from "./styles/markdown";
-import ArticleActionCreator from "../../core/src/models/client/ArticleActionCreator";
-import { MessageDescriptor, injectIntl, WrappedComponentProps as IntlProps } from "react-intl";
+import { MessageDescriptor, } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-
-interface Props extends IntlProps, RouteComponentProps<any> {
-    state: AppState;
-    actions: ArticleActionCreator;
-}
+import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
+import { pendingRedirect } from "../../core/src/shared/redirect";
 
 interface States {}
 
@@ -32,7 +26,7 @@ class ArticleDetail extends React.Component<Props, States> {
         this.getString = this.props.intl.formatMessage;
     }
     render(): any {
-        if (!this.props.state.redirectTask.redirected) {
+        if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         }
         const article: Article | undefined = this.props.location.state;
@@ -117,4 +111,4 @@ class ArticleDetail extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ArticleDetail));
+export default connectAllProps(ArticleDetail);

@@ -2,6 +2,7 @@ import UserState from "./UserState.d";
 import ArticleState from "./ArticleState.d";
 import CommentState from "./CommentState.d";
 import RedirectTask from "./RedirectTask.d";
+import ThreadState from "./ThreadState.d";
 import Translation from "../Translation";
 import Comment from "../Comment.d";
 import User from "../User.d";
@@ -12,7 +13,8 @@ export default interface AppState {
     redirectTask: RedirectTask;
     userState: UserState;
     articleState: ArticleState;
-    commentState: CommentState; // Comments for currently displayed article/photo/video
+    threadState: ThreadState;
+    commentState: CommentState; // Comments for currently displayed article/thread/photo/video
     userDictionary: {[id: string]: User}; // User dictionary of all content authors
     fabActions: FabAction[];
 }

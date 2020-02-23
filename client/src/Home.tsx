@@ -1,13 +1,7 @@
 import React from "react";
-import { RouteComponentProps, Redirect } from "react-router-native";
-import AppState from "../core/src/models/client/AppState";
-import UserActionCreator from "../core/src/models/client/UserActionCreator";
-import connectPropsAndActions from "../core/src/shared/connect";
-
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: UserActionCreator;
-}
+import { Redirect } from "react-router-native";
+import connectAllProps from "../core/src/shared/connect";
+import { ComponentProps as Props } from "../core/src/shared/ComponentProps";
 
 interface States {}
 
@@ -20,4 +14,4 @@ class Home extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Home);
+export default connectAllProps(Home);

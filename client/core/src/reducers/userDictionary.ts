@@ -4,6 +4,7 @@ import { GET_ARTICLE_SUCCESS, GET_MORE_ARTICLE_SUCCESS } from "../actions/articl
 import { LOAD_COMMENTS_SUCCESS } from "../actions/comment";
 import { CONSENT_REQUEST_SUCCESS, AUTHENTICATE_SUCCESS, LOGIN_SUCCESS, UPDATE_PROFILE_SUCCESS } from "../actions/user";
 import { GET_NOTIFICATIONS_SUCCESS } from "../actions/notification";
+import { GET_THREADS_SUCCESS } from "../actions/thread";
 
 const initialState: {[id: string]: User} = {};
 
@@ -12,6 +13,7 @@ const userDictionary = (state: {[id: string]: User} = initialState, action: Acti
         case GET_ARTICLE_SUCCESS:
         case LOAD_COMMENTS_SUCCESS:
         case GET_MORE_ARTICLE_SUCCESS:
+        case GET_THREADS_SUCCESS:
             return {...state, ...action.authors};
         case CONSENT_REQUEST_SUCCESS:
         case AUTHENTICATE_SUCCESS:

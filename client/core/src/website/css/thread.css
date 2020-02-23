@@ -1,0 +1,19 @@
+@charset "UTF-8";
+/**
+ * style sheet for thread page
+ */
+.title-text {
+    display: flex;
+    color: rgba(0, 0, 0, 0.7);
+}
+.title-text:hover {
+    display: flex;
+    color: rgba(0, 0, 0, 1);
+}
+.description-text {
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.6);
+}
+.reply-info-text {
+    margin-top: 4px;
+}

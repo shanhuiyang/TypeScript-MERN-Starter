@@ -1,18 +1,12 @@
 import React, { Fragment } from "react";
 // eslint-disable-next-line
-import { Route, RouteComponentProps, Switch, match } from "react-router";
+import { Route, Switch, match } from "react-router";
 import ArticleDetail from "../components/article/ArticleDetail";
 import ArticleList from "../components/article/ArticleList";
 import CreateArticle from "../components/article/CreateArticle";
 import EditArticle from "../components/article/EditArticle";
-import AppState from "../../models/client/AppState";
-import ArticleActionCreator from "../../models/client/ArticleActionCreator";
-import connectPropsAndActions from "../../shared/connect";
-
-interface Props extends RouteComponentProps<any> {
-    state: AppState;
-    actions: ArticleActionCreator;
-}
+import connectAllProps from "../../shared/connect";
+import { ComponentProps as Props } from "../../shared/ComponentProps";
 
 interface States {}
 
@@ -22,7 +16,6 @@ class Articles extends React.Component<Props, States> {
             this.props.actions.getArticles();
         }
     }
-
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.articleState.valid && !this.props.state.articleState.valid) {
             this.props.actions.getArticles();
@@ -45,4 +38,4 @@ class Articles extends React.Component<Props, States> {
     }
 }
 
-export default connectPropsAndActions(Articles);
+export default connectAllProps(Articles);

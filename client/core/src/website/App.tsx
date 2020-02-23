@@ -15,6 +15,7 @@ import Articles from "./pages/Articles";
 import Notifications from "./pages/Notifications";
 import Security from "./pages/Security";
 import ForgetPassword from "./pages/ForgetPassword";
+import Threads from "./pages/Threads";
 
 interface Props {}
 
@@ -27,10 +28,6 @@ export default class App extends React.Component<Props, States> {
         this.contextRef = createRef();
     }
     render(): React.ReactElement<any> {
-        const notFoundError: Error = {
-            name: "404 Not Found",
-            message: `not found for ${window.location.href} `
-        };
         return (
             <div ref={this.contextRef} style={WRAPPER_VIEW_STYLE}>
                 <Route render={ (props) =>
@@ -44,12 +41,18 @@ export default class App extends React.Component<Props, States> {
                                 <Route path="/profile" render={ (props) => <Profile {...props} /> } />
                                 <Route path="/preferences" render={ (props) => <Preferences {...props} /> } />
                                 <Route path="/article" render={ (props) => <Articles {...props} /> } />
+                                <Route path="/thread" render={ (props) => <Threads {...props} /> } />
                                 <Route path="/notifications" render={ (props) => <Notifications {...props} /> } />
                                 <Route path="/security" render={ (props) => <Security {...props} /> } />
                                 <Route path="/forgetpassword" render={ (props) => <ForgetPassword {...props} /> } />
                                 <Route path="/about" component={About} />
                                 {/* add more routes here, the path should keep the same as PostType if necessary */}
-                                <Route render={ (props) => <ErrorPage {...props} error={notFoundError} /> } />
+                                <Route render={ (props) => <ErrorPage {...props} error={{
+                                            name: "404 Not Found",
+                                            message: `not found for ${window.location.href} `
+                                        }}
+                                    />}
+                                />
                             </Switch>
                         </main>
                         <Footer />

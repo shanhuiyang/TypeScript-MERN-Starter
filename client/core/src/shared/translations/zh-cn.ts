@@ -1,4 +1,5 @@
 import Translation from "../../models/Translation";
+import { THREAD_TITLE_MAX_LENGTH, THREAD_CONTENT_MAX_LENGTH, ARTICLE_TITLE_MAX_LENGTH, ARTICLE_CONTENT_MIN_LENGTH, ARTICLE_CONTENT_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants";
 
 const TRANSLATION: Translation = {
     locale: "zh-CN",
@@ -28,6 +29,13 @@ const TRANSLATION: Translation = {
         "page.me.reset_password_step_2": "验证邮箱",
         "page.me.reset_password_step_3": "重置密码",
         "page.me.notifications": "通知",
+        "page.threads": "论坛",
+        "page.thread.add": "发新帖",
+        "page.thread.empty": "目前还没有任何帖子。",
+        "page.thread.placeholder": "输入任何内容…",
+        "page.thread.removed": ">>> 原帖已删除 <<<",
+        "page.thread.delete": "删除帖子: {title}",
+        "page.thread.delete_confirmation": "删除后的帖子不可恢复，你确定要删除吗？",
         "page.consent.greeting": "{email}你好，",
         "page.consent.description": "{app_name}需要访问你的账号。",
         "page.consent.inquiry": "请问是否授权？",
@@ -56,6 +64,7 @@ const TRANSLATION: Translation = {
         "page.notification.event_unlike": "取消点赞",
         "page.notification.object_article": "你的文章",
         "page.notification.object_comment": "你的评论",
+        "page.notification.object_thread": "你的帖子",
         "page.notification.empty": "没有新的通知",
         "page.notification.load_all": "查看所有已读通知",
         "page.notification.set_as_read": "设为已读",
@@ -81,9 +90,11 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "所见即所得",
         "article.title": "标题",
         "article.content": "正文",
-        "article.content_placeholder": "不少于{minimum_length}字",
-        "article.created_at": "创建于",
-        "article.updated_at": "最后更新于",
+        "article.content_placeholder": `不少于${ARTICLE_CONTENT_MIN_LENGTH}字`,
+        "post.created_at": "创建于",
+        "post.updated_at": "最后更新于",
+        "post.replied_at": "最后回复于",
+        "post.no_reply_yet": "暂无回复",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -96,6 +107,7 @@ const TRANSLATION: Translation = {
         "component.button.update": "更新",
         "component.button.delete": "删除",
         "component.button.edit": "编辑",
+        "component.button.preview": "预览",
         "component.button.see_all": "查看全文",
         "component.button.create": "创建",
         "component.button.next": "下一步",
@@ -129,12 +141,15 @@ const TRANSLATION: Translation = {
         "toast.user.old_password_error": "旧的密码不对",
         "toast.client.invalid": "非法客户端！",
         "toast.client.incorrect_url": "客户端redirectUri错误！",
+        "toast.post.title_empty": "标题不能为空",
+        "toast.post.content_empty": "正文不能为空",
+        "toast.thread.title_too_long": `帖子标题不能长于${THREAD_TITLE_MAX_LENGTH}字`,
+        "toast.thread.content_too_long": `帖子正文不能长于${THREAD_CONTENT_MAX_LENGTH}字`,
+        "toast.article.title_too_long": `文章标题不能长于${ARTICLE_TITLE_MAX_LENGTH}字`,
+        "toast.article.content_too_short": `文章正文不能短于${ARTICLE_CONTENT_MIN_LENGTH}字`,
+        "toast.article.content_too_long": `文章正文不能长于${ARTICLE_CONTENT_MAX_LENGTH}字`,
         "toast.article.save_successfully": "成功保存你的文章",
         "toast.article.delete_successfully": "成功删除你的文章",
-        "toast.article.title_empty": "标题不能为空",
-        "toast.article.content_empty": "正文不能为空",
-        "toast.article.title_too_long": "标题不能长于100字",
-        "toast.article.content_too_short": "正文不能短于150字",
         "toast.article.invalid_author": "你并非本文的作者！",
         "toast.article.not_found": "不存在的文章！",
         "toast.article.insert_image_failed": "图片插入失败",
@@ -142,7 +157,7 @@ const TRANSLATION: Translation = {
         "toast.user.email": "这不是一个合法的邮箱",
         "toast.user.email_not_found": "找不到该邮箱",
         "toast.user.password_error": "密码错误",
-        "toast.user.password_too_short": "密码不能短于6个字符",
+        "toast.user.password_too_short": `密码不能短于${PASSWORD_MIN_LENGTH}个字符`,
         "toast.user.password_empty": "密码不能为空",
         "toast.user.confirm_password": "密码不一致",
         "toast.user.name": "名字不能为空",
@@ -155,7 +170,12 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "抱歉，你不能删除一个有人回复过的评论",
         "toast.comment.delete_successfully": "删除成功",
         "toast.comment.delete_failed": "删除失败",
-        "toast.notification.not_found": "找不到这条通知"
+        "toast.comment.not_found": "找不到该条评论",
+        "toast.notification.not_found": "找不到这条通知",
+        "toast.thread.add_successfully": "你的帖子发表成功",
+        "toast.thread.add_failed": "你的帖子发表失败",
+        "toast.thread.delete_successfully": "你的帖子已删除",
+        "toast.thread.delete_failed": "你的帖子删除失败"
     }
 };
 

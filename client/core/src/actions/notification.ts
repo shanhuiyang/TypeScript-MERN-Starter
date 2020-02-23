@@ -39,7 +39,7 @@ const notificationActionCreator: NotificationActionCreator = {
                         subjects: json.subjects
                     });
                 } else {
-                    dispatch(actions.handleFetchError(GET_NOTIFICATIONS_FAILED, { name: "500 Internal Server Error", message: "" }));
+                    return Promise.reject({ name: "500 Internal Server Error", message: "" });
                 }
             })
             .catch((error: Error) => {

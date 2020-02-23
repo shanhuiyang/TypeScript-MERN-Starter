@@ -1,4 +1,5 @@
 import Translation from "../../models/Translation";
+import { ARTICLE_TITLE_MAX_LENGTH, ARTICLE_CONTENT_MIN_LENGTH, ARTICLE_CONTENT_MAX_LENGTH, THREAD_CONTENT_MAX_LENGTH, THREAD_TITLE_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "../constants";
 
 const TRANSLATION: Translation = {
     locale: "en-US",
@@ -28,6 +29,13 @@ const TRANSLATION: Translation = {
         "page.me.reset_password_step_2": "Verify Email",
         "page.me.reset_password_step_3": "Reset Password",
         "page.me.notifications": "Notifications",
+        "page.threads": "Forum",
+        "page.thread.add": "Add thread",
+        "page.thread.empty": "No threads are added up to now.",
+        "page.thread.placeholder": "Anything you would like to post...",
+        "page.thread.removed": ">>> The original thread has been removed <<<",
+        "page.thread.delete": "Delete Thread: {title}",
+        "page.thread.delete_confirmation": "You cannot restore this thread after delete. Are you sure to delete?",
         "page.avatar.title": "Adjust Your Profile Image",
         "page.avatar.rotate": "Rotate",
         "page.avatar.zoom": "Zoom",
@@ -56,6 +64,7 @@ const TRANSLATION: Translation = {
         "page.notification.event_unlike": "cancelled like on",
         "page.notification.object_article": "your article",
         "page.notification.object_comment": "your comment",
+        "page.notification.object_thread": "your thread",
         "page.notification.empty": "No new notification.",
         "page.notification.load_all": "See all read notifications",
         "page.notification.set_as_read": "Set as read",
@@ -81,9 +90,11 @@ const TRANSLATION: Translation = {
         "preferences.editor_type.wysiwyg": "WYSIWYG",
         "article.title": "Title",
         "article.content": "Content",
-        "article.content_placeholder": "no less than {minimum_length} characters",
-        "article.created_at": "Created at ",
-        "article.updated_at": "Last updated at ",
+        "article.content_placeholder": `no less than ${ARTICLE_CONTENT_MIN_LENGTH} characters`,
+        "post.created_at": "Created at ",
+        "post.updated_at": "Last updated at ",
+        "post.replied_at": "Last replied at ",
+        "post.no_reply_yet": "No reply yet",
 
         // Components.
         // pattern: component.<component_name>.<action>
@@ -96,6 +107,7 @@ const TRANSLATION: Translation = {
         "component.button.update": "Update",
         "component.button.delete": "Delete",
         "component.button.edit": "Edit",
+        "component.button.preview": "Preview",
         "component.button.see_all": "Read all",
         "component.button.create": "Create",
         "component.button.next": "next",
@@ -128,12 +140,15 @@ const TRANSLATION: Translation = {
         "toast.user.old_password_error": "Old password is incorrect.",
         "toast.client.invalid": "Invalid client!",
         "toast.client.incorrect_url": "Incorrect redirectUri!",
+        "toast.post.title_empty": "Title could not be empty.",
+        "toast.post.content_empty": "Content could not be empty.",
+        "toast.thread.title_too_long": `Title could not be longer than ${THREAD_TITLE_MAX_LENGTH} characters.`,
+        "toast.thread.content_too_long": `Thread could not be longer than ${THREAD_CONTENT_MAX_LENGTH} characters.`,
+        "toast.article.title_too_long": `Title could not be longer than ${ARTICLE_TITLE_MAX_LENGTH} characters.`,
+        "toast.article.content_too_short": `Article could not be shorter than ${ARTICLE_CONTENT_MIN_LENGTH} characters.`,
+        "toast.article.content_too_long": `Article could not be longer than ${ARTICLE_CONTENT_MAX_LENGTH} characters.`,
         "toast.article.save_successfully": "Save your article successfully.",
         "toast.article.delete_successfully": "Delete your article successfully.",
-        "toast.article.title_empty": "Title could not be empty.",
-        "toast.article.content_empty": "Content could not be empty.",
-        "toast.article.title_too_long": "Title could not be longer than 100 characters.",
-        "toast.article.content_too_short": "Content could not be shorter than 150 characters.",
         "toast.article.invalid_author": "You are not the author!",
         "toast.article.not_found": "Article not found!",
         "toast.article.insert_image_failed": "Failed to insert the image",
@@ -141,7 +156,7 @@ const TRANSLATION: Translation = {
         "toast.user.email": "Invalid email.",
         "toast.user.email_not_found": "This email is not found.",
         "toast.user.password_error": "Password is incorrect.",
-        "toast.user.password_too_short": "Password should be longer than or equal to 6 characters.",
+        "toast.user.password_too_short": `Password should be longer than or equal to ${PASSWORD_MIN_LENGTH} characters.`,
         "toast.user.password_empty": "Password could not be empty.",
         "toast.user.confirm_password": "confirmed password field must have the same value as the password field",
         "toast.user.name": "Name could not be empty.",
@@ -154,7 +169,12 @@ const TRANSLATION: Translation = {
         "toast.comment.delete_parent": "Sorry, you cannot delete a comment someone has replied to it.",
         "toast.comment.delete_successfully": "Delete successfully.",
         "toast.comment.delete_failed": "Delete failed.",
-        "toast.notification.not_found": "Cannot find this notification"
+        "toast.comment.not_found": "Cannot find this comment.",
+        "toast.notification.not_found": "Cannot find this notification",
+        "toast.thread.add_successfully": "Your thread created.",
+        "toast.thread.add_failed": "Your thread cannot be created.",
+        "toast.thread.delete_successfully": "Your thread has been deleted",
+        "toast.thread.delete_failed": "Your thread cannot be deleted."
     }
 };
 

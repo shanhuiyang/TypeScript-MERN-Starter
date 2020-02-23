@@ -3,29 +3,32 @@
  * In future, this section can be used to show comments below photo, video, etc
  */
 import React, { RefObject, createRef, Fragment } from "react";
-import { Comment, Form, Button, Header, RatingProps, Rating, Popup } from "semantic-ui-react";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
+import { Comment, Form, Button, Header, RatingProps, Rating, Popup, Divider, Container } from "semantic-ui-react";
+import connectAllProps from "../../../shared/connect";
 import User from "../../../models/User";
 import CommentClass from "../../../models/Comment";
 import UserAvatar from "../user/UserAvatar";
-import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import PostType from "../../../models/PostType";
-import CommentActionCreator from "../../../models/client/CommentActionCreator";
-import { byCreatedAt } from "../../../shared/date";
+import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
 import { getNameList } from "../../../shared/string";
 import moment from "moment";
+import { CONTAINER_STYLE } from "../../../shared/styles";
+import Loading from "./Loading";
+import { ComponentProps } from "../../../shared/ComponentProps";
 
-const MAXIMUM_THREAD_STACK_DEPTH: number = 3;
-interface Props extends IntlProps {
+interface Props extends ComponentProps {
     targetId: string;
     target: PostType;
-    state: AppState;
-    actions: CommentActionCreator;
-    maxThreadStackDepth?: number;
+    maxThreadStackDepth: number;
+    commentsOrder: "latest" | "oldest";
+    replyFormPosition: "top" | "bottom";
+    threaded: boolean;
+    divided?: boolean;
+    withHeader?: boolean;
 }
 interface States {
     showReplyFormForCommentId: string;
@@ -63,31 +66,53 @@ class CommentSection extends React.Component<Props, States> {
     }
     render(): React.ReactElement<any> {
         const getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
-        return <Comment.Group threaded>
-            <Header as="h3" dividing>
-                <FormattedMessage id={"component.comment.title"} />
-                {`(${this.props.state.commentState.data.length})`}
-            </Header>
+        return <Comment.Group threaded={this.props.threaded}>
             {
-                this.props.targetId === this.state.showReplyFormForCommentId ?
-                this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef)
+                this.props.withHeader ?
+                <Header as="h3" dividing>
+                    <FormattedMessage id={"component.comment.title"} />
+                    {`(${this.props.state.commentState.data.length})`}
+                </Header>
                 : undefined
             }
             {
+                this.props.replyFormPosition === "top" ?
+                this.renderPrimaryReplyForm()
+                : undefined
+            }
+            {
+                this.props.state.commentState.loading ?
+                <Container text style={CONTAINER_STYLE}>
+                    <Loading/>
+                </Container>
+                :
                 this.props.state.commentState.data
                     .filter((value: CommentClass, index: number) => !value.parent)
-                    .sort(byCreatedAt).reverse().map((value: CommentClass) => this.renderComment(value))
+                    .sort(this.props.commentsOrder === "latest" ? byCommentedAtLatestFirst : byCommentedAtOldestFirst)
+                    .map((value: CommentClass) => this.renderComment(value))
             }
             <WarningModal
                 descriptionIcon="delete" open={this.state.openDeleteWarning}
                 descriptionText={getString({id: "component.comment.delete_title"})}
                 warningText={getString({id: "component.comment.delete_confirmation"})}
                 onConfirm={() => {
-                    this.props.actions.deleteComment(this.toDeleteId);
+                    this.props.actions.removeComment(this.props.target, this.toDeleteId);
                     this.setState({openDeleteWarning: false});
                 }}
                 onCancel={() => { this.setState({openDeleteWarning: false}); }}/>
+            {
+                this.props.replyFormPosition === "bottom" ?
+                this.renderPrimaryReplyForm()
+                : undefined
+            }
         </Comment.Group>;
+    }
+    private renderPrimaryReplyForm = (): React.ReactElement<any> | undefined => {
+        if (this.props.targetId === this.state.showReplyFormForCommentId) {
+            return this.renderReplyForm(this.state.commentEditing, this.props.targetId, this.commentFormRef);
+        } else {
+            return undefined;
+        }
     }
     private renderReplyForm = (editing: boolean, id: string, ref: RefObject<any>): React.ReactElement<any> | undefined => {
         if (!this.props.state.userState.currentUser) {
@@ -141,6 +166,9 @@ class CommentSection extends React.Component<Props, States> {
         const createDate: Date = comment.createdAt ? new Date(comment.createdAt) : new Date(0);
         const author: User = this.props.state.userDictionary[comment.author];
         return <Comment key={comment._id}>
+            {
+                this.props.divided ? <Divider /> : undefined
+            }
             <Comment.Avatar src={author.avatarUrl ? author.avatarUrl : "/images/avatar.png"} />
             <Comment.Content>
                 {/* There is a bug of style for <Comment /> in semantic-ui-react. Here we explicitly set the style */}
@@ -157,13 +185,22 @@ class CommentSection extends React.Component<Props, States> {
                 </Comment.Text>
                 {this.renderActions(comment, stackDepth)}
             </Comment.Content>
-            <Comment.Group threaded>
-                {this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)}
+            <Comment.Group threaded={this.props.threaded}>
+                {
+                    this.props.replyFormPosition === "top" ?
+                    this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)
+                    : undefined
+                }
                 {/* Recursively render the children */
                     this.props.state.commentState.data
                         .filter((value: CommentClass, index: number) => (value.parent === comment._id))
-                        .sort(byCreatedAt).reverse()
+                        .sort(this.props.commentsOrder === "latest" ? byCommentedAtLatestFirst : byCommentedAtOldestFirst)
                         .map((value: CommentClass) => this.renderComment(value, stackDepth + 1))
+                }
+                {
+                    this.props.replyFormPosition === "bottom" ?
+                    this.renderReplyForm(this.state.replyCommentEditing, comment._id, this.replyCommentFormRef)
+                    : undefined
                 }
             </Comment.Group>
         </Comment>;
@@ -174,7 +211,7 @@ class CommentSection extends React.Component<Props, States> {
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
                 this.props.state.userState.currentUser
-                && stackDepth < (this.props.maxThreadStackDepth ? this.props.maxThreadStackDepth : MAXIMUM_THREAD_STACK_DEPTH) ?
+                && stackDepth < this.props.maxThreadStackDepth ?
                 /* eslint-disable-next-line */
                 <Comment.Action onClick={() => {this.onToggleReplyForm(comment._id); }}>
                     <FormattedMessage id="component.comment.reply"/>
@@ -236,4 +273,4 @@ class CommentSection extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(CommentSection));
+export default connectAllProps(CommentSection);

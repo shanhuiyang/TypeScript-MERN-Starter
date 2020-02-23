@@ -2,14 +2,13 @@ import Article from "../../../models/Article";
 import { Form, Button, FormGroup } from "semantic-ui-react";
 import { RefObject } from "react";
 import React from "react";
-import { FormattedMessage, injectIntl, WrappedComponentProps as IntlProps, MessageDescriptor } from "react-intl";
+import { FormattedMessage, MessageDescriptor } from "react-intl";
 import "codemirror/lib/codemirror.css";
 import "tui-editor/dist/tui-editor.min.css";
 import "tui-editor/dist/tui-editor-contents.min.css";
 import "../../css/tui-editor-override.css";
 import { Editor } from "@toast-ui/react-editor";
-import connectPropsAndActions from "../../../shared/connect";
-import AppState from "../../../models/client/AppState";
+import connectAllProps from "../../../shared/connect";
 import fetch from "../../../shared/fetch";
 import { getToast as toast } from "../../../shared/toast";
 import { DEFAULT_PREFERENCES } from "../../../shared/preferences";
@@ -17,18 +16,15 @@ import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { isMobile } from "../dimension";
 import ArticleCache from "../../../models/client/ArticleCache";
 import { NEW_ARTICLE_CACHE_ID } from "../../../actions/article";
-import ArticleActionCreator from "../../../models/client/ArticleActionCreator";
-import { MINIMUM_ARTICLE_LENGTH } from "../../../shared/constants";
 import { PrimitiveType } from "intl-messageformat";
 import WarningModal from "../shared/WarningModal";
+import { ComponentProps } from "../../../shared/ComponentProps";
 
-interface Props extends IntlProps {
+interface Props extends ComponentProps {
     article?: Article;
     submitTextId: string;
     onSubmit: (title: string, content: string) => void;
     loading?: boolean;
-    state: AppState;
-    actions: ArticleActionCreator;
 }
 
 interface States {
@@ -87,7 +83,7 @@ class ArticleEditor extends React.Component<Props, States> {
                         language={this.props.state.translations.locale.replace("-", "_")} // i18n use _ instead of -
                         ref={this.contentRef}
                         initialValue={this.originalContent}
-                        placeholder={this.getString({id: "article.content_placeholder"}, {minimum_length: MINIMUM_ARTICLE_LENGTH})}
+                        placeholder={this.getString({id: "article.content_placeholder"})}
                         previewStyle={isMobile() ? "tab" : "vertical"}
                         height="54vh"
                         initialEditType={editorType}
@@ -135,7 +131,7 @@ class ArticleEditor extends React.Component<Props, States> {
     }
 
     private onInsertImage = (blob: File, callback: (url: string, altText: string) => void): void => {
-        fetch("/api/article/insert/image", blob, "PUT", true)
+        fetch("/api/image/upload/article", blob, "PUT", true)
         .then((json: any) => {
             if (json && json.url) {
                 callback(json.url, blob.name);
@@ -208,4 +204,4 @@ class ArticleEditor extends React.Component<Props, States> {
     }
 }
 
-export default injectIntl(connectPropsAndActions(ArticleEditor));
+export default connectAllProps(ArticleEditor);

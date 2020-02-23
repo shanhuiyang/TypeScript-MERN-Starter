@@ -1,6 +1,9 @@
-import { UnifiedModel } from "../models/UnifiedModel";
+/**
+ * Sort predicates for dates.
+ */
+import Post from "../models/Post.d";
 
-export const byCreatedAt = (first: UnifiedModel, second: UnifiedModel): number => {
+export const byCreatedAtLatestFirst = (first: Post, second: Post): number => {
     if (!first || !first.createdAt) {
         return 1;
     }
@@ -12,14 +15,22 @@ export const byCreatedAt = (first: UnifiedModel, second: UnifiedModel): number =
     return secondDate - firstDate;
 };
 
-export const byUpdatedAt = (first: UnifiedModel, second: UnifiedModel): number => {
-    if (!first || !first.updatedAt) {
+export const byCreatedAtOldestFirst = (first: Post, second: Post): number => {
+    return byCreatedAtLatestFirst(second, first);
+};
+
+export const byCommentedAtLatestFirst = (first: Post, second: Post): number => {
+    if (!first || !first.lastCommentedAt) {
         return 1;
     }
-    if (!second || !second.updatedAt) {
+    if (!second || !second.lastCommentedAt) {
         return -1;
     }
-    const firstDate: any = new Date(first.updatedAt);
-    const secondDate: any = new Date(second.updatedAt);
+    const firstDate: any = new Date(first.lastCommentedAt);
+    const secondDate: any = new Date(second.lastCommentedAt);
     return secondDate - firstDate;
+};
+
+export const byCommentedAtOldestFirst = (first: Post, second: Post): number => {
+    return byCommentedAtLatestFirst(second, first);
 };
