@@ -1,5 +1,7 @@
-// The Spec of OAuth2 defined 4 roles. They are user, resource server, client and authorization server.
-// All request handlers of **authorization server** are located in this file.
+/**
+ * The Spec of OAuth2 defined 4 roles. They are user, resource server, client and authorization server.
+ * All request handlers of **authorization server** are located in this file.
+ */
 
 import server from "../config/oauth2orize-server";
 import passport from "passport";
@@ -24,7 +26,6 @@ import * as NotificationStorage from "../models/Notification/NotificationStorage
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
 import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../client/core/src/shared/constants";
-import { WriteError } from "mongodb";
 import { refreshOtpThenSendToUser, OTP_LENGTH } from "../models/User/UserStorage";
 
 // User authorization endpoint.
@@ -61,9 +62,10 @@ export const authorization: RequestHandler[] = [
         },
         (client: Client, user: UserDocument, scope: string[], type: string, areq: any,
             done: (err: Error | null, allow: boolean, info: any, locals: any) => void): void => {
-            AccessTokenCollection.findOne(
-                {clientId: client.id, userId: user.id},
-                (error: Error, accessToken: AccessToken): void => {
+            AccessTokenCollection
+            .findOne({clientId: client.id, userId: user.id})
+            .exec()
+            .then((accessToken: AccessToken | null): void => {
                     if (accessToken) {
                         // Auto-approve
                         // tslint:disable-next-line: no-null-keyword
@@ -73,7 +75,9 @@ export const authorization: RequestHandler[] = [
                         done(null, false, user, undefined);
                     }
                 }
-            );
+            ).catch((error: Error) => {
+                done(error, false, user, undefined);
+            });
         }
     ),
     function (req: MiddlewareRequest & Request, res: Response) {
@@ -90,12 +94,14 @@ export const authorization: RequestHandler[] = [
 // requested by a client application.  Based on the grant type requested by the
 // client, the above grant middleware configured above will be invoked to send
 // a response.
-
 export const decision: RequestHandler[] = [
     login.ensureLoggedIn(),
     (req: Request, res: Response, next: NextFunction) => {
         if (FLAG_ENABLE_OTP_FOR_VERIFICATION) {
-            UserCollection.findById((req.user as User)._id).exec().then((user: UserDocument | null) => {
+            UserCollection
+            .findById((req.user as User)._id)
+            .exec()
+            .then((user: UserDocument | null) => {
                 verifyOtpInternal(res, next, user, req.body["OTP"], true);
             });
         } else {
@@ -134,25 +140,27 @@ export const signUp: RequestHandler = (req: Request, res: Response, next: NextFu
         avatarUrl: req.body.avatarUrl,
         preferences: req.body.preferences
     });
-    UserCollection.findOne({ email: _.toLower(req.body.email) }, (err: Error, existingUser: UserDocument) => {
-        if (err) { return next(err); }
+    UserCollection
+    .findOne({ email: _.toLower(req.body.email) })
+    .exec()
+    .then((existingUser: UserDocument | null) => {
         if (existingUser) {
-            return res.status(409).json({ message: "toast.user.upload_exist_account" });
+            return Promise.reject(res.status(409).json({ message: "toast.user.upload_exist_account" }));
         }
-        user.save((err: any) => {
+        return user.save();
+    })
+    .then((user: UserDocument) => {
+        req.logIn(user, (err) => {
             if (err) {
-                // TODO: resolve the MongoError: E11000 duplicate key error collection: admin.users index: name_1 dup key: { name: "xx xx" }
                 return next(err);
             }
-            req.logIn(user, (err) => {
-                if (err) {
-                    return next(err);
-                }
-                res.redirect(302, "/auth/oauth2"); // Get access token
-            });
+            return res.redirect(302, "/auth/oauth2"); // Get access token
         });
+    })
+    .catch((error: Response) => {
+        return error.end();
     });
-  };
+};
 
 /**
  * Sign in using email and password.
@@ -200,20 +208,23 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
         return invalid;
     }
 
-    UserCollection.findById(req.body._id, (err: Error, user: UserDocument) => {
-        if (err) { return next(err); }
+    UserCollection
+    .findById(req.body._id)
+    .exec()
+    .then((user: UserDocument | null) => {
         if (!user) {
-            return res.status(404).json({ message: "toast.user.account_not_found" });
+            return Promise.reject(res.status(404).json({ message: "toast.user.account_not_found" }));
         }
         Object.assign(user, req.body);
-        user.save((err: any) => {
-            if (err) {
-                return res.status(500).json({ message: "toast.user.update_failed" });
-            }
-            const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
-            user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
-            res.json(user);
-        });
+        return user.save();
+    })
+    .then((user: UserDocument) => {
+        const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
+        user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
+        return res.json(user);
+    })
+    .catch((error: Response) => {
+        return error.end();
     });
 };
 export const updatePreferences: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -222,18 +233,21 @@ export const updatePreferences: RequestHandler = (req: Request, res: Response, n
         return invalid;
     }
 
-    UserCollection.findById(req.body.id, (err: Error, user: UserDocument) => {
-        if (err) { return next(err); }
+    UserCollection
+    .findById(req.body.id)
+    .exec()
+    .then((user: UserDocument | null) => {
         if (!user) {
-            return res.status(404).json({ message: "toast.user.account_not_found" });
+            return Promise.reject(res.status(404).json({ message: "toast.user.account_not_found" }));
         }
         user.preferences = req.body.preferences;
-        user.save((err: any) => {
-            if (err) {
-                return res.status(500).json({ message: "toast.user.update_failed" });
-            }
-            res.json(user.preferences);
-        });
+        return user.save();
+    })
+    .then((user: UserDocument) => {
+        return res.json(user.preferences);
+    })
+    .catch((error: Response) => {
+        return error.end();
     });
 };
 export const updatePassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
@@ -241,24 +255,29 @@ export const updatePassword: RequestHandler = (req: Request, res: Response, next
     if (invalid) {
         return invalid;
     }
-    (req.user as UserDocument).comparePassword(req.body.oldPassword, (err: Error, isMatch: boolean) => {
+    (req.user as UserDocument).comparePassword(
+            req.body.oldPassword,
+            (err: Error, isMatch: boolean) => {
         if (err || !isMatch) {
             return res.status(401).json({ message: "toast.user.old_password_error" });
         }
     });
-    UserCollection.findById((req.user as User)._id).exec()
+    UserCollection
+    .findById((req.user as User)._id)
+    .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
-            return res.status(500).end();
+            return Promise.reject(res.status(500).end());
         }
         user.password = req.body.password;
-        user.save((err: WriteError) => {
-            if (err) {
-                return next(err);
-            }
-            res.sendStatus(200);
-        });
-    }).catch((error: any) => next(error));
+        return user.save();
+    })
+    .then(() => {
+        return res.sendStatus(200);
+    })
+    .catch((error: Response) => {
+        return error.end();
+    });
 };
 export const resetPassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
     if (!FLAG_ENABLE_OTP_FOR_VERIFICATION) {
@@ -268,38 +287,42 @@ export const resetPassword: RequestHandler = (req: Request, res: Response, next:
     if (invalid) {
         return invalid;
     }
-    UserCollection.findOne({email: req.body.email, OTP: req.body.OTP}).exec()
+    UserCollection
+    .findOne({email: req.body.email, OTP: req.body.OTP})
+    .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
-            return res.sendStatus(404);
+            return Promise.reject(res.sendStatus(404));
         }
         user.password = req.body.password;
-        user.save((err: WriteError) => {
-            if (err) {
-                return next(err);
-            }
-            res.sendStatus(200);
-        });
-    }).catch((error: any) => next(error));
+        return user.save();
+    })
+    .then(() => {
+        return res.sendStatus(200);
+    })
+    .catch((error: Response) => {
+        return error.end();
+    });
 };
 export const sendOtp: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
     const invalid: Response | false = validationErrorResponse(res, validationResult(req));
     if (invalid) {
         return invalid;
     }
-    UserCollection.findOne({email: req.query.email}).exec()
+    UserCollection
+    .findOne({email: req.query.email})
+    .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
-            return res.status(404).json({ message: "toast.user.account_not_found"});
+            return Promise.reject(res.status(404).json({ message: "toast.user.account_not_found"}));
         }
-        const locale: string = req.acceptsLanguages()
-        ? req.acceptsLanguages()[0] : "en-us";
-        refreshOtpThenSendToUser(user.email, locale)
-        .then((value: any) => {
-            res.sendStatus(200);
-        }).catch((reason: any) => {
-            res.status(500).json({ message: "toast.user.otp_send_failed" });
-        });
+        const locale: string = req.acceptsLanguages() ? req.acceptsLanguages()[0] : "en-us";
+        return refreshOtpThenSendToUser(user.email, locale);
+    })
+    .then((value: any) => {
+        return res.sendStatus(200);
+    }).catch((reason: any) => {
+        return res.status(500).json({ message: "toast.user.otp_send_failed" });
     });
 };
 
@@ -308,7 +331,9 @@ export const verifyAccount: RequestHandler = (req: Request, res: Response, next:
     if (invalid) {
         return invalid;
     }
-    UserCollection.findOne({email: req.query.email}).exec()
+    UserCollection
+    .findOne({email: req.query.email})
+    .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
             return res.status(404).json({ message: "toast.user.email"});
@@ -323,7 +348,9 @@ export const verifyOtp: RequestHandler[] = [
         if (invalid) {
             return invalid;
         }
-        UserCollection.findOne({email: req.query.email}).exec()
+        UserCollection
+        .findOne({email: req.query.email})
+        .exec()
         .then((user: UserDocument | null) => {
             if (!user) {
                 return res.status(404).json({ message: "toast.user.email"});

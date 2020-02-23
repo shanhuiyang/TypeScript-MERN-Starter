@@ -227,22 +227,22 @@ In next period of time (Before end of Feb 2020), we will work on:
 
 - Better documents.
 - Use types as many as possible.
-- Use Promises instead of callbacks.
+- ~~Use Promises instead of callbacks.~~
 - ~~Globalization. The text strings should be well managed and easily be extended for multi-languages.~~
 - ~~Better error alert.~~
 - Tests. The core of client (such as actions, reducers), and server (such as routes, controllers) should be well covered by unit tests.
 - Better article UX.
   - ~~Using the list-detail structure.~~
-  - User can add comments to articles.
-  - Pagination.
-- Rich text editors. Using markdown as the exchanging text format.
+  - ~~User can add comments to articles. (website only)~~
+  - ~~Pagination. (website only)~~
+- ~~Rich text editors. Using markdown as the exchanging text format.~~
   - ~~Unsaved alert if users are going to close the page.~~
-- Notification
-  - Comment received for article authors.
-- Improving the authentication.
-  - Email verification for signing up.
-  - Password modification.
-  - Forget password.
+- ~~Notification (website only)~~
+  - ~~Comment received for article authors.~~
+- ~~Improving the authentication. (website only)~~
+  - ~~Email verification for signing up.~~
+  - ~~Password modification.~~
+  - ~~Forget password.~~
 - ~~User-friend time display.~~
 - Incoming issues.
 

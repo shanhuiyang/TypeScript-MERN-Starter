@@ -63,7 +63,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             return res.json({data: comments, authors: authorsDic} as GetCommentsResponse);
         })
         .catch((error: Response) => {
-            return error;
+            return error.end();
         });
     } else {
         return res.status(400).end();
@@ -188,7 +188,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         return res.status(200).end();
     })
     .catch((error: Response) => {
-        return error;
+        return error.end();
     });
 };
 
@@ -241,6 +241,6 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         return res.status(200).end();
     })
     .catch((error: Response) => {
-        return error;
+        return error.end();
     });
 };

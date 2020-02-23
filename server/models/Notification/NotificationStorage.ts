@@ -5,6 +5,7 @@ import User from "../../../client/core/src/models/User.d";
 import UserCollection from "../../models/User/UserCollection";
 import UserDocument from "../../models/User/UserDocument.d";
 
+// TODO: Using Promise
 export const findByOwner = (
         ownerId: string,
         unacknowledgedOnly: boolean,

@@ -5,6 +5,7 @@ export default interface UserDocument extends User, mongoose.Document {
     OTP?: string;
     otpExpireTime?: Date;
 }
+// TODO: Using Promise
 export type ComparePasswordFunction = (
     candidatePassword: string,
     cb: (err: mongoose.Error, isMatch: boolean) => void

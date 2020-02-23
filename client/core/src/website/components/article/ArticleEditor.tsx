@@ -16,7 +16,6 @@ import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { isMobile } from "../dimension";
 import ArticleCache from "../../../models/client/ArticleCache";
 import { NEW_ARTICLE_CACHE_ID } from "../../../actions/article";
-import { ARTICLE_CONTENT_MIN_LENGTH } from "../../../shared/constants";
 import { PrimitiveType } from "intl-messageformat";
 import WarningModal from "../shared/WarningModal";
 import { ComponentProps } from "../../../shared/ComponentProps";
