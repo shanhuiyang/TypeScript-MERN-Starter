@@ -39,9 +39,6 @@ class ThreadList extends React.Component<Props, States> {
                         {this.renderThreads()}
                     </div>
                 </Container>
-                <Container text style={{...CONTAINER_STYLE, paddingBottom: 0}} >
-                    {this.renderPager()}
-                </Container>
             </Fragment>;
         } else {
             return <Redirect to="/login" />;
