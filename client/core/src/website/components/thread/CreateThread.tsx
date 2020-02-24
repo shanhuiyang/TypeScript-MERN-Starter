@@ -9,10 +9,14 @@ import ResponsiveFormField from "../shared/ResponsiveFormField";
 import { PrimitiveType } from "intl-messageformat";
 import InsertImageDialog from "../shared/InsertImageDialog";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
+import insertTextAtCursor from "insert-text-at-cursor";
+import { Viewer } from "@toast-ui/react-editor";
+
 interface States {
     editing: boolean;
     mode: "edit" | "preview";
     openUploadImageDialog: boolean;
+    cache: string;
 }
 class CreateThread extends React.Component<Props, States> {
     private titleRef: RefObject<HTMLInputElement>;
@@ -26,7 +30,8 @@ class CreateThread extends React.Component<Props, States> {
         this.state = {
             editing: false,
             mode: "edit",
-            openUploadImageDialog: false
+            openUploadImageDialog: false,
+            cache: ""
         };
     }
     render(): React.ReactElement<any> {
@@ -57,9 +62,14 @@ class CreateThread extends React.Component<Props, States> {
                             {
                                 this.renderControlBar()
                             }
-                            <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
-                                onChange={this.onEditing}
-                                placeholder={ this.getString({id: "page.thread.placeholder"}) } />
+                            {
+                                this.state.mode === "edit" ?
+                                <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
+                                    onChange={this.onEditing} defaultValue={this.state.cache}
+                                    placeholder={ this.getString({id: "page.thread.placeholder"}) } />
+                                :
+                                <Viewer initialValue={this.contentRef.current ? this.contentRef.current.value : ""} />
+                            }
                         </Form.Field>
                         <FormGroup inline>
                             <Form.Field control={Button} onClick={() => { this.onSubmit(); }} primary
@@ -79,37 +89,33 @@ class CreateThread extends React.Component<Props, States> {
     private renderControlBar = (): React.ReactElement<any> => {
         return <div style={{ marginTop: 10, marginBottom: 4 }}>
             <Button.Group basic>
-                <Button icon>
-                    <Icon name="eye" />
-                    {" "}
-                    <FormattedMessage id="component.button.preview"/>
-                </Button>
-            </Button.Group>
-            {" "}
-            <Button.Group basic>
-                <Button icon>
-                    <Icon name="bold" />
-                </Button>
-                <Button icon>
-                    <Icon name="italic" />
-                </Button>
-                <Button icon>
-                    <Icon name="underline" />
-                </Button>
-            </Button.Group>
-            {" "}
-            <Button.Group basic>
+                {
+                    this.state.mode === "edit" ?
+                    <Button icon onClick={
+                        () => this.setState({
+                            mode: "preview",
+                            cache: this.contentRef.current ? this.contentRef.current.value : ""
+                        })
+                    }>
+                        <Icon name="eye" />
+                        {" "}
+                        <FormattedMessage id="component.button.preview"/>
+                    </Button>
+                    :
+                    <Button icon onClick={() => this.setState({ mode: "edit" })}>
+                        <Icon name="edit" />
+                        {" "}
+                        <FormattedMessage id="component.button.edit"/>
+                    </Button>
+                }
                 <Button icon onClick={() => { this.setState({openUploadImageDialog: true}); }}>
                     <Icon name="file image" />
                 </Button>
                 <InsertImageDialog
                     open={this.state.openUploadImageDialog}
                     onCancel={() => { this.setState({openUploadImageDialog: false}); }}
-                    onConfirm={() => {}}
+                    onConfirm={this.onImageInserted}
                 />
-                <Button icon>
-                    <Icon name="smile" />
-                </Button>
             </Button.Group>
         </div>;
     }
@@ -121,7 +127,6 @@ class CreateThread extends React.Component<Props, States> {
             this.props.actions.addThread(title, content, this.props.state.userState.currentUser._id);
         }
     }
-
     private onEditing = () => {
         if (!this.contentRef.current || !this.titleRef.current) {
             return;
@@ -133,6 +138,14 @@ class CreateThread extends React.Component<Props, States> {
         } else {
             this.setState({editing: false});
         }
+    }
+
+    private onImageInserted = (description: string, link: string): void => {
+        if (this.contentRef.current) {
+            const toInsert: string = `![${description}](${link})`;
+            insertTextAtCursor(this.contentRef.current, toInsert);
+        }
+        this.setState({openUploadImageDialog: false});
     }
 }
 

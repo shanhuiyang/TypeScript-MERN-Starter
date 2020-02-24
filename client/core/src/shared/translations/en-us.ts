@@ -151,7 +151,6 @@ const TRANSLATION: Translation = {
         "toast.article.delete_successfully": "Delete your article successfully.",
         "toast.article.invalid_author": "You are not the author!",
         "toast.article.not_found": "Article not found!",
-        "toast.article.insert_image_failed": "Failed to insert the image",
         "toast.user.attack_alert": "Malicious attack is detected.",
         "toast.user.email": "Invalid email.",
         "toast.user.email_not_found": "This email is not found.",
@@ -174,7 +173,8 @@ const TRANSLATION: Translation = {
         "toast.thread.add_successfully": "Your thread created.",
         "toast.thread.add_failed": "Your thread cannot be created.",
         "toast.thread.delete_successfully": "Your thread has been deleted",
-        "toast.thread.delete_failed": "Your thread cannot be deleted."
+        "toast.thread.delete_failed": "Your thread cannot be deleted.",
+        "toast.post.insert_image_failed": "Failed to insert the image"
     }
 };
 

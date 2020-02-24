@@ -136,10 +136,10 @@ class ArticleEditor extends React.Component<Props, States> {
             if (json && json.url) {
                 callback(json.url, blob.name);
             } else {
-                toast().error("toast.article.insert_image_failed");
+                toast().error("toast.post.insert_image_failed");
             }
         }, (error: Error) => {
-            toast().error("toast.article.insert_image_failed");
+            toast().error("toast.post.insert_image_failed");
         });
     }
     private onEditing = () => {
