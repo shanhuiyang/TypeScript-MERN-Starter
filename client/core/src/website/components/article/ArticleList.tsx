@@ -52,20 +52,15 @@ class ArticleList extends React.Component<Props, States> {
         }
     }
     private addFabActions = (): void => {
-        const actions: FabAction[] = [{
-            text: this.props.intl.formatMessage({id: "component.button.scroll_up"}),
-            icon: "arrow up",
-            onClick: () => { window.scrollTo(0, 0); },
-        }];
         if (this.props.state.userState.currentUser) {
             const editUri: string = "/article/create";
-            actions.unshift({
+            const actions: FabAction[] = [{
                 text: this.props.intl.formatMessage({id: "page.article.add"}),
                 icon: "add",
                 onClick: () => { this.props.history.push(editUri); },
-            });
+            }];
+            this.props.actions.setFabActions(actions);
         }
-        this.props.actions.setFabActions(actions);
     }
     private renderCreateArticleSection = (): React.ReactElement<any> | undefined => {
         const articles: Article [] = this.props.state.articleState.data;

@@ -101,27 +101,21 @@ class ArticleDetail extends React.Component<Props, States> {
         if (!article) {
             return;
         }
-        const actions: FabAction[] = [{
-            text: this.getString({id: "component.button.scroll_up"}),
-            icon: "arrow up",
-            onClick: () => { window.scrollTo(0, 0); },
-        }];
         if (this.isAuthorOf(article)) {
-            actions.unshift({
+            const actions: FabAction[] = [{
                 text: this.getString({id: "component.button.delete"}),
                 icon: "trash alternate",
                 onClick: () => { this.setState({openDeleteWarning: true }); },
-            });
-            actions.unshift({
+            }, {
                 text: this.getString({id: "component.button.edit"}),
                 icon: "edit",
                 onClick: () => {
                     const target: string = this.props.match.url.replace(/^(.+)(\/[0-9a-z]+$)/, "$1/edit$2");
                     this.props.history.push(target, this.props.location.state);
                 },
-            });
+            }];
+            this.props.actions.setFabActions(actions);
         }
-        this.props.actions.setFabActions(actions);
     }
     private renderDeleteWarningModal = (article: Article): React.ReactElement<any> | undefined => {
         return this.isAuthorOf(article) ?

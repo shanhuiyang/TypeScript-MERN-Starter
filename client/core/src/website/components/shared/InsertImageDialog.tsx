@@ -87,7 +87,8 @@ class InsertImageDialog extends React.Component<Props, States> {
             fetch("/api/image/upload/thread", blob, "PUT", true)
             .then((json: any) => {
                 if (json && json.url && this.descriptionRef.current && this.linkRef.current) {
-                    this.descriptionRef.current.value = blob.name.substr(0, blob.name.lastIndexOf("."));
+                    const filenameWithoutExtension: string = blob.name.substr(0, blob.name.lastIndexOf("."));
+                    this.descriptionRef.current.value = filenameWithoutExtension.replace(/[.,?![\]()"'`;:\\/]/g, "");
                     this.linkRef.current.value = amendImageUrl(json.url);
                     this.setState({
                         valid: true,
@@ -115,7 +116,7 @@ class InsertImageDialog extends React.Component<Props, States> {
         const link: string | null = this.linkRef.current && this.linkRef.current.value;
         if (description && link) {
             // Remove special characters before complete
-            this.props.onConfirm(description.replace(/[.,?![]()"'`;:\\\/]/g, ""), link);
+            this.props.onConfirm(description, link);
         } else {
             console.error("Unexpected behavior");
         }

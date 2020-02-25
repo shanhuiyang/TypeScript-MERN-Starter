@@ -16,13 +16,20 @@ import Notifications from "./pages/Notifications";
 import Security from "./pages/Security";
 import ForgetPassword from "./pages/ForgetPassword";
 import Threads from "./pages/Threads";
-
-interface Props {}
+import { ComponentProps as Props } from "../shared/ComponentProps";
+import connectAllProps from "../shared/connect";
+import { SHOW_UNDER_SCROLL_HEIGHT } from "./components/constants";
+import FabAction from "../models/client/FabAction";
 
 interface States {}
 
-export default class App extends React.Component<Props, States> {
+class App extends React.Component<Props, States> {
     private contextRef: RefObject<any>;
+    readonly scrollUpAction: FabAction = {
+        text: this.props.intl.formatMessage({id: "component.button.scroll_up"}),
+        icon: "arrow up",
+        onClick: () => { window.scrollTo(0, 0); },
+    };
     constructor(props: Props) {
         super(props);
         this.contextRef = createRef();
@@ -61,4 +68,25 @@ export default class App extends React.Component<Props, States> {
             </div>
         );
     }
+    componentDidMount() {
+        this.handleScroll();
+        window.addEventListener("scroll", this.handleScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener("scroll", this.handleScroll);
+    }
+    handleScroll = () => {
+        if (window.pageYOffset > SHOW_UNDER_SCROLL_HEIGHT) {
+            if (this.props.state.fabActions.findIndex((action: FabAction) => action.icon === "arrow up") < 0) {
+                this.props.actions.addFabAction(this.scrollUpAction);
+            }
+        } else {
+            if (this.props.state.fabActions.findIndex((action: FabAction) => action.icon === "arrow up") >= 0) {
+                this.props.actions.removeFabAction(this.scrollUpAction.icon);
+            }
+        }
+    }
 }
+
+export default connectAllProps(App);

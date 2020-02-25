@@ -34,6 +34,12 @@ class CreateThread extends React.Component<Props, States> {
             cache: ""
         };
     }
+    componentDidMount() {
+        window.addEventListener("beforeunload", this.closeAlert);
+    }
+    componentWillUnmount() {
+        window.removeEventListener("beforeunload", this.closeAlert);
+    }
     render(): React.ReactElement<any> {
         if (!this.props.state.threadState.valid) {
             return <Redirect to="/thread" />;
@@ -141,11 +147,19 @@ class CreateThread extends React.Component<Props, States> {
     }
 
     private onImageInserted = (description: string, link: string): void => {
-        if (this.contentRef.current) {
+        if (this.contentRef.current && description && link) {
             const toInsert: string = `![${description}](${link})`;
             insertTextAtCursor(this.contentRef.current, toInsert);
+            this.setState({editing: !!this.titleRef.current && !!this.titleRef.current.value});
         }
         this.setState({openUploadImageDialog: false});
+    }
+    private closeAlert = (e: BeforeUnloadEvent): any => {
+        const self: CreateThread = this;
+        if (self.state.editing) {
+            e.preventDefault();
+            e.returnValue = "";
+        }
     }
 }
 
