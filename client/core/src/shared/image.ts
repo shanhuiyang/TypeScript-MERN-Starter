@@ -1,4 +1,4 @@
-import { getHostUrl } from "../../core/src/shared/fetch";
+import { getHostUrl } from "./fetch";
 
 export const getAvatarSource = (url: string): { uri: string } => {
     if (url) {

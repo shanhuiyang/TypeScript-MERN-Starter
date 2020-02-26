@@ -13,6 +13,7 @@ import moment from "moment";
 import "../../css/thread.css";
 import { DEFAULT_PAGE_SIZE } from "../../../shared/constants";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
+import { isMobile } from "../dimension";
 
 interface States {}
 
@@ -99,36 +100,39 @@ class ThreadList extends React.Component<Props, States> {
                     <FormattedMessage id="post.created_at" />{moment(createTime).fromNow()}
                 </div>
             </div>
-            <div style={{
-                display: "flex",
-                flex: "none",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                justifyContent: "space-between"
-            }}>
-                <div className="description-text">
-                    <label style={{marginRight: 8}}>
-                        <Icon name="like"  />{likesCount}
-                    </label>
-                    <label>
-                        <Icon name="talk"  />{commentsCount}
-                    </label>
-                </div>
-                <div className="description-text">
-                {
-                    lastCommentedBy ?
-                    <div className="reply-info-text">
-                        {lastCommentedBy.name}
-                        {" "}
-                        <FormattedMessage id="post.replied_at" />{moment(lastCommentedTime).fromNow()}
+            {
+                isMobile() ? undefined :
+                <div style={{
+                    display: "flex",
+                    flex: "initial",
+                    flexDirection: "column",
+                    alignItems: "flex-end",
+                    justifyContent: "space-between"
+                }}>
+                    <div className="description-text">
+                        <label style={{marginRight: 8}}>
+                            <Icon name="like"  />{likesCount}
+                        </label>
+                        <label>
+                            <Icon name="talk"  />{commentsCount}
+                        </label>
                     </div>
-                    :
-                    <div className="reply-info-text">
-                        <FormattedMessage id="post.no_reply_yet" />
+                    <div className="description-text">
+                    {
+                        lastCommentedBy ?
+                        <div className="reply-info-text">
+                            {lastCommentedBy.name}
+                            {" "}
+                            <FormattedMessage id="post.replied_at" />{moment(lastCommentedTime).fromNow()}
+                        </div>
+                        :
+                        <div className="reply-info-text">
+                            <FormattedMessage id="post.no_reply_yet" />
+                        </div>
+                    }
                     </div>
-                }
                 </div>
-            </div>
+            }
         </List.Item>;
     }
     private renderPager = (): React.ReactElement<any> => {

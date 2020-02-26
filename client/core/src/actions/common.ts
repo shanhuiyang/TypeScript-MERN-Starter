@@ -9,6 +9,8 @@ import moment from "moment";
 export const RESET_REDIRECT: string = "RESET_REDIRECT";
 export const SET_LOCALE: string = "SET_LOCALE";
 export const SET_FAB_ACTIONS: string = "SET_FAB_ACTIONS";
+export const ADD_FAB_ACTION: string = "ADD_FAB_ACTION";
+export const REMOVE_FAB_ACTION: string = "REMOVE_FAB_ACTION";
 
 const actions: CommonActionCreator = {
     handleFetchError(type: string, error: Error): Action {
@@ -44,6 +46,18 @@ const actions: CommonActionCreator = {
         return {
             type: SET_FAB_ACTIONS,
             fabActions: fabActions
+        };
+    },
+    addFabAction(fabAction: FabAction): Action {
+        return {
+            type: ADD_FAB_ACTION,
+            fabAction: fabAction
+        };
+    },
+    removeFabAction(iconName: string): Action {
+        return {
+            type: REMOVE_FAB_ACTION,
+            iconName: iconName
         };
     }
 };

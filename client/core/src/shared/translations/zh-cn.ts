@@ -152,7 +152,6 @@ const TRANSLATION: Translation = {
         "toast.article.delete_successfully": "成功删除你的文章",
         "toast.article.invalid_author": "你并非本文的作者！",
         "toast.article.not_found": "不存在的文章！",
-        "toast.article.insert_image_failed": "图片插入失败",
         "toast.user.attack_alert": "侦测到非法攻击",
         "toast.user.email": "这不是一个合法的邮箱",
         "toast.user.email_not_found": "找不到该邮箱",
@@ -175,7 +174,8 @@ const TRANSLATION: Translation = {
         "toast.thread.add_successfully": "你的帖子发表成功",
         "toast.thread.add_failed": "你的帖子发表失败",
         "toast.thread.delete_successfully": "你的帖子已删除",
-        "toast.thread.delete_failed": "你的帖子删除失败"
+        "toast.thread.delete_failed": "你的帖子删除失败",
+        "toast.post.insert_image_failed": "图片插入失败"
     }
 };
 

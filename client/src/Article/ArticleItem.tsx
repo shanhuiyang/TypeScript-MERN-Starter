@@ -5,7 +5,7 @@ import { Link } from "react-router-native";
 import Article from "../../core/src/models/Article";
 import User from "../../core/src/models/User";
 import connectAllProps from "../../core/src/shared/connect";
-import { getAvatarSource, amendImageUrl } from "../utils/image";
+import { getAvatarSource, amendImageUrl } from "../../core/src/shared/image";
 import moment from "moment";
 import { getArticleAbstract, getArticleCoverImage } from "../../core/src/shared/string";
 import { ARTICLE_CONTENT_MIN_LENGTH } from "../../core/src/shared/constants";

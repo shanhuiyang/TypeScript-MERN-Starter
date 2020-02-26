@@ -5,4 +5,6 @@ export default interface CommonActionCreator {
     resetRedirectTask(): Action;
     setLocale(locale: string): Action; // Not in used.
     setFabActions(fabActions: FabAction[]): Action;
+    addFabAction(fabAction: FabAction): Action;
+    removeFabAction(iconName: string): Action;
 }

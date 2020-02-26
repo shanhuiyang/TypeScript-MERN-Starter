@@ -87,9 +87,9 @@ class AvatarCropDialog extends React.Component<Props, States> {
     }
     private save = (): void => {
         if (this.editorRef && this.editorRef.current) {
-          // If you want the image resized to the canvas size (also a HTMLCanvasElement)
-          const canvasScaled: HTMLCanvasElement = this.editorRef.current.getImageScaledToCanvas();
-          canvasScaled.toBlob((blob: Blob | null): void => {this.props.onConfirm(blob); });
+            // If you want the image resized to the canvas size (also a HTMLCanvasElement)
+            const canvasScaled: HTMLCanvasElement = this.editorRef.current.getImageScaledToCanvas();
+            canvasScaled.toBlob((blob: Blob | null): void => {this.props.onConfirm(blob); });
         }
     }
 }
