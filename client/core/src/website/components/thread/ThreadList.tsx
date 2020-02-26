@@ -101,7 +101,7 @@ class ThreadList extends React.Component<Props, States> {
             </div>
             <div style={{
                 display: "flex",
-                flex: "none",
+                flex: "initial",
                 flexDirection: "column",
                 alignItems: "flex-end",
                 justifyContent: "space-between"

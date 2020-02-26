@@ -4,7 +4,7 @@ import TabNavigator from "../Nav/TabNavigator";
 import { Link } from "react-router-native";
 import UserModel from "../../core/src/models/User";
 import connectAllProps from "../../core/src/shared/connect";
-import { getAvatarSource } from "../utils/image";
+import { getAvatarSource } from "../../core/src/shared/image";
 import { FormattedMessage } from "react-intl";
 import { ComponentProps as Props } from "../../core/src/shared/ComponentProps";
 

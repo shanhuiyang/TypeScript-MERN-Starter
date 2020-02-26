@@ -6,7 +6,7 @@ import Article from "../../core/src/models/Article";
 import connectAllProps from "../../core/src/shared/connect";
 import User from "../../core/src/models/User";
 import HeaderWithBack from "../Common/HeaderWithBack";
-import { getAvatarSource, amendAllImageInContent } from "../utils/image";
+import { getAvatarSource, amendAllImageInContent } from "../../core/src/shared/image";
 import Markdown from "react-native-markdown-display";
 import moment from "moment";
 import { MARKDOWN_STYLES } from "./styles/markdown";

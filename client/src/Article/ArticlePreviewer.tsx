@@ -5,7 +5,7 @@ import { injectIntl, WrappedComponentProps as IntlProps, FormattedMessage } from
 import { StyleSheet } from "react-native";
 import Markdown from "react-native-markdown-display";
 import { MARKDOWN_STYLES } from "./styles/markdown";
-import { amendAllImageInContent } from "../utils/image";
+import { amendAllImageInContent } from "../../core/src/shared/image";
 import ArticleCache from "../../core/src/models/client/ArticleCache";
 import { getStorage } from "../../core/src/shared/storage";
 import { ARTICLE_EDIT_CACHE_KEY_PREFIX, NEW_ARTICLE_CACHE_ID } from "../../core/src/actions/article";
