@@ -12,8 +12,7 @@ import PostType from "../../models/PostType";
 import NothingMoreFooter from "../components/shared/NothingMoreFooter";
 import { isMobile } from "../components/dimension";
 import { ComponentProps as Props } from "../../shared/ComponentProps";
-import Article from "../../models/Article";
-import Thread from "../../models/Thread";
+import { Redirect } from "react-router";
 
 interface States {
     loadedAll: boolean;
@@ -26,18 +25,22 @@ class Notifications extends React.Component<Props, States> {
         };
     }
     render(): React.ReactElement<any> {
-        return <Container text style={CONTAINER_STYLE}>
-            <div>
-                {
-                    this.props.state.userState.notifications.length > 0 ?
-                    this.props.state.userState.notifications.map(this.renderMessage)
-                    : this.renderEmptyNotification()
-                }
-                {
-                    this.renderLoadAll()
-                }
-            </div>
-        </Container>;
+        if (this.props.state.userState.currentUser) {
+            return <Container text style={CONTAINER_STYLE}>
+                <div>
+                    {
+                        this.props.state.userState.notifications.length > 0 ?
+                        this.props.state.userState.notifications.map(this.renderMessage)
+                        : this.renderEmptyNotification()
+                    }
+                    {
+                        this.renderLoadAll()
+                    }
+                </div>
+            </Container>;
+        } else {
+            return <Redirect to="login" />;
+        }
     }
     private renderEmptyNotification = (): React.ReactElement<any> => {
         return <Message>
@@ -54,21 +57,23 @@ class Notifications extends React.Component<Props, States> {
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "flex-start",
                 fontSize: isMobile() ? 12 : 14
             }}>
-            <div style={{display: "flex", flexDirection: "row", alignItems: "center"}}>
-                <UserAvatar user={subject}/>
-                <b style={{marginLeft: 8, marginRight: 4}}>{subject.name}</b>
+            <UserAvatar user={subject}/>
+            <span style={{paddingLeft: 8, paddingRight: 8}}>
+                <b>{subject.name}</b>
                 {this.getEventMessage(notification)}
                 {this.getObjectMessage(notification)}
-            </div>
+            </span>
             {
                 notification.acknowledged ? undefined :
-                <Button basic size={isMobile() ? "small" : "medium"}
-                    onClick={() => { this.props.actions.acknowledgeNotification(notification._id); }}>
-                    <FormattedMessage id="page.notification.set_as_read" />
-                </Button>
+                <div style={{flex: "auto", flexDirection: "row", justifyContent: "flex-end"}}>
+                    <Button basic size="small"
+                        onClick={() => { this.props.actions.acknowledgeNotification(notification._id); }}>
+                        <FormattedMessage id="page.notification.set_as_read" />
+                    </Button>
+                </div>
             }
         </Message>;
     }
@@ -86,25 +91,13 @@ class Notifications extends React.Component<Props, States> {
     }
     private getObjectMessage = (notification: Notification): React.ReactElement<any> => {
         let objectMessageId: string;
-        let title: string = "";
+        const title: string = notification.objectText;
         switch (notification.objectType) {
             case PostType.ARTICLE:
                 objectMessageId = "page.notification.object_article";
-                const article: Article | undefined = this.props.state.articleState.data.find(
-                    (value: Article): boolean => notification.object === value._id
-                );
-                if (article) {
-                    title = article.title;
-                }
                 break;
             case PostType.THREAD:
                 objectMessageId = "page.notification.object_thread";
-                const thread: Thread | undefined = this.props.state.threadState.data.find(
-                    (value: Thread): boolean => notification.object === value._id
-                );
-                if (thread) {
-                    title = thread.title;
-                }
                 break;
             case PostType.COMMENT:
                 objectMessageId = "page.notification.object_comment";
@@ -112,7 +105,7 @@ class Notifications extends React.Component<Props, States> {
             default:
                 return <span/>;
         }
-        return <Link to={notification.link} style={{marginLeft: 4}}
+        return <Link to={notification.link}
             onClick={() => { this.props.actions.acknowledgeNotification(notification._id); }}>
             <FormattedMessage id={objectMessageId} />
             {title ? `: ${title}` : undefined }

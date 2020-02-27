@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import connectAllProps from "../../../shared/connect";
 import { Redirect } from "react-router-dom";
 import Thread from "../../../models/Thread";
-import ErrorPage from "../../pages/ErrorPage";
 import { Container, Comment, Header, Popup, Rating, RatingProps } from "semantic-ui-react";
 import { MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
@@ -40,18 +39,14 @@ class ThreadDetail extends React.Component<Props, States> {
         if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         }
-        const notFoundError: Error = {
-            name: "404 Not Found",
-            message: `not found for ${window.location.href} `
-        };
         if (!this.threadId) {
-            return <ErrorPage error={notFoundError} />;
+            return <span/>;
         }
         const thread: Thread | undefined = this.props.state.threadState.data.find(
             (value: Thread): boolean => value._id === this.threadId
         );
         if (!thread) {
-            return <ErrorPage error={notFoundError} />;
+            return <span/>;
         }
         return (
             <Fragment>

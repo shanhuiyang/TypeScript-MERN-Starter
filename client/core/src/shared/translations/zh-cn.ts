@@ -113,6 +113,7 @@ const TRANSLATION: Translation = {
         "component.button.next": "下一步",
         "component.button.scroll_up": "回到顶部",
         "component.button.clear_edit": "清空编辑",
+        "component.button.refresh": "刷新",
         "component.comment.title": "评论",
         "component.comment.placeholder": "留下你的看法",
         "component.comment.submit": "添加回复",
