@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import connectAllProps from "../../../shared/connect";
 import Thread from "../../../models/Thread";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { byCommentedAtLatestFirst } from "../../../shared/date";
 import { Container, List, Button, Pagination, Segment, Header, Icon } from "semantic-ui-react";
 import { CONTAINER_STYLE } from "../../../shared/styles";
@@ -21,26 +21,33 @@ const MARGIN_VERTICAL: number = 10;
 
 class ThreadList extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
-        if (this.props.state.userState.currentUser) {
-            return <Fragment>
-                <Container text style={{
-                    ...CONTAINER_STYLE,
-                    flex: 1,
-                    flexDirection: "column"
-                }}>
-                    {this.renderControlBar()}
-                    {this.renderPager()}
-                    <div style={{flex: 1}}>
-                        {this.renderThreads()}
-                    </div>
-                </Container>
-            </Fragment>;
-        } else {
-            return <Redirect to="/login" />;
-        }
+        return <Fragment>
+            <Container text style={{
+                ...CONTAINER_STYLE,
+                flex: 1,
+                flexDirection: "column"
+            }}>
+                {this.renderControlBar()}
+                {this.renderPager()}
+                <div style={{flex: 1}}>
+                    {this.renderThreads()}
+                </div>
+            </Container>
+            <Container text style={CONTAINER_STYLE}>
+                {this.renderPager()}
+            </Container>
+        </Fragment>;
     }
     componentDidMount() {
         this.props.actions.resetRedirectTask();
+        this.props.actions.setFabActions([{
+            text: this.props.intl.formatMessage({id: "component.button.refresh"}),
+            icon: "sync alternate",
+            onClick: () => this.props.actions.getThreads(0, DEFAULT_PAGE_SIZE)
+        }]);
+    }
+    componentWillUnmount() {
+        this.props.actions.setFabActions([]);
     }
     private renderThreads = (): React.ReactElement<any> => {
         if (this.props.state.threadState.loading
@@ -69,11 +76,6 @@ class ThreadList extends React.Component<Props, States> {
     }
     private renderThreadItem = (thread: Thread): React.ReactElement<any> => {
         const author: User = this.props.state.userDictionary[thread.author];
-        const createTime: Date = thread.createdAt ? new Date(thread.createdAt) : new Date(0);
-        const commentsCount: number = thread.commentsCount ? thread.commentsCount : 0;
-        const likesCount: number = thread.likes ? thread.likes.length : 0;
-        const lastCommentedBy: User | undefined = thread.lastCommentedBy ? this.props.state.userDictionary[thread.lastCommentedBy] : undefined;
-        const lastCommentedTime: Date = thread.lastCommentedAt ? new Date(thread.lastCommentedAt) : new Date(0);
         return <List.Item as={Link} to={`/thread/${thread._id}`}
             key={thread._id} style={{
                 display: "flex",
@@ -85,52 +87,24 @@ class ThreadList extends React.Component<Props, States> {
             <div style={{flex: "none"}}>
                 <UserAvatar user={author} />
             </div>
-            <div style={{
-                flex: "auto",
-                justifyContent: "center",
-                marginLeft: 10,
-                marginRight: 10,
-                flexDirection: "column"}}>
-                <div className="title-text">
-                    {thread.removedEternally ? <FormattedMessage id="page.thread.removed" /> : thread.title}
-                </div>
-                <div className="description-text" style={{marginTop: 4}}>
-                    {author.name}
-                    {" "}
-                    <FormattedMessage id="post.created_at" />{moment(createTime).fromNow()}
-                </div>
-            </div>
+            {
+                this.renderThreadPrimaryInfo(thread)
+            }
             {
                 isMobile() ? undefined :
                 <div style={{
                     display: "flex",
-                    flex: "initial",
+                    flex: "none",
                     flexDirection: "column",
                     alignItems: "flex-end",
                     justifyContent: "space-between"
                 }}>
-                    <div className="description-text">
-                        <label style={{marginRight: 8}}>
-                            <Icon name="like"  />{likesCount}
-                        </label>
-                        <label>
-                            <Icon name="talk"  />{commentsCount}
-                        </label>
-                    </div>
-                    <div className="description-text">
                     {
-                        lastCommentedBy ?
-                        <div className="reply-info-text">
-                            {lastCommentedBy.name}
-                            {" "}
-                            <FormattedMessage id="post.replied_at" />{moment(lastCommentedTime).fromNow()}
-                        </div>
-                        :
-                        <div className="reply-info-text">
-                            <FormattedMessage id="post.no_reply_yet" />
-                        </div>
+                        this.renderUpVotes(thread)
                     }
-                    </div>
+                    {
+                        this.renderLastCommentInfo(thread)
+                    }
                 </div>
             }
         </List.Item>;
@@ -138,7 +112,7 @@ class ThreadList extends React.Component<Props, States> {
     private renderPager = (): React.ReactElement<any> => {
         return <div style={{marginTop: MARGIN_VERTICAL, marginBottom: MARGIN_VERTICAL, flex: "none"}}>
             <Pagination
-                defaultActivePage={this.props.state.threadState.pageIndex + 1}
+                activePage={this.props.state.threadState.pageIndex + 1}
                 totalPages={Math.ceil(this.props.state.threadState.totalCount / DEFAULT_PAGE_SIZE)}
                 onPageChange={(e, { activePage }) => this.handlePaginationChange(activePage)}
                 />
@@ -157,6 +131,58 @@ class ThreadList extends React.Component<Props, States> {
                     <FormattedMessage id="page.thread.add" />
                 </Button.Content>
             </Button>
+        </div>;
+    }
+    private renderThreadPrimaryInfo = (thread: Thread): React.ReactElement<any> | undefined => {
+        const author: User = this.props.state.userDictionary[thread.author];
+        const createTime: Date = thread.createdAt ? new Date(thread.createdAt) : new Date(0);
+        return <div style={{
+            flex: "auto",
+            justifyContent: "center",
+            marginLeft: 10,
+            marginRight: 10,
+            flexDirection: "column"}}>
+            <div className="title-text">
+                {thread.removedEternally ? <FormattedMessage id="page.thread.removed" /> : thread.title}
+            </div>
+            <div className="description-text" style={{marginTop: 4}}>
+                {author.name}
+                {" "}
+                <FormattedMessage id="post.created_at" />{moment(createTime).fromNow()}
+            </div>
+            {
+                isMobile() ? this.renderUpVotes(thread) : undefined
+            }
+        </div>;
+    }
+    private renderUpVotes = (thread: Thread): React.ReactElement<any> | undefined => {
+        const commentsCount: number = thread.commentsCount ? thread.commentsCount : 0;
+        const likesCount: number = thread.likes ? thread.likes.length : 0;
+        return <div className="description-text">
+            <label style={{marginRight: 8}}>
+                <Icon name="like"  />{likesCount}
+            </label>
+            <label>
+                <Icon name="talk"  />{commentsCount}
+            </label>
+        </div>;
+    }
+    private renderLastCommentInfo = (thread: Thread): React.ReactElement<any> => {
+        const lastCommentedBy: User | undefined = thread.lastCommentedBy ? this.props.state.userDictionary[thread.lastCommentedBy] : undefined;
+        const lastCommentedTime: Date = thread.lastCommentedAt ? new Date(thread.lastCommentedAt) : new Date(0);
+        return <div className="description-text">
+            {
+                lastCommentedBy ?
+                <div className="reply-info-text">
+                    {lastCommentedBy.name}
+                    {" "}
+                    <FormattedMessage id="post.replied_at" />{moment(lastCommentedTime).fromNow()}
+                </div>
+                :
+                <div className="reply-info-text">
+                    <FormattedMessage id="post.no_reply_yet" />
+                </div>
+            }
         </div>;
     }
     private handlePaginationChange = (activePage: string | number | undefined): void => {

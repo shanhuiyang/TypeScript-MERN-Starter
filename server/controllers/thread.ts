@@ -87,7 +87,8 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
                 InteractionType.LIKE : InteractionType.UNLIKE,
             objectType: PostType.THREAD,
             object: updated._id,
-            link: `/thread/${updated._id}`
+            link: `/thread/${updated._id}`,
+            objectText: updated.title
         });
         return notification.save();
     })

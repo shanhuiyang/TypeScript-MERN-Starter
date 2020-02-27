@@ -9,4 +9,5 @@ export default interface Notification extends UnifiedModel {
     objectType: PostType;
     object: string; // Article._id and Comment._id, etc
     link: string; // For owner to click
+    objectText: string; // Article.title or something else
 }

@@ -4,7 +4,7 @@
  */
 .title-text {
     display: flex;
-    color: rgba(0, 0, 0, 0.7);
+    color: rgba(0, 0, 0, 0.6);
 }
 .title-text:hover {
     display: flex;
@@ -12,7 +12,7 @@
 }
 .description-text {
     font-size: 0.8em;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgba(0, 0, 0, 0.5);
 }
 .reply-info-text {
     margin-top: 4px;

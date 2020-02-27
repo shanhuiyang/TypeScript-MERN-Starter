@@ -105,7 +105,8 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: PostType.COMMENT,
                     object: req.query.parent,
-                    link: `/${req.query.targetType}/${req.query.targetId}`
+                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    objectText: parent.content
                 });
                 notification.save();
             }
@@ -133,7 +134,8 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: req.query.targetType,
                     object: req.query.targetId,
-                    link: `/${req.query.targetType}/${req.query.targetId}`
+                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    objectText: value.title
                 });
                 notification.save();
             }
@@ -233,7 +235,8 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
                 InteractionType.LIKE : InteractionType.UNLIKE,
             objectType: PostType.COMMENT,
             object: updated._id.toString(),
-            link: `/${updated.targetType}/${updated.targetId}` // TODO: locate it to the comment position
+            link: `/${updated.targetType}/${updated.targetId}`, // TODO: locate it to the comment position
+            objectText: updated.content
         });
         return notification.save();
     })

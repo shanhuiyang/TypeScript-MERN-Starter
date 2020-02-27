@@ -40,18 +40,14 @@ class ThreadDetail extends React.Component<Props, States> {
         if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
         }
-        const notFoundError: Error = {
-            name: "404 Not Found",
-            message: `not found for ${window.location.href} `
-        };
         if (!this.threadId) {
-            return <ErrorPage error={notFoundError} />;
+            return <span/>;
         }
         const thread: Thread | undefined = this.props.state.threadState.data.find(
             (value: Thread): boolean => value._id === this.threadId
         );
         if (!thread) {
-            return <ErrorPage error={notFoundError} />;
+            return <span/>;
         }
         return (
             <Fragment>

@@ -7,7 +7,8 @@ export const notificationSchema: Schema = new mongoose.Schema({
     event: String, // Like, Mention and Comment
     objectType: String,
     object: String, // Article._id and Comment._id, etc
-    link: String // For owner to click
+    link: String, // For owner to click
+    objectText: String
 }, { timestamps: true });
 
 const NotificationCollection: Model<NotificationDocument> = mongoose.model("Notification", notificationSchema);

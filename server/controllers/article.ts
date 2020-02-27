@@ -108,7 +108,8 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
                 InteractionType.LIKE : InteractionType.UNLIKE,
             objectType: PostType.ARTICLE,
             object: updated._id,
-            link: `/article/${updated._id}`
+            link: `/article/${updated._id}`,
+            objectText: updated.title
         });
         return notification.save();
     })
