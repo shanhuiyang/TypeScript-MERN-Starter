@@ -2,7 +2,6 @@ import React, { Fragment } from "react";
 import connectAllProps from "../../../shared/connect";
 import { Redirect } from "react-router-dom";
 import Thread from "../../../models/Thread";
-import ErrorPage from "../../pages/ErrorPage";
 import { Container, Comment, Header, Popup, Rating, RatingProps } from "semantic-ui-react";
 import { MessageDescriptor, FormattedMessage } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
