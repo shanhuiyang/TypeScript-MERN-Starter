@@ -112,6 +112,12 @@ class ThreadList extends React.Component<Props, States> {
     private renderPager = (): React.ReactElement<any> => {
         return <div style={{marginTop: MARGIN_VERTICAL, marginBottom: MARGIN_VERTICAL, flex: "none"}}>
             <Pagination
+                boundaryRange={isMobile() ? 0 : 1}
+                siblingRange={isMobile() ? 1 : 2}
+                // tslint:disable-next-line:no-null-keyword
+                prevItem={isMobile() ? null : undefined}
+                // tslint:disable-next-line:no-null-keyword
+                nextItem={isMobile() ? null : undefined}
                 activePage={this.props.state.threadState.pageIndex + 1}
                 totalPages={Math.ceil(this.props.state.threadState.totalCount / DEFAULT_PAGE_SIZE)}
                 onPageChange={(e, { activePage }) => this.handlePaginationChange(activePage)}

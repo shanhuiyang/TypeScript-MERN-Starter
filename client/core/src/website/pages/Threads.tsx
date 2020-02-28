@@ -11,9 +11,7 @@ import { ComponentProps as Props } from "../../shared/ComponentProps";
 interface States {}
 class Threads extends React.Component<Props, States> {
     componentDidMount() {
-        if (!this.props.state.threadState.valid) {
-            this.props.actions.getThreads(0, DEFAULT_PAGE_SIZE);
-        }
+        this.props.actions.getThreads(this.props.state.threadState.pageIndex, DEFAULT_PAGE_SIZE);
     }
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.threadState.valid && !this.props.state.threadState.valid) {

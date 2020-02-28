@@ -1,8 +1,11 @@
 import { MOBILE_DESKTOP_BOUND } from "./constants";
 
 export const isMobile = (): boolean => {
-    if (!(window as any).visualViewport) {
-        return true;
+    let windowWidth: number = 0;
+    if ((window as any).visualViewport) {
+        windowWidth = (window as any).visualViewport.width;
+    } else {
+        windowWidth = window.innerWidth;
     }
-    return (window as any).visualViewport.width <= MOBILE_DESKTOP_BOUND;
+    return windowWidth <= MOBILE_DESKTOP_BOUND;
 };

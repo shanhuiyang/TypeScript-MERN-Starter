@@ -142,6 +142,10 @@ yarn start
 
 Finally, navigate to [http://localhost:3000](http://localhost:3000) and you should see the blog page being served and rendered locally!
 
+> **Note!** You **cannot** open the localhost website on IE and Edge browser.
+> In contrast, you can open it on Safari, Firefox, and Chrome.
+> However, we will ensure the compatibility of the production app on IE and Edge browser.
+
 ### Start the mobile apps
 
 The command `yarn start` will also start the react-native project using expo-cli.
