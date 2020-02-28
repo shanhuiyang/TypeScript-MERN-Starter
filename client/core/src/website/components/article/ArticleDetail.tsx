@@ -41,6 +41,7 @@ class ArticleDetail extends React.Component<Props, States> {
             this.addFabActions();
         }
         this.props.actions.resetRedirectTask();
+        window.scrollTo(0, 0);
     }
     componentDidUpdate(prevProps: Props) {
         if ((prevProps.state.articleState.loading
