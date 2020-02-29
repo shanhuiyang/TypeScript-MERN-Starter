@@ -1,3 +1,10 @@
+
+// Change the app version value before every time you deploy your app
+// This follow the approach to force refresh the SPA suggested on:
+// https://stackoverflow.com/questions/34388614/how-to-force-update-single-page-application-spa-pages
+export const APP_VERSION: string = "0.4.1";
+
+// local storage keys
 export const ACCESS_TOKEN_KEY: string = "accessToken";
 
 export const INVALID_TOKEN_ERROR: string = "toast.user.invalid_token_error";
@@ -20,5 +27,4 @@ export const ANDROID_LOCAL_HOST_URL: string = "10.0.2.2";
 
 // Add feature flags here
 export const FLAG_ENABLE_OTP_FOR_VERIFICATION: boolean = false; // prerequisite: enable sending OTP thru email
-
 export const FLAG_ENABLE_INVITATION_CODE: boolean = false; // prerequisite: add your own invitation codes in client/core/src/shared/data/invitationCode.ts

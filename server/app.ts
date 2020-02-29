@@ -20,6 +20,7 @@ import "./config/passport-consumer";
 import avatar from "./routes/avatar";
 import notification from "./routes/notification";
 import thread from "./routes/thread";
+import version from "./routes/version";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -107,6 +108,7 @@ if (process.env.NODE_ENV === "production") {
 // Primary app routes.
 app.use("/auth", auth); // Auth client routes
 app.use("/oauth2", oauth2); // OAuth2 server routes
+app.use("/api/version", version); // version indicator
 app.use("/api/article", article); // Article related routes
 app.use("/api/avatar", avatar); // Avatar update related routes
 app.use("/api/comment", comment); // Comment related routes
