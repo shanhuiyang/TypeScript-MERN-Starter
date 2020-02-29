@@ -9,6 +9,7 @@ import { FormattedMessage, MessageDescriptor } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
 import { ComponentProps as Props } from "../../shared/ComponentProps";
 import { pendingRedirect } from "../../shared/redirect";
+import { FLAG_ENABLE_INVITATION_CODE } from "../../shared/constants";
 
 interface States {
     selectedGender: Gender;
@@ -22,6 +23,7 @@ class SignUp extends React.Component<Props, States> {
     private passwordRef: RefObject<HTMLInputElement>;
     private confirmPasswordRef: RefObject<HTMLInputElement>;
     private nameRef: RefObject<HTMLInputElement>;
+    private invitationCodeRef: RefObject<HTMLInputElement>;
     constructor(props: Props) {
         super(props);
         this.getString = this.props.intl.formatMessage;
@@ -29,6 +31,7 @@ class SignUp extends React.Component<Props, States> {
         this.passwordRef = React.createRef();
         this.confirmPasswordRef = React.createRef();
         this.nameRef = React.createRef();
+        this.invitationCodeRef = React.createRef();
         this.state = {
             selectedGender: DEFAULT_SELECTED_GENDER
         };
@@ -61,6 +64,16 @@ class SignUp extends React.Component<Props, States> {
                         </label>
                         <input type="password" placeholder={this.getString({ id: "user.confirm_password"})} ref={this.confirmPasswordRef} />
                     </ResponsiveFormField>
+                    {
+                        FLAG_ENABLE_INVITATION_CODE ?
+                        <ResponsiveFormField>
+                            <label>
+                                <FormattedMessage id="user.invitation_code"/>
+                            </label>
+                            <input placeholder={this.getString({ id: "user.invitation_code"})} ref={this.invitationCodeRef} />
+                        </ResponsiveFormField>
+                        : undefined
+                    }
                     <ResponsiveFormField>
                         <label>
                             <FormattedMessage id="user.name"/>
@@ -105,7 +118,8 @@ class SignUp extends React.Component<Props, States> {
         const confirmPassword: any = this.confirmPasswordRef.current && this.confirmPasswordRef.current.value;
         const name: any = this.nameRef.current && this.nameRef.current.value;
         const gender: Gender = this.state.selectedGender;
-        this.props.actions.signUp(email, password, confirmPassword, name, gender);
+        const invitationCode: string = this.invitationCodeRef.current ? this.invitationCodeRef.current.value : "";
+        this.props.actions.signUp(email, password, confirmPassword, name, gender, invitationCode);
     }
 }
 

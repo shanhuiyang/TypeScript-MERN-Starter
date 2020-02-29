@@ -6,7 +6,7 @@ import { check, query } from "express-validator";
 import passport = require("passport");
 import Gender from "../../client/core/src/models/Gender";
 import EditorType from "../../client/core/src/models/EditorType";
-import { PASSWORD_MIN_LENGTH } from "../../client/core/src/shared/constants";
+import { PASSWORD_MIN_LENGTH, FLAG_ENABLE_INVITATION_CODE } from "../../client/core/src/shared/constants";
 const oauth2: Router = express.Router();
 oauth2.route("/token").post(controllers.token);
 oauth2.route("/authorize").get(controllers.authorization);
@@ -21,6 +21,7 @@ oauth2.route("/signup").post(
         check("name", "toast.user.name").not().isEmpty(),
         check("gender", "toast.user.gender").isIn(Object.values(Gender))
     ],
+    FLAG_ENABLE_INVITATION_CODE ? check("invitationCode", "toast.user.invitation_code.empty").not().isEmpty() : [],
     controllers.signUp
 );
 oauth2.route("/login").post(

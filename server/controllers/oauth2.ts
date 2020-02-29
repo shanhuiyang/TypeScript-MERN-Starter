@@ -25,8 +25,9 @@ import AuthenticationResponse from "../../client/core/src/models/response/Authen
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 import Notification from "../../client/core/src/models/Notification.d";
 import User from "../../client/core/src/models/User";
-import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../client/core/src/shared/constants";
+import { FLAG_ENABLE_OTP_FOR_VERIFICATION, FLAG_ENABLE_INVITATION_CODE } from "../../client/core/src/shared/constants";
 import { refreshOtpThenSendToUser, OTP_LENGTH } from "../models/User/UserStorage";
+import { invitationCode } from "../../client/core/src/shared/data/invitationCode";
 
 // User authorization endpoint.
 //
@@ -126,41 +127,68 @@ export const token: RequestHandler[] = [
 /**
  * Create a new oauth2 user account.
  */
-export const signUp: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    const invalid: Response | false = validationErrorResponse(res, validationResult(req));
-    if (invalid) {
-        return invalid;
-    }
-    const user: UserDocument = new UserCollection({
-        email: req.body.email,
-        password: req.body.password,
-        gender: req.body.gender,
-        name: req.body.name,
-        address: req.body.address,
-        avatarUrl: req.body.avatarUrl,
-        preferences: req.body.preferences
-    });
-    UserCollection
-    .findOne({ email: _.toLower(req.body.email) })
-    .exec()
-    .then((existingUser: UserDocument | null) => {
-        if (existingUser) {
-            return Promise.reject(res.status(409).json({ message: "toast.user.upload_exist_account" }));
-        }
-        return user.save();
-    })
-    .then((user: UserDocument) => {
-        req.logIn(user, (err) => {
-            if (err) {
-                return next(err);
+export const signUp: RequestHandler[] = [
+    (req: Request, res: Response, next: NextFunction) => {
+        if (FLAG_ENABLE_INVITATION_CODE) {
+            const code: string = req.body.invitationCode;
+            if (invitationCode.indexOf(code) > 0) {
+                UserCollection
+                .findOne({invitationCode: code})
+                .exec()
+                .then((user: UserDocument | null) => {
+                    if (user) {
+                        Promise.reject(res.status(409).json({ message: "toast.user.invitation_code.used" }));
+                    } else {
+                        return next();
+                    }
+                })
+                .catch((error: Response) => {
+                    return error.end();
+                });
+            } else {
+                return res.status(400).json({ message: "toast.user.invitation_code.invalid" });
             }
-            return res.redirect(302, "/auth/oauth2"); // Get access token
+        } else {
+            return next();
+        }
+    },
+    (req: Request, res: Response, next: NextFunction) => {
+        const invalid: Response | false = validationErrorResponse(res, validationResult(req));
+        if (invalid) {
+            return invalid;
+        }
+        const user: UserDocument = new UserCollection({
+            email: req.body.email,
+            password: req.body.password,
+            gender: req.body.gender,
+            name: req.body.name,
+            address: req.body.address,
+            avatarUrl: req.body.avatarUrl,
+            preferences: req.body.preferences,
+            invitationCode: req.body.invitationCode
         });
-    })
-    .catch((error: Response) => {
-        return error.end();
-    });
-};
+        UserCollection
+        .findOne({ email: _.toLower(req.body.email) })
+        .exec()
+        .then((existingUser: UserDocument | null) => {
+            if (existingUser) {
+                return Promise.reject(res.status(409).json({ message: "toast.user.upload_exist_account" }));
+            }
+            return user.save();
+        })
+        .then((user: UserDocument) => {
+            req.logIn(user, (err) => {
+                if (err) {
+                    return next(err);
+                }
+                return res.redirect(302, "/auth/oauth2"); // Get access token
+            });
+        })
+        .catch((error: Response) => {
+            return error.end();
+        });
+    }
+];
 
 /**
  * Sign in using email and password.
