@@ -228,7 +228,7 @@ const userActionCreator: UserActionCreator = {
             type: RESET_UPLOADED_AVATAR
         };
     },
-    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender): any {
+    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender, invitationCode?: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
             const preferences: Preferences = DEFAULT_PREFERENCES;
@@ -238,7 +238,8 @@ const userActionCreator: UserActionCreator = {
                 confirmPassword,
                 name,
                 gender,
-                preferences
+                preferences,
+                invitationCode
             }, "POST")
             .then((redirectTask: RedirectTask) => {
                 dispatch({

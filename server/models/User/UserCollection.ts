@@ -16,7 +16,8 @@ export const userSchema: Schema = new mongoose.Schema({
         of: String
     },
     OTP: String,
-    otpExpireTime: Date
+    otpExpireTime: Date,
+    invitationCode: String
 }, { timestamps: true });
 
 /**
