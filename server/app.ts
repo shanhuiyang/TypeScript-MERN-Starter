@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import compression from "compression";
 import session from "express-session";
 import lusca from "lusca";
@@ -46,6 +47,8 @@ const app = express();
 app.set("server_port", SERVER_PORT);
 app.set("origin_uri", ORIGIN_URI);
 app.use(compression());
+// Please follow https://expressjs.com/en/resources/middleware/cors.html#enabling-cors-pre-flight to configure more strict cors
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
