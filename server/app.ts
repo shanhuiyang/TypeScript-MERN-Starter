@@ -58,7 +58,8 @@ app.use(cors({
             // tslint:disable-next-line:no-null-keyword
             return callback(null, true);
         }
-    }
+    },
+    credentials: true
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
