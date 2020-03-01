@@ -21,3 +21,6 @@ if (HOST_PORT_PROD === 80) {
     url = `${HOST_NAME_PROD}:${HOST_PORT_PROD}`;
 }
 export const HOST_URL_PROD = url;
+export const CORS_WHITELIST: string [] = [
+    // Add the origins you would like to whitelist
+];
