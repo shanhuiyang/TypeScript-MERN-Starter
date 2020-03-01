@@ -20,6 +20,12 @@ import { APP_VERSION } from "./shared/constants";
 
 // Add necessary configurations here before rendering
 
+// Polyfill Promise if it is undefined
+if (typeof document === "undefined") {
+    // eslint-disable-next-line
+    Promise = require("bluebird");
+}
+
 // Set host url for HTTP requests
 setHostUrl(window.location.origin);
 
