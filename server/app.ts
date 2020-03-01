@@ -22,6 +22,7 @@ import avatar from "./routes/avatar";
 import notification from "./routes/notification";
 import thread from "./routes/thread";
 import version from "./routes/version";
+import { CORS_WHITELIST } from "../client/core/src/models/HostUrl";
 
 // Connect to MongoDB
 const MongoStore = mongo(session);
@@ -47,8 +48,18 @@ const app = express();
 app.set("server_port", SERVER_PORT);
 app.set("origin_uri", ORIGIN_URI);
 app.use(compression());
-// Please follow https://expressjs.com/en/resources/middleware/cors.html#enabling-cors-pre-flight to configure more strict cors
-app.use(cors());
+app.use(cors({
+    origin: (requestOrigin: string | undefined, callback: (err: Error | null, allow?: boolean) => void): void  => {
+        // allow requests with no origin
+        if (requestOrigin && CORS_WHITELIST.indexOf(requestOrigin) === -1) {
+            const message: string = "The CORS policy for this origin doesn't allow access from the particular origin.";
+            return callback(new Error(message), false);
+        } else {
+            // tslint:disable-next-line:no-null-keyword
+            return callback(null, true);
+        }
+    }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
