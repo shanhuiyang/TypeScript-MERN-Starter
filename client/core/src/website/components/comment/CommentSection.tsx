@@ -40,6 +40,11 @@ class CommentSection extends React.Component<Props, States> {
     private commentFormRef: RefObject<any>;
     private replyCommentFormRef: RefObject<any>;
     private toDeleteId: string = "";
+    componentDidMount() {
+        if (this.props.state.userState.currentUser) {
+            this.props.actions.getComments(this.props.target, this.props.targetId);
+        }
+    }
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.commentState.updating === ADD_COMMENT_START
             && this.props.state.commentState.updating === ADD_COMMENT_SUCCESS) {
@@ -51,6 +56,9 @@ class CommentSection extends React.Component<Props, States> {
                 commentEditing: false,
                 replyCommentEditing: false
             });
+        }
+        if (prevProps.state.userState.currentUser && this.props.state.userState.currentUser) {
+            this.props.actions.getComments(this.props.target, this.props.targetId);
         }
     }
     constructor(props: Props) {
@@ -71,7 +79,13 @@ class CommentSection extends React.Component<Props, States> {
                 this.props.withHeader ?
                 <Header as="h3" dividing>
                     <FormattedMessage id={"component.comment.title"} />
-                    {`(${this.props.state.commentState.data.length})`}
+                    {"("}
+                    {
+                        this.props.state.userState.currentUser ?
+                        this.props.state.commentState.data.length
+                        : <FormattedMessage id={"component.comment.private"} />
+                    }
+                    {")"}
                 </Header>
                 : undefined
             }

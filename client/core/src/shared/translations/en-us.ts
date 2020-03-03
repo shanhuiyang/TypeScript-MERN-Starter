@@ -116,6 +116,7 @@ const TRANSLATION: Translation = {
         "component.button.clear_edit": "Clear edit",
         "component.button.refresh": "Refresh",
         "component.comment.title": "Comment",
+        "component.comment.private": "Show after login",
         "component.comment.placeholder": "Leave a reply",
         "component.comment.submit": "Add Reply",
         "component.comment.reply": "Reply",

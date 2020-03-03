@@ -30,11 +30,6 @@ class ThreadDetail extends React.Component<Props, States> {
             openDeleteWarning: false
         };
     }
-    componentDidMount() {
-        if (this.threadId) {
-            this.props.actions.getComments(PostType.THREAD, this.threadId);
-        }
-    }
     render(): React.ReactElement<any> {
         if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;

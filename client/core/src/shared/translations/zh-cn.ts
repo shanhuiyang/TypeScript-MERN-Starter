@@ -116,6 +116,7 @@ const TRANSLATION: Translation = {
         "component.button.clear_edit": "清空编辑",
         "component.button.refresh": "刷新",
         "component.comment.title": "评论",
+        "component.comment.private": "登录后可见",
         "component.comment.placeholder": "留下你的看法",
         "component.comment.submit": "添加回复",
         "component.comment.reply": "回复",
