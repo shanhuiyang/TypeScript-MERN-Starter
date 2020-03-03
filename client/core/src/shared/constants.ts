@@ -23,8 +23,6 @@ export const ARTICLE_TITLE_MAX_LENGTH: number = 50;
 export const THREAD_CONTENT_MAX_LENGTH: number = 1000;
 export const THREAD_TITLE_MAX_LENGTH: number = 50;
 
-export const ANDROID_LOCAL_HOST_URL: string = "10.0.2.2";
-
 // Add feature flags here
 export const FLAG_ENABLE_OTP_FOR_VERIFICATION: boolean = false; // prerequisite: enable sending OTP thru email
 export const FLAG_ENABLE_INVITATION_CODE: boolean = false; // prerequisite: add your own invitation codes in client/core/src/shared/data/invitationCode.ts
