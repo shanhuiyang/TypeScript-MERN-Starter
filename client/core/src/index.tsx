@@ -17,6 +17,7 @@ import moment from "moment";
 import "moment/locale/zh-cn";
 import fetch from "./shared/fetch";
 import { APP_VERSION } from "./shared/constants";
+import { HOST_URL_PROD, HOST_URL_DEV } from "./models/HostUrl";
 
 // Add necessary configurations here before rendering
 
@@ -27,7 +28,11 @@ if (typeof document === "undefined") {
 }
 
 // Set host url for HTTP requests
-setHostUrl(window.location.origin);
+if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
+    setHostUrl(HOST_URL_DEV);
+} else {
+    setHostUrl(HOST_URL_PROD);
+}
 
 // Check app version and upgrade app if obsolete
 // Please note this **must be called after host url is set**

@@ -30,7 +30,8 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
         completeUrl = `${getHostUrl()}${url}`;
     }
     const headers: any = {
-        Accept: "*/*" // For Android client this header line is must-have otherwise the server won't respond expectively
+        Accept: "*/*", // For Android client this header line is must-have otherwise the server won't respond expectively
+        Origin: window.location.origin
     };
     if (withToken) {
         const token: string | null = await localStorage().getItem(ACCESS_TOKEN_KEY);
