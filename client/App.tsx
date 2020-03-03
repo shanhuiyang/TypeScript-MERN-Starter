@@ -12,15 +12,15 @@ import "intl/locale-data/jsonp/en";
 import "intl/locale-data/jsonp/zh";
 
 import { setHostUrl } from "./core/src/shared/fetch";
-import { HOST_URL_DEV, HOST_URL_PROD } from "./core/src/models/HostUrl";
+import { HOST_URL_DEV, HOST_URL_PROD, HOST_NAME_ANDROID_LOCAL } from "./core/src/models/HostUrl";
 
 if (__DEV__) {
     // Android Emulator cannot access http://localhost on the same server
     // But we can inject http://10.0.2.2 for such requirement
     let hostUrl: string = HOST_URL_DEV;
-    const localHostUrl: string = "localhost";
+    const localHostUrl: string = "http://localhost";
     if (hostUrl.match(localHostUrl) && Platform.OS === "android") {
-        hostUrl = hostUrl.replace(localHostUrl, ANDROID_LOCAL_HOST_URL);
+        hostUrl = hostUrl.replace(localHostUrl, HOST_NAME_ANDROID_LOCAL);
         setHostUrl(hostUrl);
     } else {
         setHostUrl(HOST_URL_DEV);
@@ -46,8 +46,6 @@ import * as Localization from "expo-localization";
 import { SET_LOCALE } from "./core/src/actions/common";
 import moment from "moment";
 import "moment/locale/zh-cn";
-
-import { ANDROID_LOCAL_HOST_URL } from "./core/src/shared/constants";
 
 interface Props {}
 interface States {
