@@ -56,7 +56,7 @@ const userActionCreator: UserActionCreator = {
                         type: CONSENT_REQUEST_SUCCESS,
                         user: json.user,
                         notifications: [],
-                        notificationSubjects: {}
+                        others: json.others
                     });
                     return localStorage().setItem(ACCESS_TOKEN_KEY, json.accessToken);
                 } else {
@@ -94,7 +94,7 @@ const userActionCreator: UserActionCreator = {
                         type: AUTHENTICATE_SUCCESS,
                         user: json.user,
                         notifications: json.notifications,
-                        notificationSubjects: json.notificationSubjects
+                        others: json.others
                     });
                 } else {
                     return Promise.reject(new Error(INVALID_TOKEN_ERROR));
@@ -118,7 +118,7 @@ const userActionCreator: UserActionCreator = {
                         type: LOGIN_SUCCESS,
                         user: response.user,
                         notifications: response.notifications,
-                        notificationSubjects: response.notificationSubjects
+                        others: response.others
                     });
                     return localStorage().setItem(ACCESS_TOKEN_KEY, response.accessToken);
                 } else if (!task.redirected && task.to) {

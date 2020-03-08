@@ -36,31 +36,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             if (!comments) {
                 return Promise.reject(res.status(500).end());
             }
-            const findAuthorInUsers = (comment: Comment): Promise<UserDocument | null> => {
-                return UserCollection.findById(comment.author).exec();
-            };
-            const promises: Promise<User | undefined>[] = comments.map(async (comment: Comment) => {
-                const author: UserDocument | null = await findAuthorInUsers(comment);
-                if (author) {
-                    return {
-                        email: author.email,
-                        name: author.name,
-                        avatarUrl: author.avatarUrl,
-                        gender: author.gender,
-                        _id: author._id.toString()
-                    } as User;
-                } else {
-                    return undefined;
-                }
-            });
-            const authors: (User | undefined) [] = await Promise.all(promises);
-            const authorsDic: {[id: string]: User} = {};
-            authors.forEach((author: User | undefined): void => {
-                if (author) {
-                    authorsDic[author._id] = author;
-                }
-            });
-            return res.json({data: comments, authors: authorsDic} as GetCommentsResponse);
+            return res.json({data: comments} as GetCommentsResponse);
         })
         .catch((error: Response) => {
             return error.end();

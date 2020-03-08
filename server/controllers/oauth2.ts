@@ -215,19 +215,18 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
     })(req, res, next);
 };
 
-export const profile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    NotificationStorage.findByOwner(
-        (req.user as User)._id.toString(),
-        true,
-        (data: Notification[], subjects: {[id: string]: User}): void => {
-            (req.user as User).password = "######";
-            res.json({
-                user: req.user,
-                notifications: data,
-                notificationSubjects: subjects
-            } as AuthenticationResponse);
-        }
-    );
+export const profile: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+    const notifications: Notification[] = await NotificationStorage.findByOwner((req.user as User)._id.toString(), true);
+    const others: User[] = await UserCollection.find({});
+    (req.user as User).password = "######";
+    others.forEach((other: User) => {
+        other.password = "######";
+    });
+    return res.json({
+        user: req.user,
+        notifications: notifications,
+        others: others
+    } as AuthenticationResponse);
 };
 
 export const updateProfile: RequestHandler = (req: Request, res: Response, next: NextFunction) => {

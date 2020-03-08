@@ -4,5 +4,5 @@ export default interface AuthenticationResponse {
     user: User;
     accessToken?: string;
     notifications: Notification[]; // unacknowledged
-    notificationSubjects: {[id: string]: User};
+    others: User[]; // Get all users' info after authenticate
 }

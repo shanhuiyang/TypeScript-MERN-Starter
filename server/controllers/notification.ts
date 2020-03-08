@@ -8,13 +8,13 @@ import * as NotificationStorage from "../models/Notification/NotificationStorage
 
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
     const unacknowledgedOnly: boolean = req.query.unread && req.query.unread === "true";
-    NotificationStorage.findByOwner(
-        (req.user as User)._id.toString(),
-        unacknowledgedOnly,
-        (data: Notification[], subjects: {[id: string]: User}): void => {
-            res.json({data, subjects} as GetNotificationsResponse);
-        }
-    );
+    NotificationStorage.findByOwner((req.user as User)._id.toString(), unacknowledgedOnly)
+    .then((data: Notification[]): void => {
+        res.json({data} as GetNotificationsResponse);
+    })
+    .catch((error: Error) => {
+        next(error);
+    });
 };
 
 export const acknowledge: RequestHandler = (req: Request, res: Response, next: NextFunction) => {

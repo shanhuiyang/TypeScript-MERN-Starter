@@ -27,11 +27,10 @@ const threadActionCreator: ThreadActionCreator = {
             dispatch({type: GET_THREADS_START});
             fetch(`/api/thread?pageIndex=${pageIndex}&pageSize=${pageSize}`, undefined, "GET", /*withToken*/ true)
             .then((json: GetThreadsResponse) => {
-                if (json && json.data && json.authors && json.totalCount >= 0) {
+                if (json && json.data && json.totalCount >= 0) {
                     dispatch({
                         type: GET_THREADS_SUCCESS,
                         threads: json.data,
-                        authors: json.authors,
                         pageIndex: pageIndex,
                         totalCount: json.totalCount
                     });

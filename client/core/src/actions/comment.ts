@@ -28,11 +28,10 @@ const commentActionCreator: CommentActionCreator = {
             dispatch({type: LOAD_COMMENTS_START});
             fetch(`/api/comment?targetType=${targetType}&targetId=${targetId}`, undefined, "GET")
             .then((json: GetCommentsResponse) => {
-                if (json && json.data && json.authors) {
+                if (json && json.data) {
                     dispatch({
                         type: LOAD_COMMENTS_SUCCESS,
                         comments: json.data,
-                        authors: json.authors,
                     });
                 } else {
                     return Promise.reject({ name: "500 Internal Server Error", message: "" });

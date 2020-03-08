@@ -15,6 +15,7 @@ export const RESPONSE_CONTENT_TYPE = {
     HTML: "text/html"
 };
 
+export const MAX_REGISTRATION_USER: number = 100; // Limit user count so that we can handle users profile easily.
 export const DEFAULT_PAGE_SIZE: number = 8;
 export const PASSWORD_MIN_LENGTH: number = 8;
 export const ARTICLE_CONTENT_MIN_LENGTH: number = 150;

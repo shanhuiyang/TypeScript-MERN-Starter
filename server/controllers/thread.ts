@@ -137,33 +137,8 @@ export const read: RequestHandler = async (req: Request, res: Response, next: Ne
         .skip(pageSize * pageIndex)
         .limit(pageSize)
         .exec();
-    const findAuthorInUsers = (thread: Thread): Promise<UserDocument | null> => {
-        return UserCollection.findById(thread.author).exec();
-    };
-    const promises: Promise<User | undefined>[] = threads.map(async (thread: Thread) => {
-        const user: UserDocument | null = await findAuthorInUsers(thread);
-        if (!user) {
-            return undefined;
-        } else {
-            return {
-                email: user.email,
-                name: user.name,
-                avatarUrl: user.avatarUrl,
-                gender: user.gender,
-                _id: user._id.toString()
-            } as User;
-        }
-    });
-    const authors: (User | undefined) [] = await Promise.all(promises);
-    const authorsDic: {[id: string]: User} = {};
-    authors.forEach((author: User | undefined): void => {
-        if (author) {
-            authorsDic[author._id] = author;
-        }
-    });
     return res.json({
         data: threads,
-        authors: authorsDic,
         totalCount: count
     } as GetThreadsResponse);
 };
