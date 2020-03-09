@@ -5,8 +5,6 @@ import PostType from "../../client/core/src/models/PostType";
 import CommentCollection from "../models/Comment/CommentCollection";
 import CommentDocument from "../models/Comment/CommentDocument";
 import Comment from "../../client/core/src/models/Comment.d";
-import UserCollection from "../models/User/UserCollection";
-import UserDocument from "../models/User/UserDocument.d";
 import User from "../../client/core/src/models/User.d";
 import GetCommentsResponse from "../../client/core/src/models/response/GetCommentsResponse";
 import NotificationDocument from "../models/Notification/NotificationDocument";
@@ -68,7 +66,7 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
         return next(new Error("failed to add comment."));
     }
     res.json(saved);
-    const notificationLink: string = `/${req.query.targetType}/${req.query.targetId}`;
+    const notificationLink: string = `/${req.query.targetType}/${req.query.targetId}#${saved._id}`;
     if (req.query.parent) { // This is a comment of Comment
         CommentCollection
         .findByIdAndUpdate(req.query.parent, {
@@ -198,6 +196,14 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
     }
 
     const user: User = req.user as User;
+    let action: InteractionType;
+    if (Number.parseInt(req.query.rating) === 1) {
+        action = InteractionType.LIKE;
+    } else if (Number.parseInt(req.query.rating) === 0) {
+        action = InteractionType.UNLIKE;
+    } else {
+        return res.status(400).end();
+    }
 
     CommentCollection
     .findById(req.query.id)
@@ -210,13 +216,11 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
         const likes: string[] = comment.likes;
-        if (Number.parseInt(req.query.rating) === 1) {
+        if (action === InteractionType.LIKE) {
             likes.push(user._id.toString());
-        } else if (Number.parseInt(req.query.rating) === 0) {
+        } else {
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove, 1);
-        } else {
-            return Promise.reject(res.status(400).end());
         }
         return CommentCollection.findByIdAndUpdate(req.query.id, {likes: likes}).exec();
     })
@@ -229,11 +233,10 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             owner: updated.author,
             acknowledged: false,
             subject: user._id.toString(),
-            event: Number.parseInt(req.query.rating) === 1 ?
-                InteractionType.LIKE : InteractionType.UNLIKE,
+            event: action,
             objectType: PostType.COMMENT,
             object: updated._id.toString(),
-            link: `/${updated.targetType}/${updated.targetId}`, // TODO: locate it to the comment position
+            link: `/${updated.targetType}/${updated.targetId}${action === InteractionType.LIKE ? "#" + updated._id : ""}`,
             objectText: updated.content
         });
         notification.save();
