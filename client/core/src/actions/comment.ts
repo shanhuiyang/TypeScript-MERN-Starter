@@ -42,11 +42,11 @@ const commentActionCreator: CommentActionCreator = {
             });
         };
     },
-    addComment(targetType: PostType, targetId: string, parent: string, content: string): any {
+    addComment(targetType: PostType, targetId: string, parent: string, content: string, mentions?: string[]): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: ADD_COMMENT_START});
             fetch(`/api/comment/add?targetType=${targetType}&targetId=${targetId}${ parent ? "&parent=" + parent : "" }`,
-                { content },
+                { content, mentions },
                 "POST", true)
             .then((added: Comment) => {
                 if (added) {

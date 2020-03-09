@@ -14,7 +14,7 @@ import PostType from "../../../models/PostType";
 import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
-import { getNameList } from "../../../shared/string";
+import { getNameList, getMentionedUserId } from "../../../shared/string";
 import moment from "moment";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import Loading from "./Loading";
@@ -168,11 +168,13 @@ class CommentSection extends React.Component<Props, States> {
     }
     private onSubmitComment = (id: string, ref: RefObject<any>): void => {
         if (ref.current && ref.current.value) {
+            const content: string = ref.current.value;
             this.props.actions.addComment(
                 this.props.target,
                 this.props.targetId,
                 id === this.props.targetId ? "" : id,
-                ref.current.value
+                content,
+                getMentionedUserId(content, this.props.state.userDictionary)
             );
         }
     };

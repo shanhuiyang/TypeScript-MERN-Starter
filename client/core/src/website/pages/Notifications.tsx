@@ -85,6 +85,8 @@ class Notifications extends React.Component<Props, States> {
                 return <FormattedMessage id="page.notification.event_like" />;
             case InteractionType.UNLIKE:
                 return <FormattedMessage id="page.notification.event_unlike" />;
+            case InteractionType.MENTION:
+                return <FormattedMessage id="page.notification.event_mention" />;
             default:
                 return <span/>;
         }

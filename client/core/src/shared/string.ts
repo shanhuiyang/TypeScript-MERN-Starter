@@ -2,7 +2,7 @@ import User from "../models/User";
 
 const markDownImage: RegExp = /!\[.*\]\((.*)\)/;
 
-const mentionedUser: RegExp = /@(.+?)\ /g;
+const mentionedUser: RegExp = /@(.+?) /g;
 
 /**
  * Extract the content by first n characters, excluding images

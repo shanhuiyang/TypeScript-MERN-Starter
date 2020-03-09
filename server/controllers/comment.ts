@@ -63,7 +63,12 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
         lastCommentedAt: nowDateString,
         lastCommentedBy: ""
     });
-    const saved: Comment = await comment.save();
+    const saved: Comment | null = await comment.save();
+    if (!saved) {
+        return next(new Error("failed to add comment."));
+    }
+    res.json(saved);
+    const notificationLink: string = `/${req.query.targetType}/${req.query.targetId}`;
     if (req.query.parent) { // This is a comment of Comment
         CommentCollection
         .findByIdAndUpdate(req.query.parent, {
@@ -81,12 +86,11 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: PostType.COMMENT,
                     object: req.query.parent,
-                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    link: notificationLink,
                     objectText: parent.content
                 });
                 notification.save();
             }
-            return res.json(saved);
         })
         .catch((error: Error) => {
                 // Unknown parent id.
@@ -110,12 +114,29 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: req.query.targetType,
                     object: req.query.targetId,
-                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    link: notificationLink,
                     objectText: value.title
                 });
                 notification.save();
             }
-            return res.json(saved);
+        })
+        .catch((error: Error) => {
+            return next(error);
+        });
+    }
+    if (req.body.mentions && (req.body.mentions as string[]).length > 0) {
+        (req.body.mentions as string[]).forEach((mentioned: string) => {
+            const notification: NotificationDocument = new NotificationCollection({
+                owner: mentioned,
+                acknowledged: false,
+                subject: saved.author,
+                event: InteractionType.MENTION,
+                objectType: PostType.COMMENT,
+                object: saved._id,
+                link: notificationLink,
+                objectText: saved.content
+            });
+            notification.save();
         });
     }
 };
@@ -203,6 +224,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         if (!updated) {
             return Promise.reject(res.status(500).end());
         }
+        res.status(200).end();
         const notification: NotificationDocument = new NotificationCollection({
             owner: updated.author,
             acknowledged: false,
@@ -214,10 +236,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             link: `/${updated.targetType}/${updated.targetId}`, // TODO: locate it to the comment position
             objectText: updated.content
         });
-        return notification.save();
-    })
-    .then(() => {
-        return res.status(200).end();
+        notification.save();
     })
     .catch((error: Response) => {
         return error.end();

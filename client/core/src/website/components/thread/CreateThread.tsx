@@ -11,6 +11,7 @@ import InsertImageDialog from "../shared/InsertImageDialog";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
 import insertTextAtCursor from "insert-text-at-cursor";
 import { Viewer } from "@toast-ui/react-editor";
+import { getMentionedUserId } from "../../../shared/string";
 
 interface States {
     editing: boolean;
@@ -128,7 +129,7 @@ class CreateThread extends React.Component<Props, States> {
         const title: any = this.titleRef.current && this.titleRef.current.value;
         const content: any = this.contentRef.current && this.contentRef.current.value;
         if (this.props.state.userState.currentUser) {
-            this.props.actions.addThread(title, content, this.props.state.userState.currentUser._id);
+            this.props.actions.addThread(title, content, this.props.state.userState.currentUser._id, getMentionedUserId(content, this.props.state.userDictionary));
         }
     }
     private onEditing = () => {
