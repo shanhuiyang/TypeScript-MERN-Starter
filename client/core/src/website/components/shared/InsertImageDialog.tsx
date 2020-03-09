@@ -95,9 +95,12 @@ class InsertImageDialog extends React.Component<Props, States> {
                         uploading: false
                     });
                 } else {
-                    toast().error("toast.post.insert_image_failed");
+                    return Promise.reject();
                 }
-            }, (error: Error) => {
+            }).catch((error: Error) => {
+                this.setState({
+                    uploading: false
+                });
                 toast().error("toast.post.insert_image_failed");
             });
         }
