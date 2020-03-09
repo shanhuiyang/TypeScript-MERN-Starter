@@ -62,7 +62,7 @@ const TRANSLATION: Translation = {
         "page.notification.event_comment": "回复了你的",
         "page.notification.event_like": "点赞了你的",
         "page.notification.event_unlike": "取消点赞你的",
-        "page.notification.event_mention": "提到了你，请点击查看他/她的",
+        "page.notification.event_mention": "提到了你，点击查看他/她的",
         "page.notification.object_article": "文章",
         "page.notification.object_comment": "评论",
         "page.notification.object_thread": "帖子",

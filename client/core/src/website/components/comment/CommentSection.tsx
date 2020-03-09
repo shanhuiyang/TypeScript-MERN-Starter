@@ -57,7 +57,7 @@ class CommentSection extends React.Component<Props, States> {
                 replyCommentEditing: false
             });
         }
-        if (prevProps.state.userState.currentUser && this.props.state.userState.currentUser) {
+        if (!prevProps.state.userState.currentUser && this.props.state.userState.currentUser) {
             this.props.actions.getComments(this.props.target, this.props.targetId);
         }
     }

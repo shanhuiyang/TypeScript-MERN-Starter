@@ -54,7 +54,7 @@ export const getMentionedUserId = (content: string, userDictionary: {[id: string
     const ids: string [] = [];
     const userArray: User [] = Object.values(userDictionary);
     const results: IterableIterator<RegExpMatchArray> = content.matchAll(mentionedUser);
-    for (let result = results.next(); result.done; result = results.next()) {
+    for (let result = results.next(); !result.done; result = results.next()) {
         const name: string = result.value[1];
         const found: number = userArray.findIndex((user: User) => user.name === name);
         ids.push(userArray[found]._id);
