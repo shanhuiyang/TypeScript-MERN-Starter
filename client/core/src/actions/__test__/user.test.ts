@@ -50,14 +50,14 @@ describe("login", () => {
                 user: DUMMY_USER_1,
                 accessToken: DUMMY_ACCESS_TOKEN,
                 notifications: [],
-                notificationSubjects: {}
+                others: []
             } as AuthenticationResponse,
             headers: { "content-type": RESPONSE_CONTENT_TYPE.JSON }
         });
 
         const expectedActions = [
             { type: types.USER_REQUEST_START },
-            { type: types.LOGIN_SUCCESS, user: DUMMY_USER_1, notifications: [], notificationSubjects: {}}
+            { type: types.LOGIN_SUCCESS, user: DUMMY_USER_1, notifications: [], others: []}
         ];
         const store = mockStore({
             loading: false,

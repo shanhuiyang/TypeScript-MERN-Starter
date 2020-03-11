@@ -32,11 +32,10 @@ const notificationActionCreator: NotificationActionCreator = {
             dispatch({type: GET_NOTIFICATIONS_BEGIN});
             fetch("/api/notification", undefined, "GET", true)
             .then((json: GetNotificationsResponse) => {
-                if (json && json.data && json.subjects) {
+                if (json && json.data) {
                     dispatch({
                         type: GET_NOTIFICATIONS_SUCCESS,
-                        notifications: json.data,
-                        subjects: json.subjects
+                        notifications: json.data
                     });
                 } else {
                     return Promise.reject({ name: "500 Internal Server Error", message: "" });

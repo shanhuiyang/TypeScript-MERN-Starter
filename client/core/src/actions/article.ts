@@ -82,10 +82,10 @@ const articleActionCreator: ArticleActionCreator = {
             });
         };
     },
-    addArticle(title: string, content: string, author: string): any {
+    addArticle(title: string, content: string, author: string, mentions?: string[]): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: SAVE_ARTICLE_BEGIN});
-            fetch("/api/article/create", { title, content, author }, "POST", /*withToken*/ true)
+            fetch("/api/article/create", { title, content, author, mentions }, "POST", /*withToken*/ true)
             .then((added: Article) => {
                 if (added) {
                     removeEditCacheExec(NEW_ARTICLE_CACHE_ID, dispatch);

@@ -2,6 +2,7 @@ import { AnyAction as Action } from "redux";
 import { LOAD_COMMENTS_START, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_FAILED, ADD_COMMENT_START, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILED, REMOVE_COMMENT_SUCCESS, RATE_COMMENT_SUCCESS } from "../actions/comment";
 import CommentState from "../models/client/CommentState";
 import Comment from "../models/Comment";
+import { LOGOUT } from "../actions/user";
 
 const initialState: CommentState = {
     loading: false,
@@ -11,6 +12,8 @@ const initialState: CommentState = {
 
 const comments = (state: CommentState = initialState, action: Action): CommentState => {
     switch (action.type) {
+        case LOGOUT:
+            return initialState;
         case LOAD_COMMENTS_START:
             return {
                 ...state,

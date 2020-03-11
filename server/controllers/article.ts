@@ -100,6 +100,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         if (!updated) {
             return Promise.reject(res.status(500).end());
         }
+        res.status(200).end();
         const notification: NotificationDocument = new NotificationCollection({
             owner: updated.author,
             acknowledged: false,
@@ -111,10 +112,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             link: `/article/${updated._id}`,
             objectText: updated.title
         });
-        return notification.save();
-    })
-    .then(() => {
-        return res.status(200).end();
+        notification.save();
     })
     .catch((error: Response) => {
         return error.end();
@@ -139,7 +137,22 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     article
     .save()
     .then((saved: Article) => {
-        return res.status(200).json(saved);
+        res.status(200).json(saved);
+        if (req.body.mentions && (req.body.mentions as string[]).length > 0) {
+            (req.body.mentions as string[]).forEach((mentioned: string) => {
+                const notification: NotificationDocument = new NotificationCollection({
+                    owner: mentioned,
+                    acknowledged: false,
+                    subject: saved.author,
+                    event: InteractionType.MENTION,
+                    objectType: PostType.ARTICLE,
+                    object: saved._id,
+                    link: `/article/${saved._id}`,
+                    objectText: saved.title
+                });
+                notification.save();
+            });
+        }
     })
     .catch((error: Response) => {
         return error.end();

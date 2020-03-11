@@ -79,6 +79,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         if (!updated) {
             return Promise.reject(res.status(500).end());
         }
+        res.status(200).end();
         const notification: NotificationDocument = new NotificationCollection({
             owner: updated.author,
             acknowledged: false,
@@ -90,10 +91,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             link: `/thread/${updated._id}`,
             objectText: updated.title
         });
-        return notification.save();
-    })
-    .then(() => {
-        return res.status(200).end();
+        notification.save();
     })
     .catch((error: Response) => {
         return error.end();
@@ -118,7 +116,22 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     thread
     .save()
     .then((saved: Thread) => {
-        return res.status(200).json(saved);
+        res.status(200).json(saved);
+        if (req.body.mentions && (req.body.mentions as string[]).length > 0) {
+            (req.body.mentions as string[]).forEach((mentioned: string) => {
+                const notification: NotificationDocument = new NotificationCollection({
+                    owner: mentioned,
+                    acknowledged: false,
+                    subject: saved.author,
+                    event: InteractionType.MENTION,
+                    objectType: PostType.THREAD,
+                    object: saved._id,
+                    link: `/thread/${saved._id}`,
+                    objectText: saved.title
+                });
+                notification.save();
+            });
+        }
     })
     .catch((error: Response) => {
         return error.end();
@@ -137,33 +150,8 @@ export const read: RequestHandler = async (req: Request, res: Response, next: Ne
         .skip(pageSize * pageIndex)
         .limit(pageSize)
         .exec();
-    const findAuthorInUsers = (thread: Thread): Promise<UserDocument | null> => {
-        return UserCollection.findById(thread.author).exec();
-    };
-    const promises: Promise<User | undefined>[] = threads.map(async (thread: Thread) => {
-        const user: UserDocument | null = await findAuthorInUsers(thread);
-        if (!user) {
-            return undefined;
-        } else {
-            return {
-                email: user.email,
-                name: user.name,
-                avatarUrl: user.avatarUrl,
-                gender: user.gender,
-                _id: user._id.toString()
-            } as User;
-        }
-    });
-    const authors: (User | undefined) [] = await Promise.all(promises);
-    const authorsDic: {[id: string]: User} = {};
-    authors.forEach((author: User | undefined): void => {
-        if (author) {
-            authorsDic[author._id] = author;
-        }
-    });
     return res.json({
         data: threads,
-        authors: authorsDic,
         totalCount: count
     } as GetThreadsResponse);
 };

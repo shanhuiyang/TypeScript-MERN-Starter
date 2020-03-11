@@ -27,11 +27,10 @@ const threadActionCreator: ThreadActionCreator = {
             dispatch({type: GET_THREADS_START});
             fetch(`/api/thread?pageIndex=${pageIndex}&pageSize=${pageSize}`, undefined, "GET", /*withToken*/ true)
             .then((json: GetThreadsResponse) => {
-                if (json && json.data && json.authors && json.totalCount >= 0) {
+                if (json && json.data && json.totalCount >= 0) {
                     dispatch({
                         type: GET_THREADS_SUCCESS,
                         threads: json.data,
-                        authors: json.authors,
                         pageIndex: pageIndex,
                         totalCount: json.totalCount
                     });
@@ -44,10 +43,10 @@ const threadActionCreator: ThreadActionCreator = {
             });
         };
     },
-    addThread(title: string, content: string, author: string): any {
+    addThread(title: string, content: string, author: string, mentions?: string[]): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({type: ADD_THREAD_START});
-            fetch(`/api/thread/add`, { title, content, author }, "POST", /*withToken*/ true)
+            fetch(`/api/thread/add`, { title, content, author, mentions }, "POST", /*withToken*/ true)
             .then((json: Thread) => {
                 if (json) {
                     toast().success("toast.thread.add_successfully");

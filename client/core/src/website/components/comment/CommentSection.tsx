@@ -14,7 +14,7 @@ import PostType from "../../../models/PostType";
 import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
-import { getNameList } from "../../../shared/string";
+import { getNameList, getMentionedUserId } from "../../../shared/string";
 import moment from "moment";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import Loading from "./Loading";
@@ -40,6 +40,11 @@ class CommentSection extends React.Component<Props, States> {
     private commentFormRef: RefObject<any>;
     private replyCommentFormRef: RefObject<any>;
     private toDeleteId: string = "";
+    componentDidMount() {
+        if (this.props.state.userState.currentUser) {
+            this.props.actions.getComments(this.props.target, this.props.targetId);
+        }
+    }
     componentDidUpdate(prevProps: Props) {
         if (prevProps.state.commentState.updating === ADD_COMMENT_START
             && this.props.state.commentState.updating === ADD_COMMENT_SUCCESS) {
@@ -51,6 +56,18 @@ class CommentSection extends React.Component<Props, States> {
                 commentEditing: false,
                 replyCommentEditing: false
             });
+        }
+        if (!prevProps.state.userState.currentUser && this.props.state.userState.currentUser) {
+            this.props.actions.getComments(this.props.target, this.props.targetId);
+        }
+        if (prevProps.state.commentState.loading && !this.props.state.commentState.loading && window.location.hash) {
+            const commentElement: HTMLElement | null = document.getElementById(window.location.hash.substr(1));
+            if (commentElement) {
+                commentElement.scrollIntoView({
+                    behavior: "smooth"
+                });
+                commentElement.style.backgroundColor = "#FDFF47";
+            }
         }
     }
     constructor(props: Props) {
@@ -71,7 +88,13 @@ class CommentSection extends React.Component<Props, States> {
                 this.props.withHeader ?
                 <Header as="h3" dividing>
                     <FormattedMessage id={"component.comment.title"} />
-                    {`(${this.props.state.commentState.data.length})`}
+                    {"("}
+                    {
+                        this.props.state.userState.currentUser ?
+                        this.props.state.commentState.data.length
+                        : <FormattedMessage id={"component.comment.private"} />
+                    }
+                    {")"}
                 </Header>
                 : undefined
             }
@@ -154,11 +177,13 @@ class CommentSection extends React.Component<Props, States> {
     }
     private onSubmitComment = (id: string, ref: RefObject<any>): void => {
         if (ref.current && ref.current.value) {
+            const content: string = ref.current.value;
             this.props.actions.addComment(
                 this.props.target,
                 this.props.targetId,
                 id === this.props.targetId ? "" : id,
-                ref.current.value
+                content,
+                getMentionedUserId(content, this.props.state.userDictionary)
             );
         }
     };
@@ -170,7 +195,7 @@ class CommentSection extends React.Component<Props, States> {
                 this.props.divided ? <Divider /> : undefined
             }
             <Comment.Avatar src={author.avatarUrl ? author.avatarUrl : "/images/avatar.png"} />
-            <Comment.Content>
+            <Comment.Content id={comment._id}>
                 {/* There is a bug of style for <Comment /> in semantic-ui-react. Here we explicitly set the style */}
                 <div style={{display: "flex", flexDirection: "row", alignItems: "flex-end"}}>
                     <Comment.Author>

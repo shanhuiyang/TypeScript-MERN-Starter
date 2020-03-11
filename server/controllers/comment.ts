@@ -5,8 +5,6 @@ import PostType from "../../client/core/src/models/PostType";
 import CommentCollection from "../models/Comment/CommentCollection";
 import CommentDocument from "../models/Comment/CommentDocument";
 import Comment from "../../client/core/src/models/Comment.d";
-import UserCollection from "../models/User/UserCollection";
-import UserDocument from "../models/User/UserDocument.d";
 import User from "../../client/core/src/models/User.d";
 import GetCommentsResponse from "../../client/core/src/models/response/GetCommentsResponse";
 import NotificationDocument from "../models/Notification/NotificationDocument";
@@ -36,31 +34,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
             if (!comments) {
                 return Promise.reject(res.status(500).end());
             }
-            const findAuthorInUsers = (comment: Comment): Promise<UserDocument | null> => {
-                return UserCollection.findById(comment.author).exec();
-            };
-            const promises: Promise<User | undefined>[] = comments.map(async (comment: Comment) => {
-                const author: UserDocument | null = await findAuthorInUsers(comment);
-                if (author) {
-                    return {
-                        email: author.email,
-                        name: author.name,
-                        avatarUrl: author.avatarUrl,
-                        gender: author.gender,
-                        _id: author._id.toString()
-                    } as User;
-                } else {
-                    return undefined;
-                }
-            });
-            const authors: (User | undefined) [] = await Promise.all(promises);
-            const authorsDic: {[id: string]: User} = {};
-            authors.forEach((author: User | undefined): void => {
-                if (author) {
-                    authorsDic[author._id] = author;
-                }
-            });
-            return res.json({data: comments, authors: authorsDic} as GetCommentsResponse);
+            return res.json({data: comments} as GetCommentsResponse);
         })
         .catch((error: Response) => {
             return error.end();
@@ -87,7 +61,12 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
         lastCommentedAt: nowDateString,
         lastCommentedBy: ""
     });
-    const saved: Comment = await comment.save();
+    const saved: Comment | null = await comment.save();
+    if (!saved) {
+        return next(new Error("failed to add comment."));
+    }
+    res.json(saved);
+    const notificationLink: string = `/${req.query.targetType}/${req.query.targetId}#${saved._id}`;
     if (req.query.parent) { // This is a comment of Comment
         CommentCollection
         .findByIdAndUpdate(req.query.parent, {
@@ -105,12 +84,11 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: PostType.COMMENT,
                     object: req.query.parent,
-                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    link: notificationLink,
                     objectText: parent.content
                 });
                 notification.save();
             }
-            return res.json(saved);
         })
         .catch((error: Error) => {
                 // Unknown parent id.
@@ -134,12 +112,29 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
                     event: InteractionType.COMMENT,
                     objectType: req.query.targetType,
                     object: req.query.targetId,
-                    link: `/${req.query.targetType}/${req.query.targetId}`,
+                    link: notificationLink,
                     objectText: value.title
                 });
                 notification.save();
             }
-            return res.json(saved);
+        })
+        .catch((error: Error) => {
+            return next(error);
+        });
+    }
+    if (req.body.mentions && (req.body.mentions as string[]).length > 0) {
+        (req.body.mentions as string[]).forEach((mentioned: string) => {
+            const notification: NotificationDocument = new NotificationCollection({
+                owner: mentioned,
+                acknowledged: false,
+                subject: saved.author,
+                event: InteractionType.MENTION,
+                objectType: PostType.COMMENT,
+                object: saved._id,
+                link: notificationLink,
+                objectText: saved.content
+            });
+            notification.save();
         });
     }
 };
@@ -201,6 +196,14 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
     }
 
     const user: User = req.user as User;
+    let action: InteractionType;
+    if (Number.parseInt(req.query.rating) === 1) {
+        action = InteractionType.LIKE;
+    } else if (Number.parseInt(req.query.rating) === 0) {
+        action = InteractionType.UNLIKE;
+    } else {
+        return res.status(400).end();
+    }
 
     CommentCollection
     .findById(req.query.id)
@@ -213,13 +216,11 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
         const likes: string[] = comment.likes;
-        if (Number.parseInt(req.query.rating) === 1) {
+        if (action === InteractionType.LIKE) {
             likes.push(user._id.toString());
-        } else if (Number.parseInt(req.query.rating) === 0) {
+        } else {
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove, 1);
-        } else {
-            return Promise.reject(res.status(400).end());
         }
         return CommentCollection.findByIdAndUpdate(req.query.id, {likes: likes}).exec();
     })
@@ -227,21 +228,18 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         if (!updated) {
             return Promise.reject(res.status(500).end());
         }
+        res.status(200).end();
         const notification: NotificationDocument = new NotificationCollection({
             owner: updated.author,
             acknowledged: false,
             subject: user._id.toString(),
-            event: Number.parseInt(req.query.rating) === 1 ?
-                InteractionType.LIKE : InteractionType.UNLIKE,
+            event: action,
             objectType: PostType.COMMENT,
             object: updated._id.toString(),
-            link: `/${updated.targetType}/${updated.targetId}`, // TODO: locate it to the comment position
+            link: `/${updated.targetType}/${updated.targetId}${action === InteractionType.LIKE ? "#" + updated._id : ""}`,
             objectText: updated.content
         });
-        return notification.save();
-    })
-    .then(() => {
-        return res.status(200).end();
+        notification.save();
     })
     .catch((error: Response) => {
         return error.end();

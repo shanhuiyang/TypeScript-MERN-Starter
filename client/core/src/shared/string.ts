@@ -2,6 +2,8 @@ import User from "../models/User";
 
 const markDownImage: RegExp = /!\[.*\]\((.*)\)/;
 
+const mentionedUser: RegExp = /@(.+?) /g;
+
 /**
  * Extract the content by first n characters, excluding images
  * @param text: the content
@@ -38,4 +40,24 @@ export const getNameList = (ids: string [], userDictionary: {[id: string]: User}
             .filter((value: string) => !!value)
             .join(", ");
     }
+};
+
+/**
+ * Parse a post content to extract users mentioned
+ * @param content to parse
+ * @param userDictionary users to search from
+ */
+export const getMentionedUserId = (content: string, userDictionary: {[id: string]: User}): string [] => {
+    if (!content) {
+        return [];
+    }
+    const ids: string [] = [];
+    const userArray: User [] = Object.values(userDictionary);
+    const results: IterableIterator<RegExpMatchArray> = content.matchAll(mentionedUser);
+    for (let result = results.next(); !result.done; result = results.next()) {
+        const name: string = result.value[1];
+        const found: number = userArray.findIndex((user: User) => user.name === name);
+        ids.push(userArray[found]._id);
+    }
+    return ids;
 };

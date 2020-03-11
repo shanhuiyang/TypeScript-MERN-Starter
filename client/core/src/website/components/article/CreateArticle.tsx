@@ -8,6 +8,7 @@ import { FormattedMessage } from "react-intl";
 import { isMobile } from "../dimension";
 import { pendingRedirect } from "../../../shared/redirect";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
+import { getMentionedUserId } from "../../../shared/string";
 
 interface States {}
 class CreateArticle extends React.Component<Props, States> {
@@ -36,7 +37,7 @@ class CreateArticle extends React.Component<Props, States> {
 
     private createArticle = (title: string, content: string): void => {
         if (this.props.state.userState.currentUser) {
-            this.props.actions.addArticle(title, content, this.props.state.userState.currentUser._id);
+            this.props.actions.addArticle(title, content, this.props.state.userState.currentUser._id, getMentionedUserId(content, this.props.state.userDictionary));
         }
     }
 }
