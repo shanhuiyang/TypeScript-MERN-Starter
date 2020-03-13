@@ -24,5 +24,5 @@ export const getFormattedString = (id: string, locale: string, params: any): str
         getString(id, locale),
         locale
     );
-    return formatter.format(params);
+    return formatter.format(params) as string;
 };
