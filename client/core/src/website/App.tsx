@@ -28,7 +28,12 @@ class App extends React.Component<Props, States> {
     readonly scrollUpAction: FabAction = {
         text: this.props.intl.formatMessage({id: "component.button.scroll_up"}),
         icon: "arrow up",
-        onClick: () => { window.scrollTo(0, 0); },
+        onClick: () => { window.scrollTo({
+                left: 0,
+                top: 0,
+                behavior: "smooth"
+            });
+        },
     };
     constructor(props: Props) {
         super(props);

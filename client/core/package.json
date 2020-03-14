@@ -3,11 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "es6-object-assign": "^1.1.0",
     "http-proxy-middleware": "^0.19.1",
     "insert-text-at-cursor": "^0.3.0",
-    "isomorphic-fetch": "^2.2.1",
+    "intl": "^1.2.5",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "react": "16.12.0",
@@ -40,10 +41,10 @@
     "@types/shelljs": "^0.8.5"
   },
   "devDependencies": {
-    "fetch-mock": "^7.3.9",
+    "axios-mock-adapter": "^1.17.0",
     "redux-mock-store": "^1.5.3",
-    "@types/isomorphic-fetch": "^0.0.35",
-    "@types/fetch-mock": "^7.3.1",
+    "@types/axios": "^0.14.0",
+    "@types/axios-mock-adapter": "^1.10.0",
     "@types/jest": "^24.0.16",
     "@types/redux-mock-store": "^1.0.1"
   },

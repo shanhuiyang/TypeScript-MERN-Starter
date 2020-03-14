@@ -1,10 +1,7 @@
 import { ACCESS_TOKEN_KEY, RESPONSE_CONTENT_TYPE, INVALID_TOKEN_ERROR } from "./constants";
 import sleep from "./sleep";
 import { getStorage as localStorage } from "../shared/storage";
-
-if (typeof fetch === "undefined") {
-    require("isomorphic-fetch");
-}
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 
 export type Method = "GET" | "POST" | "PUT";
 
@@ -31,7 +28,7 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
     }
     const headers: any = {
         Accept: "*/*", // For Android client this header line is must-have otherwise the server won't respond as expected
-        Origin: (window && window.location /* is website */) ? window.location.origin : getHostUrl()
+        // Origin: (window && window.location /* is website */) ? window.location.origin : getHostUrl()
     };
     if (withToken) {
         const token: string | null = await localStorage().getItem(ACCESS_TOKEN_KEY);
@@ -41,74 +38,62 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
             return Promise.reject(INVALID_TOKEN_ERROR);
         }
     }
-    const options: any = {
+    const options: AxiosRequestConfig = {
+        url: completeUrl,
         method: method,
         headers: headers,
-        credentials: "include"
+        withCredentials: true
     };
     if (method === "POST") {
         headers["Content-Type"] = "application/json";
-        options.body = JSON.stringify(body);
+        options.data = body;
     } else if (method === "PUT") {
         headers["Content-Type"] = (body as File).type;
-        options.body = body;
+        options.data = body;
     }
-    const response: Response = await fetch(completeUrl, options);
-    let contentType: string | null = response.headers.get("Content-Type") || response.headers.get("content-type");
-    if (response.ok) {
-        if (contentType === null) {
-            return response.text();
-        }
-        contentType = contentType.toLowerCase();
-        if (contentType.startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
-            return response.text();
-        } else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
-            return response.json();
-        } else if (contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.url) {
-            // Drop the html because we use client routing instead of server routing
-            let targetTo: string = response.url;
-            if (targetTo.startsWith(getHostUrl())) {
-                targetTo = targetTo.substring(getHostUrl().length);
+
+    return axios(options).then((response: AxiosResponse): Promise<any> => {
+        let contentType: string | null = response.headers["Content-Type"] || response.headers["content-type"];
+        if (response.status >= 200 && response.status < 300) {
+            contentType = contentType && contentType.toLowerCase();
+            if (contentType && contentType.startsWith(RESPONSE_CONTENT_TYPE.HTML) && response.request.responseURL) {
+                // Drop the html because we use client routing instead of server routing
+                let targetTo: string = response.request.responseURL;
+                if (targetTo.startsWith(getHostUrl())) {
+                    targetTo = targetTo.substring(getHostUrl().length);
+                }
+                return Promise.resolve({ redirected: false, to: targetTo });
             }
-            return Promise.resolve({ redirected: false, to: targetTo });
+            else {
+                return Promise.resolve(response.data);
+            }
+        } else {
+            return Promise.reject({
+                isAxiosError: true,
+                config: response.config,
+                response: response
+            } as AxiosError);
         }
-        else {
-            return response.text();
+    }).catch((error: AxiosError): Promise<any> => {
+        const response: AxiosResponse | undefined = error.response;
+        if (!response) {
+            return Promise.reject({name: "Unknown error!"});
         }
-    }
-    else {
-        if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.JSON)) {
-            return response.json().then((body: any) => {
-                return Promise.reject(({
-                    name: `${response.status} ${response.statusText}`,
-                    message: body && body.message
-                } as Error));
-            });
-        }
-        else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.TEXT)) {
-            return response.text().then((textBody: any) => {
-                return Promise.reject(({
-                    name: `${response.status} ${response.statusText}`,
-                    message: textBody
-                } as Error));
-            });
-        }
-        else if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.HTML)) {
-            return response.text().then((htmlBody: any) => {
-                return Promise.reject(({
-                    name: `${response.status} ${response.statusText}`,
-                    message: "",
-                    stack: htmlBody
-                } as Error));
-            });
-        }
-        else {
+        let contentType: string | null = response.headers["Content-Type"] || response.headers["content-type"];
+        contentType = contentType && contentType.toLowerCase();
+        if (contentType && contentType.toLowerCase().startsWith(RESPONSE_CONTENT_TYPE.HTML)) {
             return Promise.reject(({
                 name: `${response.status} ${response.statusText}`,
-                message: ""
+                message: "",
+                stack: response.data
+            } as Error));
+        } else {
+            return Promise.reject(({
+                name: `${response.status} ${response.statusText}`,
+                message: response.data.message
             } as Error));
         }
-    }
+    });
 };
 
 export default _fetch;
