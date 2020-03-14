@@ -64,9 +64,15 @@ class CommentSection extends React.Component<Props, States> {
             const commentElement: HTMLElement | null = document.getElementById(window.location.hash.substr(1));
             if (commentElement) {
                 commentElement.scrollIntoView({
-                    behavior: "smooth"
+                    behavior: "smooth",
+                    block: "center"
                 });
-                commentElement.style.backgroundColor = "#FDFF47";
+                commentElement.animate([
+                    {backgroundColor: "white"},
+                    {backgroundColor: "white"},
+                    {backgroundColor: "#FDFF47"},
+                    {backgroundColor: "white"}
+                ], 2000);
             }
         }
     }
@@ -190,12 +196,13 @@ class CommentSection extends React.Component<Props, States> {
     private renderComment = (comment: CommentClass, stackDepth: number = 0): React.ReactElement<any> => {
         const createDate: Date = comment.createdAt ? new Date(comment.createdAt) : new Date(0);
         const author: User = this.props.state.userDictionary[comment.author];
-        return <Comment key={comment._id}>
+        return <Comment key={comment._id} id={comment._id}>
             {
                 this.props.divided ? <Divider /> : undefined
             }
+            <div />
             <Comment.Avatar src={author.avatarUrl ? author.avatarUrl : "/images/avatar.png"} />
-            <Comment.Content id={comment._id}>
+            <Comment.Content>
                 {/* There is a bug of style for <Comment /> in semantic-ui-react. Here we explicitly set the style */}
                 <div style={{display: "flex", flexDirection: "row", alignItems: "flex-end"}}>
                     <Comment.Author>
