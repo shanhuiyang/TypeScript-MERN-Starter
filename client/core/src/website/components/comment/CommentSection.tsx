@@ -14,11 +14,13 @@ import PostType from "../../../models/PostType";
 import { byCommentedAtLatestFirst, byCommentedAtOldestFirst } from "../../../shared/date";
 import { ADD_COMMENT_START, ADD_COMMENT_SUCCESS } from "../../../actions/comment";
 import WarningModal from "../shared/WarningModal";
-import { getNameList, getMentionedUserId } from "../../../shared/string";
+import { getNameListString, getMentionedUserId, getAllNames } from "../../../shared/string";
 import moment from "moment";
 import { CONTAINER_STYLE } from "../../../shared/styles";
 import Loading from "./Loading";
 import { ComponentProps } from "../../../shared/ComponentProps";
+import "../../css/text-complete.css";
+import { registerAutoComplete } from "../autocomplete";
 
 interface Props extends ComponentProps {
     targetId: string;
@@ -40,12 +42,14 @@ class CommentSection extends React.Component<Props, States> {
     private commentFormRef: RefObject<any>;
     private replyCommentFormRef: RefObject<any>;
     private toDeleteId: string = "";
+    private userNamesCache: string[];
     componentDidMount() {
+        this.registerAutoCompleteForForms();
         if (this.props.state.userState.currentUser) {
             this.props.actions.getComments(this.props.target, this.props.targetId);
         }
     }
-    componentDidUpdate(prevProps: Props) {
+    componentDidUpdate(prevProps: Props, prevState: States) {
         if (prevProps.state.commentState.updating === ADD_COMMENT_START
             && this.props.state.commentState.updating === ADD_COMMENT_SUCCESS) {
             // Reset
@@ -75,11 +79,15 @@ class CommentSection extends React.Component<Props, States> {
                 ], 2000);
             }
         }
+        if (prevState.showReplyFormForCommentId !== this.state.showReplyFormForCommentId) {
+            this.registerAutoCompleteForForms();
+        }
     }
     constructor(props: Props) {
         super(props);
         this.commentFormRef = createRef();
         this.replyCommentFormRef = createRef();
+        this.userNamesCache = getAllNames(this.props.state.userDictionary);
         this.state = {
             showReplyFormForCommentId: this.props.targetId,
             commentEditing: false,
@@ -238,7 +246,7 @@ class CommentSection extends React.Component<Props, States> {
         </Comment>;
     };
     private renderActions = (comment: CommentClass, stackDepth: number): any => {
-        const likersPopUpContent: string = getNameList(comment.likes, this.props.state.userDictionary);
+        const likersPopUpContent: string = getNameListString(comment.likes, this.props.state.userDictionary);
         return <Comment.Actions>
             {/* There is a bug for <Comment.Action />. It will automatically call onClick. */}
             {
@@ -302,6 +310,14 @@ class CommentSection extends React.Component<Props, States> {
                     }}/>
             { comment.likes ? comment.likes.length : 0 }
         </label>;
+    }
+    private registerAutoCompleteForForms = (): void => {
+        if (this.replyCommentFormRef.current) {
+            registerAutoComplete(this.replyCommentFormRef.current, this.userNamesCache);
+        }
+        if (this.commentFormRef.current) {
+            registerAutoComplete(this.commentFormRef.current, this.userNamesCache);
+        }
     }
 }
 

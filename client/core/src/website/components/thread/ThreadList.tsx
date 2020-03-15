@@ -14,6 +14,7 @@ import "../../css/thread.css";
 import { DEFAULT_PAGE_SIZE } from "../../../shared/constants";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
 import { isMobile } from "../dimension";
+import { isIE } from "../../../shared/platform";
 
 interface States {}
 
@@ -34,7 +35,10 @@ class ThreadList extends React.Component<Props, States> {
                 </div>
             </Container>
             <Container text style={CONTAINER_STYLE}>
-                {this.renderPager()}
+                {
+                    isIE() ? undefined :
+                    this.renderPager()
+                }
             </Container>
         </Fragment>;
     }

@@ -11,7 +11,9 @@ import InsertImageDialog from "../shared/InsertImageDialog";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
 import insertTextAtCursor from "insert-text-at-cursor";
 import { Viewer } from "@toast-ui/react-editor";
-import { getMentionedUserId } from "../../../shared/string";
+import { getMentionedUserId, getAllNames } from "../../../shared/string";
+import "../../css/text-complete.css";
+import { registerAutoComplete } from "../autocomplete";
 
 interface States {
     editing: boolean;
@@ -22,11 +24,13 @@ interface States {
 class CreateThread extends React.Component<Props, States> {
     private titleRef: RefObject<HTMLInputElement>;
     private contentRef: RefObject<HTMLTextAreaElement>;
+    private userNamesCache: string[];
     private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
     constructor(props: Props) {
         super(props);
         this.titleRef = React.createRef();
         this.contentRef = React.createRef();
+        this.userNamesCache = getAllNames(this.props.state.userDictionary);
         this.getString = this.props.intl.formatMessage;
         this.state = {
             editing: false,
@@ -37,6 +41,9 @@ class CreateThread extends React.Component<Props, States> {
     }
     componentDidMount() {
         window.addEventListener("beforeunload", this.closeAlert);
+        if (this.contentRef.current) {
+            registerAutoComplete(this.contentRef.current, this.userNamesCache);
+        }
     }
     componentWillUnmount() {
         window.removeEventListener("beforeunload", this.closeAlert);
@@ -69,12 +76,11 @@ class CreateThread extends React.Component<Props, States> {
                             {
                                 this.renderControlBar()
                             }
+                            <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
+                                onChange={this.onEditing} defaultValue={this.state.cache} hidden={this.state.mode !== "edit"}
+                                placeholder={ this.getString({id: "page.thread.placeholder"}) } />
                             {
-                                this.state.mode === "edit" ?
-                                <textarea ref={this.contentRef} rows={18} style={{marginBottom: 4}}
-                                    onChange={this.onEditing} defaultValue={this.state.cache}
-                                    placeholder={ this.getString({id: "page.thread.placeholder"}) } />
-                                :
+                                this.state.mode === "edit" ? undefined :
                                 <Viewer initialValue={this.contentRef.current ? this.contentRef.current.value : ""} />
                             }
                         </Form.Field>
@@ -113,7 +119,7 @@ class CreateThread extends React.Component<Props, States> {
                         <FormattedMessage id="component.button.edit"/>
                     </Button>
                 }
-                <Button icon onClick={() => { this.setState({openUploadImageDialog: true}); }}>
+                <Button icon onClick={() => { this.setState({openUploadImageDialog: true}); }} disabled={this.state.mode !== "edit"}>
                     <Icon name="file image" />
                 </Button>
                 <InsertImageDialog

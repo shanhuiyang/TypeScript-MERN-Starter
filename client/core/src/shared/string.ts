@@ -2,8 +2,6 @@ import User from "../models/User";
 
 const markDownImage: RegExp = /!\[.*\]\((.*)\)/;
 
-const mentionedUser: RegExp = /@(.+?) /g;
-
 /**
  * Extract the content by first n characters, excluding images
  * @param text: the content
@@ -31,15 +29,23 @@ export const getArticleCoverImage = (text: string): string => {
  * @param ids list of User id
  * @param userDictionary A dictionary to find User by id
  */
-export const getNameList = (ids: string [], userDictionary: {[id: string]: User}): string => {
+export const getNameListString = (ids: string [], userDictionary: {[id: string]: User}, separator?: string): string => {
     if (!ids || ids.length === 0) {
         return "";
     } else {
+        separator = separator ? separator : ", ";
         return ids
             .map((id: string) => userDictionary[id] ? userDictionary[id].name : "")
             .filter((value: string) => !!value)
-            .join(", ");
+            .join(separator);
     }
+};
+
+export const getAllNames = (userDictionary: {[id: string]: User}): string[] => {
+    if (!userDictionary) {
+        return [];
+    }
+    return Object.values(userDictionary).map((user: User): string => user.name);
 };
 
 /**
@@ -51,13 +57,22 @@ export const getMentionedUserId = (content: string, userDictionary: {[id: string
     if (!content) {
         return [];
     }
-    const ids: string [] = [];
-    const userArray: User [] = Object.values(userDictionary);
-    const results: IterableIterator<RegExpMatchArray> = content.matchAll(mentionedUser);
-    for (let result = results.next(); !result.done; result = results.next()) {
-        const name: string = result.value[1];
-        const found: number = userArray.findIndex((user: User) => user.name === name);
-        ids.push(userArray[found]._id);
+    const ids: string[] = [];
+    const userArray: User[] = Object.values(userDictionary);
+    const userNameListString: string = getNameListString(Object.keys(userDictionary), userDictionary, "|");
+    const toMatch: RegExp = new RegExp(`@(${userNameListString}) `, "g");
+    const results: RegExpMatchArray | null = content.match(toMatch);
+    if (results) {
+        results.forEach((result: string) => {
+            const name: string = result.substring(1, result.length - 1); // stripe from "@Someone " to "Someone"
+            const found: number = userArray.findIndex((user: User) => user.name === name);
+            if (found >= 0) {
+                const existing: number = ids.findIndex((id: string) => id === userArray[found]._id);
+                if (existing < 0) {
+                    ids.push(userArray[found]._id);
+                }
+            }
+        });
     }
     return ids;
 };

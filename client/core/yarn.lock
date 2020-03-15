@@ -4887,6 +4887,11 @@ etag@~1.8.1:
   version "0.4.1"
   resolved "git://github.com/adobe-webplatform/eve.git#eef80ed8d188423c2272746fb8ae5cc8dad84cb1"
 
+eventemitter3@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-2.0.3.tgz#b5e1079b59fb5e1ba2771c0a993be060a58c99ba"
+  integrity sha1-teEHm1n7XhuidxwKmTvgYKWMmbo=
+
 eventemitter3@^3.0.0:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/eventemitter3/-/eventemitter3-3.1.2.tgz#2d3d48f9c346698fce83a85d7d664e98535df6e7"
@@ -11095,6 +11100,20 @@ text-table@0.2.0, text-table@^0.2.0:
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
 
+textarea-caret@^3.0.1:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/textarea-caret/-/textarea-caret-3.1.0.tgz#5d5a35bb035fd06b2ff0e25d5359e97f2655087f"
+  integrity sha512-cXAvzO9pP5CGa6NKx0WYHl+8CHKZs8byMkt3PCJBCmq2a34YA9pO1NrQET5pzeqnBjBdToF5No4rrmkDUgQC2Q==
+
+textcomplete@^0.18.1:
+  version "0.18.1"
+  resolved "https://registry.yarnpkg.com/textcomplete/-/textcomplete-0.18.1.tgz#43a3eb545275b5f5714669220a4725b69f13b490"
+  integrity sha512-ukWti83oL4rBAnj6HVwl76mhKRScAvjJps90EeT5qVYm6dwwa0XCytLCfSGQOYbj4CyjgN//oIfq+Gnb29KCPg==
+  dependencies:
+    eventemitter3 "^2.0.3"
+    textarea-caret "^3.0.1"
+    undate "^0.2.3"
+
 throat@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/throat/-/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
@@ -11365,6 +11384,11 @@ uglify-js@^3.1.4:
   dependencies:
     commander "~2.20.3"
     source-map "~0.6.1"
+
+undate@^0.2.3:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/undate/-/undate-0.2.4.tgz#ccb2a8cf38edc035d1006fcb2909c4c6024a8400"
+  integrity sha512-k1WTRVhI076HYqP6e3pZPzS7K2xNAcuhCcWOPjHmR8SwU3byyKYvyNZ4XTEAd7Ofe40+wrEjNq6WmmO8WoUVNg==
 
 unicode-12.1.0@0.8:
   version "0.8.0"

@@ -23,6 +23,7 @@ export const ARTICLE_CONTENT_MAX_LENGTH: number = 1000000;
 export const ARTICLE_TITLE_MAX_LENGTH: number = 50;
 export const THREAD_CONTENT_MAX_LENGTH: number = 1000;
 export const THREAD_TITLE_MAX_LENGTH: number = 50;
+export const AUTO_COMPLETE_MAX_CANDIDATES: number = 5;
 
 // Add feature flags here
 export const FLAG_ENABLE_OTP_FOR_VERIFICATION: boolean = false; // prerequisite: enable sending OTP thru email
