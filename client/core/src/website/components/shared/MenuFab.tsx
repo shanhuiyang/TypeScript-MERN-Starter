@@ -19,7 +19,7 @@ class MenuFab extends React.Component<Props, States> {
         } else if (this.props.fabActions.length === 1) {
             const action: FabAction = this.props.fabActions[0];
             return <Fab event="click" position={position}
-                icon={<Icon name={action.icon} style={fabIconStyle}/>}
+                icon={<Icon name={action.icon} style={fabIconStyle} loading={action.loading}/>}
                 onClick={action.onClick}
                 text={action.text}/>;
         } else {
