@@ -18,7 +18,7 @@ export const getHostUrl = (): string => {
     return hostUrl;
 };
 
-const _fetch = async (url: string, body: any, method: Method, withToken?: boolean): Promise<any> => {
+const _fetch = async (url: string, body: any, method: Method, withToken?: boolean, onProgress?: (progressEvent: ProgressEvent) => void): Promise<any> => {
     if (TEST_FOR_LOADING) {
         await sleep(2000);
     }
@@ -50,6 +50,7 @@ const _fetch = async (url: string, body: any, method: Method, withToken?: boolea
     } else if (method === "PUT") {
         headers["Content-Type"] = (body as File).type;
         options.data = body;
+        options.onUploadProgress = onProgress;
     }
 
     return axios(options).then((response: AxiosResponse): Promise<any> => {

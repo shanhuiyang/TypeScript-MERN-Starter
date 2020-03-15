@@ -4,7 +4,7 @@
 import React, { RefObject } from "react";
 import { MessageDescriptor, FormattedMessage, injectIntl, WrappedComponentProps as IntlProps  } from "react-intl";
 import { PrimitiveType } from "intl-messageformat";
-import { Modal, Form } from "semantic-ui-react";
+import { Modal, Form, Progress } from "semantic-ui-react";
 import FileSelectButton from "./FileSelectButton";
 import fetch from "../../../shared/fetch";
 import { getToast as toast } from "../../../shared/toast";
@@ -19,6 +19,7 @@ interface Props extends IntlProps {
 interface States {
     valid: boolean;
     uploading: boolean;
+    progress: number; // from 0 to 100
 }
 
 class InsertImageDialog extends React.Component<Props, States> {
@@ -30,7 +31,8 @@ class InsertImageDialog extends React.Component<Props, States> {
         this.linkRef = React.createRef();
         this.state = {
             valid: false,
-            uploading: false
+            uploading: false,
+            progress: 0
         };
     }
     render () {
@@ -59,6 +61,9 @@ class InsertImageDialog extends React.Component<Props, States> {
                         </label>
                         <FileSelectButton onChange={this.onImageSelected}/>
                     </Form.Group>
+                    {
+                        this.renderProgress()
+                    }
                 </Form>
             </Modal.Content>
             <Modal.Actions actions={[
@@ -79,12 +84,26 @@ class InsertImageDialog extends React.Component<Props, States> {
         </Modal>;
     }
 
+    private renderProgress = (): any => {
+        if (this.state.uploading) {
+            return <Progress percent={this.state.progress} size="tiny" indicating/>;
+        } else {
+            return undefined;
+        }
+    }
+
     private onImageSelected = (e: React.ChangeEvent<HTMLInputElement>): void => {
         if (e.target.files && e.target.files.length > 0) {
-            this.setState({uploading: true});
+            this.setState({
+                uploading: true,
+                progress: 0
+            });
             const blob: File = e.target.files[0] as File;
-            // TODO: How to update the progress bar?
-            fetch("/api/image/upload/thread", blob, "PUT", true)
+            fetch("/api/image/upload/thread", blob, "PUT", true, (progress: ProgressEvent): void => {
+                this.setState({
+                    progress: (progress.loaded / progress.total * 100)
+                });
+            })
             .then((json: any) => {
                 if (json && json.url && this.descriptionRef.current && this.linkRef.current) {
                     const filenameWithoutExtension: string = blob.name.substr(0, blob.name.lastIndexOf("."));
