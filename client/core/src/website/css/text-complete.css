@@ -1,0 +1,39 @@
+@charset "UTF-8";
+/**
+ * to customize the style of autocomplete textarea
+ */
+.textcomplete-header,
+.textcomplete-footer {
+    list-style: none;
+    height: 5px;
+}
+.textcomplete-dropdown {
+    list-style: none;
+    margin: 0;
+    padding: 0 0;
+    font-size: 1em;
+    text-shadow: none;
+    text-align: left;
+    background: rgba(250,250,250,1);
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,.08);
+    border-radius: 5px;
+}
+.textcomplete-item {
+    border-top: 1px solid #fafafa;
+    border: none;
+    padding: .78571429rem 1.14285714rem!important;
+    white-space: normal;
+    word-wrap: normal;
+    line-height: 1em;
+    font-size: 1rem;
+    text-transform: none;
+    font-weight: 400;
+    box-shadow: none;
+    box-sizing: inherit;
+}
+.textcomplete-item.active {
+    background: rgba(0,0,0,.1);
+}
+.textcomplete-item > a {
+    color: rgba(0,0,0,.87);
+}

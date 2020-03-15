@@ -9,7 +9,7 @@ import { Viewer } from "@toast-ui/react-editor";
 import WarningModal from "../shared/WarningModal";
 import CommentSection from "../comment/CommentSection";
 import PostType from "../../../models/PostType";
-import { getNameList } from "../../../shared/string";
+import { getNameListString } from "../../../shared/string";
 import moment from "moment";
 import User from "../../../models/User";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
@@ -113,7 +113,7 @@ class ThreadDetail extends React.Component<Props, States> {
         </Fragment>;
     }
     private renderActions = (thread: Thread): any => {
-        const likersPopUpContent: string = getNameList(thread.likes, this.props.state.userDictionary);
+        const likersPopUpContent: string = getNameListString(thread.likes, this.props.state.userDictionary);
         return <Comment.Actions>
             {
                 this.props.state.userState.currentUser

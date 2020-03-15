@@ -25,6 +25,7 @@
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.88.1",
     "shelljs": "^0.8.1",
+    "textcomplete": "^0.18.1",
     "typescript": "^3.7.4",
     "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
     "@toast-ui/react-editor": "^1.0.1",

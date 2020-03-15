@@ -124,6 +124,9 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
     }
     if (req.body.mentions && (req.body.mentions as string[]).length > 0) {
         (req.body.mentions as string[]).forEach((mentioned: string) => {
+            if (saved.author === mentioned) {
+                return;
+            }
             const notification: NotificationDocument = new NotificationCollection({
                 owner: mentioned,
                 acknowledged: false,

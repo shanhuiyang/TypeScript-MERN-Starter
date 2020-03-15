@@ -16,7 +16,7 @@ import User from "../../../models/User";
 import FabAction from "../../../models/client/FabAction";
 import CommentSection from "../comment/CommentSection";
 import PostType from "../../../models/PostType";
-import { getNameList } from "../../../shared/string";
+import { getNameListString } from "../../../shared/string";
 import moment from "moment";
 import { ComponentProps as Props } from "../../../shared/ComponentProps";
 
@@ -126,7 +126,7 @@ class ArticleDetail extends React.Component<Props, States> {
     }
     private renderMetaInfo = (article: Article): React.ReactElement<any> => {
         const createDate: Date = article.createdAt ? new Date(article.createdAt) : new Date(0);
-        const likersPopUpContent: string = getNameList(article.likes, this.props.state.userDictionary);
+        const likersPopUpContent: string = getNameListString(article.likes, this.props.state.userDictionary);
         const labelStyle: any = {
             color: "grey",
             marginTop: 2,
