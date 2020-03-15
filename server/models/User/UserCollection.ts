@@ -24,7 +24,7 @@ export const userSchema: Schema = new mongoose.Schema({
  * Password hashing & Signing Url middleware.
  */
 userSchema.pre("save", function save(next: any) {
-    const user = this as UserDocument;
+    const user: any = userSchema;
     // email cannot have capital character
     if (user && user.email) {
         user.email = user.email.toLowerCase();
@@ -50,14 +50,18 @@ userSchema.pre("save", function save(next: any) {
     });
 });
 
-userSchema.post("findOne", function findOne(user: UserDocument, next: any) {
+export const postFind = (user: UserDocument, next?: any) => {
     // Add signing params for Avatar Url so that client can consume
     if (user && user.avatarUrl) {
         const avatarFilename: string = getBlobNameFromUrl(user.avatarUrl);
         user.avatarUrl = `${user.avatarUrl}?${storage.generateSigningUrlParams(CONTAINER_AVATAR, avatarFilename)}`;
     }
-    next();
-});
+    if (next) {
+        next();
+    }
+};
+
+userSchema.post("findOne", postFind);
 
 const comparePassword: ComparePasswordFunction = function (this: any, candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, (err: mongoose.Error, isMatch: boolean) => {

@@ -170,7 +170,7 @@ export const read: RequestHandler = async (req: Request, res: Response, next: Ne
     };
 
     const articles: ArticleDocument[] = await ArticleCollection
-        .find({ createdAt: { $lt: latestTime} })
+        .find({ createdAt: { $lt: latestTime.toISOString()} })
         .sort({ createdAt: "desc" })
         .limit(pageSize + 1) // Use 1 more requirement for indication of hasMore
         .exec();

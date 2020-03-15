@@ -7,9 +7,6 @@ import {
     ContainerClient,
     BlobSASSignatureValues
 } from "@azure/storage-blob";
-import {
-    BlockBlobUploadResponse
-} from "@azure/storage-blob/typings/src/generated/src/models";
 import { STORAGE_ACCOUNT, STORAGE_ACCOUNT_KEY } from "../../util/secrets";
 import { UploadBlobResult } from "../storage.d";
 
@@ -45,7 +42,7 @@ export const uploadBlob = async (
     const blobClient = containerClient.getBlobClient(blobName);
     const blockBlobClient = blobClient.getBlockBlobClient();
     return blockBlobClient.upload(() => stream, contentLength)
-        .then((value: BlockBlobUploadResponse) => {
+        .then((value: any) => {
             return new Promise<UploadBlobResult>((resolve: any, reject: any): any => {
                 resolve({
                     blobUrl: blockBlobClient.url,
