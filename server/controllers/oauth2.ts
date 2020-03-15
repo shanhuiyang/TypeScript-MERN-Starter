@@ -11,7 +11,7 @@ import ClientCollection from "../models/OAuth/ClientCollection";
 import AccessToken from "../models/OAuth/AccessToken";
 import AccessTokenCollection from "../models/OAuth/AccessTokenCollection";
 import UserDocument from "../models/User/UserDocument";
-import UserCollection from "../models/User/UserCollection";
+import UserCollection, { postFind } from "../models/User/UserCollection";
 import { RequestHandler } from "express";
 import { Request, Response, NextFunction } from "express";
 import { IVerifyOptions } from "passport-local";
@@ -217,13 +217,14 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
 
 export const profile: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     const notifications: Notification[] = await NotificationStorage.findByOwner((req.user as User)._id.toString(), true);
-    const others: User[] = await UserCollection.find({});
+    const others: UserDocument[] = await UserCollection.find({});
     (req.user as User).password = "######";
-    others.forEach((other: User) => {
+    others.forEach((other: UserDocument) => {
         other.password = "######";
+        postFind(other);
     });
     return res.json({
-        user: req.user,
+        user: req.user as User,
         notifications: notifications,
         others: others
     } as AuthenticationResponse);
