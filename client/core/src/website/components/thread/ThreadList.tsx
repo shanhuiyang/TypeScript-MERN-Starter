@@ -40,14 +40,29 @@ class ThreadList extends React.Component<Props, States> {
     }
     componentDidMount() {
         this.props.actions.resetRedirectTask();
+        this.enableRefreshFab();
+    }
+    componentDidUpdate(prevProps: Props) {
+        if (!prevProps.state.threadState.loading && this.props.state.threadState.loading) {
+            this.props.actions.setFabActions([{
+                text: this.props.intl.formatMessage({id: "component.button.refreshing"}),
+                icon: "sync",
+                onClick: () => {},
+                loading: true
+            }]);
+        } else if (prevProps.state.threadState.loading && !this.props.state.threadState.loading) {
+            this.enableRefreshFab();
+        }
+    }
+    componentWillUnmount() {
+        this.props.actions.setFabActions([]);
+    }
+    private enableRefreshFab = (): void => {
         this.props.actions.setFabActions([{
             text: this.props.intl.formatMessage({id: "component.button.refresh"}),
             icon: "sync alternate",
             onClick: () => this.props.actions.getThreads(0, DEFAULT_PAGE_SIZE)
         }]);
-    }
-    componentWillUnmount() {
-        this.props.actions.setFabActions([]);
     }
     private renderThreads = (): React.ReactElement<any> => {
         if (this.props.state.threadState.loading
