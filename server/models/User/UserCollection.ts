@@ -24,7 +24,7 @@ export const userSchema: Schema = new mongoose.Schema({
  * Password hashing & Signing Url middleware.
  */
 userSchema.pre("save", function save(next: any) {
-    const user: any = userSchema;
+    const user: any = this;
     // email cannot have capital character
     if (user && user.email) {
         user.email = user.email.toLowerCase();

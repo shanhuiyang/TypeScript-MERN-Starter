@@ -34,7 +34,7 @@ export const remove: RequestHandler = (req: Request, res: Response, next: NextFu
         return res.status(200).end();
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 
@@ -64,7 +64,7 @@ export const update: RequestHandler = (req: Request, res: Response, next: NextFu
         return res.status(200).json(updated);
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const like: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -115,7 +115,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
         notification.save();
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const create: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -158,7 +158,7 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
         }
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const read: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {

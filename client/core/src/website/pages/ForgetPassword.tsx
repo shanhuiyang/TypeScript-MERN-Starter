@@ -99,9 +99,9 @@ class ForgetPassword extends React.Component<Props, States> {
                 </label>
                 <input placeholder={this.getString({ id: "user.email"})} ref={this.emailRef} />
             </ResponsiveFormField>
-            <Button primary type="submit" onClick={ this.completeStep1 } loading={loading} disabled={loading}>
-                <Icon name="arrow alternate circle right outline" />
+            <Button icon labelPosition="right" primary type="submit" onClick={ this.completeStep1 } loading={loading} disabled={loading}>
                 <FormattedMessage id="component.button.next"/>
+                <Icon name="arrow right" />
             </Button>
         </Form>;
     }
@@ -146,9 +146,9 @@ class ForgetPassword extends React.Component<Props, States> {
                     <FormattedMessage id="page.consent.OTP_resend" />
                 </Button>
             </div>
-            <Button primary type="submit" onClick={ this.completeStep2 } loading={loading} disabled={loading}>
-                <Icon name="arrow alternate circle right outline" />
+            <Button icon labelPosition="right" primary type="submit" onClick={ this.completeStep2 } loading={loading} disabled={loading}>
                 <FormattedMessage id="component.button.next"/>
+                <Icon name="arrow right" />
             </Button>
         </Form>;
     }
@@ -180,9 +180,9 @@ class ForgetPassword extends React.Component<Props, States> {
                 </label>
                 <input type="password" placeholder={this.getString({ id: "user.confirm_password"})} ref={this.confirmPasswordRef} />
             </ResponsiveFormField>
-            <Button primary type="submit" onClick={ this.resetPassword } loading={loading} disabled={loading}>
+            <Button icon labelPosition="right" primary type="submit" onClick={ this.resetPassword } loading={loading} disabled={loading}>
+                <FormattedMessage id="component.button.next"/>
                 <Icon name="check circle outline" />
-                <FormattedMessage id="component.button.submit"/>
             </Button>
         </Form>;
     }
