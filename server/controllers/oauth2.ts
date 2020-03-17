@@ -143,7 +143,7 @@ export const signUp: RequestHandler[] = [
                     }
                 })
                 .catch((error: Response) => {
-                    return error.end();
+                    return next(error);
                 });
             } else {
                 return res.status(400).json({ message: "toast.user.invitation_code.invalid" });
@@ -185,7 +185,7 @@ export const signUp: RequestHandler[] = [
             });
         })
         .catch((error: Response) => {
-            return error.end();
+            return next(error);
         });
     }
 ];
@@ -252,7 +252,7 @@ export const updateProfile: RequestHandler = (req: Request, res: Response, next:
         return res.json(user);
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const updatePreferences: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
@@ -275,7 +275,7 @@ export const updatePreferences: RequestHandler = (req: Request, res: Response, n
         return res.json(user.preferences);
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const updatePassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
@@ -304,7 +304,7 @@ export const updatePassword: RequestHandler = (req: Request, res: Response, next
         return res.sendStatus(200);
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const resetPassword: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
@@ -329,7 +329,7 @@ export const resetPassword: RequestHandler = (req: Request, res: Response, next:
         return res.sendStatus(200);
     })
     .catch((error: Response) => {
-        return error.end();
+        return next(error);
     });
 };
 export const sendOtp: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
