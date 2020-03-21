@@ -2,10 +2,6 @@ import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./website/App";
 import React from "react";
-// On some platforms there is no intl polyfill so we add it manually.
-import "intl";
-import "intl/locale-data/jsonp/en";
-import "intl/locale-data/jsonp/zh";
 import ConnectedIntlProvider from "./shared/intl";
 import { Provider } from "react-redux";
 import store from "./shared/store";

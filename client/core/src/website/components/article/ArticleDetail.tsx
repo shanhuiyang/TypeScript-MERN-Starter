@@ -36,6 +36,9 @@ class ArticleDetail extends React.Component<Props, States> {
         };
     }
     componentDidMount() {
+        if (this.articleId) {
+            this.addFabActions();
+        }
         this.props.actions.resetRedirectTask();
         window.scrollTo(0, 0);
     }
