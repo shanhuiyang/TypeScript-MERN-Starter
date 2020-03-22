@@ -832,8 +832,8 @@ To build a free MongoDB service, you can follow below steps.
 1. [Register a MongoDB account](https://cloud.mongodb.com/user?signedOut=true#/atlas/register/accountProfile).
 2. After sign in to the cloud atlas, create a free tier (M0 Sandbox) cluster which take Azure as cloud provider.
 3. Click _Connect_ button in the cluster you just created.
-4. In step _(1) Whitelist your connection IP address_, remove the IP restriction by whitelist all IPs.
-5. In step _(2) Create a MongoDB User_, create a cluster user with admin privilege.
+4. In step _(1) Whitelist your connection IP address_, remove the IP restriction by whitelist all IPs (filling 0.0.0.0/0).
+5. In step _(2) Create a MongoDB User_, create a cluster user with admin privilege. Using auto generated password and copy it to somewhere so that you can paste it back later.
 6. Click _Choose a connection method_.
 7. Click _Connect your application_.
 8. In step _(1) Choose your driver version_, select driver as _Node.js_ and version as **_2.2.12 or later_**.
@@ -846,7 +846,7 @@ Modify the variable `MONGODB_URI` using the connection string you just copied.
 mongodb://<cluster_user_name>:<password>@cluster0-shard-00-00-pyou0.azure.mongodb.net:27017,cluster0-shard-00-01-pyou0.azure.mongodb.net:27017,cluster0-shard-00-02-pyou0.azure.mongodb.net:27017/<your_db_name>?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority
 ```
 
-Remember to replace the placeholders in above connection string example.
+Remember to replace the placeholders in above connection string example, especially `<your_db_name>`.
 
 ### Create a production blob storage
 
@@ -915,6 +915,9 @@ Let's generate the Docker image locally in this section.
 
 In file [client/core/src/models/HostUrl.ts](client/core/src/models/HostUrl.ts), change the `HOST_NAME_PROD` to the target app url.
 Meanwhile change the `HOST_PORT_PROD` from 3000 back to 80.
+
+At the same time, in the string array `CORS_WHITELIST`, you need to add **all of your possible domain names** into it.
+For example, `"https://www.tsmernstarter.com"` and `"https://tsmernstarter.com"`.
 
 #### Build app into a local Docker image
 
