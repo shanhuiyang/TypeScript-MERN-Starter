@@ -133,6 +133,7 @@ const TRANSLATION: Translation = {
         "toast.user.general_error": "找不到该用户，请检查",
         "toast.user.invalid_token_error": "请先登录",
         "toast.user.sign_in_successfully": "登录成功",
+        "toast.user.sign_up_successfully": "注册成功",
         "toast.user.sign_in_failed": "登录失败",
         "toast.user.deny_consent": "请授权以完成注册",
         "toast.user.update_successfully": "更新成功",

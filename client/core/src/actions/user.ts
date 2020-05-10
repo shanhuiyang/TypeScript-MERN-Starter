@@ -246,6 +246,7 @@ const userActionCreator: UserActionCreator = {
                     type: SIGN_UP_SUCCESS,
                     redirectTask: redirectTask
                 });
+                toast().success("toast.user.sign_up_successfully");
             })
             .catch((error: Error) => {
                 dispatch(actions.handleFetchError(SIGN_UP_FAILED, error));

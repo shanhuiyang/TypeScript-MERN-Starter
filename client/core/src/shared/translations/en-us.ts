@@ -132,6 +132,7 @@ const TRANSLATION: Translation = {
         "toast.user.general_error": "Cannot find the user, please check.",
         "toast.user.invalid_token_error": "Please log in first.",
         "toast.user.sign_in_successfully": "Sign in successfully.",
+        "toast.user.sign_up_successfully": "Sign up successfully.",
         "toast.user.sign_in_failed": "Sign in failed.",
         "toast.user.deny_consent": "Please approve to finish signing up.",
         "toast.user.update_successfully": "Update successfully.",
