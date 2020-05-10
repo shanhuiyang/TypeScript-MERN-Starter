@@ -85,7 +85,7 @@ const TRANSLATION: Translation = {
         "user.gender.other": "Other",
         "user.address": "Address",
         "user.website": "Web site",
-        "user.OTP": "OTP (Case-sensitive)",
+        "user.OTP": "OTP (Case-insensitive)",
         "user.invitation_code": "Invitation Code (Case-sensitive)",
         "preferences.editor_type": "Editor type",
         "preferences.editor_type.markdown": "Markdown",

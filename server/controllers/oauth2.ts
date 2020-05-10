@@ -392,7 +392,7 @@ export const verifyOtp: RequestHandler[] = [
 ];
 
 const verifyOtpInternal: any = (res: Response, next: NextFunction, user: UserDocument, OTP: string, reset: boolean): any => {
-    if (user && user.OTP && user.OTP.length == OTP_LENGTH && user.OTP === OTP) {
+    if (user && user.OTP && user.OTP.length == OTP_LENGTH && user.OTP.toLowerCase() === OTP.toLowerCase()) {
         if (!user.otpExpireTime || user.otpExpireTime.getTime() <= Date.now()) {
             return res.status(401).json({ message: "toast.user.expired_OTP" });
         } else {

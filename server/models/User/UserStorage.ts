@@ -5,7 +5,7 @@ import { sendEmail } from "../../config/smtp-transporter";
 import { getUid } from "../../util/random";
 import { getExpireTime } from "../../util/time";
 import { FLAG_ENABLE_OTP_FOR_VERIFICATION } from "../../../client/core/src/shared/constants";
-export const OTP_LENGTH: number = 8;
+export const OTP_LENGTH: number = 4;
 const OTP_EXPIRE_TIME: number = 10;
 export const refreshOtpThenSendToUser = (email: string, locale: string): Promise<any> => {
     if (FLAG_ENABLE_OTP_FOR_VERIFICATION) {

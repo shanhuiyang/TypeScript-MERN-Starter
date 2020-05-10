@@ -85,7 +85,7 @@ const TRANSLATION: Translation = {
         "user.gender.other": "其它",
         "user.address": "地址",
         "user.website": "个人网站",
-        "user.OTP": "验证码（区分大小写）",
+        "user.OTP": "验证码（不区分大小写）",
         "user.invitation_code": "邀请码（区分大小写）",
         "preferences.editor_type": "编辑器类型",
         "preferences.editor_type.markdown": "Markdown",
