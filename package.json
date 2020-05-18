@@ -102,7 +102,7 @@
     "ts-node": "^8.3.0",
     "tslint": "^6.1.0",
     "typescript": "^3.7.4",
-    "snyk": "^1.290.1"
+    "snyk": "^1.316.1"
   },
   "devDependencies": {
     "ts-jest": "^26.0.0"
