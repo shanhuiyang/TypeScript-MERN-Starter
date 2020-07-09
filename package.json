@@ -47,7 +47,7 @@
     "express-session": "^1.15.6",
     "express-validator": "^6.2.0",
     "intl-messageformat": "^8.2.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.16",
     "lusca": "^1.5.2",
     "mongoose": "^5.7.7",
     "nodemailer": "^6.4.2",
