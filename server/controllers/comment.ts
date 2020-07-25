@@ -19,7 +19,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
         return invalid;
     }
     if (req.query.targetType !== PostType.COMMENT) {
-        getCollectionByPostType(req.query.targetType)
+        getCollectionByPostType(req.query.targetType as PostType)
         .findById(req.query.targetId)
         .exec()
         .then((post: any) => {
@@ -27,7 +27,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
                 return Promise.reject(res.status(404).json({ message: "toast.user.attack_alert" }));
             }
             return CommentCollection
-                .find({ targetId: req.query.targetId })
+                .find({ targetId: req.query.targetId as string })
                 .exec();
         })
         .then(async (comments: Comment[]) => {
@@ -96,7 +96,7 @@ export const add: RequestHandler = async (req: Request, res: Response, next: Nex
             }
         );
     } else { // This is a comment of other Post
-        getCollectionByPostType(req.query.targetType)
+        getCollectionByPostType(req.query.targetType as PostType)
         .findByIdAndUpdate(req.query.targetId, {
             $inc: { commentsCount: 1 },
             lastCommentedAt: nowDateString,
@@ -200,9 +200,9 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
 
     const user: User = req.user as User;
     let action: InteractionType;
-    if (Number.parseInt(req.query.rating) === 1) {
+    if (Number.parseInt(req.query.rating as string) === 1) {
         action = InteractionType.LIKE;
-    } else if (Number.parseInt(req.query.rating) === 0) {
+    } else if (Number.parseInt(req.query.rating as string) === 0) {
         action = InteractionType.UNLIKE;
     } else {
         return res.status(400).end();

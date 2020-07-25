@@ -338,7 +338,7 @@ export const sendOtp: RequestHandler = (req: Request, res: Response, next: NextF
         return invalid;
     }
     UserCollection
-    .findOne({email: req.query.email})
+    .findOne({email: req.query.email as string})
     .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
@@ -360,7 +360,7 @@ export const verifyAccount: RequestHandler = (req: Request, res: Response, next:
         return invalid;
     }
     UserCollection
-    .findOne({email: req.query.email})
+    .findOne({email: req.query.email as string})
     .exec()
     .then((user: UserDocument | null) => {
         if (!user) {
@@ -377,7 +377,7 @@ export const verifyOtp: RequestHandler[] = [
             return invalid;
         }
         UserCollection
-        .findOne({email: req.query.email})
+        .findOne({email: req.query.email as string})
         .exec()
         .then((user: UserDocument | null) => {
             if (!user) {

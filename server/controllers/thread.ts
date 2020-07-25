@@ -65,9 +65,9 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
         const likes: string[] = thread.likes;
-        if (Number.parseInt(req.query.rating) === 1) {
+        if (Number.parseInt(req.query.rating as string) === 1) {
             likes.push(user._id.toString());
-        } else if (Number.parseInt(req.query.rating) === 0) {
+        } else if (Number.parseInt(req.query.rating as string) === 0) {
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove, 1);
         } else {
@@ -84,7 +84,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             owner: updated.author,
             acknowledged: false,
             subject: user._id.toString(),
-            event: Number.parseInt(req.query.rating) === 1 ?
+            event: Number.parseInt(req.query.rating as string) === 1 ?
                 InteractionType.LIKE : InteractionType.UNLIKE,
             objectType: PostType.THREAD,
             object: updated._id,
@@ -141,8 +141,8 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 export const read: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-    const pageIndex: number = Number.parseInt(req.query.pageIndex);
-    const pageSize: number = Number.parseInt(req.query.pageSize);
+    const pageIndex: number = Number.parseInt(req.query.pageIndex as string);
+    const pageSize: number = Number.parseInt(req.query.pageSize as string);
     if (pageIndex < 0 || pageSize <= 0 || pageSize > 100) {
         return res.status(400).end();
     }

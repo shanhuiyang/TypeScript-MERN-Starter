@@ -7,7 +7,7 @@ import GetNotificationsResponse from "../../client/core/src/models/response/GetN
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
 
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
-    const unacknowledgedOnly: boolean = req.query.unread && req.query.unread === "true";
+    const unacknowledgedOnly: boolean = (!!req.query.unread) && req.query.unread === "true";
     NotificationStorage.findByOwner((req.user as User)._id.toString(), unacknowledgedOnly)
     .then((data: Notification[]): void => {
         res.json({data} as GetNotificationsResponse);
