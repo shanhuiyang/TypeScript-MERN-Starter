@@ -86,9 +86,9 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             return Promise.reject(res.status(401).json({ message: "toast.user.attack_alert" }));
         }
         const likes: string[] = article.likes;
-        if (Number.parseInt(req.query.rating) === 1) {
+        if (Number.parseInt(req.query.rating as string) === 1) {
             likes.push(user._id.toString());
-        } else if (Number.parseInt(req.query.rating) === 0) {
+        } else if (Number.parseInt(req.query.rating as string) === 0) {
             const toRemove: number = likes.findIndex((value: string) => value === user._id.toString());
             likes.splice(toRemove, 1);
         } else {
@@ -105,7 +105,7 @@ export const like: RequestHandler = (req: Request, res: Response, next: NextFunc
             owner: updated.author,
             acknowledged: false,
             subject: user._id.toString(),
-            event: Number.parseInt(req.query.rating) === 1 ?
+            event: Number.parseInt(req.query.rating as string) === 1 ?
                 InteractionType.LIKE : InteractionType.UNLIKE,
             objectType: PostType.ARTICLE,
             object: updated._id,
@@ -162,8 +162,8 @@ export const create: RequestHandler = (req: Request, res: Response, next: NextFu
     });
 };
 export const read: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
-    const latestTime: Date = req.query.latest ? new Date(req.query.latest) : new Date(Date.now());
-    const pageSize: number = req.query.size ? req.query.size : DEFAULT_PAGE_SIZE;
+    const latestTime: Date = req.query.latest ? new Date(req.query.latest as string) : new Date(Date.now());
+    const pageSize: number = req.query.size ? Number.parseInt(req.query.size as string) : DEFAULT_PAGE_SIZE;
 
     const findAuthorInUsers = (article: Article): Promise<UserDocument | null> => {
         return UserCollection.findById(article.author).exec();

@@ -2,7 +2,6 @@
 
 [![Build Status](https://api.travis-ci.org/shanhuiyang/TypeScript-MERN-Starter.svg?branch=master)](https://travis-ci.org/shanhuiyang/TypeScript-MERN-Starter)
 [![Dependency Status](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter.svg)](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter)
-[![Known Vulnerabilities](https://snyk.io/test/github/shanhuiyang/TypeScript-MERN-Starter/badge.svg)](https://snyk.io/test/github/shanhuiyang/TypeScript-MERN-Starter/badge.svg)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
 **Live Demo:** [https://typescript-mern-starter.azurewebsites.net/](https://typescript-mern-starter.azurewebsites.net/)
