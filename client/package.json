@@ -5,7 +5,9 @@
     "android": "yarn build && expo start --android",
     "ios": "yarn build && expo start --ios",
     "eject": "expo eject",
-    "build": "tsc"
+    "build": "tsc",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "axios": "^0.19.2",
@@ -25,7 +27,8 @@
     "react-redux": "^7.2.1",
     "react-router-native": "^5.1.2",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "snyk": "^1.369.2"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -36,5 +39,6 @@
     "babel-preset-expo": "^8.2.3",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "private": true,
+  "snyk": true
 }
