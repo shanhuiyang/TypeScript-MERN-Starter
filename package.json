@@ -75,7 +75,7 @@
     "intl-messageformat": "^9.1.7",
     "lodash": "^4.17.19",
     "lusca": "^1.6.1",
-    "mongoose": "^5.9.25",
+    "mongoose": "^5.12.3",
     "nodemailer": "^6.4.10",
     "nodemon": "^2.0.4",
     "oauth2orize": "^1.11.0",
