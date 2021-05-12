@@ -76,7 +76,7 @@
     "lodash": "^4.17.19",
     "lusca": "^1.6.1",
     "mongoose": "^5.9.25",
-    "nodemailer": "^6.4.10",
+    "nodemailer": "^6.4.16",
     "nodemon": "^2.0.4",
     "oauth2orize": "^1.11.0",
     "passport": "^0.4.1",
