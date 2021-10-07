@@ -28,6 +28,8 @@ import User from "../../client/core/src/models/User";
 import { FLAG_ENABLE_OTP_FOR_VERIFICATION, FLAG_ENABLE_INVITATION_CODE } from "../../client/core/src/shared/constants";
 import { refreshOtpThenSendToUser, OTP_LENGTH } from "../models/User/UserStorage";
 import { invitationCode } from "../../client/core/src/shared/data/invitationCode";
+import RoleCollection from "../models/Role/RoleCollection";
+import { Document } from "mongoose";
 
 // User authorization endpoint.
 //
@@ -81,11 +83,17 @@ export const authorization: RequestHandler[] = [
             });
         }
     ),
+    // function (req: MiddlewareRequest & Request, res: Response) {
+    //     if (!req.oauth2) {
+    //         return res.status(500).end();
+    //     }
+    //     res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${(req.oauth2.client as Client).name}&transactionID=${req.oauth2.transactionID}`);
+    // },
     function (req: MiddlewareRequest & Request, res: Response) {
         if (!req.oauth2) {
             return res.status(500).end();
         }
-        res.redirect(302, `/consent?email=${(req.user as User).email}&client_name=${(req.oauth2.client as Client).name}&transactionID=${req.oauth2.transactionID}`);
+        res.redirect(302, `/oauth2/authorize/decision`);
     }
 ];
 
@@ -165,16 +173,28 @@ export const signUp: RequestHandler[] = [
             address: req.body.address,
             avatarUrl: req.body.avatarUrl,
             preferences: req.body.preferences,
-            invitationCode: req.body.invitationCode
+            invitationCode: req.body.invitationCode,
         });
         UserCollection
         .findOne({ email: _.toLower(req.body.email) })
         .exec()
-        .then((existingUser: UserDocument | null) => {
+        .then(async (existingUser: UserDocument | null) => {
+            // checks for already user exists and toast exist account
             if (existingUser) {
                 return Promise.reject(res.status(409).json({ message: "toast.user.upload_exist_account" }));
+                // return Promise.reject(res.status(409).json({ message: "toast.user.upload_exist_account" }));
             }
-            return user.save();
+            const userDoc: Promise<UserDocument> = RoleCollection
+            .findOne({name: req.body.role})
+            .exec()
+            .then((doc: any) => {
+                user.role = doc?._id;
+                return user.save();
+            });
+            const userDoc_1 = await userDoc;
+            return userDoc_1;
+            // if account does not exists, save user collection and return UserDocument promise
+            // return user.save();
         })
         .then((user: UserDocument) => {
             req.logIn(user, (err) => {
@@ -198,6 +218,22 @@ export const logIn: RequestHandler = (req: Request, res: Response, next: NextFun
     if (invalid) {
         return invalid;
     }
+    // passport.authenticate("custom", (err: Error, user: UserDocument) => {
+    //     if (err) {
+    //         return res.status(401).json({ message: err.message });
+    //     }
+    //     if (!user) {
+    //         return res.status(401).json({ message: "toast.user.sign_in_failed" });
+    //     }
+    //     req.logIn(user, (err) => {
+    //         if (err) {
+    //             return res.status(401).json({ message: "toast.user.sign_in_failed" });
+    //         }
+    //         console.log("DEBUGGER STARTED:")
+    //         debugger;
+    //         res.redirect(302, "/auth/oauth2"); // Get access token
+    //     });
+    // })(req, res, next);
 
     passport.authenticate("local", (err: Error, user: UserDocument, info: IVerifyOptions) => {
         if (err) {

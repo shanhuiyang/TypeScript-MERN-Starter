@@ -11,5 +11,5 @@ export const notificationSchema: Schema = new mongoose.Schema({
     objectText: String
 }, { timestamps: true });
 
-const NotificationCollection: Model<NotificationDocument> = mongoose.model("Notification", notificationSchema);
+const NotificationCollection: Model<any> = mongoose.model("Notification", notificationSchema);
 export default NotificationCollection;

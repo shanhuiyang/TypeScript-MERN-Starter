@@ -4,6 +4,7 @@ import CommonActionCreator from "./CommonActionCreator.d";
 import CommentActionCreator from "./CommentActionCreator.d";
 import NotificationActionCreator from "./NotificationActionCreator.d";
 import ThreadActionCreator from "./ThreadActionCreator.d";
+import StudentActionCreator from "./StudentActionCreator.d";
 
 export default interface ActionCreator extends
     UserActionCreator,
@@ -11,4 +12,5 @@ export default interface ActionCreator extends
     CommentActionCreator,
     CommonActionCreator,
     NotificationActionCreator,
-    ThreadActionCreator {}
+    ThreadActionCreator,
+    StudentActionCreator {}

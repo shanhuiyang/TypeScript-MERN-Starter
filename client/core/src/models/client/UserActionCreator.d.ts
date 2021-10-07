@@ -7,13 +7,13 @@ export default interface UserActionCreator {
     allowConsent(transactionId: string, OTP?: string): any;
     denyConsent(): Action;
     authenticate(): any;
-    login(email: string, password: string): any;
+    login(email: string, password: string, path: string): any;
     logout(): Action;
     updateProfile(user: User): any;
     updatePreferences(id: string, preferences: Preferences): any;
     uploadAvatar(payload: Blob): any;
     resetAvatar(): Action;
-    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender, invitationCode?: string): any;
+    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender, role: any, invitationCode?: string): any;
     updatePassword(oldPassword: string, password: string, confirmPassword: string): any;
     resetPassword(email: string, OTP: string, password: string, confirmPassword: string): any;
     sendOtp(email: string): any;

@@ -106,10 +106,10 @@ const userActionCreator: UserActionCreator = {
             });
         };
     },
-    login(email: string, password: string): any {
+    login(email: string, password: string, path: string): any {
         return (dispatch: Dispatch<any>): any => {
             dispatch({ type: USER_REQUEST_START});
-            return fetch("/oauth2/login", { email: email, password: password }, "POST")
+            return fetch("/oauth2/login", { email: email, password: password, path: path }, "POST")
             .then((json: AuthenticationResponse | RedirectTask) => {
                 const response = json as AuthenticationResponse;
                 const task = json as RedirectTask;
@@ -228,7 +228,7 @@ const userActionCreator: UserActionCreator = {
             type: RESET_UPLOADED_AVATAR
         };
     },
-    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender, invitationCode?: string): any {
+    signUp(email: string, password: string, confirmPassword: string, name: string, gender: Gender, role: any, invitationCode?: string): any {
         return (dispatch: Dispatch<any>): void => {
             dispatch({ type: USER_REQUEST_START});
             const preferences: Preferences = DEFAULT_PREFERENCES;
@@ -239,9 +239,11 @@ const userActionCreator: UserActionCreator = {
                 name,
                 gender,
                 preferences,
-                invitationCode
+                invitationCode,
+                role
             }, "POST")
             .then((redirectTask: RedirectTask) => {
+                console.log(redirectTask);
                 dispatch({
                     type: SIGN_UP_SUCCESS,
                     redirectTask: redirectTask

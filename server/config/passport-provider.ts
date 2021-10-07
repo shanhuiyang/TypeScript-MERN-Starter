@@ -4,6 +4,7 @@
 import passport from "passport";
 import UserDocument from "../models/User/UserDocument";
 import UserCollection from "../models/User/UserCollection";
+import { Strategy as CustomLocalStrategy } from "passport-custom";
 import { Strategy as LocalStrategy } from "passport-local";
 import { BasicStrategy } from "passport-http";
 import { Strategy as ClientPasswordStrategy } from "passport-oauth2-client-password";
@@ -12,8 +13,10 @@ import ClientCollection from "../models/OAuth/ClientCollection";
 import Client from "../models/OAuth/Client";
 import AccessTokenCollection from "../models/OAuth/AccessTokenCollection";
 import AccessToken from "../models/OAuth/AccessToken";
+import RoleCollection from "../models/Role/RoleCollection";
+import Role from "../models/Role/Role";
 
-passport.serializeUser<any, any>((user: UserDocument, done: (err: any, id?: any) => void) => {
+passport.serializeUser<any, any>((req: any, user: UserDocument | any, done: (err: any, id?: any) => void) => {
     done(undefined, user.id);
 });
 
@@ -42,6 +45,34 @@ passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, don
                 return done(undefined, user);
             }
             return done({ message: "toast.user.password_error" }, false);
+        });
+    });
+}));
+
+// Sign in using custom fields
+passport.use("custom", new CustomLocalStrategy((req, done) => {
+    console.log(`Custom Local Strategy Applied: `);
+    console.log(req.body);
+    RoleCollection
+    .findOne({ name: "admin" })
+    .exec()
+    .then((value: any) => {
+        UserCollection.findOne({email: req.body.email, role: value._id}, (err: Error, user: UserDocument) => {
+            if (err) {
+                done(err);
+            }
+            if (!user) {
+                done({ message: "toast.user.email_not_found" }, false );
+            }
+            user.comparePassword(req.body.password, (err: Error, isMatch: boolean) => {
+                if (err) {
+                    return done(err);
+                }
+                if (isMatch) {
+                    return done(undefined, user);
+                }
+                return done({ message: "toast.user.password_error" }, false);
+            });
         });
     });
 }));

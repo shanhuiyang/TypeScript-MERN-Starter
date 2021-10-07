@@ -9,5 +9,5 @@ export const authCodeSchema: Schema = new mongoose.Schema({
     redirectUri: String,
 });
 
-const AuthCodeCollection: Model<AuthCode> = mongoose.model("AuthCode", authCodeSchema);
+const AuthCodeCollection: Model<AuthCode> = mongoose.model<AuthCode>("AuthCode", authCodeSchema);
 export default AuthCodeCollection;

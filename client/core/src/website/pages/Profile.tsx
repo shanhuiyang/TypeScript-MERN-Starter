@@ -59,6 +59,7 @@ class Profile extends React.Component<Props, States> {
     render(): React.ReactElement<any> {
         if (this.props.state.userState.currentUser) {
             const user: User = this.props.state.userState.currentUser;
+            console.log(user);
             const loading: boolean = this.props.state.userState.loading;
             const displayedAvatarUrl: string = this.props.state.userState.uploadedAvatarUrl
                 ? this.props.state.userState.uploadedAvatarUrl

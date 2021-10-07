@@ -10,6 +10,7 @@
         "baseUrl": ".",
         "jsx": "react",
         "allowJs": true,
+        "skipLibCheck": true,
         "paths": {
             "*": [
                 "node_modules/*",

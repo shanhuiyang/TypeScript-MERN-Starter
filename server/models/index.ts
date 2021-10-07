@@ -1,5 +1,5 @@
 import PostType from "../../client/core/src/models/PostType";
-import { Model, Document } from "mongoose";
+import mongoose, { Model, Document } from "mongoose";
 import ArticleCollection from "./Article/ArticleCollection";
 import CommentCollection from "./Comment/CommentCollection";
 import ThreadCollection from "./Thread/ThreadCollection";

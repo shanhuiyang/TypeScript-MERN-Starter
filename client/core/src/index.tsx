@@ -38,7 +38,7 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
 // Please note this **must be called after host url is set**
 fetch("/api/version", undefined, "GET").then((json: any) => {
     if (json && json.version && json.version !== APP_VERSION) {
-        window.location.reload(true);
+        window.location.reload();
     }
 });
 

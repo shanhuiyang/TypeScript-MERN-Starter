@@ -7,6 +7,7 @@ import commentState from "./comment";
 import userDictionary from "./userDictionary";
 import fabActions from "./fabActions";
 import threadState from "./thread";
+import studentState from "./student"
 
 const reducer = combineReducers({
     userState,
@@ -16,7 +17,8 @@ const reducer = combineReducers({
     translations,
     commentState,
     userDictionary,
-    fabActions
+    fabActions,
+    studentState
 });
 
 export default reducer;

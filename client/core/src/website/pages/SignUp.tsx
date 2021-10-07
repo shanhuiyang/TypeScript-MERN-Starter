@@ -13,9 +13,18 @@ import { FLAG_ENABLE_INVITATION_CODE } from "../../shared/constants";
 
 interface States {
     selectedGender: Gender;
+    selectedRole: Roles;
+}
+
+enum Roles {
+    ADMIN= "admin",
+    TEACHER= "teacher",
+    STUDENT= "student",
+    USER= "user"
 }
 
 const DEFAULT_SELECTED_GENDER: Gender = Gender.MALE;
+const DEFAULT_SELECTED_ROLE: Roles = Roles.USER;
 
 class SignUp extends React.Component<Props, States> {
     private getString: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string;
@@ -33,7 +42,8 @@ class SignUp extends React.Component<Props, States> {
         this.nameRef = React.createRef();
         this.invitationCodeRef = React.createRef();
         this.state = {
-            selectedGender: DEFAULT_SELECTED_GENDER
+            selectedGender: DEFAULT_SELECTED_GENDER,
+            selectedRole: DEFAULT_SELECTED_ROLE
         };
     }
     render(): React.ReactElement<any> {
@@ -88,6 +98,14 @@ class SignUp extends React.Component<Props, States> {
                                 Object.values(Gender).map(this.renderGenderRadio)
                             }
                     </Form.Group>
+                    <Form.Group inline>
+                        <label>
+                            <FormattedMessage id="user.role"/>
+                        </label>
+                            {
+                                Object.values(Roles).map(this.renderRoleRadio)
+                            }
+                    </Form.Group>
                     <Button primary type="submit" onClick={ this.signUp } loading={loading} disabled={loading}>
                         <Icon name="check circle outline" />
                         <FormattedMessage id="component.button.submit"/>
@@ -112,14 +130,29 @@ class SignUp extends React.Component<Props, States> {
             selectedGender: data.value as Gender
         });
     }
+    private renderRoleRadio = (role: string): React.ReactElement<any> | undefined => {
+        return <Form.Field
+            key={role}
+            control={Radio}
+            label={this.getString({ id: `user.role.${role}`})}
+            value={role}
+            checked={this.state.selectedRole === role}
+            onChange={this.onSelectedRoleChange} />;
+    }
+    private onSelectedRoleChange = (event: ChangeEvent, data: any): void => {
+        this.setState({
+            selectedRole: data.value as Roles
+        });
+    }
     private signUp = (): void => {
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
         const confirmPassword: any = this.confirmPasswordRef.current && this.confirmPasswordRef.current.value;
         const name: any = this.nameRef.current && this.nameRef.current.value;
         const gender: Gender = this.state.selectedGender;
+        const role: Roles = this.state.selectedRole;
         const invitationCode: string = this.invitationCodeRef.current ? this.invitationCodeRef.current.value : "";
-        this.props.actions.signUp(email, password, confirmPassword, name, gender, invitationCode);
+        this.props.actions.signUp(email, password, confirmPassword, name, gender, role, invitationCode);
     }
 }
 

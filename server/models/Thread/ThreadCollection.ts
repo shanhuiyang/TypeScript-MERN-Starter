@@ -11,5 +11,5 @@ export const articleSchema: Schema = new mongoose.Schema({
     removedEternally: Boolean,
 }, { timestamps: true });
 
-const ThreadCollection: Model<ThreadDocument> = mongoose.model("Thread", articleSchema);
+const ThreadCollection: Model<any> = mongoose.model("Thread", articleSchema);
 export default ThreadCollection;

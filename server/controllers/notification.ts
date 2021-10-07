@@ -5,6 +5,7 @@ import NotificationCollection from "../models/Notification/NotificationCollectio
 import User from "../../client/core/src/models/User.d";
 import GetNotificationsResponse from "../../client/core/src/models/response/GetNotificationsResponse";
 import * as NotificationStorage from "../models/Notification/NotificationStorage";
+import { CallbackError } from "mongoose";
 
 export const read: RequestHandler = (req: Request, res: Response, next: NextFunction): any => {
     const unacknowledgedOnly: boolean = (!!req.query.unread) && req.query.unread === "true";
@@ -18,7 +19,7 @@ export const read: RequestHandler = (req: Request, res: Response, next: NextFunc
 };
 
 export const acknowledge: RequestHandler = (req: Request, res: Response, next: NextFunction) => {
-    NotificationCollection.findById(req.params.id).exec((error: Error, notification: NotificationDocument) => {
+    NotificationCollection.findById(req.params.id).exec((error: CallbackError, notification: NotificationDocument | null) => {
         if (error) {
             return next(error);
         }

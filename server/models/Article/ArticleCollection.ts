@@ -1,6 +1,6 @@
 import mongoose, { Model, Schema } from "mongoose";
 import ArticleDocument from "./ArticleDocument";
-export const articleSchema: Schema = new mongoose.Schema({
+export const articleSchema: Schema<ArticleDocument, Model<ArticleDocument>> = new mongoose.Schema<ArticleDocument, Model<ArticleDocument>>({
     author: String, // User._id
     title: String,
     content: String,
@@ -10,5 +10,5 @@ export const articleSchema: Schema = new mongoose.Schema({
     lastCommentedBy: String,
 }, { timestamps: true });
 
-const ArticleCollection: Model<ArticleDocument> = mongoose.model("Article", articleSchema);
+const ArticleCollection: Model<any> = mongoose.model<ArticleDocument>("Article", articleSchema);
 export default ArticleCollection;

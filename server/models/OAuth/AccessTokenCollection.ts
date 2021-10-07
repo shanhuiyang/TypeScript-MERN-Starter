@@ -7,5 +7,5 @@ export const accessTokenSchema: Schema = new mongoose.Schema({
     userId: String,
 });
 
-const AccessTokenCollection: Model<AccessToken> = mongoose.model("AccessToken", accessTokenSchema);
+const AccessTokenCollection: Model<any> = mongoose.model("AccessToken", accessTokenSchema);
 export default AccessTokenCollection;

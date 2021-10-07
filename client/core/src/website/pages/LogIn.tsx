@@ -24,6 +24,7 @@ class LogIn extends React.Component<Props, States> {
         this.props.actions.resetRedirectTask();
     }
     render(): React.ReactElement<any> {
+        console.log(this.props.state.userState.currentUser);
         const message: (descriptor: MessageDescriptor, values?: Record<string, PrimitiveType>) => string = this.props.intl.formatMessage;
         if (pendingRedirect(this.props)) {
             return <Redirect to={this.props.state.redirectTask.to} />;
@@ -74,8 +75,10 @@ class LogIn extends React.Component<Props, States> {
     private login = (): void => {
         const email: any = this.emailRef.current && this.emailRef.current.value;
         const password: any = this.passwordRef.current && this.passwordRef.current.value;
-        if (_.isString(email) && _.isString(password)) {
-            this.props.actions.login(email, password);
+        const path: string = this.props.location.pathname;
+        console.log(`Path Loc: ${this.props.location}`);
+        if (_.isString(email) && _.isString(password) && _.isString(path)) {
+            this.props.actions.login(email, password, path);
         } else {
             // TODO: prompt error
         }

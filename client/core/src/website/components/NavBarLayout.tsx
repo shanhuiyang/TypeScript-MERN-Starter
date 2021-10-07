@@ -65,6 +65,9 @@ class NavBarLayout extends React.Component<Props, States> {
             <Menu.Item as={NavLink} to="/about" >
                 <FormattedMessage id="page.about"/>
             </Menu.Item>
+            <Menu.Item as="a" href="http://localhost:3000/admin">
+                <FormattedMessage id="Admin"/>
+            </Menu.Item>
             {/* Add more nav items here */}
         </Fragment>;
     }

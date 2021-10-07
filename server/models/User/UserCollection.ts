@@ -3,21 +3,27 @@ import mongoose, { Model, Schema } from "mongoose";
 import UserDocument, { ComparePasswordFunction } from "./UserDocument";
 import storage, { CONTAINER_AVATAR } from "../../repository/storage";
 import { getBlobNameFromUrl } from "../../repository/utils";
+
+
 export const userSchema: Schema = new mongoose.Schema({
     email: { type: String, unique: true },
     password: String,
-    name: { type: String, unique: true },
+    name: { type: String },
     gender: String,
     address: String,
     website: String,
     avatarUrl: String,
     preferences: {
-        type: Map,
+        type: mongoose.Schema.Types.Map,
         of: String
     },
     OTP: String,
     otpExpireTime: Date,
-    invitationCode: String
+    invitationCode: String,
+    role: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role"
+    }
 }, { timestamps: true });
 
 /**
@@ -71,5 +77,5 @@ const comparePassword: ComparePasswordFunction = function (this: any, candidateP
 
 userSchema.methods.comparePassword = comparePassword;
 
-const UserCollection: Model<UserDocument> = mongoose.model("User", userSchema);
+const UserCollection: Model<UserDocument> = mongoose.model<UserDocument>("User", userSchema);
 export default UserCollection;

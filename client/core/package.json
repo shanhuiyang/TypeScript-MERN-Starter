@@ -19,13 +19,17 @@
     "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "es6-object-assign": "^1.1.0",
+    "html-webpack-plugin": "4.5.0",
     "http-proxy-middleware": "^0.19.1",
     "insert-text-at-cursor": "^0.3.0",
     "intl": "^1.2.5",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
-    "react": "^16.13.1",
+    "react": "^17.0.2",
+    "react-app-rewire-multiple-entry": "^2.2.1",
+    "react-app-rewired": "^2.1.8",
     "react-avatar-editor": "^11.0.7",
+    "react-dev-utils": "^11.0.4",
     "react-dom": "^16.13.1",
     "react-intl": "^3.11.0",
     "react-redux": "7.1.3",
@@ -35,11 +39,13 @@
     "react-tiny-fab": "^3.2.0",
     "react-toastify": "^5.3.2",
     "redux": "^4.0.4",
+    "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-react": "^1.0.0",
+    "semantic-ui-react": "1.0.0",
     "shelljs": "^0.8.1",
     "textcomplete": "^0.18.1",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "webpack-manifest-plugin": "2.2.0"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -50,9 +56,9 @@
     "redux-mock-store": "^1.5.3"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

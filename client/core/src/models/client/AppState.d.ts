@@ -7,6 +7,7 @@ import Translation from "../Translation";
 import Comment from "../Comment.d";
 import User from "../User.d";
 import FabAction from "./FabAction";
+import StudentState from "./StudentState.d";
 
 export default interface AppState {
     translations: Translation;
@@ -17,4 +18,5 @@ export default interface AppState {
     commentState: CommentState; // Comments for currently displayed article/thread/photo/video
     userDictionary: {[id: string]: User}; // User dictionary of all content authors
     fabActions: FabAction[];
+    studentState: StudentState;
 }

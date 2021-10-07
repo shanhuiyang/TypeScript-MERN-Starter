@@ -10,4 +10,5 @@ export default interface User extends UnifiedModel {
     address?: string;
     website?: string;
     preferences: Preferences;
+    role: any;
 }

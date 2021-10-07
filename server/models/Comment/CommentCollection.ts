@@ -12,5 +12,5 @@ export const commentSchema: Schema = new mongoose.Schema({
     lastCommentedBy: String,
 }, { timestamps: true });
 
-const CommentCollection: Model<CommentDocument> = mongoose.model("Comment", commentSchema);
+const CommentCollection: Model<any> = mongoose.model("Comment", commentSchema);
 export default CommentCollection;

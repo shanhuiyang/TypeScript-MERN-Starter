@@ -5,6 +5,7 @@ import commonActionCreator from "./common";
 import commentActionCreator from "./comment";
 import notificationActionCreator from "./notification";
 import threadActionCreator from "./thread";
+import studentActionCreator from "./student";
 
 const actions: ActionCreator = {
     ...userActionCreator,
@@ -12,7 +13,8 @@ const actions: ActionCreator = {
     ...commentActionCreator,
     ...commonActionCreator,
     ...notificationActionCreator,
-    ...threadActionCreator
+    ...threadActionCreator,
+    ...studentActionCreator
 };
 
 export default actions;
