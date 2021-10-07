@@ -1,0 +1,11 @@
+# get http://localhost:3001/api/class/remove/6148be85bcd6142aa4db4e34/
+get http://localhost:3001/api/student/view
+# post http://localhost:3001/api/class/edit/
+Content-Type: application/json
+
+{
+    "_id": "6148bf24b43fc1363417ec69",
+    "class_label": "class 12",
+    "class_capacity": 100
+}
+
