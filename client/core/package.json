@@ -37,7 +37,7 @@
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^1.0.0",
-    "shelljs": "^0.8.1",
+    "shelljs": "^0.8.5",
     "textcomplete": "^0.18.1",
     "typescript": "^3.7.4"
   },
