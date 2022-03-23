@@ -4,7 +4,7 @@
 [![Dependency Status](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter.svg)](https://david-dm.org/shanhuiyang/TypeScript-MERN-Starter)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 
-**Live Demo:** [https://hd283.net/article](https://hd283.net/article)
+**Live Demo:** [https://hd283.net/](https://hd283.net/)
 
 | Supported Clients        | Preview                 |
 | ------------------------ | ----------------------- |
