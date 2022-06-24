@@ -77,7 +77,7 @@
     "lusca": "^1.6.1",
     "mongoose": "^5.9.25",
     "nodemailer": "^6.4.10",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.17",
     "oauth2orize": "^1.11.0",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
