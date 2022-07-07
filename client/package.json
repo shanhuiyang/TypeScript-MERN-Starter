@@ -13,7 +13,7 @@
     "expo-font": "~8.2.1",
     "expo-localization": "~8.2.1",
     "intl": "^1.2.5",
-    "moment": "^2.27.0",
+    "moment": "^2.29.4",
     "native-base": "2.13.8",
     "punycode": "^2.1.1",
     "react": "16.11.0",
