@@ -5,27 +5,30 @@
     "android": "yarn build && expo start --android",
     "ios": "yarn build && expo start --ios",
     "eject": "expo eject",
-    "build": "tsc"
+    "build": "tsc",
+    "prepare": "yarn run snyk-protect",
+    "snyk-protect": "snyk-protect"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "expo": "^38.0.0",
-    "expo-font": "~8.2.1",
+    "axios": "^0.21.3",
+    "expo": "^41.0.0",
+    "expo-font": "~9.0.0",
     "expo-localization": "~8.2.1",
     "intl": "^1.2.5",
-    "moment": "^2.27.0",
-    "native-base": "2.13.8",
+    "moment": "^2.29.4",
+    "native-base": "3.0.0",
     "punycode": "^2.1.1",
     "react": "16.11.0",
     "react-dom": "16.11.0",
     "react-intl": "^3.11.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",
+    "react-native": "0.68.0",
     "react-native-markdown-display": "^5.1.0",
     "react-native-web": "~0.11.7",
     "react-redux": "^7.2.1",
     "react-router-native": "^5.1.2",
     "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0"
+    "redux-thunk": "^2.3.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
@@ -36,5 +39,6 @@
     "babel-preset-expo": "^8.2.3",
     "typescript": "~3.9.5"
   },
-  "private": true
+  "private": true,
+  "snyk": true
 }
