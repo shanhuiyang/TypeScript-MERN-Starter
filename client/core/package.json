@@ -22,7 +22,7 @@
     "http-proxy-middleware": "^0.19.1",
     "insert-text-at-cursor": "^0.3.0",
     "intl": "^1.2.5",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.27.0",
     "react": "^16.13.1",
     "react-avatar-editor": "^11.0.7",
