@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "expo": "^38.0.0",
+    "expo": "^41.0.0",
     "expo-font": "~8.2.1",
     "expo-localization": "~8.2.1",
     "intl": "^1.2.5",
