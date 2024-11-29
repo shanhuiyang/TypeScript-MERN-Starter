@@ -1,0 +1,12 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-LODASH-567746:
+    - react-native > @react-native-community/cli > @react-native-community/cli-server-api > @react-native-community/cli-tools > lodash:
+        patched: '2020-08-01T11:09:37.221Z'
+    - expo > expo-splash-screen > @expo/configure-splash-screen > @react-native-community/cli-platform-ios > lodash:
+        patched: '2020-08-01T11:09:37.221Z'
+    - expo > expo-splash-screen > @expo/configure-splash-screen > @react-native-community/cli-platform-ios > @react-native-community/cli-tools > lodash:
+        patched: '2020-08-01T11:09:37.221Z'
