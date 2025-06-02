@@ -14,5 +14,6 @@
         "csrf",
         "definitelytyped",
         "promisified"
-    ]
+    ],
+    "zencoder.enableRepoIndexing": true
 }

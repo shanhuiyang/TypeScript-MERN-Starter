@@ -1,12 +1,12 @@
-const proxy = require("http-proxy-middleware");
+const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function(app) {
-    app.use(proxy("/api", { 
+    app.use(createProxyMiddleware("/api", { 
         target: "http://localhost:3001/",
         headers: {
             "Connection": "keep-alive"
         }
     }));
-    app.use(proxy("/auth", { target: "http://localhost:3001/" }));
-    app.use(proxy("/oauth2", { target: "http://localhost:3001/" }));
+    app.use(createProxyMiddleware("/auth", { target: "http://localhost:3001/" }));
+    app.use(createProxyMiddleware("/oauth2", { target: "http://localhost:3001/" }));
 };
